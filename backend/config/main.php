@@ -40,8 +40,8 @@ return [
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
-            'rules' => [
-            ],
+            /*'rules' => [
+            ],*/
         ],
         /*'view' => [
             'theme' => [
@@ -50,13 +50,13 @@ return [
                 ],
             ],
         ],*/
-        'assetManager' => [
+        /*'assetManager' => [
             'bundles' => [
                 'dmstr\web\AdminLteAsset' => [
                     'skin' => 'skin-black',
                 ],
             ],
-        ],
+        ],*/
     ],
     'params' => $params,
 ];
