@@ -1,4 +1,5 @@
 <?php
+
 namespace common\models;
 
 use Yii;
@@ -43,7 +44,7 @@ class LoginForm extends Model
         if (!$this->hasErrors()) {
             $user = $this->getUser();
             if (!$user || !$user->validatePassword($this->password)) {
-                $this->addError($attribute, 'Incorrect username or password.');
+                $this->addError($attribute, Yii::t('app','Неверное имя пользователя или пароль.'));
             }
         }
     }
@@ -74,5 +75,14 @@ class LoginForm extends Model
         }
 
         return $this->_user;
+    }
+
+    public function attributeLabels()
+    {
+        return [
+            'username' => Yii::t('app', 'Имя пользователя'),
+            'password' => Yii::t('app', 'Пароль'),
+            'rememberMe' => Yii::t('app', 'Запомнить меня'),
+        ];
     }
 }
