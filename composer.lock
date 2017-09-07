@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "702d50174f4abf03ebad7c00ac3ecb0a",
+    "content-hash": "275ff9b2cf8c6942bdf736a75d177175",
     "packages": [
         {
             "name": "almasaeed2010/adminlte",
@@ -283,6 +283,53 @@
             "license": [
                 "MIT"
             ]
+        },
+        {
+            "name": "bupy7/yii2-pages",
+            "version": "1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bupy7/yii2-pages.git",
+                "reference": "46c27d2d5ef4c6792053e64fd97a5945bc3d9b14"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bupy7/yii2-pages/zipball/46c27d2d5ef4c6792053e64fd97a5945bc3d9b14",
+                "reference": "46c27d2d5ef4c6792053e64fd97a5945bc3d9b14",
+                "shasum": ""
+            },
+            "require": {
+                "vova07/yii2-imperavi-widget": "1.2.10",
+                "yiisoft/yii2": "*",
+                "yiisoft/yii2-bootstrap": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "bupy7\\pages\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Belosludcev Vasilij",
+                    "email": "bupy765@gmail.com",
+                    "homepage": "http://mihaly4.ru"
+                }
+            ],
+            "description": "Module implements CRUD with static pages with uses Imperavi Redactor.",
+            "homepage": "https://github.com/bupy7/yii2-pages",
+            "keywords": [
+                "extension",
+                "module",
+                "pages",
+                "static",
+                "yii2"
+            ],
+            "time": "2016-04-08T15:34:24+00:00"
         },
         {
             "name": "cebe/markdown",
@@ -601,6 +648,68 @@
             "time": "2017-05-01T15:54:03+00:00"
         },
         {
+            "name": "vova07/yii2-imperavi-widget",
+            "version": "1.2.10",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/vova07/yii2-imperavi-widget.git",
+                "reference": "6835bfe3c6d77d00c3033a7f8a54e85ac446d5ac"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/vova07/yii2-imperavi-widget/zipball/6835bfe3c6d77d00c3033a7f8a54e85ac446d5ac",
+                "reference": "6835bfe3c6d77d00c3033a7f8a54e85ac446d5ac",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": "*"
+            },
+            "require-dev": {
+                "mikey179/vfsstream": "~1",
+                "phpunit/phpunit": "4.*",
+                "scrutinizer/ocular": "~1.1"
+            },
+            "type": "yii2-extension",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                },
+                "asset-installer-paths": {
+                    "bower-asset-library": "vendor/bower"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "vova07\\imperavi\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Crudu Vasile",
+                    "email": "bazillio07@yandex.ru",
+                    "homepage": "https://github.com/vova07",
+                    "role": "Developer"
+                }
+            ],
+            "description": "The imperavi redactor widget for Yii 2 framework.",
+            "homepage": "https://github.com/vova07/yii2-imperavi-widget",
+            "keywords": [
+                "Redactor",
+                "extension",
+                "imperavi",
+                "widget",
+                "wysiwyg",
+                "yii",
+                "yii 2",
+                "yii2"
+            ],
+            "time": "2015-12-10T21:16:23+00:00"
+        },
+        {
             "name": "yiisoft/yii2",
             "version": "2.0.12",
             "source": {
@@ -849,59 +958,6 @@
                 "yii2"
             ],
             "time": "2017-05-01T08:29:00+00:00"
-        },
-        {
-            "name": "yiister/yii2-adminlte",
-            "version": "1.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/yiister/yii2-adminlte.git",
-                "reference": "8d03738309840436700ea1a71428c879ca3bccab"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/yiister/yii2-adminlte/zipball/8d03738309840436700ea1a71428c879ca3bccab",
-                "reference": "8d03738309840436700ea1a71428c879ca3bccab",
-                "shasum": ""
-            },
-            "require": {
-                "almasaeed2010/adminlte": "~2.0",
-                "php": ">=5.4.0",
-                "rmrevin/yii2-fontawesome": "2.12.*",
-                "yiisoft/yii2": ">=2.0.5",
-                "yiisoft/yii2-bootstrap": "*"
-            },
-            "type": "yii2-extension",
-            "autoload": {
-                "psr-4": {
-                    "yiister\\adminlte\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Pavel Fedotov",
-                    "email": "fps.06@mail.ru",
-                    "homepage": "https://github.com/fps01",
-                    "role": "Creator"
-                }
-            ],
-            "description": "yii2-adminlte is a package for yii framework 2 that consists a very popular backend template AdminLTE (based on bootstrap 3).",
-            "homepage": "http://adminlte.yiister.ru",
-            "keywords": [
-                "AdminLTE",
-                "admin",
-                "back-end",
-                "backend",
-                "bootstrap 3",
-                "template",
-                "theme",
-                "yii2"
-            ],
-            "time": "2016-01-20T18:10:37+00:00"
         }
     ],
     "packages-dev": [
@@ -3138,6 +3194,59 @@
                 "yii2"
             ],
             "time": "2016-03-18T14:09:46+00:00"
+        },
+        {
+            "name": "yiister/yii2-adminlte",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/yiister/yii2-adminlte.git",
+                "reference": "8d03738309840436700ea1a71428c879ca3bccab"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/yiister/yii2-adminlte/zipball/8d03738309840436700ea1a71428c879ca3bccab",
+                "reference": "8d03738309840436700ea1a71428c879ca3bccab",
+                "shasum": ""
+            },
+            "require": {
+                "almasaeed2010/adminlte": "~2.0",
+                "php": ">=5.4.0",
+                "rmrevin/yii2-fontawesome": "2.12.*",
+                "yiisoft/yii2": ">=2.0.5",
+                "yiisoft/yii2-bootstrap": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "yiister\\adminlte\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Pavel Fedotov",
+                    "email": "fps.06@mail.ru",
+                    "homepage": "https://github.com/fps01",
+                    "role": "Creator"
+                }
+            ],
+            "description": "yii2-adminlte is a package for yii framework 2 that consists a very popular backend template AdminLTE (based on bootstrap 3).",
+            "homepage": "http://adminlte.yiister.ru",
+            "keywords": [
+                "AdminLTE",
+                "admin",
+                "back-end",
+                "backend",
+                "bootstrap 3",
+                "template",
+                "theme",
+                "yii2"
+            ],
+            "time": "2016-01-20T18:10:37+00:00"
         }
     ],
     "aliases": [],
