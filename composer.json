@@ -20,7 +20,9 @@
         "yiisoft/yii2-swiftmailer": "~2.0.0",
         "dmstr/yii2-adminlte-asset": "2.*",
         "bupy7/yii2-pages": "*",
-        "dektrium/yii2-rbac": "1.0.0-alpha@dev"
+        "dektrium/yii2-rbac": "1.0.0-alpha@dev",
+        "developeruz/yii2-db-rbac": "*",
+        "kartik-v/yii2-tree-manager": "@dev"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

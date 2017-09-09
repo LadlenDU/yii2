@@ -8,6 +8,9 @@ return [
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
+       /* 'authManager' => [
+            'class' => 'yii\rbac\DbManager',
+        ],*/
     ],
     'modules' => [
         'pages' => [
@@ -40,6 +43,10 @@ return [
             'class' => 'dektrium\rbac\RbacWebModule',
             'admins' => ['Ladlen'],
         ],
+        'treemanager' =>  [
+            'class' => '\kartik\tree\Module',
+            // other module settings, refer detailed documentation
+        ]
     ],
     'language' => 'ru-RU',
     //'sourceLanguage' => 'ru-RU',
