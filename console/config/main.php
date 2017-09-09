@@ -15,7 +15,7 @@ return [
         'fixture' => [
             'class' => 'yii\console\controllers\FixtureController',
             'namespace' => 'common\fixtures',
-          ],
+        ],
     ],
     'components' => [
         'log' => [
@@ -26,6 +26,9 @@ return [
                 ],
             ],
         ],
+    ],
+    'modules' => [
+        'rbac' => 'dektrium\rbac\RbacConsoleModule',
     ],
     'params' => $params,
 ];

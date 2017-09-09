@@ -32,6 +32,7 @@
                 'items' => [
                     ['label' => 'Меню Yii2', 'options' => ['class' => 'header']],
                     ['label' => 'Страницы', 'icon' => 'file-code-o', 'url' => ['/pages/manager']],
+                    ['label' => 'RBAC', 'icon' => 'users', 'url' => ['/rbac']],
                     ['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['/gii']],
                     ['label' => 'Debug', 'icon' => 'dashboard', 'url' => ['/debug']],
                     ['label' => 'Login', 'url' => ['site/login'], 'visible' => Yii::$app->user->isGuest],

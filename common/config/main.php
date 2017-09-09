@@ -36,9 +36,13 @@ return [
             'addImage' => true,
             'addFile' => true,
         ],
+        'rbac' => [
+            'class' => 'dektrium\rbac\RbacWebModule',
+            'admins' => ['Ladlen'],
+        ],
     ],
     'language' => 'ru-RU',
-    'sourceLanguage' => 'ru-RU',
+    //'sourceLanguage' => 'ru-RU',
     //'sourceLanguage' => 'en-US',
 
 ];
