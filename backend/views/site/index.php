@@ -17,6 +17,27 @@ echo TreeView::widget([
     //'cacheSettings'   => ['enableCache' => true]      // normally not needed to change
 ]);
 
+echo TreeView::widget([
+    //'query' => \app\models\Product::find()->addOrderBy('root, lft'),
+    'query'             => Tree::find()->addOrderBy('root, lft'),
+    'headingOptions' => ['label' => Yii::t('app', 'Категории')],
+    //'rootOptions' => ['label'=>'<span class="text-primary">Root</span>'],
+    'fontAwesome' => true,
+    'isAdmin' => true,
+    'displayValue' => 1,
+    /*'iconEditSettings'=> [
+        'show' => 'list',
+        'listData' => [
+            'folder' => 'Folder',
+            'file' => 'File',
+            'mobile' => 'Phone',
+            'bell' => 'Bell',
+        ]
+    ],*/
+    'softDelete' => true,
+    //'cacheSettings' => ['enableCache' => true]
+]);
+
 ?>
 <div class="site-index">
 
