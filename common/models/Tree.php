@@ -2,7 +2,7 @@
 
 namespace common\models;
 
-//use Yii;
+use Yii;
 
 class Tree extends \kartik\tree\models\Tree
 {
@@ -14,5 +14,12 @@ class Tree extends \kartik\tree\models\Tree
     public static function tableName()
     {
         return 'tree';
+    }
+
+    public function attributeLabels()
+    {
+        $labels = parent::attributeLabels();
+        $labels['page'] = Yii::t('app', 'Страница');
+        return $labels;
     }
 }
