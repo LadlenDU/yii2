@@ -6,6 +6,8 @@ namespace common\models;
 
 class Tree extends \kartik\tree\models\Tree
 {
+    public $page = null;
+
     /**
      * @inheritdoc
      */
