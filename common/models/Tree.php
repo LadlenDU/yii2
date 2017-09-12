@@ -6,14 +6,12 @@ use Yii;
 use bupy7\pages\models\Page;
 
 /**
- * @property Page $page_mod
- *
  * @property PageTree[] $pageTrees
  * @property Page[] $pages
  */
 class Tree extends \kartik\tree\models\Tree
 {
-    #public $page = null;
+    #public $pages;
 
     /**
      * @inheritdoc
@@ -30,59 +28,56 @@ class Tree extends \kartik\tree\models\Tree
         return $labels;
     }
 
-    /*public function transactions()
-    {
-        return [
-            #self::SCENARIO_DEFAULT => self::OP_ALL,
-            self::SCENARIO_DEFAULT => false,
-        ];
-    }*/
-
-    /*public function beforeSave($insert)
-    {
-        if (parent::beforeSave($insert)) {
-            return true;
-        }
-        return false;
-    }*/
+    protected function linkPage($id) {
+        $page = Page::findOne(['id' => $id]);
+        $this->link('pages', $page);
+    }
 
     public function afterSave($insert, $changedAttributes)
     {
-        parent::afterSave($insert, $changedAttributes);
-
-        #$this->save();
+        #parent::afterSave($insert, $changedAttributes);
 
         if (!empty($_POST['Tree']['pages'])) {
+
             if ($insert) {
+
+                $this->linkPage(Yii::$app->request->post()[$this->getModelName()]['pages']);
+
+                /*$page = Page::findOne(['id' => Yii::$app->request->post()[$this->getModelName()]['pages']]);
+                $this->link('pages', $page);*/
+
+                //Yii::$app->request->post()
+
+                /*$page = Page::findOne(['id' => $_POST['Tree']['pages']]);
+                #$page->save();
+                $this->link('pages', $page);*/
+
+               /* $userGroup = new PageTree();
+                // load data from form into $userGroup and validate
+                if ($userGroup->load(Yii::$app->request->post()) && $userGroup->validate()) {
+                    // all data in $userGroup is valid
+                    // --> create item in junction table incl. additional data
+                    $this->link('pages', $page, $userGroup->getDirtyAttributes());
+                }*/
 
                 /*$pageTree = new PageTree([
                     'page_id' => $_POST['Tree']['pages'],
                     'tree_id' => $this->id,
                 ]);
-                $this->link('pageTree', $pageTree);*/
+                $this->link('pageTrees', $pageTree);*/
 
+                /*//TODO: тупой костыль-рассмотреть link()
                 $command = $this->db->createCommand()->insert('page_tree', [
                     'page_id' => $_POST['Tree']['pages'],
                     'tree_id' => $this->id,
                 ]);
-                if (!$command->execute()) {
-                    return false;
-                }
-
-               /* static::getDb()->schema->insert('page_tree', [
-                    'page_id' => $_POST['Tree']['pages'],
-                    'tree_id' => $this->id,
-                ]);*/
-
-                /*$page2tree = new PageTree([
-                    'page_id' => $_POST['Tree']['pages'],
-                    'tree_id' => $this->id,
-                ]);
-                $page2tree->save(false);*/
+                $command->execute();*/
             } else {
                 /*PageTree::updateAll(['page_id' => $_POST['Tree']['pages']], ['tree_id' => $this->id]);*/
             }
         }
+
+        parent::afterSave($insert, $changedAttributes);
     }
 
     /*public function save($runValidation = true, $attributeNames = NULL)
@@ -107,7 +102,12 @@ class Tree extends \kartik\tree\models\Tree
         return $this->hasMany(Page::className(), ['id' => 'page_id'])->viaTable('page_tree', ['tree_id' => 'id']);
     }
 
-    public function getPage()
+    public function getModelName()
+    {
+        return __CLASS__;
+    }
+
+    /*public function getPage()
     {
         #return $this->hasMany(Page::className(), ['id' => 'page_id'])->viaTable('page_tree', ['tree_id' => 'id']);
         //$page = PageTree::find()->select(['page_id'])->where(['id' => 2])->one();
@@ -122,5 +122,5 @@ class Tree extends \kartik\tree\models\Tree
     public function setPage($id)
     {
         $tt = $id;
-    }
+    }*/
 }
