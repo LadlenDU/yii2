@@ -118,3 +118,23 @@ a.desc:after {
 .nav > li > form > button.logout:focus {
     outline: none;
 }
+
+
+/* ****************************** */
+.site-map {
+    padding: 3em 1em;
+}
+
+.announcement {
+    padding: 1em;
+    text-align: center;
+}
+.middle-ad-block {
+    padding: 3em 1em;
+    text-align: center;
+}
+
+.middle-ad-block > section {
+    border: black 1px solid;
+    height: 10em;
+}
