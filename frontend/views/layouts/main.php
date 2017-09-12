@@ -84,9 +84,10 @@ AppAsset::register($this);
     <div class="container">
         <? /*= Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-        ]) */ ?>
-        <?= Alert::widget() ?>
-        <? /*= $content */ ?>
+        ]) */
+            Alert::widget()
+            /*= $content */
+        ?>
 
         <div class="row middle-ad-block">
             <section class="col-md-6">разработка сайтов</section>
