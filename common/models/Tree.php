@@ -26,60 +26,31 @@ class Tree extends \kartik\tree\models\Tree
         return $labels;
     }
 
-    protected function linkPage($id) {
-        $page = Page::findOne(['id' => $id]);
-        $this->link('pages', $page);
+    protected function linkPage($id)
+    {
+        if ($id) {
+            $page = Page::findOne(['id' => $id]);
+            $this->link('pages', $page);
+        }
     }
 
     public function afterSave($insert, $changedAttributes)
     {
-        #parent::afterSave($insert, $changedAttributes);
-
         $pageId = Yii::$app->request->post()[$this->getModelName()]['pages'];
 
-        #if (!empty($_POST['Tree']['pages'])) {
-
-            if ($insert) {
-
-                $this->linkPage($pageId);
-
-                /*$page = Page::findOne(['id' => Yii::$app->request->post()[$this->getModelName()]['pages']]);
-                $this->link('pages', $page);*/
-
-                //Yii::$app->request->post()
-
-                /*$page = Page::findOne(['id' => $_POST['Tree']['pages']]);
-                #$page->save();
-                $this->link('pages', $page);*/
-
-               /* $userGroup = new PageTree();
-                // load data from form into $userGroup and validate
-                if ($userGroup->load(Yii::$app->request->post()) && $userGroup->validate()) {
-                    // all data in $userGroup is valid
-                    // --> create item in junction table incl. additional data
-                    $this->link('pages', $page, $userGroup->getDirtyAttributes());
-                }*/
-
-                /*$pageTree = new PageTree([
-                    'page_id' => $_POST['Tree']['pages'],
-                    'tree_id' => $this->id,
-                ]);
-                $this->link('pageTrees', $pageTree);*/
-
-                /*//TODO: тупой костыль-рассмотреть link()
-                $command = $this->db->createCommand()->insert('page_tree', [
-                    'page_id' => $_POST['Tree']['pages'],
-                    'tree_id' => $this->id,
-                ]);
-                $command->execute();*/
-            } else {
-                if (PageTree::find()->where(['tree_id' => $this->id])->exists()) {
+        if ($insert) {
+            $this->linkPage($pageId);
+        } else {
+            if (PageTree::find()->where(['tree_id' => $this->id])->exists()) {
+                if ($pageId) {
                     PageTree::updateAll(['page_id' => $pageId], ['tree_id' => $this->id]);
                 } else {
-                    $this->linkPage($pageId);
+                    PageTree::deleteAll(['tree_id' => $this->id]);
                 }
+            } else {
+                $this->linkPage($pageId);
             }
-        #}
+        }
 
         parent::afterSave($insert, $changedAttributes);
     }

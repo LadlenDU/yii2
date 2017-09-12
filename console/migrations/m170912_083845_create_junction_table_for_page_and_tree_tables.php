@@ -9,7 +9,7 @@ use yii\db\Migration;
  * - `page`
  * - `tree`
  */
-class m170910_201416_create_junction_table_for_page_and_tree_tables extends Migration
+class m170912_083845_create_junction_table_for_page_and_tree_tables extends Migration
 {
     /**
      * @inheritdoc
