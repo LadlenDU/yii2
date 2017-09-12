@@ -11,8 +11,6 @@ use bupy7\pages\models\Page;
  */
 class Tree extends \kartik\tree\models\Tree
 {
-    #public $pages;
-
     /**
      * @inheritdoc
      */
@@ -37,11 +35,13 @@ class Tree extends \kartik\tree\models\Tree
     {
         #parent::afterSave($insert, $changedAttributes);
 
-        if (!empty($_POST['Tree']['pages'])) {
+        $pageId = Yii::$app->request->post()[$this->getModelName()]['pages'];
+
+        #if (!empty($_POST['Tree']['pages'])) {
 
             if ($insert) {
 
-                $this->linkPage(Yii::$app->request->post()[$this->getModelName()]['pages']);
+                $this->linkPage($pageId);
 
                 /*$page = Page::findOne(['id' => Yii::$app->request->post()[$this->getModelName()]['pages']]);
                 $this->link('pages', $page);*/
@@ -73,9 +73,13 @@ class Tree extends \kartik\tree\models\Tree
                 ]);
                 $command->execute();*/
             } else {
-                /*PageTree::updateAll(['page_id' => $_POST['Tree']['pages']], ['tree_id' => $this->id]);*/
+                if (PageTree::find()->where(['tree_id' => $this->id])->exists()) {
+                    PageTree::updateAll(['page_id' => $pageId], ['tree_id' => $this->id]);
+                } else {
+                    $this->linkPage($pageId);
+                }
             }
-        }
+        #}
 
         parent::afterSave($insert, $changedAttributes);
     }
@@ -104,7 +108,8 @@ class Tree extends \kartik\tree\models\Tree
 
     public function getModelName()
     {
-        return __CLASS__;
+        $tag = explode("\\", self::className());
+        return array_pop($tag);
     }
 
     /*public function getPage()
