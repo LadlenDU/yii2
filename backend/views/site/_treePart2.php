@@ -15,7 +15,7 @@ foreach ($pages as $pg) {
     $listData[$pg->id] = $pg->title;
 }
 
-echo $form->field($node, 'page')->dropDownList($listData);
+echo $form->field($node, 'pages')->dropDownList($listData);
 
 //echo '<select name="page">';
 //
