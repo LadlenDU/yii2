@@ -82,11 +82,11 @@ AppAsset::register($this);
     </header>
 
     <div class="container">
-        <? /*= Breadcrumbs::widget([
+        <?php /*Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) */
-            Alert::widget()
-            /*= $content */
+            Alert::widget();
+            /* $content */
         ?>
 
         <div class="row middle-ad-block">
