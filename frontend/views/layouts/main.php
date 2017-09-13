@@ -74,8 +74,10 @@ AppAsset::register($this);
             <section class="col-md-4 text-center">Сфера деятельности</section>
             <nav class="col-md-8 text-center">
                 <?php
-                    Tree::getElementsByLevel();
-                ?>
+                    $menuElems = Tree::getElementsByLevel();
+                    foreach ($menuElems as $mElem) {
+                        echo Html::a($mElem['name'], ['/pages/default/index', 'page' => $mElem['alias']]) . ' / ';
+                    }
                 ?>
                 <?/*= Html::a(Yii::t('app', 'Студия')) */?><!-- /
                 <?/*= Html::a(Yii::t('app', 'Услуги')) */?> /
@@ -91,7 +93,7 @@ AppAsset::register($this);
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) */
             Alert::widget();
-            /* $content */
+            echo $content;
         ?>
 
         <div class="row middle-ad-block">

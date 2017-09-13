@@ -91,10 +91,17 @@ class Tree extends \kartik\tree\models\Tree
 
     public static function getElementsByLevel($level = 0)
     {
+        $menu = [];
+
         $levelName = 'lvl';   //TODO: consider treeStructure['depthAttribute'], what to do with table names in ['tree.id', 'tree.name', 'page.alias'] ???
         $elements = static::find()->joinWith('pages')->andWhere([$levelName => $level])
             ->select(['tree.id', 'tree.name', 'page.alias'])->all();
 
-        return $elements;
+        foreach ($elements as $elem) {
+            $menu[] = ['id' => $elem->id, 'name' => $elem->name,
+                'alias' => isset($elem->pages[0]) ? $elem->pages[0]->alias : null];
+        }
+
+        return $menu;
     }
 }
