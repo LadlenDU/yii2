@@ -2,52 +2,26 @@
 
 /* @var $this yii\web\View */
 
-$this->title = 'My Yii Application';
+$this->title = Yii::t('app', '«Программный комплекс «УПРАВДОЛГ»');
 ?>
-<div class="site-index">
+<div class="row middle-ad-block">
+    <section class="col-md-6">разработка сайтов</section>
+    <section class="col-md-6">реклама в интернете</section>
+</div>
 
-    <div class="jumbotron">
-        <h1>Congratulations!</h1>
+<section class="row">
+    <div class="col-md-3 announcement">Анонс 1</div>
+    <div class="col-md-3 announcement">Анонс 2</div>
+    <div class="col-md-3 announcement">Анонс 3</div>
+    <div class="col-md-3 announcement">Анонс 4</div>
+</section>
 
-        <p class="lead">You have successfully created your Yii-powered application.</p>
-
-        <p><a class="btn btn-lg btn-success" href="http://www.yiiframework.com">Get started with Yii</a></p>
-    </div>
-
-    <div class="body-content">
-
-        <div class="row">
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/doc/">Yii Documentation &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/forum/">Yii Forum &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/extensions/">Yii Extensions &raquo;</a></p>
-            </div>
-        </div>
-
-    </div>
+<div class="row">
+    <section class="col-md-7" style="background-color: #eee;">
+        Обращение к посетителю:<br>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas vestibulum fringilla nulla non fringilla. Aenean eu urna sit amet eros euismod elementum. Aliquam tempor auctor lacus. Aliquam ornare ligula vel turpis aliquam ullamcorper. Phasellus massa dui, congue ut mi at, accumsan auctor arcu. Quisque at mauris sagittis nisl lobortis rhoncus id ut quam. Maecenas eget enim sed enim viverra laoreet. Phasellus interdum turpis urna, ac aliquam metus faucibus ut. Nulla finibus ut lectus eget venenatis. Aenean eget ullamcorper nibh, quis fringilla diam. Sed sed neque vel velit tincidunt suscipit bibendum sit amet tellus. Sed efficitur quam vel leo faucibus cursus.
+    </section>
+    <section class="col-md-5">
+        Отзывы клиентов
+    </section>
 </div>

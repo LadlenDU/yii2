@@ -46,7 +46,10 @@ return [
         'treemanager' =>  [
             'class' => '\kartik\tree\Module',
             // other module settings, refer detailed documentation
-        ]
+        ],
+        'user' => [
+            'class' => 'dektrium\user\Module',
+        ],
     ],
     'language' => 'ru-RU',
     //'sourceLanguage' => 'ru-RU',

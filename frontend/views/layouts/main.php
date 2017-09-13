@@ -4,6 +4,7 @@
 /* @var $content string */
 
 use yii\helpers\Html;
+
 #use yii\bootstrap\Nav;
 #use yii\bootstrap\NavBar;
 #use yii\widgets\Breadcrumbs;
@@ -61,7 +62,7 @@ AppAsset::register($this);
     NavBar::end();*/
     ?>
 
-    <header>
+    <header class="container">
         <div class="row">
             <div class="col-md-4 text-center"><?= Html::img('/img/logo.jpg', ['alt' => Yii::t('app', 'Логотип'), 'width' => 238, 'height' => 212]) ?></div>
             <div class="col-md-3 text-center">Заказ онлайн</div>
@@ -71,20 +72,37 @@ AppAsset::register($this);
             </div>
         </div>
         <div class="row">
-            <section class="col-md-4 text-center">Сфера деятельности</section>
-            <nav class="col-md-8 text-center">
+            <section class="col-md-3 text-center">Сфера деятельности</section>
+            <nav class="col-md-7 text-center">
                 <?php
-                    $menuElems = Tree::getElementsByLevel();
-                    foreach ($menuElems as $mElem) {
-                        echo Html::a($mElem['name'], ['/pages/default/index', 'page' => $mElem['alias']]) . ' / ';
-                    }
+                $menuElems = Tree::getElementsByLevel();
+                foreach ($menuElems as $mElem) {
+                    echo Html::a($mElem['name'], ['/pages/default/index', 'page' => $mElem['alias']]) . ' / ';
+                }
                 ?>
-                <?/*= Html::a(Yii::t('app', 'Студия')) */?><!-- /
-                <?/*= Html::a(Yii::t('app', 'Услуги')) */?> /
-                <?/*= Html::a(Yii::t('app', 'Портфолио')) */?> /
-                <?/*= Html::a(Yii::t('app', 'Клиенты')) */?> /
-                --><?/*= Html::a(Yii::t('app', 'Контакты')) */?>
             </nav>
+            <div class="col-md-2 text-right">
+                <?php
+                if (Yii::$app->user->isGuest) {
+                    //['label' => 'Sign in', 'url' => ['/user/security/login']]
+                    echo Html::a(Yii::t('app', 'Войти'),
+                        '/user/security/login'
+                    ) . "\n";
+                    echo Html::a(Yii::t('app', 'Зарегистрироваться'),
+                        '/user/registration/register'
+                    );
+                } else {
+                    echo Html::a(Yii::t('app', 'Выйти ({username})',
+                        ['username' => Yii::$app->user->identity->username]),
+                        '/user/security/logout'
+                    );
+                    /*['label' => 'Sign out (' . Yii::$app->user->identity->username . ')',
+                        'url' => ['/user/security/logout'],
+                        'linkOptions' => ['data-method' => 'post']],
+                    ['label' => 'Register', 'url' => ['/user/registration/register'], 'visible' => Yii::$app->user->isGuest]*/
+                }
+                ?>
+            </div>
         </div>
     </header>
 
@@ -92,34 +110,12 @@ AppAsset::register($this);
         <?php /*Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) */
-            Alert::widget();
-            echo $content;
+        Alert::widget();
+        echo $content;
         ?>
 
-        <div class="row middle-ad-block">
-            <section class="col-md-6">разработка сайтов</section>
-            <section class="col-md-6">реклама в интернете</section>
-        </div>
-
-        <section class="row">
-            <div class="col-md-3 announcement">Анонс 1</div>
-            <div class="col-md-3 announcement">Анонс 2</div>
-            <div class="col-md-3 announcement">Анонс 3</div>
-            <div class="col-md-3 announcement">Анонс 4</div>
-        </section>
-
-        <div class="row">
-            <section class="col-md-7" style="background-color: #eee;">
-                Обращение к посетителю:<br>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas vestibulum fringilla nulla non fringilla. Aenean eu urna sit amet eros euismod elementum. Aliquam tempor auctor lacus. Aliquam ornare ligula vel turpis aliquam ullamcorper. Phasellus massa dui, congue ut mi at, accumsan auctor arcu. Quisque at mauris sagittis nisl lobortis rhoncus id ut quam. Maecenas eget enim sed enim viverra laoreet. Phasellus interdum turpis urna, ac aliquam metus faucibus ut. Nulla finibus ut lectus eget venenatis. Aenean eget ullamcorper nibh, quis fringilla diam. Sed sed neque vel velit tincidunt suscipit bibendum sit amet tellus. Sed efficitur quam vel leo faucibus cursus.
-            </section>
-            <section class="col-md-5">
-                Отзывы клиентов
-            </section>
-        </div>
-
         <section class="text-center site-map">
-             Это мини карта сайта
+            Это мини карта сайта
         </section>
     </div>
 </div>

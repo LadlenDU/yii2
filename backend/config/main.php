@@ -13,6 +13,10 @@ return [
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
     'modules' => [
+        'user' => [
+            // following line will restrict access to profile, recovery, registration and settings controllers from backend
+            'as backend' => 'dektrium\user\filters\BackendFilter',
+        ],
         /*'permit' => [
             'class' => 'developeruz\db_rbac\Yii2DbRbac',
         ],*/
@@ -21,11 +25,11 @@ return [
         'request' => [
             'csrfParam' => '_csrf-backend',
         ],
-        'user' => [
+        /*'user' => [
             'identityClass' => 'common\models\User',
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-backend', 'httpOnly' => true],
-        ],
+        ],*/
         'session' => [
             // this is the name of the session cookie used for login on the backend
             'name' => 'advanced-backend',
