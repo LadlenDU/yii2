@@ -55,17 +55,12 @@ class Tree extends \kartik\tree\models\Tree
         parent::afterSave($insert, $changedAttributes);
     }
 
-    /*public function save($runValidation = true, $attributeNames = NULL)
-    {
-        parent::save($runValidation, $attributeNames);
-        $yy = $runValidation;
-    }*/
-
     /**
      * @return \yii\db\ActiveQuery
      */
     public function getPageTrees()
     {
+        //TODO: hasOne ???
         return $this->hasMany(PageTree::className(), ['tree_id' => 'id']);
     }
 
@@ -74,6 +69,7 @@ class Tree extends \kartik\tree\models\Tree
      */
     public function getPages()
     {
+        //TODO: hasOne ??? page_tree - get table name from the class ??? PageTree::className()
         return $this->hasMany(Page::className(), ['id' => 'page_id'])->viaTable('page_tree', ['tree_id' => 'id']);
     }
 
@@ -83,20 +79,22 @@ class Tree extends \kartik\tree\models\Tree
         return array_pop($tag);
     }
 
-    /*public function getPage()
+    public static function find()
     {
-        #return $this->hasMany(Page::className(), ['id' => 'page_id'])->viaTable('page_tree', ['tree_id' => 'id']);
-        //$page = PageTree::find()->select(['page_id'])->where(['id' => 2])->one();
-        return $this->hasMany(Page::className(), ['id' => 'page_id'])->viaTable('page_tree', ['tree_id' => 'id']);
+        $query = parent::find();
+        $nmActive = static::tableName() . '.active';
+        $nmDisabled = static::tableName() . '.disabled';
+        //TODO: переписать
+        $query->andWhere("$nmActive IS NOT NULL AND $nmActive > 0 AND ($nmDisabled IS NULL OR $nmDisabled = 0)");
+        return $query;
     }
 
-    public function getPageTree()
+    public static function getElementsByLevel($level = 0)
     {
-        return $this->hasMany(PageTree::className(), ['page_id' => 'id']);
-    }
+        $levelName = 'lvl';   //TODO: consider treeStructure['depthAttribute'], what to do with table names in ['tree.id', 'tree.name', 'page.alias'] ???
+        $elements = static::find()->joinWith('pages')->andWhere([$levelName => $level])
+            ->select(['tree.id', 'tree.name', 'page.alias'])->all();
 
-    public function setPage($id)
-    {
-        $tt = $id;
-    }*/
+        return $elements;
+    }
 }

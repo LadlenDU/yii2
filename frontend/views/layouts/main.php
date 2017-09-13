@@ -4,11 +4,12 @@
 /* @var $content string */
 
 use yii\helpers\Html;
-use yii\bootstrap\Nav;
-use yii\bootstrap\NavBar;
-use yii\widgets\Breadcrumbs;
+#use yii\bootstrap\Nav;
+#use yii\bootstrap\NavBar;
+#use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
 use common\widgets\Alert;
+use common\models\Tree;
 
 AppAsset::register($this);
 ?>
@@ -72,11 +73,15 @@ AppAsset::register($this);
         <div class="row">
             <section class="col-md-4 text-center">Сфера деятельности</section>
             <nav class="col-md-8 text-center">
-                <?= Html::a(Yii::t('app', 'Студия')) ?> /
-                <?= Html::a(Yii::t('app', 'Услуги')) ?> /
-                <?= Html::a(Yii::t('app', 'Портфолио')) ?> /
-                <?= Html::a(Yii::t('app', 'Клиенты')) ?> /
-                <?= Html::a(Yii::t('app', 'Контакты')) ?>
+                <?php
+                    Tree::getElementsByLevel();
+                ?>
+                ?>
+                <?/*= Html::a(Yii::t('app', 'Студия')) */?><!-- /
+                <?/*= Html::a(Yii::t('app', 'Услуги')) */?> /
+                <?/*= Html::a(Yii::t('app', 'Портфолио')) */?> /
+                <?/*= Html::a(Yii::t('app', 'Клиенты')) */?> /
+                --><?/*= Html::a(Yii::t('app', 'Контакты')) */?>
             </nav>
         </div>
     </header>
