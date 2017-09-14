@@ -4,6 +4,7 @@
 /* @var $content string */
 
 use yii\helpers\Html;
+use yii\bootstrap\Nav;
 
 #use yii\bootstrap\Nav;
 #use yii\bootstrap\NavBar;
@@ -83,24 +84,45 @@ AppAsset::register($this);
             </nav>
             <div class="col-md-2 text-right">
                 <?php
+                $menuItems = [];
                 if (Yii::$app->user->isGuest) {
+                    $menuItems[] = ['label' => Yii::t('app', 'Войти'), 'url' => ['/user/security/login']];
+                    $menuItems[] = ['label' => Yii::t('app', 'Зарегистрироваться'), 'url' => ['/user/registration/register']];
                     //['label' => 'Sign in', 'url' => ['/user/security/login']]
-                    echo Html::a(Yii::t('app', 'Войти'),
-                        '/user/security/login'
-                    ) . "\n";
+                    /*echo Html::a(Yii::t('app', 'Войти'),
+                            '/user/security/login'
+                        ) . "\n";
                     echo Html::a(Yii::t('app', 'Зарегистрироваться'),
                         '/user/registration/register'
-                    );
+                    );*/
                 } else {
-                    echo Html::a(Yii::t('app', 'Выйти ({username})',
+                    $menuItems[] = [
+                        'label' => Yii::t('app', 'Выйти ({username})',
+                            ['username' => Yii::$app->user->identity->username]),
+                        'url' => ['/user/security/logout'],
+                        'linkOptions' => ['data-method' => 'post']
+                    ];
+                    ?>
+                    <!--<form method="post" action="<?/*= Url::to('/user/security/logout') */ ?>">
+                        <?/*= Html::submitButton(Yii::t('app', 'Выйти ({username})',
+                            ['username' => Yii::$app->user->identity->username]))
+                        */ ?>
+                    </form>-->
+                    <?php
+                    /*echo Html::a(Yii::t('app', 'Выйти ({username})',
                         ['username' => Yii::$app->user->identity->username]),
                         '/user/security/logout'
-                    );
+                    );*/
                     /*['label' => 'Sign out (' . Yii::$app->user->identity->username . ')',
                         'url' => ['/user/security/logout'],
                         'linkOptions' => ['data-method' => 'post']],
                     ['label' => 'Register', 'url' => ['/user/registration/register'], 'visible' => Yii::$app->user->isGuest]*/
                 }
+
+                echo Nav::widget([
+                    'options' => ['class' => 'navbar-nav navbar-right'],
+                    'items' => $menuItems,
+                ]);
                 ?>
             </div>
         </div>
