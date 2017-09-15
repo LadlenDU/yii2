@@ -14,6 +14,7 @@ class User extends BaseUser
 
         $message = false;
         $showRegistrationForm = false;
+        $success = false;
 
         if ($token instanceof Token && !$token->isExpired) {
             $token->delete();
@@ -26,28 +27,22 @@ class User extends BaseUser
                 $message = \Yii::t('user', 'Something went wrong and your account has not been confirmed.');
             }
         } else {
-            $success = false;
-            if ($complete = UserInfo::find()->select(['complete'])->where(['user_id' => $this->id])->one()) {
-                $message = \Yii::t('user', 'The confirmation link is invalid or expired. Please try requesting a new one.');
-            } else {
-                $showRegistrationForm = true;
-            }
-
+            $message = \Yii::t('user', 'The confirmation link is invalid or expired. Please try requesting a new one.');
         }
 
         if ($message) {
             \Yii::$app->session->setFlash($success ? 'success' : 'danger', $message);
         }
 
-        if ($showRegistrationForm) {
+        /*if ($showRegistrationForm) {
             $this->registrationInfo();
-        }
+        }*/
 
         return $showRegistrationForm;
     }
 
-    public function registrationInfo()
+    /*public function registrationInfo()
     {
-        \Yii::$app->session->setFlash('info', \Yii::t('app', 'Пожалуйста, заполните форму для завершения регистрации.'));
-    }
+        \Yii::$app->session->setFlash('info', \Yii::t('app', 'Пожалуйста, выберите ваш тип регистрации для продолжения.'));
+    }*/
 }

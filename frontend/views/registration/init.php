@@ -21,7 +21,7 @@ echo $this->render('/message', [
 ?>
 <div class="registration-type">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['action' => '/sdfss']); ?>
 
     <?= Html::activeDropDownList($regType, 'id', $regType->getIdNamePairs()) ?>
 
