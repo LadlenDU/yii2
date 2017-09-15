@@ -21,7 +21,7 @@ class m170915_003305_create_user_info_table extends Migration
         $this->createTable('user_info', [
             'id' => $this->primaryKey(),
             'user_id' => $this->integer()->notNull(),
-            'complete' => $this->smallInteger()->notNull()->default(0)->comment('Завершен ли процесс заполнения информации'),
+            'complete' => $this->smallInteger()->notNull()->defaultValue(0)->comment('Завершен ли процесс заполнения информации'),
             'registration_type_id' => $this->integer()->comment('Вариант регистрации'),
         ]);
 

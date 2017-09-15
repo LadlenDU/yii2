@@ -4,11 +4,11 @@ use yii\db\Migration;
 
 /**
  * Юридическое лицо - данные.
- *
+ * 
  * Handles the creation of table `legal_entity`.
  * Has foreign keys to the tables:
  *
- * - `user`
+ * - `user_info`
  */
 class m170915_005746_create_legal_entity_table extends Migration
 {
@@ -36,12 +36,12 @@ class m170915_005746_create_legal_entity_table extends Migration
             'user_info_id'
         );
 
-        // add foreign key for table `user`
+        // add foreign key for table `user_info`
         $this->addForeignKey(
             'fk-legal_entity-user_info_id',
             'legal_entity',
             'user_info_id',
-            'user',
+            'user_info',
             'id',
             'CASCADE'
         );
@@ -52,7 +52,7 @@ class m170915_005746_create_legal_entity_table extends Migration
      */
     public function down()
     {
-        // drops foreign key for table `user`
+        // drops foreign key for table `user_info`
         $this->dropForeignKey(
             'fk-legal_entity-user_info_id',
             'legal_entity'

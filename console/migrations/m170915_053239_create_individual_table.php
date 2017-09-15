@@ -3,41 +3,37 @@
 use yii\db\Migration;
 
 /**
- * Индивидуальный предприниматель - данные.
- *
- * Handles the creation of table `individual_entrepreneur`.
+ * Handles the creation of table `individual`.
  * Has foreign keys to the tables:
  *
  * - `user_info`
  */
-class m170915_013513_create_individual_entrepreneur_table extends Migration
+class m170915_053239_create_individual_table extends Migration
 {
     /**
      * @inheritdoc
      */
     public function up()
     {
-        $this->createTable('individual_entrepreneur', [
+        $this->createTable('individual', [
             'id' => $this->primaryKey(),
             'user_info_id' => $this->integer()->notNull(),
             'full_name' => $this->string()->comment('ФИО'),
-            'OGRN' => $this->string(40)->comment('ОГРН'),
             'INN' => $this->string(40)->comment('ИНН'),
-            'BIC' => $this->string(40)->comment('БИК'),
             'checking_account_num' => $this->string(40)->comment('№ расчетного счета'),
         ]);
 
         // creates index for column `user_info_id`
         $this->createIndex(
-            'idx-individual_entrepreneur-user_info_id',
-            'individual_entrepreneur',
+            'idx-individual-user_info_id',
+            'individual',
             'user_info_id'
         );
 
         // add foreign key for table `user_info`
         $this->addForeignKey(
-            'fk-individual_entrepreneur-user_info_id',
-            'individual_entrepreneur',
+            'fk-individual-user_info_id',
+            'individual',
             'user_info_id',
             'user_info',
             'id',
@@ -52,16 +48,16 @@ class m170915_013513_create_individual_entrepreneur_table extends Migration
     {
         // drops foreign key for table `user_info`
         $this->dropForeignKey(
-            'fk-individual_entrepreneur-user_info_id',
-            'individual_entrepreneur'
+            'fk-individual-user_info_id',
+            'individual'
         );
 
         // drops index for column `user_info_id`
         $this->dropIndex(
-            'idx-individual_entrepreneur-user_info_id',
-            'individual_entrepreneur'
+            'idx-individual-user_info_id',
+            'individual'
         );
 
-        $this->dropTable('individual_entrepreneur');
+        $this->dropTable('individual');
     }
 }
