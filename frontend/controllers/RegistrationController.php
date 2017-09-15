@@ -20,13 +20,20 @@ class RegistrationController extends BaseRegistrationController
 
         $this->trigger(self::EVENT_BEFORE_CONFIRM, $event);
 
-        $user->attemptConfirmation($code);
+        $showRegistrationForm = $user->attemptConfirmation($code);
 
         $this->trigger(self::EVENT_AFTER_CONFIRM, $event);
 
-        return $this->render('/message', [
-            'title'  => \Yii::t('user', 'Account confirmation'),
+        $title = $showRegistrationForm ? \Yii::t('app', 'Продолжение регистрации') : \Yii::t('user', 'Account confirmation');
+
+        return $this->render('@frontend/views/registration/init', [
+            'title' => $title,
             'module' => $this->module,
         ]);
+
+        /*return $this->render('/message', [
+            'title'  => $title,
+            'module' => $this->module,
+        ]);*/
     }
 }

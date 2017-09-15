@@ -43,6 +43,13 @@ return [
                 'pages/<page:[\w-]+>' => 'pages/default/index',
             ],
         ],
+        /*'view' => [
+            'theme' => [
+                'pathMap' => [
+                    '@dektrium/user/views' => '@frontend/views/user'
+                ],
+            ],
+        ],*/
     ],
     'modules' => [
         'user' => [
