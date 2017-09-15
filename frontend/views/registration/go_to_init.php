@@ -16,7 +16,7 @@ $this->title = $title;
 $regType = new RegistrationType;
 
 echo $this->render('/message', [
-    'title'  => $title,
+    'title' => $title,
     'module' => $module,
 ]);
 

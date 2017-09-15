@@ -2,9 +2,10 @@
 
 namespace frontend\controllers;
 
-use Yii;
+#use Yii;
 use dektrium\user\controllers\RegistrationController as BaseRegistrationController;
 use yii\web\NotFoundHttpException;
+use common\models\UserInfo;
 
 class RegistrationController extends BaseRegistrationController
 {
@@ -44,6 +45,10 @@ class RegistrationController extends BaseRegistrationController
 
     public function actionInit()
     {
+        if ($complete = UserInfo::find()->select(['complete'])->where(['user_id' => $this->id])->one()) {
+            return $this->redirect(['/manager/info']);
+        }
+
         return $this->render('@frontend/views/registration/init', [
             'title' => \Yii::t('app', 'Регистрация: выбор варианта'),
             'module' => $this->module,
