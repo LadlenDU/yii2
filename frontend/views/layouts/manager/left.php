@@ -41,9 +41,9 @@
                         //'url' => ['/manager/debtors'],
                         'url' => ['#'],
                         'items' => [
-                            ['label' => 'Проверка регистрации', 'icon' => 'file-code-o', 'url' => ['/manager/debtors/verify-registration'],],
-                            ['label' => 'Проверка задолженности', 'icon' => 'dashboard', 'url' => ['/manager/debtors/debt-verification'],],
-                            ['label' => 'Расчет пошлины', 'icon' => 'dashboard', 'url' => ['/manager/debtors/calculation-of-duty'],],
+                            ['label' => 'Досудебная работа', 'icon' => 'file-code-o', 'url' => ['/manager/debtors/verify-registration'],],
+                            ['label' => 'Судебная работа', 'icon' => 'dashboard', 'url' => ['/manager/debtors/debt-verification'],],
+                            ['label' => 'Работа с приставами', 'icon' => 'dashboard', 'url' => ['/manager/debtors/calculation-of-duty'],],
                         ],
                     ],
                     [
