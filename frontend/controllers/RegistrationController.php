@@ -16,7 +16,6 @@ class RegistrationController extends BaseRegistrationController
         return $behaviour;
     }
 
-
     /** @inheritdoc */
     public function actionConfirm($id, $code)
     {
