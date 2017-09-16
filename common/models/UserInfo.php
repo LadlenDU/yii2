@@ -6,6 +6,7 @@ use Yii;
 use common\models\info\Individual;
 use common\models\info\IndividualEntrepreneur;
 use common\models\info\LegalEntity;
+use dektrium\user\models\User;
 
 /**
  * This is the model class for table "user_info".
