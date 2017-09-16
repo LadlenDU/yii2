@@ -26,6 +26,8 @@
         </form>
         <!-- /.search form -->
 
+
+        <?php  //TODO: переводы Yii::t() ?>
         <?= dmstr\widgets\Menu::widget(
             [
                 'options' => ['class' => 'sidebar-menu'],
@@ -34,6 +36,7 @@
                     ['label' => 'Структура', 'icon' => 'share-alt', 'url' => ['/site']],
                     ['label' => 'Страницы', 'icon' => 'file-code-o', 'url' => ['/pages/manager']],
                     ['label' => 'RBAC', 'icon' => 'users', 'url' => ['/rbac']],
+                    ['label' => 'Пользователи', 'icon' => 'users', 'url' => ['/user/admin/index']],
                     ['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['/gii']],
                     ['label' => 'Debug', 'icon' => 'dashboard', 'url' => ['/debug']],
                     ['label' => 'Login', 'url' => ['site/login'], 'visible' => Yii::$app->user->isGuest],
