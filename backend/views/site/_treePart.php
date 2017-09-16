@@ -6,7 +6,6 @@
  */
 
 use bupy7\pages\models\Page;
-#use yii\helpers\Html;
 
 $pages = Page::find()->select(['id', 'title'])->all();
 
@@ -16,11 +15,3 @@ foreach ($pages as $pg) {
 }
 
 echo $form->field($node, 'pages')->dropDownList($listData);
-
-//echo '<select name="page">';
-//
-//foreach ($pages as $pg) {
-//    echo "<option value='{$pg->id}'>" . Html::encode($pg->title) . "</option>";
-//}
-//
-//echo '</select>';

@@ -3,6 +3,8 @@
 use yii\filters\AccessControl;
 
 return [
+    'id' => 'software-package-upravdolg',
+    'name' => 'Программный комплекс «УПРАВДОЛГ»',
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'components' => [
         'cache' => [

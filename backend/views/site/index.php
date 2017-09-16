@@ -38,7 +38,7 @@ echo TreeView::widget([
     //'softDelete' => true,
     //'cacheSettings' => ['enableCache' => true],
     'nodeAddlViews' => [
-        Module::VIEW_PART_2 => '@backend/views/site/_treePart2'
+        Module::VIEW_PART_2 => '@backend/views/site/_treePart'
     ],
 ]);
 
