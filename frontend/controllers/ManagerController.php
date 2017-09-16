@@ -5,6 +5,9 @@ namespace frontend\controllers;
 use Yii;
 use yii\filters\AccessControl;
 use common\models\UserInfo;
+use common\models\info\LegalEntity;
+use common\models\info\IndividualEntrepreneur;
+use common\models\info\Individual;
 
 class ManagerController extends \yii\web\Controller
 {
@@ -39,19 +42,25 @@ class ManagerController extends \yii\web\Controller
             switch ($infoModel->attributes['registration_type_id']) {
                 case 1: {
                     // юридическое лицо
-                    $model = new \common\models\info\LegalEntity();
+                    if (!$model = LegalEntity::find()->where(['user_info_id' => $infoModel->id])->one()) {
+                        $model = new LegalEntity();
+                    }
                     $viewName = 'legal_entity';
                     break;
                 }
                 case 2: {
                     // индивидуальный предприниматель
-                    $model = new \common\models\info\IndividualEntrepreneur();
+                    if (!$model = IndividualEntrepreneur::find()->where(['user_info_id' => $infoModel->id])->one()) {
+                        $model = new IndividualEntrepreneur();
+                    }
                     $viewName = 'individual_entrepreneur';
                     break;
                 }
                 case 3: {
                     // физическое лицо
-                    $model = new \common\models\info\Individual();
+                    if (!$model = Individual::find()->where(['user_info_id' => $infoModel->id])->one()) {
+                        $model = new Individual();
+                    }
                     $viewName = 'individual';
                     break;
                 }
