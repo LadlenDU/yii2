@@ -52,13 +52,13 @@ class LegalEntity extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'user_info_id' => Yii::t('app', 'User Info ID'),
-            'company_name' => Yii::t('app', 'Company Name'),
-            'INN' => Yii::t('app', 'Inn'),
-            'KPP' => Yii::t('app', 'Kpp'),
-            'OGRN' => Yii::t('app', 'Ogrn'),
-            'BIC' => Yii::t('app', 'Bic'),
-            'checking_account_num' => Yii::t('app', 'Checking Account Num'),
-            'CEO_name' => Yii::t('app', 'Ceo Name'),
+            'company_name' => Yii::t('app', 'Наименование компании, форма собственности'),
+            'INN' => Yii::t('app', 'ИНН'),
+            'KPP' => Yii::t('app', 'КПП'),
+            'OGRN' => Yii::t('app', 'ОГРН'),
+            'BIC' => Yii::t('app', 'БИК'),
+            'checking_account_num' => Yii::t('app', '№ расчетного счета'),
+            'CEO_name' => Yii::t('app', 'ФИО Генерального директора'),
         ];
     }
 

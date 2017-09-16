@@ -6,6 +6,8 @@ use yii\widgets\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $model common\models\info\Individual */
 /* @var $form ActiveForm */
+
+//TODO: title из БД
 ?>
 <div class="frontend-views-manager-individual">
 

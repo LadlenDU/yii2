@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use Yii;
 use yii\filters\AccessControl;
 use common\models\UserInfo;
 
@@ -34,8 +35,8 @@ class ManagerController extends \yii\web\Controller
         $params = [];
         $viewName = 'index';
 
-        if ($inforModel = UserInfo::find()->where(['user_id' => \Yii::$app->user->identity->getId()])->one()) {
-            switch ($inforModel->attributes['registration_type_id']) {
+        if ($infoModel = UserInfo::find()->where(['user_id' => Yii::$app->user->identity->getId()])->one()) {
+            switch ($infoModel->attributes['registration_type_id']) {
                 case 1: {
                     // юридическое лицо
                     $model = new \common\models\info\LegalEntity();
@@ -60,10 +61,18 @@ class ManagerController extends \yii\web\Controller
             }
 
             if (!empty($model)) {
-                if ($model->load(\Yii::$app->request->post()) && $model->validate()) {
-                    if ($model->save()) {
-                        // form inputs are valid, do something here
-                        return;
+                if ($model->load(Yii::$app->request->post())) {
+                    if ($model->validate()) {
+                        $model->user_info_id = $infoModel->id;
+                        if ($model->save()) {
+                            // form inputs are valid, do something here
+                            Yii::$app->session->setFlash('success', Yii::t('app', 'Форма успешно сохранена.'));
+                            //return;
+                        } else {
+                            Yii::$app->session->setFlash('danger', Yii::t('app', 'Не удалось сохранить форму.'));
+                        }
+                    } else {
+                        Yii::$app->session->setFlash('error', Yii::t('app', 'Форма не прошла валидацию.'));
                     }
                 }
 

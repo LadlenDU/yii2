@@ -48,9 +48,9 @@ class Individual extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'user_info_id' => Yii::t('app', 'User Info ID'),
-            'full_name' => Yii::t('app', 'Full Name'),
-            'INN' => Yii::t('app', 'Inn'),
-            'checking_account_num' => Yii::t('app', 'Checking Account Num'),
+            'full_name' => Yii::t('app', Yii::t('app', 'ФИО')),
+            'INN' => Yii::t('app', Yii::t('app', 'ИНН')),
+            'checking_account_num' => Yii::t('app', '№ расчетного счета'),
         ];
     }
 

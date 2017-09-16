@@ -3,6 +3,9 @@
 namespace common\models;
 
 use Yii;
+use common\models\info\Individual;
+use common\models\info\IndividualEntrepreneur;
+use common\models\info\LegalEntity;
 
 /**
  * This is the model class for table "user_info".
