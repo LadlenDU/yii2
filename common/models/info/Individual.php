@@ -3,6 +3,7 @@
 namespace common\models\info;
 
 use Yii;
+use common\models\UserInfo;
 
 /**
  * This is the model class for table "individual".
