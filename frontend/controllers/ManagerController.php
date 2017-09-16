@@ -13,6 +13,6 @@ class ManagerController extends \yii\web\Controller
 
     public function actionInfo()
     {
-        echo 'UUUUU+++++++++++++++++';
+        return $this->render('info');
     }
 }
