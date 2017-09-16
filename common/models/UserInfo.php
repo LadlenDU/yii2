@@ -20,12 +20,22 @@ use Yii;
  */
 class UserInfo extends \yii\db\ActiveRecord
 {
+    const SCENARIO_SELECT_REGISTRATION_TYPE = 'select_registration_type';
+
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
         return 'user_info';
+    }
+
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        $scenarios[self::SCENARIO_SELECT_REGISTRATION_TYPE] = ['registration_type_id'];
+
+        return $scenarios;
     }
 
     /**

@@ -4,7 +4,7 @@ namespace frontend\controllers;
 
 class ManagerController extends \yii\web\Controller
 {
-    public $layout = 'manager';
+    public $layout = 'manager/main';
 
     public function actionIndex()
     {

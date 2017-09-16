@@ -8,7 +8,6 @@
  */
 
 use yii\helpers\Html;
-#use yii\widgets\ActiveForm;
 use common\models\RegistrationType;
 
 $this->title = $title;

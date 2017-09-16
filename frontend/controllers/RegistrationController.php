@@ -45,13 +45,27 @@ class RegistrationController extends BaseRegistrationController
 
     public function actionInit()
     {
-        if ($complete = UserInfo::find()->select(['complete'])->where(['user_id' => $this->id])->one()) {
+        //if ($complete = UserInfo::find()->select(['complete'])->where(['user_id' => $this->id])->one()) {
+        if ($model = UserInfo::find()->where(['user_id' => \Yii::$app->user->identity->getId()])->one()) {
             return $this->redirect(['/manager/info']);
+        } else {
+            $model = \Yii::createObject(UserInfo::className());
+            $model->link('user', \Yii::$app->user->identity);
+        }
+
+        $model->scenario = UserInfo::SCENARIO_SELECT_REGISTRATION_TYPE;
+
+        if ($model->load(\Yii::$app->request->post()) && $model->validate()) {
+            if ($model->save()) {
+                // form inputs are valid, do something here
+                return;
+            }
         }
 
         return $this->render('@frontend/views/registration/init', [
             'title' => \Yii::t('app', 'Регистрация: выбор варианта'),
             'module' => $this->module,
+            'model' => $model,
         ]);
     }
 }
