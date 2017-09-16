@@ -18,8 +18,6 @@ $this->title = $title;
     <?php $form = ActiveForm::begin(); ?>
 
     <?= Html::activeDropDownList($model, 'registration_type_id', RegistrationType::getIdNamePairs()) ?>
-    <?/*= Html::activeDropDownList($regType, 'id', $regType->getIdNamePairs()) */?>
-    <?/*= $form->field($model, 'registration_type_id') */?>
     <br>
     <br>
 
