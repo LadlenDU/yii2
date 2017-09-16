@@ -64,8 +64,8 @@ AppAsset::register($this);
     ?>
 
     <header class="container">
-        <div class="row">
-            <div class="col-md-4 text-center"><?= Html::img('/img/logo.jpg', ['alt' => Yii::t('app', 'Логотип'), 'width' => 238, 'height' => 212]) ?></div>
+        <div class="row header">
+            <div class="col-md-4 text-center"><?= Html::img('/img/logo.jpg', ['alt' => Yii::t('app', 'Логотип'), 'width' => 138, 'height' => 112]) ?></div>
             <div class="col-md-3 text-center">Заказ онлайн</div>
             <div class="col-md-5 text-center">
                 Тел: +7 (123) 123 12 34<br>
@@ -96,6 +96,7 @@ AppAsset::register($this);
                         '/user/registration/register'
                     );*/
                 } else {
+                    $menuItems[] = ['label' => Yii::t('app', 'Личный кабинет'), 'url' => ['/manager']];
                     $menuItems[] = [
                         'label' => Yii::t('app', 'Выйти ({username})',
                             ['username' => Yii::$app->user->identity->username]),

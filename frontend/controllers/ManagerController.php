@@ -33,7 +33,8 @@ class ManagerController extends \yii\web\Controller
         return $this->render('index');
     }
 
-    public function actionInfo()
+    //public function actionInfo()
+    public function actionMyOrganization()
     {
         $params = [];
         $viewName = 'index';

@@ -11,7 +11,7 @@ body {
 }
 
 .wrap > .container {
-    padding: 70px 15px 20px;
+    padding: 1em 15px 20px;
 }
 
 .footer {
@@ -137,4 +137,8 @@ a.desc:after {
 .middle-ad-block > section {
     border: black 1px solid;
     height: 10em;
+}
+
+.header {
+    margin-bottom: 1em;
 }
