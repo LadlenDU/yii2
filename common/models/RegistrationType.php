@@ -58,7 +58,7 @@ class RegistrationType extends \yii\db\ActiveRecord
         return $this->hasMany(UserInfo::className(), ['registration_type_id' => 'id'])->inverseOf('registrationType');
     }
 
-    public function getIdNamePairs()
+    public static function getIdNamePairs()
     {
         return ArrayHelper::map(self::find()->all(), 'id', 'name');
     }

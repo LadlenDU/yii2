@@ -47,7 +47,9 @@ class RegistrationController extends BaseRegistrationController
     {
         //if ($complete = UserInfo::find()->select(['complete'])->where(['user_id' => $this->id])->one()) {
         if ($model = UserInfo::find()->where(['user_id' => \Yii::$app->user->identity->getId()])->one()) {
-            return $this->redirect(['/manager/info']);
+            if ($model->attributes['registration_type_id']) {
+                return $this->redirect(['/manager/info']);
+            }
         } else {
             $model = \Yii::createObject(UserInfo::className());
             $model->link('user', \Yii::$app->user->identity);
@@ -56,9 +58,9 @@ class RegistrationController extends BaseRegistrationController
         $model->scenario = UserInfo::SCENARIO_SELECT_REGISTRATION_TYPE;
 
         if ($model->load(\Yii::$app->request->post()) && $model->validate()) {
+            $model->complete = 1;
             if ($model->save()) {
-                // form inputs are valid, do something here
-                return;
+                return $this->redirect(['/manager/info']);
             }
         }
 

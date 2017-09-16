@@ -11,14 +11,15 @@ use yii\widgets\ActiveForm;
 use common\models\RegistrationType;
 
 $this->title = $title;
-$regType = new RegistrationType;
+#$regType = new RegistrationType;
 ?>
 <div class="registration-init">
 
     <?php $form = ActiveForm::begin(); ?>
 
+    <?= Html::activeDropDownList($model, 'registration_type_id', RegistrationType::getIdNamePairs()) ?>
     <?/*= Html::activeDropDownList($regType, 'id', $regType->getIdNamePairs()) */?>
-    <?= $form->field($model, 'registration_type_id') ?>
+    <?/*= $form->field($model, 'registration_type_id') */?>
     <br>
     <br>
 
