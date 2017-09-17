@@ -64,6 +64,10 @@ return [
                 'User' => 'frontend\models\User',
             ],
         ],
+        'office' => [
+            'class' => 'frontend\modules\office\Module',
+        ],
     ],
+
     'params' => $params,
 ];

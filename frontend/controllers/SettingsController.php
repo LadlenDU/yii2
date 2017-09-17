@@ -6,5 +6,6 @@ use dektrium\user\controllers\SettingsController as BaseSettingsController;
 
 class SettingsController extends BaseSettingsController
 {
-    public $layout = '/manager/main';
+    //@app/views/layouts/mainLayout
+    public $layout = '@frontend/modules/office/views/layouts/main';
 }

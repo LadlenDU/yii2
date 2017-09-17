@@ -1,18 +1,21 @@
 <?php
 
-namespace frontend\controllers;
+namespace frontend\modules\office\controllers;
 
 use Yii;
+use yii\web\Controller;
 use yii\filters\AccessControl;
 use common\models\UserInfo;
 use common\models\info\LegalEntity;
 use common\models\info\IndividualEntrepreneur;
 use common\models\info\Individual;
 
-class ManagerController extends \yii\web\Controller
-{
-    public $layout = 'manager/main';
 
+/**
+ * Default controller for the `office` module
+ */
+class DefaultController extends Controller
+{
     public function behaviors()
     {
         return [
@@ -28,33 +31,15 @@ class ManagerController extends \yii\web\Controller
         ];
     }
 
+    /**
+     * Renders the index view for the module
+     * @return string
+     */
     public function actionIndex()
     {
-//        $auth = Yii::$app->authManager;
-//        $role = $auth->getRole('admin');
-//        $auth->assign($role, Yii::$app->user->id);
-
-        #use yii\rbac\DbManager;
-//        $r=new \yii\rbac\DbManager;
-//        #$r = Yii::$app->authManager;
-//        $r->init();
-//        $r->createRole("admin", "Administrator");
-//        $r->save();
-//
-//        $r->assign('1','admin');
-
-        /*$auth = new \yii\rbac\DbManager;
-        $auth->init();
-        $role = $auth->createRole('admin');
-        $auth->add($role);
-
-        $auth->assign($role, Yii::$app->user->id);*/
-
-
         return $this->render('index');
     }
 
-    //public function actionInfo()
     public function actionMyOrganization()
     {
         $params = [];
