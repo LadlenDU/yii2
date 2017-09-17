@@ -15,7 +15,7 @@ class m170916_173428_add_balance_column_to_user_info_table extends Migration
      */
     public function up()
     {
-        $this->addColumn('user_info', 'balance', $this->decimal(8,2)->default(0));
+        $this->addColumn('user_info', 'balance', $this->decimal(8,2)->defaultValue(0));
         $this->addColumn('user_info', 'tariff_plan_id', $this->integer()->null());
 
         // creates index for column `tariff_plan_id`

@@ -30,6 +30,27 @@ class ManagerController extends \yii\web\Controller
 
     public function actionIndex()
     {
+//        $auth = Yii::$app->authManager;
+//        $role = $auth->getRole('admin');
+//        $auth->assign($role, Yii::$app->user->id);
+
+        #use yii\rbac\DbManager;
+//        $r=new \yii\rbac\DbManager;
+//        #$r = Yii::$app->authManager;
+//        $r->init();
+//        $r->createRole("admin", "Administrator");
+//        $r->save();
+//
+//        $r->assign('1','admin');
+
+        /*$auth = new \yii\rbac\DbManager;
+        $auth->init();
+        $role = $auth->createRole('admin');
+        $auth->add($role);
+
+        $auth->assign($role, Yii::$app->user->id);*/
+
+
         return $this->render('index');
     }
 
