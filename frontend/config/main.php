@@ -40,6 +40,8 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                '<module:\w+>/<action:[\w-]+>/<id:(.*?)>' => '<module>/default/<action>/<id>',
+                '<module:\w+>/<action:[\w-]+>' => '<module>/default/<action>',
                 'pages/<page:[\w-]+>' => 'pages/default/index',
             ],
         ],
