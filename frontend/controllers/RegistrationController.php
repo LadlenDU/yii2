@@ -47,7 +47,7 @@ class RegistrationController extends BaseRegistrationController
         //if ($complete = UserInfo::find()->select(['complete'])->where(['user_id' => $this->id])->one()) {
         if ($model = UserInfo::find()->where(['user_id' => \Yii::$app->user->identity->getId()])->one()) {
             if ($model->attributes['registration_type_id']) {
-                return $this->redirect(['/manager/my-organization']);
+                return $this->redirect(['/office/my-organization']);
             }
         } else {
             $model = \Yii::createObject(UserInfo::className());
@@ -59,7 +59,7 @@ class RegistrationController extends BaseRegistrationController
         if ($model->load(\Yii::$app->request->post()) && $model->validate()) {
             $model->complete = 1;
             if ($model->save()) {
-                return $this->redirect(['/manager/my-organization']);
+                return $this->redirect(['/office/my-organization']);
             }
         }
 

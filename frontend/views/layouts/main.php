@@ -96,7 +96,7 @@ AppAsset::register($this);
                         '/user/registration/register'
                     );*/
                 } else {
-                    $menuItems[] = ['label' => Yii::t('app', 'Личный кабинет'), 'url' => ['/manager']];
+                    $menuItems[] = ['label' => Yii::t('app', 'Личный кабинет'), 'url' => ['/office']];
                     $menuItems[] = [
                         'label' => Yii::t('app', 'Выйти ({username})',
                             ['username' => Yii::$app->user->identity->username]),

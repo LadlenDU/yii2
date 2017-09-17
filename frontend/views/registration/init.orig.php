@@ -17,7 +17,7 @@ $regType = new RegistrationType;
 ?>
 <div class="registration-type">
 
-    <?php $form = ActiveForm::begin(['action' => '/manager/init']); ?>
+    <?php $form = ActiveForm::begin(['action' => '/office/init']); ?>
 
     <?= Html::activeDropDownList($regType, 'id', $regType->getIdNamePairs()) ?>
     <br>
