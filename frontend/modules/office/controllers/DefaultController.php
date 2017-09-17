@@ -16,6 +16,7 @@ use common\models\info\Individual;
  */
 class DefaultController extends Controller
 {
+    //TODO: перенести правило в модуль ???
     public function behaviors()
     {
         return [
