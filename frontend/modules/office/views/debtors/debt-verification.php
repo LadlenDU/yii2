@@ -8,40 +8,48 @@
 #use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\helpers\Enum;
+
 #use yiister\adminlte\widgets\grid\GridView;
-use yii\grid\GridView;
+#use yii\grid\GridView;
+
+use kartik\dynagrid\DynaGrid;
+use kartik\grid\GridView;
+
+$columns = [
+    [
+        'class' => 'kartik\grid\SerialColumn',
+        'order' => DynaGrid::ORDER_FIX_LEFT
+    ],
+    'id',
+    'name',
+    [
+        'attribute' => 'publish_date',
+        'filterType' => GridView::FILTER_DATE,
+        'format' => 'raw',
+        'width' => '170px',
+        'filterWidgetOptions' => [
+            'pluginOptions' => ['format' => 'yyyy-mm-dd']
+        ],
+    ],
+    [
+        'class' => 'kartik\grid\BooleanColumn',
+        'attribute' => 'status',
+        'vAlign' => 'middle',
+    ],
+    [
+        'class' => 'kartik\grid\ActionColumn',
+        'dropdown' => false,
+        'order' => DynaGrid::ORDER_FIX_RIGHT
+    ],
+    ['class' => 'kartik\grid\CheckboxColumn', 'order' => DynaGrid::ORDER_FIX_RIGHT],
+];
 
 ?>
-<?php /* ?>
-<?php if ($uploaded): ?>
-    <p> Файл успешно загружен. Проверьте <?php echo $dir ?> . </p>
-<?php endif; ?>
-<?php echo Html::beginForm('', 'post', ['enctype' => 'multipart/form-data']) ?>
-<?php echo Html::error($model, 'file') ?>
-<?php echo Html::activeFileInput($model, 'file') ?>
-<?php echo Html::submitButton('Upload') ?>
-<?php Html::endForm() ?>
-
-<?php */ ?>
-
-<!--<ul class="arrows-block">
-    <li class="step-arrow active"><a data-url="/debtors/debtors/debtorsList?area=debtors-index_inner_area"
-                                     class="sub-tab"
-                                     href="javascript:void(0);"><?/*= Yii::t('app', 'Проверка регистрации') */?></a></li>
-    <li class="step-arrow "><a data-url="/debtors/debtors/notificationsList?area=debtors-index_inner_area"
-                               class="sub-tab"
-                               href="javascript:void(0);"><?/*= Yii::t('app', 'Проверка задолженности') */?></a></li>
-    <li class="step-arrow "><a data-url="/debtors/debtors/repeatNotifications?area=debtors-index_inner_area"
-                               class="sub-tab" href="javascript:void(0);"><?/*= Yii::t('app', 'Расчет пошлины') */?></a>
-    </li>
-</ul>
-<br><br>-->
-
 
 <div class="arrow-steps clearfix">
-    <div class="step current"><span><?= Yii::t('app', 'Проверка регистрации') ?></span></div>
-    <div class="step"><span><?= Yii::t('app', 'Проверка задолженности') ?></span></div>
-    <div class="step"><span> <?= Yii::t('app', 'Расчет пошлины') ?></span></div>
+    <div class="step current"><span><?= Yii::t('app', 'Досудебная практика') ?></span></div>
+    <div class="step"><span><?= Yii::t('app', 'Судебная практика') ?></span></div>
+    <div class="step"><span> <?= Yii::t('app', 'Исполнительное производство') ?></span></div>
 </div>
 
 <br><br>
@@ -199,7 +207,7 @@ use yii\grid\GridView;
 
 <?php
 #echo Enum::array2table($sheetData, false, true)
-echo GridView::widget([
+/*echo GridView::widget([
     'dataProvider' => $dataProvider,
     'columns' => [
         ['class' => 'yii\grid\SerialColumn'],
@@ -215,7 +223,19 @@ echo GridView::widget([
         // 'updated_at',
         ['class' => 'yii\grid\ActionColumn'],
     ],
-]);
+]);*/
+/*echo DynaGrid::widget([
+    'options' => ['id' => 'dynagrid-1'],
+    'columns' => $columns,
+    'storage' => DynaGrid::TYPE_COOKIE,
+    'theme' => 'panel-danger',
+    'gridOptions' => [
+        'dataProvider' => $dataProvider,
+        //'filterModel' => $searchModel,
+        'panel' => ['heading' => '<h3 class="panel-title">Library</h3>'],
+    ]
+]);*/
+
 ?>
 
 <script>

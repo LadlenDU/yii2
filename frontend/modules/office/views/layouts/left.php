@@ -47,14 +47,16 @@
                         ],*/
                     ],
                     [
-                        'label' => 'Заявление в суд',
+                        //'label' => 'Заявление в суд',
+                        'label' => 'Квартплата',
                         'icon' => 'dashboard',
                         'url' => ['#'],
                         'items' => [
                             ['label' => 'Курьер', 'icon' => 'file-code-o', 'url' => ['/office/court/courier'],],
                         ],
                     ],
-                    ['label' => 'Заявление приставам', 'icon' => 'file-code-o', 'url' => ['/office/statement-to-bailiffs']],
+                    //['label' => 'Заявление приставам', 'icon' => 'file-code-o', 'url' => ['/office/statement-to-bailiffs']],
+                    ['label' => 'Диспетчерская', 'icon' => 'file-code-o', 'url' => ['/office/statement-to-bailiffs']],
                     ['label' => 'Рассылки', 'icon' => 'file-code-o', 'url' => ['/office/newsletters']],
                     ['label' => 'Отчеты', 'icon' => 'file-code-o', 'url' => ['/office/reports']],
                     ['label' => 'Аналитика', 'icon' => 'file-code-o', 'url' => ['/office/analytics']],
