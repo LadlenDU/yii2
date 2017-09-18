@@ -36,7 +36,7 @@
                     ['label' => 'Организации', 'icon' => 'users', 'url' => ['/office/organizations']],
                     ['label' => 'Дома', 'icon' => 'file-code-o', 'url' => ['/office/buildings']],
                     [
-                        'label' => 'Должники',
+                        'label' => 'Работа с Должниками',
                         'icon' => 'dashboard',
                         'url' => ['/office/debtors/debt-verification'],
                         /*'url' => ['#'],
