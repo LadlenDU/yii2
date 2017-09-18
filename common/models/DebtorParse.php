@@ -22,6 +22,7 @@ class DebtorParse extends Model
         'name_mixed' => [
             'ФИО',
             'фамилия,имя,отчество',
+            'фамилия, имя, отчество',
         ],
         'address' => [
             'адрес',
@@ -79,6 +80,13 @@ class DebtorParse extends Model
         'payment_date' => [
             'дата оплаты',
         ],
+        /*'payment_date' => [
+            'дата оплаты',
+        ],*/
+    ];
+
+    protected static $FIELDS_IGNORE = [
+        'долг (мес.)',
     ];
 
     protected static function prepareStringToCompare($str)
@@ -113,20 +121,26 @@ class DebtorParse extends Model
         foreach ($list as $row) {
             $rowInfo = [];
             foreach ($row as $key => $col) {
-                if ($firstRow) {
-                    if ($debtorColName = self::findColumName(self::$FIELDS_DEBTOR, $col)) {
-                        $headers[$key] = ['debtor', $debtorColName, $col];
-                    } else {
-                        if ($debtDetailsColName = self::findColumName(self::$FIELDS_DEBT_DETAILS, $col)) {
-                            $headers[$key] = ['debt_details', $debtDetailsColName, $col];
-                        } else {
-                            $exception = new ColumnNotFoundException(Yii::t('app', "Колонка '$col' не найдена."));
-                            $exception->setWrongColumnName($col);
-                            throw $exception;
+                if ($col = trim($col)) {
+                    if ($firstRow) {
+                        $colPrepared = self::prepareStringToCompare($col);
+                        if (in_array($colPrepared, self::$FIELDS_IGNORE)) {
+                            continue;
                         }
+                        if ($debtorColName = self::findColumName(self::$FIELDS_DEBTOR, $col)) {
+                            $headers[$key] = ['debtor', $debtorColName, $col];
+                        } else {
+                            if ($debtDetailsColName = self::findColumName(self::$FIELDS_DEBT_DETAILS, $col)) {
+                                $headers[$key] = ['debt_details', $debtDetailsColName, $col];
+                            } else {
+                                $exception = new ColumnNotFoundException(Yii::t('app', "Колонка '$col' не найдена."));
+                                $exception->setWrongColumnName($col);
+                                throw $exception;
+                            }
+                        }
+                    } else {
+                        $rowInfo[$key] = $col;
                     }
-                } else {
-                    $rowInfo[$key] = $col;
                 }
             }
 
@@ -149,8 +163,10 @@ class DebtorParse extends Model
             foreach ($info['colInfo'] as $rowInfo) {
                 $debtor = new Debtor;
                 foreach ($rowInfo as $key => $colInfo) {
-                    if ($info['headers'][$key][0] == 'debtor') {
-                        $debtor->{$info['headers'][$key][1]} = $colInfo;
+                    if (!empty($info['headers'][$key])) {
+                        if ($info['headers'][$key][0] == 'debtor') {
+                            $debtor->{$info['headers'][$key][1]} = $colInfo;
+                        }
                     }
                 }
                 $debtor->save();
