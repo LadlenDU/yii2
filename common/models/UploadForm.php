@@ -1,7 +1,8 @@
 <?php
 
-namespace app\models;
+namespace common\models;
 
+use Yii;
 use yii\base\Model;
 use yii\web\UploadedFile;
 
@@ -25,7 +26,9 @@ class UploadForm extends Model
     {
         if ($this->validate()) {
             //$this->imageFile->saveAs('uploads/' . $this->imageFile->baseName . '.' . $this->imageFile->extension);
-            $this->excelFile->saveAs('common/uploads/' . $this->excelFile->baseName . '.' . $this->excelFile->extension);
+            $fileName = tempnam(Yii::getAlias('@common') . '/uploads/excel', 'exc_');
+            #$fileName .= '.' . $this->excelFile->extension;
+            $this->excelFile->saveAs($fileName);
             return true;
         } else {
             return false;

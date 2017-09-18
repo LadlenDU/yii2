@@ -5,10 +5,12 @@ namespace frontend\modules\office\controllers;
 use Yii;
 use yii\web\Controller;
 use yii\filters\AccessControl;
-use common\models\UserInfo;
-use common\models\info\LegalEntity;
-use common\models\info\IndividualEntrepreneur;
-use common\models\info\Individual;
+use yii\web\UploadedFile;
+use common\models\UploadForm;
+#use common\models\UserInfo;
+#use common\models\info\LegalEntity;
+#use common\models\info\IndividualEntrepreneur;
+#use common\models\info\Individual;
 
 
 /**
@@ -43,7 +45,16 @@ class DebtorsController extends Controller
 
     public function actionDebtVerification()
     {
-        $params = [];
-        return $this->render('debt-verification', $params);
+        $uploadModel = new UploadForm();
+
+        if (Yii::$app->request->isPost) {
+            $uploadModel->excelFile = UploadedFile::getInstance($uploadModel, 'excelFile');
+            if ($uploadModel->upload()) {
+                // file is uploaded successfully
+                return;
+            }
+        }
+
+        return $this->render('debt-verification', ['uploadModel' => $uploadModel]);
     }
 }
