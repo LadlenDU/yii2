@@ -167,19 +167,21 @@ class DebtorParse extends Model
     public static function saveDebtors(array $info)
     {
         if ($info['headers']) {
-            /*Debtor::()->joinWith('pages')->andWhere([$levelName => $level])
-                ->select(['tree.id', 'tree.name', 'page.alias'])->all();*/
-
             //TODO: костыль - сделать сравнение пользователей
             Debtor::deleteAll();
 
             foreach ($info['colInfo'] as $rowInfo) {
                 $debtor = new Debtor;
+                $debtDetails = new DebtDetails();
                 foreach ($rowInfo as $key => $colInfo) {
                     if (!empty($info['headers'][$key])) {
                         if ($info['headers'][$key][0] == 'debtor') {
                             $debtor->{$info['headers'][$key][1]} = $colInfo;
                         } else {    // $info['headers'][$key][0] == 'debt_details'
+                            $debtDetails->{$info['headers'][$key][1]} = $colInfo;
+                            //$debtDetails->save();
+                            //$debtor->link('debtDetails', $debtDetails);
+                            #$debtor->debtDetails[$info['headers'][$key][1]] = $colInfo;
                             #$debtor->getDebtDetails()->{$info['headers'][$key][1]} = $colInfo;
                             #$debtDetails = $debtor->getDebtDetails();
                             #$debtDetails->{$info['headers'][$key][1]} = $colInfo;
@@ -188,6 +190,7 @@ class DebtorParse extends Model
                 }
                 if ($debtor->validate()) {
                     $debtor->save();
+                    $debtor->link('debtDetails', $debtDetails);
                 } else {
                     $err = print_r($debtor->getErrors(), true);
                     throw new UserException(Yii::t('app', "Данные не прошли валидацию: $err"));
