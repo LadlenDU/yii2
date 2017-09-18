@@ -7,6 +7,7 @@ use yii\web\Controller;
 use yii\filters\AccessControl;
 use yii\web\UploadedFile;
 use common\models\UploadForm;
+
 #use common\models\UserInfo;
 #use common\models\info\LegalEntity;
 #use common\models\info\IndividualEntrepreneur;
@@ -47,14 +48,23 @@ class DebtorsController extends Controller
     {
         $uploadModel = new UploadForm();
 
+        $sheetData = '';
+
         if (Yii::$app->request->isPost) {
             $uploadModel->excelFile = UploadedFile::getInstance($uploadModel, 'excelFile');
-            if ($uploadModel->upload()) {
+            if ($fileName = $uploadModel->upload()) {
                 // file is uploaded successfully
-                return;
+                $objPHPExcel = \PHPExcel_IOFactory::load($fileName);
+                $sheetData = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
+                #print_r($sheetData);
+                #return;
             }
         }
 
-        return $this->render('debt-verification', ['uploadModel' => $uploadModel]);
+        return $this->render('debt-verification',
+            [
+                'uploadModel' => $uploadModel,
+                'sheetData' => $sheetData
+            ]);
     }
 }

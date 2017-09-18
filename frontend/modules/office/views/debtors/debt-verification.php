@@ -7,6 +7,7 @@
 
 #use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use kartik\helpers\Enum;
 
 ?>
 <?php /* ?>
@@ -171,6 +172,8 @@ use yii\widgets\ActiveForm;
         <?php ActiveForm::end() ?>
     </div>
 </div>
+
+<?php echo Enum::array2table($sheetData, false, true) ?>
 
 <script>
     $("#load_debtors").click(function () {

@@ -29,9 +29,9 @@ class UploadForm extends Model
             $fileName = tempnam(Yii::getAlias('@common') . '/uploads/excel', 'exc_');
             #$fileName .= '.' . $this->excelFile->extension;
             $this->excelFile->saveAs($fileName);
-            return true;
-        } else {
-            return false;
+            return $fileName;
         }
+
+        return false;
     }
 }
