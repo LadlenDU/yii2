@@ -24,17 +24,27 @@ use yii\grid\GridView;
 
 <?php */ ?>
 
-<ul class="arrows-block">
+<!--<ul class="arrows-block">
     <li class="step-arrow active"><a data-url="/debtors/debtors/debtorsList?area=debtors-index_inner_area"
                                      class="sub-tab"
-                                     href="javascript:void(0);"><?= Yii::t('app', 'Проверка регистрации') ?></a></li>
+                                     href="javascript:void(0);"><?/*= Yii::t('app', 'Проверка регистрации') */?></a></li>
     <li class="step-arrow "><a data-url="/debtors/debtors/notificationsList?area=debtors-index_inner_area"
                                class="sub-tab"
-                               href="javascript:void(0);"><?= Yii::t('app', 'Проверка задолженности') ?></a></li>
+                               href="javascript:void(0);"><?/*= Yii::t('app', 'Проверка задолженности') */?></a></li>
     <li class="step-arrow "><a data-url="/debtors/debtors/repeatNotifications?area=debtors-index_inner_area"
-                               class="sub-tab" href="javascript:void(0);"><?= Yii::t('app', 'Расчет пошлины') ?></a>
+                               class="sub-tab" href="javascript:void(0);"><?/*= Yii::t('app', 'Расчет пошлины') */?></a>
     </li>
 </ul>
+<br><br>-->
+
+
+<div class="arrow-steps clearfix">
+    <div class="step current"><span><?= Yii::t('app', 'Проверка регистрации') ?></span></div>
+    <div class="step"><span><?= Yii::t('app', 'Проверка задолженности') ?></span></div>
+    <div class="step"><span> <?= Yii::t('app', 'Расчет пошлины') ?></span></div>
+</div>
+
+<br><br>
 
 <div class="grid-head">
     <div class="row">
@@ -42,17 +52,17 @@ use yii\grid\GridView;
             <!--<div class="btn-group">
                 <button id="debtors-bottom-menu" class="btn btn-primary btn-sm dropdown-toggle"
                         data-toggle="dropdown" aria-expanded="true">
-                    <?/*= Yii::t('app', 'Действия к должникам') */?> <b class="caret"></b></button>
+                    <? /*= Yii::t('app', 'Действия к должникам') */ ?> <b class="caret"></b></button>
 
                 <ul role="menu" class="dropdown-menu">
                     <li id="generate-notice" role="menuitem">
-                        <a tabindex="-1" href="javascript:void(0)"><?/*= Yii::t('app', 'Проверка регистрации') */?></a>
+                        <a tabindex="-1" href="javascript:void(0)"><? /*= Yii::t('app', 'Проверка регистрации') */ ?></a>
                     </li>
                     <li id="create-lawsuit" role="menuitem">
-                        <a tabindex="-1" href="javascript:void(0)"><?/*= Yii::t('app', 'Проверка задолженности') */?></a>
+                        <a tabindex="-1" href="javascript:void(0)"><? /*= Yii::t('app', 'Проверка задолженности') */ ?></a>
                     </li>
                     <li id="send-sms" visible="1" role="menuitem">
-                        <a tabindex="-1" href="javascript:void(0)"><?/*= Yii::t('app', 'Расчет пошлины') */?></a>
+                        <a tabindex="-1" href="javascript:void(0)"><? /*= Yii::t('app', 'Расчет пошлины') */ ?></a>
                     </li>
                 </ul>
             </div>-->
