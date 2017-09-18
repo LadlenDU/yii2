@@ -56,6 +56,7 @@ class DebtorsController extends Controller
                 try {
                     $info = DebtorParse::scrapeDebtorsFromArray($sheetData);
                     DebtorParse::saveDebtors($info);
+                    Yii::$app->getSession()->setFlash('success', Yii::t('app', 'Должники успешно добавлены в БД.'));
                 } catch (\Exception $e) {
                     Yii::$app->getSession()->setFlash('error', $e->getMessage());
                 }

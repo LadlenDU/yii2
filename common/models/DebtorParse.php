@@ -67,6 +67,12 @@ class DebtorParse extends Model
         ],
     ];
 
+    /*protected static $FIELDS_DEBTOR_SPECIAL_CARE = [
+        'privatized' => function() {
+
+        },
+    ];*/
+
     protected static $FIELDS_DEBT_DETAILS = [
         'amount' => [
             'сумма долга',
@@ -169,7 +175,12 @@ class DebtorParse extends Model
                         }
                     }
                 }
-                $debtor->save();
+                if ($debtor->validate()) {
+                    $debtor->save();
+                } else {
+                    $err = print_r($debtor->getErrors(), true);
+                    throw new UserException(Yii::t('app', "Данные не прошли валидацию: $err"));
+                }
             }
         } else {
             throw new UserException(Yii::t('app', 'Не обнаружены заголовки.'));
