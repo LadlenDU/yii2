@@ -76,20 +76,20 @@ class Debtor extends Model
         ],
     ];
 
-    protected function prepareStringToCompare($str)
+    protected static function prepareStringToCompare($str)
     {
         $strMod = mb_strtolower($str, Yii::$app->charset);
         $strMod = preg_replace('/\s+/', ' ', $strMod);
         return $strMod;
     }
 
-    protected function findColumName($source, $name)
+    protected static function findColumName(array $source, $name)
     {
-        $nameFiltered = $this->prepareStringToCompare($name);
+        $nameFiltered = self::prepareStringToCompare($name);
 
         foreach ($source as $colName => $values) {
             foreach ($values as $val) {
-                $valFiltered = $this->prepareStringToCompare($val);
+                $valFiltered = self::prepareStringToCompare($val);
                 if ($valFiltered == $nameFiltered) {
                     return $colName;
                 }
@@ -99,20 +99,21 @@ class Debtor extends Model
         return false;
     }
 
-    public function putDebtorsFromArray(array $list)
+    public static function scrapeDebtorsFromArray(array $list)
     {
+        $colInfo = [];
         $headers = [];
 
         $firstRow = true;
         foreach ($list as $row) {
+            $rowInfo = [];
             foreach ($row as $col) {
                 if ($firstRow) {
-                    $debtDetailsColName = false;
-                    if ($debtorColName = $this->findColumName(self::FIELDS_DEBTOR, $col)) {
-                        $headers[] = ['debtor', $col];
+                    if ($debtorColName = self::findColumName(self::FIELDS_DEBTOR, $col)) {
+                        $headers[] = ['debtor', $debtorColName, $col];
                     } else {
-                        if ($debtDetailsColName = $this->findColumName(self::FIELDS_DEBT_DETAILS, $col)) {
-                            $headers[] = ['debt_details', $col];
+                        if ($debtDetailsColName = self::findColumName(self::FIELDS_DEBT_DETAILS, $col)) {
+                            $headers[] = ['debt_details', $debtDetailsColName, $col];
                         } else {
                             $exception = new ColumnNotFoundException("Колонка $col не найдена.");
                             $exception->setWrongColumnName($col);
@@ -120,11 +121,22 @@ class Debtor extends Model
                         }
                     }
                 } else {
-
+                    $rowInfo[] = $col;
                 }
             }
 
-            $firstRow = false;
+            if ($firstRow) {
+                $firstRow = false;
+            } else {
+                $colInfo[] = $rowInfo;
+            }
         }
+
+        return ['headers' => $headers, 'colInfo' => $colInfo];
+    }
+
+    public static function saveDebtors(array $info)
+    {
+
     }
 }

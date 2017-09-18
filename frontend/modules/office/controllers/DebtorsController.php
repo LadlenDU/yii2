@@ -7,12 +7,8 @@ use yii\web\Controller;
 use yii\filters\AccessControl;
 use yii\web\UploadedFile;
 use common\models\UploadForm;
-
-#use common\models\UserInfo;
-#use common\models\info\LegalEntity;
-#use common\models\info\IndividualEntrepreneur;
-#use common\models\info\Individual;
-
+use common\models\Debtor;
+use common\components\ColumnNotFoundException;
 
 /**
  * Default controller for the `office` module
@@ -56,15 +52,20 @@ class DebtorsController extends Controller
                 // file is uploaded successfully
                 $objPHPExcel = \PHPExcel_IOFactory::load($fileName);
                 $sheetData = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
-                #print_r($sheetData);
-                #return;
+
+                try {
+                    $info = Debtor::scrapeDebtorsFromArray($sheetData);
+                    Debtor::saveDebtors($info);
+                } catch (ColumnNotFoundException $e) {
+                    Yii::$app->getSession()->setFlash('error', $e->getMessage());
+                }
             }
         }
 
         return $this->render('debt-verification',
             [
                 'uploadModel' => $uploadModel,
-                'sheetData' => $sheetData
+                'sheetData' => $sheetData,
             ]);
     }
 }
