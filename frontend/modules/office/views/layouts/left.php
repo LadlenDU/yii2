@@ -38,13 +38,13 @@
                     [
                         'label' => 'Должники',
                         'icon' => 'dashboard',
-                        //'url' => ['/office/debtors'],
-                        'url' => ['#'],
+                        'url' => ['/office/debtors/debt-verification'],
+                        /*'url' => ['#'],
                         'items' => [
                             ['label' => 'Досудебная работа', 'icon' => 'file-code-o', 'url' => ['/office/debtors/verify-registration'],],
                             ['label' => 'Судебная работа', 'icon' => 'dashboard', 'url' => ['/office/debtors/debt-verification'],],
                             ['label' => 'Работа с приставами', 'icon' => 'dashboard', 'url' => ['/office/debtors/calculation-of-duty'],],
-                        ],
+                        ],*/
                     ],
                     [
                         'label' => 'Заявление в суд',
