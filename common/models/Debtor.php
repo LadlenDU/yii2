@@ -3,140 +3,111 @@
 namespace common\models;
 
 use Yii;
-use yii\base\Model;
-use common\components\ColumnNotFoundException;
 
-class Debtor extends Model
+/**
+ * This is the model class for table "debtor".
+ *
+ * @property integer $id
+ * @property string $first_name
+ * @property string $second_name
+ * @property string $patronymic
+ * @property string $name_mixed
+ * @property string $address
+ * @property string $locality
+ * @property string $street
+ * @property string $house
+ * @property string $appartment
+ * @property string $phone
+ * @property string $LS_EIRC
+ * @property string $LS_IKU_provider
+ * @property double $space_common
+ * @property double $space_living
+ * @property integer $privatized
+ * @property integer $general_manager_id
+ *
+ * @property DebtDetails[] $debtDetails
+ * @property GeneralManager $generalManager
+ * @property DebtorPublicService[] $debtorPublicServices
+ * @property PublicService[] $publicServices
+ */
+class Debtor extends \yii\db\ActiveRecord
 {
-    const FIELDS_DEBTOR = [
-        'first_name' => [
-            'имя',
-        ],
-        'second_name' => [
-            'фамилия',
-        ],
-        'patronymic' => [
-            'отчество',
-        ],
-        'name_mixed' => [
-            'ФИО',
-            'фамилия,имя,отчество',
-        ],
-        'address' => [
-            'адрес',
-        ],
-        'locality' => [
-            'населённый пункт',
-        ],
-        'street' => [
-            'улица',
-        ],
-        'house' => [
-            'дом',
-        ],
-        'appartment' => [
-            'кв.',
-            'квартира',
-        ],
-        'phone' => [
-            'телефон',
-        ],
-        'LS_EIRC' => [
-            'ЛС ЕИРЦ',
-        ],
-        'LS_IKU_provider' => [
-            'ЛС ИКУ/поставщика',
-        ],
-        'space_common' => [
-            'общая площадь',
-        ],
-        'space_living' => [
-            'жилая площадь',
-        ],
-        'privatized' => [
-            'приватизировано',
-            'приватизирован',
-            'приватизирована',
-            'форма собственности',
-        ],
-    ];
-
-    const FIELDS_DEBT_DETAILS = [
-        'amount' => [
-            'сумма долга',
-        ],
-        'amount_additional_services' => [
-            'сумма долга с допуслугами',
-        ],
-        'date' => [
-            'дата',
-        ],
-        'payment_date' => [
-            'дата оплаты',
-        ],
-    ];
-
-    protected static function prepareStringToCompare($str)
+    /**
+     * @inheritdoc
+     */
+    public static function tableName()
     {
-        $strMod = mb_strtolower($str, Yii::$app->charset);
-        $strMod = preg_replace('/\s+/', ' ', $strMod);
-        return $strMod;
+        return 'debtor';
     }
 
-    protected static function findColumName(array $source, $name)
+    /**
+     * @inheritdoc
+     */
+    public function rules()
     {
-        $nameFiltered = self::prepareStringToCompare($name);
-
-        foreach ($source as $colName => $values) {
-            foreach ($values as $val) {
-                $valFiltered = self::prepareStringToCompare($val);
-                if ($valFiltered == $nameFiltered) {
-                    return $colName;
-                }
-            }
-        }
-
-        return false;
+        return [
+            [['space_common', 'space_living'], 'number'],
+            [['privatized', 'general_manager_id'], 'integer'],
+            [['first_name', 'second_name', 'patronymic', 'name_mixed', 'address', 'locality', 'street', 'house', 'appartment', 'phone', 'LS_EIRC', 'LS_IKU_provider'], 'string', 'max' => 255],
+            [['general_manager_id'], 'exist', 'skipOnError' => true, 'targetClass' => GeneralManager::className(), 'targetAttribute' => ['general_manager_id' => 'id']],
+        ];
     }
 
-    public static function scrapeDebtorsFromArray(array $list)
+    /**
+     * @inheritdoc
+     */
+    public function attributeLabels()
     {
-        $colInfo = [];
-        $headers = [];
-
-        $firstRow = true;
-        foreach ($list as $row) {
-            $rowInfo = [];
-            foreach ($row as $col) {
-                if ($firstRow) {
-                    if ($debtorColName = self::findColumName(self::FIELDS_DEBTOR, $col)) {
-                        $headers[] = ['debtor', $debtorColName, $col];
-                    } else {
-                        if ($debtDetailsColName = self::findColumName(self::FIELDS_DEBT_DETAILS, $col)) {
-                            $headers[] = ['debt_details', $debtDetailsColName, $col];
-                        } else {
-                            $exception = new ColumnNotFoundException("Колонка $col не найдена.");
-                            $exception->setWrongColumnName($col);
-                            throw $exception;
-                        }
-                    }
-                } else {
-                    $rowInfo[] = $col;
-                }
-            }
-
-            if ($firstRow) {
-                $firstRow = false;
-            } else {
-                $colInfo[] = $rowInfo;
-            }
-        }
-
-        return ['headers' => $headers, 'colInfo' => $colInfo];
+        return [
+            'id' => Yii::t('app', 'ID'),
+            'first_name' => Yii::t('app', 'First Name'),
+            'second_name' => Yii::t('app', 'Second Name'),
+            'patronymic' => Yii::t('app', 'Patronymic'),
+            'name_mixed' => Yii::t('app', 'Name Mixed'),
+            'address' => Yii::t('app', 'Address'),
+            'locality' => Yii::t('app', 'Locality'),
+            'street' => Yii::t('app', 'Street'),
+            'house' => Yii::t('app', 'House'),
+            'appartment' => Yii::t('app', 'Appartment'),
+            'phone' => Yii::t('app', 'Phone'),
+            'LS_EIRC' => Yii::t('app', 'ЛС ЕИРЦ'),
+            'LS_IKU_provider' => Yii::t('app', 'ЛС ИКУ/поставщика'),
+            'space_common' => Yii::t('app', 'Space Common'),
+            'space_living' => Yii::t('app', 'Space Living'),
+            'privatized' => Yii::t('app', 'Privatized'),
+            'general_manager_id' => Yii::t('app', 'General Manager ID'),
+        ];
     }
 
-    public static function saveDebtors(array $info)
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDebtDetails()
     {
+        return $this->hasMany(DebtDetails::className(), ['debtor_id' => 'id'])->inverseOf('debtor');
+    }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getGeneralManager()
+    {
+        return $this->hasOne(GeneralManager::className(), ['id' => 'general_manager_id'])->inverseOf('debtors');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDebtorPublicServices()
+    {
+        return $this->hasMany(DebtorPublicService::className(), ['debtor_id' => 'id'])->inverseOf('debtor');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPublicServices()
+    {
+        return $this->hasMany(PublicService::className(), ['id' => 'public_service_id'])->viaTable('debtor_public_service', ['debtor_id' => 'id']);
     }
 }

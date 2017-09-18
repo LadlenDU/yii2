@@ -7,7 +7,7 @@ use yii\web\Controller;
 use yii\filters\AccessControl;
 use yii\web\UploadedFile;
 use common\models\UploadForm;
-use common\models\Debtor;
+use common\models\DebtorParse;
 use common\components\ColumnNotFoundException;
 
 /**
@@ -54,9 +54,9 @@ class DebtorsController extends Controller
                 $sheetData = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
 
                 try {
-                    $info = Debtor::scrapeDebtorsFromArray($sheetData);
-                    Debtor::saveDebtors($info);
-                } catch (ColumnNotFoundException $e) {
+                    $info = DebtorParse::scrapeDebtorsFromArray($sheetData);
+                    DebtorParse::saveDebtors($info);
+                } catch (\Exception $e) {
                     Yii::$app->getSession()->setFlash('error', $e->getMessage());
                 }
             }
