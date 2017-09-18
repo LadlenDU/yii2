@@ -37,7 +37,9 @@ use yii\helpers\Html;
 </div>
 
 <footer class="main-footer">
-    <strong>&copy; 2017 <a href="<?= Yii::$app->homeUrl ?>"><?= Html::encode(Yii::$app->name) ?></a></strong>
+    <strong>&copy; 2017
+        <a href="<?= Yii::$app->homeUrl ?>"><?= Html::encode(Yii::t('app', 'Советник ЖКХ')) ?></a>
+    </strong>
 </footer>
 
 <!-- Control Sidebar -->

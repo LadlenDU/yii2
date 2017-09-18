@@ -53,8 +53,8 @@ $columns = [
 ?>
 
 <div class="arrow-steps clearfix">
-    <div class="step current"><span><?= Yii::t('app', 'Досудебная практика') ?></span></div>
-    <div class="step"><span><?= Yii::t('app', 'Судебная практика') ?></span></div>
+    <div class="step"><span><?= Yii::t('app', 'Досудебная практика') ?></span></div>
+    <div class="step current"><span><?= Yii::t('app', 'Судебная практика') ?></span></div>
     <div class="step"><span> <?= Yii::t('app', 'Исполнительное производство') ?></span></div>
 </div>
 
