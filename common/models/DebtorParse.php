@@ -170,12 +170,19 @@ class DebtorParse extends Model
             /*Debtor::()->joinWith('pages')->andWhere([$levelName => $level])
                 ->select(['tree.id', 'tree.name', 'page.alias'])->all();*/
 
+            //TODO: костыль - сделать сравнение пользователей
+            Debtor::deleteAll();
+
             foreach ($info['colInfo'] as $rowInfo) {
                 $debtor = new Debtor;
                 foreach ($rowInfo as $key => $colInfo) {
                     if (!empty($info['headers'][$key])) {
                         if ($info['headers'][$key][0] == 'debtor') {
                             $debtor->{$info['headers'][$key][1]} = $colInfo;
+                        } else {    // $info['headers'][$key][0] == 'debt_details'
+                            #$debtor->getDebtDetails()->{$info['headers'][$key][1]} = $colInfo;
+                            #$debtDetails = $debtor->getDebtDetails();
+                            #$debtDetails->{$info['headers'][$key][1]} = $colInfo;
                         }
                     }
                 }
