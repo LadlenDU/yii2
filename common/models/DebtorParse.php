@@ -67,10 +67,10 @@ class DebtorParse extends Model
         ],
     ];
 
-    /*protected static $FIELDS_DEBTOR_SPECIAL_CARE = [
-        'privatized' => function() {
+    /*protected static $FIELDS_DEBTOR_FILTER = [
+        'privatized' => function($val) {
 
-        },
+        }
     ];*/
 
     protected static $FIELDS_DEBT_DETAILS = [
@@ -128,8 +128,8 @@ class DebtorParse extends Model
             $rowInfo = [];
             foreach ($row as $key => $col) {
                 if ($col = trim($col)) {
+                    $colPrepared = self::prepareStringToCompare($col);
                     if ($firstRow) {
-                        $colPrepared = self::prepareStringToCompare($col);
                         if (in_array($colPrepared, self::$FIELDS_IGNORE)) {
                             continue;
                         }
@@ -145,6 +145,10 @@ class DebtorParse extends Model
                             }
                         }
                     } else {
+                        if (!empty($headers[$key]) && $headers[$key][1] == 'privatized') {
+                            //TODO: исправить костыль
+                            $col = ($colPrepared == 'приватизированное') ? 1 : 0;
+                        }
                         $rowInfo[$key] = $col;
                     }
                 }
