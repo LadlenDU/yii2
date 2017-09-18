@@ -15,14 +15,20 @@ use kartik\helpers\Enum;
 use kartik\dynagrid\DynaGrid;
 use kartik\grid\GridView;
 
+/*'locality:ntext',
+        'LS_EIRC',
+        'LS_IKU_provider',*/
+
 $columns = [
     [
         'class' => 'kartik\grid\SerialColumn',
         'order' => DynaGrid::ORDER_FIX_LEFT
     ],
     'id',
-    'name',
-    [
+    'locality',
+    'LS_EIRC',
+    'LS_IKU_provider',
+    /*[
         'attribute' => 'publish_date',
         'filterType' => GridView::FILTER_DATE,
         'format' => 'raw',
@@ -40,7 +46,7 @@ $columns = [
         'class' => 'kartik\grid\ActionColumn',
         'dropdown' => false,
         'order' => DynaGrid::ORDER_FIX_RIGHT
-    ],
+    ],*/
     ['class' => 'kartik\grid\CheckboxColumn', 'order' => DynaGrid::ORDER_FIX_RIGHT],
 ];
 
@@ -224,7 +230,7 @@ $columns = [
         ['class' => 'yii\grid\ActionColumn'],
     ],
 ]);*/
-/*echo DynaGrid::widget([
+echo DynaGrid::widget([
     'options' => ['id' => 'dynagrid-1'],
     'columns' => $columns,
     'storage' => DynaGrid::TYPE_COOKIE,
@@ -234,7 +240,7 @@ $columns = [
         //'filterModel' => $searchModel,
         'panel' => ['heading' => '<h3 class="panel-title">Library</h3>'],
     ]
-]);*/
+]);
 
 ?>
 
