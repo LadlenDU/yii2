@@ -8,6 +8,8 @@
 #use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\helpers\Enum;
+#use yiister\adminlte\widgets\grid\GridView;
+use yii\grid\GridView;
 
 ?>
 <?php /* ?>
@@ -173,7 +175,26 @@ use kartik\helpers\Enum;
     </div>
 </div>
 
-<?php echo Enum::array2table($sheetData, false, true) ?>
+<?php
+#echo Enum::array2table($sheetData, false, true)
+echo GridView::widget([
+    'dataProvider' => $dataProvider,
+    'columns' => [
+        ['class' => 'yii\grid\SerialColumn'],
+        //'id',
+        'name_mixed',
+        'address',
+        'locality:ntext',
+        'LS_EIRC',
+        'LS_IKU_provider',
+        //'url:ntext',
+        //'image:ntext',
+        // 'created_at',
+        // 'updated_at',
+        ['class' => 'yii\grid\ActionColumn'],
+    ],
+]);
+?>
 
 <script>
     $("#load_debtors").click(function () {

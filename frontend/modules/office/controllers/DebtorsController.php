@@ -2,6 +2,7 @@
 
 namespace frontend\modules\office\controllers;
 
+use common\models\Debtor;
 use Yii;
 use yii\web\Controller;
 use yii\filters\AccessControl;
@@ -9,6 +10,8 @@ use yii\web\UploadedFile;
 use common\models\UploadForm;
 use common\models\DebtorParse;
 use common\components\ColumnNotFoundException;
+use yii\data\ActiveDataProvider;
+use yii\data\ArrayDataProvider;
 
 /**
  * Default controller for the `office` module
@@ -63,10 +66,15 @@ class DebtorsController extends Controller
             }
         }
 
+        $dataProvider = new ArrayDataProvider([
+            'allModels' => Debtor::find()->all(),
+        ]);
+
         return $this->render('debt-verification',
             [
                 'uploadModel' => $uploadModel,
                 'sheetData' => $sheetData,
+                'dataProvider' => $dataProvider,
             ]);
     }
 }
