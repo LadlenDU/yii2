@@ -4,6 +4,7 @@ namespace common\models;
 
 use Yii;
 use yii\base\Model;
+use common\components\ColumnNotFoundException;
 
 class Debtor extends Model
 {
@@ -107,9 +108,15 @@ class Debtor extends Model
             foreach ($row as $col) {
                 if ($firstRow) {
                     $debtDetailsColName = false;
-                    if (!$debtorColName = $this->findColumName(self::FIELDS_DEBTOR, $col)) {
-                        if (!$debtDetailsColName = $this->findColumName(self::FIELDS_DEBT_DETAILS, $col)) {
-                            //throw ;
+                    if ($debtorColName = $this->findColumName(self::FIELDS_DEBTOR, $col)) {
+                        $headers[] = ['debtor', $col];
+                    } else {
+                        if ($debtDetailsColName = $this->findColumName(self::FIELDS_DEBT_DETAILS, $col)) {
+                            $headers[] = ['debt_details', $col];
+                        } else {
+                            $exception = new ColumnNotFoundException("Колонка $col не найдена.");
+                            $exception->setWrongColumnName($col);
+                            throw $exception;
                         }
                     }
                 } else {
@@ -117,9 +124,7 @@ class Debtor extends Model
                 }
             }
 
-            if ($firstRow) {
-                $firstRow = false;
-            }
+            $firstRow = false;
         }
     }
 }
