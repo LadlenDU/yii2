@@ -46,7 +46,7 @@
                             ['label' => 'Работа с приставами', 'icon' => 'dashboard', 'url' => ['/office/debtors/calculation-of-duty'],],
                         ],*/
                     ],
-                    ['label' => 'Справочник судов', 'icon' => 'bank', 'url' => ['/court/view']],
+                    ['label' => 'Справочник судов', 'icon' => 'bank', 'url' => ['/court']],
                     [
                         //'label' => 'Заявление в суд',
                         'label' => 'Квартплата',
