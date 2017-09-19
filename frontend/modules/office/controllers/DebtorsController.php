@@ -67,12 +67,15 @@ class DebtorsController extends Controller
             }
         }
 
-        $dataProvider = new ActiveDataProvider([
+        /*$dataProvider = new ActiveDataProvider([
             //'allModels' => Debtor::find()->with('debtDetails')->all(),
             'query' => Debtor::find()->with(['debtDetails']),
         ]);
 
+        $searchModel = new DebtorSearch(Yii::$app->request->post);*/
+
         $searchModel = new DebtorSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('debt-verification',
             [
