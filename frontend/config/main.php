@@ -42,8 +42,8 @@ return [
             'rules' => [
                 '<module:\w+>/<controller:\w+>/<action:[\w-]+>/<id:(.*?)>' => '<module>/<controller>/<action>/<id>',
                 '<module:\w+>/<controller:\w+>/<action:[\w-]+>' => '<module>/<controller>/<action>',
-                '<module:\w+>/<action:[\w-]+>/<id:(.*?)>' => '<module>/default/<action>/<id>',
-                '<module:\w+>/<action:[\w-]+>' => '<module>/default/<action>',
+                //'<module:\w+>/<action:[\w-]+>/<id:(.*?)>' => '<module>/default/<action>/<id>',
+                //'<module:\w+>/<action:[\w-]+>' => '<module>/default/<action>',
                 'pages/<page:[\w-]+>' => 'pages/default/index',
             ],
         ],

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "049bf7f85dd275f1c540b2e207d9a9d8",
+    "content-hash": "31f29f055c736123493585f6206eef94",
     "packages": [
         {
             "name": "almasaeed2010/adminlte",
@@ -45,6 +45,37 @@
                 "web"
             ],
             "time": "2017-07-02T15:38:16+00:00"
+        },
+        {
+            "name": "andkon/yii2kladr",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/andkon13/yii2-klard.git",
+                "reference": "c4de6855017963285671720e17cf8644dcba5aee"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/andkon13/yii2-klard/zipball/c4de6855017963285671720e17cf8644dcba5aee",
+                "reference": "c4de6855017963285671720e17cf8644dcba5aee",
+                "shasum": ""
+            },
+            "require": {
+                "bower-asset/jquery.kladr": "*"
+            },
+            "type": "project",
+            "autoload": {
+                "psr-4": {
+                    "andkon\\yii2kladr\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Widget for yii2 Kladr",
+            "homepage": "https://github.com/andkon13/yii2-klard",
+            "time": "2017-01-31T11:10:42+00:00"
         },
         {
             "name": "bower-asset/bootstrap",
@@ -273,6 +304,41 @@
                 "jquery",
                 "mask",
                 "plugins"
+            ]
+        },
+        {
+            "name": "bower-asset/jquery.kladr",
+            "version": "2.2.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/garakh/kladrapi-jsclient.git",
+                "reference": "f0f2dc320f461a837645df46c31e0bbce6b52e5a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/garakh/kladrapi-jsclient/zipball/f0f2dc320f461a837645df46c31e0bbce6b52e5a",
+                "reference": "f0f2dc320f461a837645df46c31e0bbce6b52e5a",
+                "shasum": ""
+            },
+            "require": {
+                "bower-asset/jquery": ">=1.6"
+            },
+            "type": "bower-asset-library",
+            "extra": {
+                "bower-asset-main": "jquery.kladr.min.js",
+                "bower-asset-ignore": [
+                    "gulpfile.js",
+                    "package.json",
+                    "*.md"
+                ]
+            },
+            "license": [
+                "Public Domain"
+            ],
+            "description": "jQuery Kladr",
+            "keywords": [
+                "jquery",
+                "kladr"
             ]
         },
         {
