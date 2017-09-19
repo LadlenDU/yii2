@@ -18,6 +18,8 @@ use common\models\Debtor;
 use kartik\dynagrid\DynaGrid;
 use kartik\grid\GridView;
 
+use andkon\yii2kladr\Kladr;
+
 $columns = [
     [
         'class' => 'kartik\grid\SerialColumn',
@@ -134,7 +136,7 @@ $columns = [
 
             <!--<button class="btn-sm toggle-filter btn btn-primary" id="show_debtors_filter" data-toggle="collapse"
                     data-target="#search-debtors">
-                <i class="icon-search icon-white"></i><?/*= Yii::t('app', 'Поиск должников') */?>
+                <i class="icon-search icon-white"></i><? /*= Yii::t('app', 'Поиск должников') */ ?>
             </button>-->
             <!--<button class="hide btn-sm btn btn-grey" id="reset-debtors-filter" style="display: none">
                 <i class="fa fa-filter"></i><? /*= Yii::t('app', 'Сбросить фильтр') */ ?>
@@ -149,7 +151,7 @@ $columns = [
             <div class="clearfix"></div>
         </div>
         <!--<div class="col-sm-6">
-            <div class="pull-right" style="white-space: nowrap;"><?/*= Yii::t('app', 'Показывать записей') */?>
+            <div class="pull-right" style="white-space: nowrap;"><? /*= Yii::t('app', 'Показывать записей') */ ?>
                 <select id="debtors-grid_sizer" class="page-sizer" name="pageSize_Accounts">
                     <option value="10">10</option>
                     <option value="30">30</option>
@@ -269,6 +271,20 @@ $columns = [
 <br>
 
 <?php
+#$address = new Address(); // your address model
+
+/*$form = ActiveForm::begin();
+echo $form->field($model, 'city_id')
+    ->widget(Kladr::className(), [
+        'type' => Kladr::TYPE_CITY,
+        'options' => [
+            'placeHolder' => 'Это placeHolder',
+            'class' => 'form__input'
+        ]
+    ])
+    ->label(false);
+ActiveForm::end();*/
+
 echo DynaGrid::widget([
     'columns' => $columns,
     'storage' => DynaGrid::TYPE_COOKIE,

@@ -10,6 +10,8 @@ use Yii;
  * @property integer $id
  * @property string $name
  * @property string $address
+ * @property string $region
+ * @property string $regionId
  * @property string $district
  * @property string $districtId
  * @property string $city
@@ -44,7 +46,7 @@ class Court extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'address', 'district', 'districtId', 'city', 'cityId', 'street', 'streetId', 'building', 'buildingId', 'phone', 'name_of_payee', 'BIC', 'beneficiary_account_number', 'INN', 'KPP', 'OKTMO', 'beneficiary_bank_name', 'KBK'], 'string', 'max' => 255],
+            [['name', 'address', 'region', 'regionId', 'district', 'districtId', 'city', 'cityId', 'street', 'streetId', 'building', 'buildingId', 'phone', 'name_of_payee', 'BIC', 'beneficiary_account_number', 'INN', 'KPP', 'OKTMO', 'beneficiary_bank_name', 'KBK'], 'string', 'max' => 255],
         ];
     }
 
@@ -55,24 +57,26 @@ class Court extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'name' => Yii::t('app', 'Name'),
-            'address' => Yii::t('app', 'адрес - если был указан одной строкой'),
-            'district' => Yii::t('app', 'район'),
-            'districtId' => Yii::t('app', 'код района'),
-            'city' => Yii::t('app', 'город (населённый пункт)'),
-            'cityId' => Yii::t('app', 'код города (населённого пункта)'),
-            'street' => Yii::t('app', 'улица'),
-            'streetId' => Yii::t('app', 'код улицы'),
-            'building' => Yii::t('app', 'дом (строение)'),
-            'buildingId' => Yii::t('app', 'код дома (строения)'),
-            'phone' => Yii::t('app', 'Phone'),
-            'name_of_payee' => Yii::t('app', 'наименование получателя платежа'),
+            'name' => Yii::t('app', 'Наименование'),
+            'address' => Yii::t('app', 'Адрес одной строкой'),
+            'region' => Yii::t('app', 'Регион (область)'),
+            'regionId' => Yii::t('app', 'Код региона (области)'),
+            'district' => Yii::t('app', 'Район'),
+            'districtId' => Yii::t('app', 'Код района'),
+            'city' => Yii::t('app', 'Город (населённый пункт)'),
+            'cityId' => Yii::t('app', 'Код города (населённого пункта)'),
+            'street' => Yii::t('app', 'Улица'),
+            'streetId' => Yii::t('app', 'Код улицы'),
+            'building' => Yii::t('app', 'Дом (строение)'),
+            'buildingId' => Yii::t('app', 'Код дома (строения)'),
+            'phone' => Yii::t('app', 'Телефон'),
+            'name_of_payee' => Yii::t('app', 'Наименование получателя платежа'),
             'BIC' => Yii::t('app', 'БИК'),
-            'beneficiary_account_number' => Yii::t('app', 'номер счета получателя платежа'),
+            'beneficiary_account_number' => Yii::t('app', 'Номер счета получателя платежа'),
             'INN' => Yii::t('app', 'ИНН'),
             'KPP' => Yii::t('app', 'КПП'),
             'OKTMO' => Yii::t('app', 'ОКТМО'),
-            'beneficiary_bank_name' => Yii::t('app', 'наименование банка получателя платежа'),
+            'beneficiary_bank_name' => Yii::t('app', 'Наименование банка получателя платежа'),
             'KBK' => Yii::t('app', 'КБК'),
         ];
     }

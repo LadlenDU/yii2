@@ -6,8 +6,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model common\models\Court */
 
-$this->title = Yii::t('app', 'Create Court');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Courts'), 'url' => ['index']];
+$this->title = Yii::t('app', 'Создать суд');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Суды'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="court-create">

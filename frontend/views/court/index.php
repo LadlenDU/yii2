@@ -7,43 +7,46 @@ use yii\widgets\Pjax;
 /* @var $searchModel common\models\CourtSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', 'Courts');
+$this->title = Yii::t('app', 'Суды');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="court-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <!--<h1><?/*= Html::encode($this->title) */?></h1>-->
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a(Yii::t('app', 'Create Court'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('app', 'Создать суд'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 <?php Pjax::begin(); ?>    <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'options' => ['style' => 'overflow-x:auto'],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
             'name',
             'address',
+            'region',
+            //'regionId',
             'district',
-            'districtId',
-            // 'city',
+            //'districtId',
+            'city',
             // 'cityId',
-            // 'street',
+            'street',
             // 'streetId',
-            // 'building',
+            'building',
             // 'buildingId',
-            // 'phone',
-            // 'name_of_payee',
-            // 'BIC',
-            // 'beneficiary_account_number',
-            // 'INN',
-            // 'KPP',
-            // 'OKTMO',
-            // 'beneficiary_bank_name',
-            // 'KBK',
+            'phone',
+            'name_of_payee',
+            //'BIC',
+            //'beneficiary_account_number',
+            //'INN',
+            //'KPP',
+            //'OKTMO',
+            //'beneficiary_bank_name',
+            //'KBK',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

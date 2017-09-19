@@ -19,7 +19,7 @@ class CourtSearch extends Court
     {
         return [
             [['id'], 'integer'],
-            [['name', 'address', 'district', 'districtId', 'city', 'cityId', 'street', 'streetId', 'building', 'buildingId', 'phone', 'name_of_payee', 'BIC', 'beneficiary_account_number', 'INN', 'KPP', 'OKTMO', 'beneficiary_bank_name', 'KBK'], 'safe'],
+            [['name', 'address', 'region', 'regionId', 'district', 'districtId', 'city', 'cityId', 'street', 'streetId', 'building', 'buildingId', 'phone', 'name_of_payee', 'BIC', 'beneficiary_account_number', 'INN', 'KPP', 'OKTMO', 'beneficiary_bank_name', 'KBK'], 'safe'],
         ];
     }
 
@@ -64,6 +64,8 @@ class CourtSearch extends Court
 
         $query->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['like', 'address', $this->address])
+            ->andFilterWhere(['like', 'region', $this->region])
+            ->andFilterWhere(['like', 'regionId', $this->regionId])
             ->andFilterWhere(['like', 'district', $this->district])
             ->andFilterWhere(['like', 'districtId', $this->districtId])
             ->andFilterWhere(['like', 'city', $this->city])
