@@ -127,30 +127,47 @@ class DebtorParse extends Model
         foreach ($list as $row) {
             $rowInfo = [];
             foreach ($row as $key => $col) {
-                if ($col = trim($col)) {
-                    $colPrepared = self::prepareStringToCompare($col);
-                    if ($firstRow) {
-                        if (in_array($colPrepared, self::$FIELDS_IGNORE)) {
-                            continue;
-                        }
-                        if ($debtorColName = self::findColumName(self::$FIELDS_DEBTOR, $col)) {
-                            $headers[$key] = ['debtor', $debtorColName, $col];
+                $col = trim($col);
+                $colPrepared = self::prepareStringToCompare($col);
+                if ($firstRow && $col) {
+                    if (in_array($colPrepared, self::$FIELDS_IGNORE)) {
+                        continue;
+                    }
+                    if ($debtorColName = self::findColumName(self::$FIELDS_DEBTOR, $col)) {
+                        $headers[$key] = ['debtor', $debtorColName, $col];
+                    } else {
+                        if ($debtDetailsColName = self::findColumName(self::$FIELDS_DEBT_DETAILS, $col)) {
+                            $headers[$key] = ['debt_details', $debtDetailsColName, $col];
                         } else {
-                            if ($debtDetailsColName = self::findColumName(self::$FIELDS_DEBT_DETAILS, $col)) {
-                                $headers[$key] = ['debt_details', $debtDetailsColName, $col];
+                            $exception = new ColumnNotFoundException(Yii::t('app', "Колонка '$col' не найдена."));
+                            $exception->setWrongColumnName($col);
+                            throw $exception;
+                        }
+                    }
+                } else {
+
+                    if (!empty($headers[$key])) {
+
+                        //TODO: исправить костыль(и)
+                        if ($headers[$key][1] == 'amount' || $headers[$key][1] == 'amount_additional_services') {
+                            //TODO: цифровой формат может иметь запятую в качестве разделителя разрядов (1,336.44)
+                            //в то время как в оригинале будет 1336,44 (1 336,44)
+                            //выяснить почему и как обойтись без потенциальных ошибок
+                            $col = str_replace([' ', ','], '', $colPrepared);
+                        } elseif ($headers[$key][1] == 'privatized') {
+                            $col = ($colPrepared == 'приватизированное') ? 1 : 0;
+                        } elseif ($headers[$key][1] == 'date' || $headers[$key][1] == 'payment_date') {
+                            if ($colPrepared) {
+                                $col = date("Y-m-d H:i:s", strtotime($colPrepared));
                             } else {
-                                $exception = new ColumnNotFoundException(Yii::t('app', "Колонка '$col' не найдена."));
-                                $exception->setWrongColumnName($col);
-                                throw $exception;
+                                $col = null;
                             }
                         }
-                    } else {
-                        if (!empty($headers[$key]) && $headers[$key][1] == 'privatized') {
-                            //TODO: исправить костыль
-                            $col = ($colPrepared == 'приватизированное') ? 1 : 0;
-                        }
+
                         $rowInfo[$key] = $col;
                     }
+
+                    //$rowInfo[$key] = $col;
                 }
             }
 
