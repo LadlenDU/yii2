@@ -31,9 +31,16 @@ $columns = [
     'street',
     'house',
     'appartment',
-    'privatized',
+    //'privatized',
+    [
+        'attribute' => 'privatized',
+        'value' => function ($model, $key, $index) {
+            //TODO: исправить костыль
+            return $model->privatized ? 'Приватизированное' : 'Муниципальное';
+        },
+        'format' => 'raw',
+    ],
     'phone',
-    //'debtDetails.amount',
     [
         'attribute' => Yii::t('app', 'Сумма долга'),
         'value' => function ($model, $key, $index) {
@@ -51,6 +58,12 @@ $columns = [
     [
         'attribute' => Yii::t('app', 'Дата оплаты'),
         'value' => function ($model, $key, $index) {
+            //return $model->debtDetails[0]->payment_date;
+            // Убираем секунды
+            //TODO: здесь возможно надо будет скорректировать
+            if ($model->debtDetails[0]->payment_date) {
+                return substr($model->debtDetails[0]->payment_date, 0, 10);
+            }
             return $model->debtDetails[0]->payment_date;
         },
         'format' => 'raw',

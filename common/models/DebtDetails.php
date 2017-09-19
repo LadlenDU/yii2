@@ -49,11 +49,11 @@ class DebtDetails extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'debtor_id' => Yii::t('app', 'Debtor ID'),
-            'amount' => Yii::t('app', 'Amount'),
-            'amount_additional_services' => Yii::t('app', 'Amount Additional Services'),
-            'date' => Yii::t('app', 'Date'),
-            'payment_date' => Yii::t('app', 'Payment Date'),
+            'debtor_id' => Yii::t('app', 'ID должника'),
+            'amount' => Yii::t('app', 'Сумма долга'),
+            'amount_additional_services' => Yii::t('app', 'Сумма долга с допуслугами'),
+            'date' => Yii::t('app', 'Дата'),
+            'payment_date' => Yii::t('app', 'Дата оплаты'),
             'public_service_id' => Yii::t('app', 'Public Service ID'),
         ];
     }
