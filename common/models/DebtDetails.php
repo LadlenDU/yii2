@@ -20,6 +20,8 @@ use Yii;
  */
 class DebtDetails extends \yii\db\ActiveRecord
 {
+    const DEBT_DIVISION_VALUE = 20000;
+
     /**
      * @inheritdoc
      */
@@ -72,5 +74,18 @@ class DebtDetails extends \yii\db\ActiveRecord
     public function getPublicService()
     {
         return $this->hasOne(PublicService::className(), ['id' => 'public_service_id'])->inverseOf('debtDetails');
+    }
+
+    public function calculateStateFee()
+    {
+        if ($this->amount < self::DEBT_DIVISION_VALUE) {
+            $fee = $this->amount / 100 * 4;
+            $fee = ($fee < 400) ? 400 : $fee;
+        } else {
+            $midVal = $this->amount - self::DEBT_DIVISION_VALUE;
+            $fee = $midVal / 100 * 3 + 800;
+        }
+
+        return $fee;
     }
 }

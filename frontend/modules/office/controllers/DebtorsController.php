@@ -74,6 +74,7 @@ class DebtorsController extends Controller
 
         $searchModel = new DebtorSearch(Yii::$app->request->post);*/
 
+        //TODO: debtorDetails выбираются каждый раз - оптимизировать (также проверить pagination)
         $searchModel = new DebtorSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 

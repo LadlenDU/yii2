@@ -10,6 +10,7 @@
 use yii\widgets\ActiveForm;
 use kartik\helpers\Enum;
 use yii\helpers\Html;
+use common\models\Debtor;
 
 #use yiister\adminlte\widgets\grid\GridView;
 #use yii\grid\GridView;
@@ -65,6 +66,13 @@ $columns = [
                 return substr($model->debtDetails[0]->payment_date, 0, 10);
             }
             return $model->debtDetails[0]->payment_date;
+        },
+        'format' => 'raw',
+    ],
+    [
+        'attribute' => Yii::t('app', 'Пошлина'),
+        'value' => function (Debtor $model, $key, $index) {
+            return $model->calculateStateFee();
         },
         'format' => 'raw',
     ],
