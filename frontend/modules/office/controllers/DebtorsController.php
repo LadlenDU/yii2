@@ -66,8 +66,9 @@ class DebtorsController extends Controller
             }
         }
 
-        $dataProvider = new ArrayDataProvider([
-            'allModels' => Debtor::find()->all(),
+        $dataProvider = new ActiveDataProvider([
+            //'allModels' => Debtor::find()->with('debtDetails')->all(),
+            'query' => Debtor::find()->with(['debtDetails']),
         ]);
 
         return $this->render('debt-verification',

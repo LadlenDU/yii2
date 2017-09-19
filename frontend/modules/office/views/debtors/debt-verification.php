@@ -16,19 +16,44 @@ use yii\helpers\Html;
 use kartik\dynagrid\DynaGrid;
 use kartik\grid\GridView;
 
-/*'locality:ntext',
-        'LS_EIRC',
-        'LS_IKU_provider',*/
-
 $columns = [
     [
         'class' => 'kartik\grid\SerialColumn',
         'order' => DynaGrid::ORDER_FIX_LEFT
     ],
     //'id',
-    'locality',
     'LS_EIRC',
     'LS_IKU_provider',
+    'IKU',
+    'name_mixed',
+    'locality',
+    'street',
+    'house',
+    'appartment',
+    'privatized',
+    'phone',
+    //'debtDetails.amount',
+    [
+        'attribute' => Yii::t('app', 'Сумма долга'),
+        'value' => function ($model, $key, $index) {
+            return $model->debtDetails[0]->amount;
+        },
+        'format' => 'raw',
+    ],
+    [
+        'attribute' => Yii::t('app', 'Сумма долга с допуслугами'),
+        'value' => function ($model, $key, $index) {
+            return $model->debtDetails[0]->amount_additional_services;
+        },
+        'format' => 'raw',
+    ],
+    [
+        'attribute' => Yii::t('app', 'Дата оплаты'),
+        'value' => function ($model, $key, $index) {
+            return $model->debtDetails[0]->payment_date;
+        },
+        'format' => 'raw',
+    ],
     /*[
         'attribute' => 'publish_date',
         'filterType' => GridView::FILTER_DATE,
@@ -216,24 +241,6 @@ $columns = [
 </div>
 
 <?php
-#echo Enum::array2table($sheetData, false, true)
-/*echo GridView::widget([
-    'dataProvider' => $dataProvider,
-    'columns' => [
-        ['class' => 'yii\grid\SerialColumn'],
-        //'id',
-        'name_mixed',
-        'address',
-        'locality:ntext',
-        'LS_EIRC',
-        'LS_IKU_provider',
-        //'url:ntext',
-        //'image:ntext',
-        // 'created_at',
-        // 'updated_at',
-        ['class' => 'yii\grid\ActionColumn'],
-    ],
-]);*/
 echo DynaGrid::widget([
     'columns' => $columns,
     'storage' => DynaGrid::TYPE_COOKIE,
@@ -243,20 +250,11 @@ echo DynaGrid::widget([
         //'filterModel'=>$searchModel,
         'panel' => [
             'heading' => '<h3 class="panel-title">' . Yii::t('app', 'Список должников') . '</h3>',
-            'before' => '{dynagrid}' . Html::a('Custom Button', '#', ['class' => 'btn btn-default']),
+            'before' => '{dynagrid}',
         ],
     ],
     'options' => ['id' => 'dynagrid-1'] // a unique identifier is important
 ]);
-
-/*echo GridView::widget([
-    'dataProvider' => $dataProvider,
-    //'filterModel' => $searchModel,
-    'columns' => $columns,
-    'responsive' => true,
-    'hover' => true
-]);*/
-
 ?>
 
 <script>
