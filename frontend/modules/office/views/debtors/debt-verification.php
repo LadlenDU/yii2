@@ -8,6 +8,7 @@
 #use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\helpers\Enum;
+use yii\helpers\Html;
 
 #use yiister\adminlte\widgets\grid\GridView;
 #use yii\grid\GridView;
@@ -24,7 +25,7 @@ $columns = [
         'class' => 'kartik\grid\SerialColumn',
         'order' => DynaGrid::ORDER_FIX_LEFT
     ],
-    'id',
+    //'id',
     'locality',
     'LS_EIRC',
     'LS_IKU_provider',
@@ -47,7 +48,10 @@ $columns = [
         'dropdown' => false,
         'order' => DynaGrid::ORDER_FIX_RIGHT
     ],*/
-    ['class' => 'kartik\grid\CheckboxColumn', 'order' => DynaGrid::ORDER_FIX_RIGHT],
+    [
+        'class' => 'kartik\grid\CheckboxColumn',
+        'order' => DynaGrid::ORDER_FIX_RIGHT
+    ],
 ];
 
 ?>
@@ -231,16 +235,27 @@ $columns = [
     ],
 ]);*/
 echo DynaGrid::widget([
-    'options' => ['id' => 'dynagrid-1'],
     'columns' => $columns,
     'storage' => DynaGrid::TYPE_COOKIE,
-    'theme' => 'panel-danger',
+    'theme' => 'simple-striped',
     'gridOptions' => [
         'dataProvider' => $dataProvider,
-        //'filterModel' => $searchModel,
-        'panel' => ['heading' => '<h3 class="panel-title">Library</h3>'],
-    ]
+        //'filterModel'=>$searchModel,
+        'panel' => [
+            'heading' => '<h3 class="panel-title">' . Yii::t('app', 'Список должников') . '</h3>',
+            'before' => '{dynagrid}' . Html::a('Custom Button', '#', ['class' => 'btn btn-default']),
+        ],
+    ],
+    'options' => ['id' => 'dynagrid-1'] // a unique identifier is important
 ]);
+
+/*echo GridView::widget([
+    'dataProvider' => $dataProvider,
+    //'filterModel' => $searchModel,
+    'columns' => $columns,
+    'responsive' => true,
+    'hover' => true
+]);*/
 
 ?>
 
