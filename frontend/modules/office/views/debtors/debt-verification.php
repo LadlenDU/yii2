@@ -2,6 +2,7 @@
 /**
  * @var yii\web\View $this
  * @var common\models\UploadForm $uploadModel
+ * @var common\models\DebtorSearch $searchModel
  * @var bool $uploaded
  */
 
@@ -91,7 +92,7 @@ $columns = [
 
 <div class="grid-head">
     <div class="row">
-        <div class="col-sm-6 controls-buttons">
+        <div class="col-sm-12 controls-buttons">
             <!--<div class="btn-group">
                 <button id="debtors-bottom-menu" class="btn btn-primary btn-sm dropdown-toggle"
                         data-toggle="dropdown" aria-expanded="true">
@@ -110,10 +111,10 @@ $columns = [
                 </ul>
             </div>-->
 
-            <button class="btn-sm toggle-filter btn btn-primary" id="show_debtors_filter" data-toggle="collapse"
+            <!--<button class="btn-sm toggle-filter btn btn-primary" id="show_debtors_filter" data-toggle="collapse"
                     data-target="#search-debtors">
-                <i class="icon-search icon-white"></i><?= Yii::t('app', 'Поиск должников') ?>
-            </button>
+                <i class="icon-search icon-white"></i><?/*= Yii::t('app', 'Поиск должников') */?>
+            </button>-->
             <!--<button class="hide btn-sm btn btn-grey" id="reset-debtors-filter" style="display: none">
                 <i class="fa fa-filter"></i><? /*= Yii::t('app', 'Сбросить фильтр') */ ?>
             </button>-->
@@ -126,8 +127,8 @@ $columns = [
 
             <div class="clearfix"></div>
         </div>
-        <div class="col-sm-6">
-            <div class="pull-right" style="white-space: nowrap;"><?= Yii::t('app', 'Показывать записей') ?>
+        <!--<div class="col-sm-6">
+            <div class="pull-right" style="white-space: nowrap;"><?/*= Yii::t('app', 'Показывать записей') */?>
                 <select id="debtors-grid_sizer" class="page-sizer" name="pageSize_Accounts">
                     <option value="10">10</option>
                     <option value="30">30</option>
@@ -135,10 +136,11 @@ $columns = [
                     <option value="100" selected="selected">100</option>
                 </select>
             </div>
-        </div>
+        </div>-->
     </div>
 </div>
 
+<?php /* ?>
 <div class="row collapse" id="search-debtors">
     <div class="col-xs-12 filters">
         <div id="debtors_free_filter" class="free-filter toggle-container well-info well-sm" style="display: block;">
@@ -230,6 +232,9 @@ $columns = [
 
     </div>
 </div>
+ */ ?>
+
+<br>
 
 <div class="row collapse" id="load-debtors">
     <div class="col-xs-12">
@@ -240,6 +245,8 @@ $columns = [
     </div>
 </div>
 
+<br>
+
 <?php
 echo DynaGrid::widget([
     'columns' => $columns,
@@ -247,7 +254,7 @@ echo DynaGrid::widget([
     'theme' => 'simple-striped',
     'gridOptions' => [
         'dataProvider' => $dataProvider,
-        //'filterModel'=>$searchModel,
+        'filterModel' => $searchModel,
         'panel' => [
             'heading' => '<h3 class="panel-title">' . Yii::t('app', 'Список должников') . '</h3>',
             'before' => '{dynagrid}',
@@ -257,11 +264,7 @@ echo DynaGrid::widget([
 ]);
 ?>
 
-<script>
-    $("#load_debtors").click(function () {
 
-    });
-</script>
 
 
 

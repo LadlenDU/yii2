@@ -3,6 +3,7 @@
 namespace frontend\modules\office\controllers;
 
 use common\models\Debtor;
+use common\models\DebtorSearch;
 use Yii;
 use yii\web\Controller;
 use yii\filters\AccessControl;
@@ -71,11 +72,14 @@ class DebtorsController extends Controller
             'query' => Debtor::find()->with(['debtDetails']),
         ]);
 
+        $searchModel = new DebtorSearch();
+
         return $this->render('debt-verification',
             [
                 'uploadModel' => $uploadModel,
                 'sheetData' => $sheetData,
                 'dataProvider' => $dataProvider,
+                'searchModel' => $searchModel,
             ]);
     }
 }
