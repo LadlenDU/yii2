@@ -25,7 +25,17 @@ $columns = [
         'class' => 'kartik\grid\CheckboxColumn',
         'order' => DynaGrid::ORDER_FIX_LEFT,
     ],
-
+    [
+        'attribute' => 'Кв-я',
+        'value' => function ($model, $key, $index) {
+            return '<button style="height:21px;width:21px;display:inline-block;vertical-align:middle" title="'
+                . \Yii::t('app', 'Показать квитанцию') . '" onclick="showInvoice(' . $key . ')"></button>';
+        },
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'format' => 'raw',
+        'order' => DynaGrid::ORDER_FIX_LEFT,
+    ],
     //'id',
     'LS_EIRC',
     'LS_IKU_provider',
@@ -101,10 +111,6 @@ $columns = [
         'dropdown' => false,
         'order' => DynaGrid::ORDER_FIX_RIGHT
     ],*/
-    [
-        'class' => 'kartik\grid\CheckboxColumn',
-        'order' => DynaGrid::ORDER_FIX_RIGHT,
-    ],
     [
         'class' => 'kartik\grid\SerialColumn',
         'order' => DynaGrid::ORDER_FIX_RIGHT
@@ -311,7 +317,12 @@ echo DynaGrid::widget([
 ]);
 ?>
 
-
+<script>
+    function showInvoice(debtorId)
+    {
+        window.open('/office/debtors/invoice-prev/?debtorId=' + encodeURIComponent(debtorId), '_blank');
+    }
+</script>
 
 
 

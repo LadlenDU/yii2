@@ -86,4 +86,12 @@ class DebtorsController extends Controller
                 'searchModel' => $searchModel,
             ]);
     }
+
+    public function actionInvoicePrev($debtorId)
+    {
+        return $this->renderPartial('invoice-prev',
+            [
+                'debtorId' => $debtorId,
+            ]);
+    }
 }
