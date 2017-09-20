@@ -22,9 +22,10 @@ use andkon\yii2kladr\Kladr;
 
 $columns = [
     [
-        'class' => 'kartik\grid\SerialColumn',
-        'order' => DynaGrid::ORDER_FIX_LEFT
+        'class' => 'kartik\grid\CheckboxColumn',
+        'order' => DynaGrid::ORDER_FIX_LEFT,
     ],
+
     //'id',
     'LS_EIRC',
     'LS_IKU_provider',
@@ -49,14 +50,16 @@ $columns = [
         'value' => function ($model, $key, $index) {
             return $model->debtDetails[0]->amount;
         },
-        'format' => 'raw',
+        'format' => ['decimal', 2],
+        'hAlign' => 'right',
     ],
     [
         'attribute' => Yii::t('app', 'Сумма долга с допуслугами'),
         'value' => function ($model, $key, $index) {
             return $model->debtDetails[0]->amount_additional_services;
         },
-        'format' => 'raw',
+        'format' => ['decimal', 2],
+        'hAlign' => 'right',
     ],
     [
         'attribute' => Yii::t('app', 'Дата оплаты'),
@@ -76,7 +79,8 @@ $columns = [
         'value' => function (Debtor $model, $key, $index) {
             return $model->calculateStateFee();
         },
-        'format' => 'raw',
+        'format' => ['decimal', 2],
+        'hAlign' => 'right',
     ],
     /*[
         'attribute' => 'publish_date',
@@ -99,6 +103,10 @@ $columns = [
     ],*/
     [
         'class' => 'kartik\grid\CheckboxColumn',
+        'order' => DynaGrid::ORDER_FIX_RIGHT,
+    ],
+    [
+        'class' => 'kartik\grid\SerialColumn',
         'order' => DynaGrid::ORDER_FIX_RIGHT
     ],
 ];
@@ -292,6 +300,8 @@ echo DynaGrid::widget([
     'gridOptions' => [
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        /*'floatHeader' => true,*/
+        'pjax' => true,
         'panel' => [
             'heading' => '<h3 class="panel-title">' . Yii::t('app', 'Список должников') . '</h3>',
             'before' => '{dynagrid}',
