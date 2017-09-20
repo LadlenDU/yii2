@@ -2,6 +2,7 @@
 
 namespace frontend\modules\office\controllers;
 
+use common\components\HelpersDebt;
 use common\models\Debtor;
 use common\models\DebtorSearch;
 use Yii;
@@ -89,9 +90,14 @@ class DebtorsController extends Controller
 
     public function actionInvoicePrev($debtorId)
     {
+        $debtor = Debtor::findOne($debtorId);
+        $court = HelpersDebt::findCourtAddressForDebtor($debtor, 'common\models\Court');
+
         return $this->renderPartial('invoice-prev',
             [
                 'debtorId' => $debtorId,
+                'debtor' => $debtor,
+                'court' => $court,
             ]);
     }
 }
