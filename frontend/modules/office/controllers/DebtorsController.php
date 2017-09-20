@@ -93,6 +93,8 @@ class DebtorsController extends Controller
         $debtor = Debtor::findOne($debtorId);
         $court = HelpersDebt::findCourtAddressForDebtor($debtor, 'common\models\Court');
 
+        HelpersDebt::fillInvoiceBlank($debtor, $court);
+
         return $this->renderPartial('invoice-prev',
             [
                 'debtorId' => $debtorId,

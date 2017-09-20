@@ -157,9 +157,14 @@ $columns = [
             </button>-->
 
             <button class="btn-sm toggle-filter btn btn-primary" id="load_debtors" data-toggle="collapse"
-                    data-target="#load-debtors"
-                    title="<?= Yii::t('app', 'Загрузка должников из файла') ?>">
+                             data-target="#load-debtors"
+                             title="<?= Yii::t('app', 'Загрузка должников из файла') ?>">
                 <i class="icon-search icon-white"></i><?= Yii::t('app', 'Загрузка должников') ?>
+            </button>
+
+            <button class="btn-sm btn btn-primary" id="print_invoices"
+                    title="<?= Yii::t('app', 'Распечатка бланков выбранных должников') ?>">
+                <i class="icon-search icon-white"></i><?= Yii::t('app', 'Распечатка бланков') ?>
             </button>
 
             <div class="clearfix"></div>
@@ -322,6 +327,12 @@ echo DynaGrid::widget([
     {
         window.open('/office/debtors/invoice-prev/?debtorId=' + encodeURIComponent(debtorId), '_blank');
     }
+    
+    jQuery(function ($) {
+        $("#print_invoices").click(function () {
+            
+        });
+    });
 </script>
 
 

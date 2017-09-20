@@ -6,6 +6,7 @@
  * @var common\models\Court $court
  */
 
+
 echo $debtorId;
 print_r($debtor);
 print_r($court);
