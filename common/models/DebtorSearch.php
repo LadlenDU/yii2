@@ -19,7 +19,7 @@ class DebtorSearch extends Debtor
     {
         return [
             [['id', 'privatized', 'general_manager_id'], 'integer'],
-            [['first_name', 'second_name', 'patronymic', 'name_mixed', 'address', 'locality', 'street', 'house', 'appartment', 'phone', 'LS_EIRC', 'LS_IKU_provider', 'IKU'], 'safe'],
+            [['first_name', 'second_name', 'patronymic', 'name_mixed', 'address', 'locality', 'street', 'building', 'appartment', 'phone', 'LS_EIRC', 'LS_IKU_provider', 'IKU'], 'safe'],
             [['space_common', 'space_living'], 'number'],
         ];
     }
@@ -74,7 +74,7 @@ class DebtorSearch extends Debtor
             ->andFilterWhere(['like', 'address', $this->address])
             ->andFilterWhere(['like', 'locality', $this->locality])
             ->andFilterWhere(['like', 'street', $this->street])
-            ->andFilterWhere(['like', 'house', $this->house])
+            ->andFilterWhere(['like', 'building', $this->building])
             ->andFilterWhere(['like', 'appartment', $this->appartment])
             ->andFilterWhere(['like', 'phone', $this->phone])
             ->andFilterWhere(['like', 'LS_EIRC', $this->LS_EIRC])

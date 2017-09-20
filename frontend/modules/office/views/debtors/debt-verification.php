@@ -43,7 +43,7 @@ $columns = [
     'name_mixed',
     'locality',
     'street',
-    'house',
+    'building',
     'appartment',
     //'privatized',
     [

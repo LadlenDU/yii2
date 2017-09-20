@@ -33,7 +33,7 @@ class DebtorParse extends Model
         'street' => [
             'улица',
         ],
-        'house' => [
+        'building' => [
             'дом',
         ],
         'appartment' => [

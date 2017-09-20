@@ -48,7 +48,7 @@ class Debtor extends \yii\db\ActiveRecord
         return [
             [['space_common', 'space_living'], 'number'],
             [['privatized', 'general_manager_id'], 'integer'],
-            [['first_name', 'second_name', 'patronymic', 'name_mixed', 'address', 'locality', 'street', 'house', 'appartment', 'phone', 'LS_EIRC', 'LS_IKU_provider'], 'string', 'max' => 255],
+            [['first_name', 'second_name', 'patronymic', 'name_mixed', 'address', 'locality', 'street', 'building', 'appartment', 'phone', 'LS_EIRC', 'LS_IKU_provider'], 'string', 'max' => 255],
             [['general_manager_id'], 'exist', 'skipOnError' => true, 'targetClass' => GeneralManager::className(), 'targetAttribute' => ['general_manager_id' => 'id']],
         ];
     }
@@ -67,7 +67,7 @@ class Debtor extends \yii\db\ActiveRecord
             'address' => Yii::t('app', 'Адрес'),
             'locality' => Yii::t('app', 'Населённый пункт'),
             'street' => Yii::t('app', 'Улица'),
-            'house' => Yii::t('app', 'Дом'),
+            'building' => Yii::t('app', 'Дом'),
             'appartment' => Yii::t('app', 'Квартира'),
             'phone' => Yii::t('app', 'Телефон'),
             'LS_EIRC' => Yii::t('app', 'ЛС ЕИРЦ'),
@@ -117,5 +117,29 @@ class Debtor extends \yii\db\ActiveRecord
         //TODO: косяк - в таблице надо использовать не Debtor, a DebtDetails класс (и текущцю функцию вызывать из него напрямую)
         $fee = $this->getDebtDetails()->one()->calculateStateFee();
         return $fee;
+    }
+
+    public function getFIOName()
+    {
+        if ($this->name_mixed) {
+            return $this->name_mixed;
+        }
+
+        $fio = $this->second_name;
+        if ($this->first_name) {
+            $fio .= ' ';
+        }
+        $fio .= $this->first_name;
+        if ($this->patronymic) {
+            $fio .= ' ';
+        }
+        $fio .= $this->patronymic;
+
+        return $fio;
+    }
+
+    public function getFullAddress()
+    {
+
     }
 }
