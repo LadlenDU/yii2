@@ -41,7 +41,7 @@ $columns = [
     'LS_IKU_provider',
     'IKU',
     'name_mixed',
-    'locality',
+    'city',
     'street',
     'building',
     'appartment',

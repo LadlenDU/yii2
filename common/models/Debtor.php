@@ -48,7 +48,7 @@ class Debtor extends \yii\db\ActiveRecord
         return [
             [['space_common', 'space_living'], 'number'],
             [['privatized', 'general_manager_id'], 'integer'],
-            [['first_name', 'second_name', 'patronymic', 'name_mixed', 'address', 'locality', 'street', 'building', 'appartment', 'phone', 'LS_EIRC', 'LS_IKU_provider'], 'string', 'max' => 255],
+            [['first_name', 'second_name', 'patronymic', 'name_mixed', 'address', 'city', 'street', 'building', 'appartment', 'phone', 'LS_EIRC', 'LS_IKU_provider'], 'string', 'max' => 255],
             [['general_manager_id'], 'exist', 'skipOnError' => true, 'targetClass' => GeneralManager::className(), 'targetAttribute' => ['general_manager_id' => 'id']],
         ];
     }
@@ -65,7 +65,7 @@ class Debtor extends \yii\db\ActiveRecord
             'patronymic' => Yii::t('app', 'Отчество'),
             'name_mixed' => Yii::t('app', 'ФИО'),
             'address' => Yii::t('app', 'Адрес'),
-            'locality' => Yii::t('app', 'Населённый пункт'),
+            'city' => Yii::t('app', 'Населённый пункт'),
             'street' => Yii::t('app', 'Улица'),
             'building' => Yii::t('app', 'Дом'),
             'appartment' => Yii::t('app', 'Квартира'),

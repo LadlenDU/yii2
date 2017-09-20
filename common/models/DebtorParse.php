@@ -27,7 +27,7 @@ class DebtorParse extends Model
         'address' => [
             'адрес',
         ],
-        'locality' => [
+        'city' => [
             'населённый пункт',
         ],
         'street' => [
