@@ -38,14 +38,17 @@ $columns = [
     ],*/
     [
         'attribute' => 'LS_EIRC',
+        'label' => Yii::t('app', 'ЛС ЕИРЦ'),
         'value' => 'debtor.LS_EIRC',
     ],
     [
         'attribute' => 'LS_IKU_provider',
+        'label' => Yii::t('app', 'ЛС ИКУ/поставщика'),
         'value' => 'debtor.LS_IKU_provider',
     ],
     [
         'attribute' => 'IKU',
+        'label' => Yii::t('app', 'ИКУ'),
         'value' => 'debtor.IKU',
     ],
     [
@@ -55,18 +58,22 @@ $columns = [
     ],
     [
         'attribute' => 'city',
+        'label' => Yii::t('app', 'Населённый пункт'),
         'value' => 'debtor.city',
     ],
     [
         'attribute' => 'street',
+        'label' => Yii::t('app', 'Улица'),
         'value' => 'debtor.street',
     ],
     [
         'attribute' => 'building',
+        'label' => Yii::t('app', 'Дом'),
         'value' => 'debtor.building',
     ],
     [
         'attribute' => 'appartment',
+        'label' => Yii::t('app', 'Квартира'),
         'value' => 'debtor.appartment',
     ],
     [
@@ -80,6 +87,7 @@ $columns = [
     ],
     [
         'attribute' => 'phone',
+        'label' => Yii::t('app', 'Телефон'),
         'value' => 'debtor.phone',
     ],
     [
