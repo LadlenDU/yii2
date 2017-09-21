@@ -13,9 +13,9 @@ use Yii;
  * @property string $patronymic
  * @property string $name_mixed
  * @property string $address
- * @property string $locality
+ * @property string $city
  * @property string $street
- * @property string $house
+ * @property string $building
  * @property string $appartment
  * @property string $phone
  * @property string $LS_EIRC
@@ -140,6 +140,6 @@ class Debtor extends \yii\db\ActiveRecord
 
     public function getFullAddress()
     {
-
+        return "$this->city $this->street $this->building $this->appartment";
     }
 }

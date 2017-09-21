@@ -53,6 +53,14 @@ class HelpersDebt
         // Адрес плательщика
         $sheet->setCellValueByColumnAndRow(26, 13, $debtor->getFullAddress());
 
+        // Сумма платежа
+        $sheet->setCellValueByColumnAndRow(24, 14, $debtor->debtDetails[0]->amount);
+        // Сумма платы за услуги - ???
+        //$sheet->setCellValueByColumnAndRow(50, 14, );
+
+        // Итого
+        $sheet->setCellValueByColumnAndRow(20, 15, $debtor->debtDetails[0]->amount);
+
 
         header("Expires: Mon, 1 Apr 1974 05:00:00 GMT");
         header("Last-Modified: " . gmdate("D,d M YH:i:s") . " GMT");
