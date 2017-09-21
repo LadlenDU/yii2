@@ -25,7 +25,7 @@ $columns = [
         'class' => 'kartik\grid\CheckboxColumn',
         'order' => DynaGrid::ORDER_FIX_LEFT,
     ],
-    [
+    /*[
         'attribute' => 'Кв-я',
         'value' => function ($model, $key, $index) {
             return '<button style="height:21px;width:21px;display:inline-block;vertical-align:middle" title="'
@@ -35,7 +35,7 @@ $columns = [
         'vAlign' => 'middle',
         'format' => 'raw',
         'order' => DynaGrid::ORDER_FIX_LEFT,
-    ],
+    ],*/
     //'id',
     'LS_EIRC',
     'LS_IKU_provider',
@@ -91,29 +91,6 @@ $columns = [
         },
         'format' => ['decimal', 2],
         'hAlign' => 'right',
-    ],
-    /*[
-        'attribute' => 'publish_date',
-        'filterType' => GridView::FILTER_DATE,
-        'format' => 'raw',
-        'width' => '170px',
-        'filterWidgetOptions' => [
-            'pluginOptions' => ['format' => 'yyyy-mm-dd']
-        ],
-    ],
-    [
-        'class' => 'kartik\grid\BooleanColumn',
-        'attribute' => 'status',
-        'vAlign' => 'middle',
-    ],
-    [
-        'class' => 'kartik\grid\ActionColumn',
-        'dropdown' => false,
-        'order' => DynaGrid::ORDER_FIX_RIGHT
-    ],*/
-    [
-        'class' => 'kartik\grid\SerialColumn',
-        'order' => DynaGrid::ORDER_FIX_RIGHT
     ],
 ];
 
@@ -290,19 +267,6 @@ $columns = [
     <br>
 
 <?php
-#$address = new Address(); // your address model
-
-/*$form = ActiveForm::begin();
-echo $form->field($model, 'city_id')
-    ->widget(Kladr::className(), [
-        'type' => Kladr::TYPE_CITY,
-        'options' => [
-            'placeHolder' => 'Это placeHolder',
-            'class' => 'form__input'
-        ]
-    ])
-    ->label(false);
-ActiveForm::end();*/
 
 echo DynaGrid::widget([
     'columns' => $columns,
@@ -324,23 +288,6 @@ echo DynaGrid::widget([
 ?>
 
     <script>
-        /*function openExcelFile(strLocation) {
-         if (window.ActiveXObject) {
-         try {
-         var objExcel;
-         objExcel = new ActiveXObject("Excel.Application");
-         objExcel.Visible = true;
-         objExcel.Workbooks.Open(strLocation, false, true);
-         }
-         catch (e) {
-         alert (e.message);
-         }
-         }
-         else {
-         alert ("Your browser does not support this.");
-         }
-         }*/
-
         function showInvoice(debtorId) {
             var url = '/office/debtors/invoice-prev/?debtorIds=' + encodeURIComponent(debtorId);
             window.open(url, '_blank');

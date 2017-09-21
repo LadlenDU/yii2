@@ -94,8 +94,6 @@ class DebtorsController extends Controller
         $xls = \PHPExcel_IOFactory::load($fileName);
 
         foreach ($debtorIds as $key => $id) {
-
-            #$xls->copy();
             if ($key) {
                 $newSheet = clone $sheet;
                 $newSheet->setTitle('Должник ' . $id);
