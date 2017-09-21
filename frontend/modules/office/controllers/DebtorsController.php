@@ -3,7 +3,9 @@
 namespace frontend\modules\office\controllers;
 
 use common\components\HelpersDebt;
+use common\models\DebtDetails;
 use common\models\Debtor;
+use common\models\DebtDetailsSearch;
 use common\models\DebtorSearch;
 use Yii;
 use yii\web\Controller;
@@ -76,7 +78,9 @@ class DebtorsController extends Controller
         $searchModel = new DebtorSearch(Yii::$app->request->post);*/
 
         //TODO: debtorDetails выбираются каждый раз - оптимизировать (также проверить pagination)
-        $searchModel = new DebtorSearch();
+        #$searchModel = new DebtorSearch();
+        #$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $searchModel = new DebtDetailsSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('debt-verification',
@@ -104,8 +108,11 @@ class DebtorsController extends Controller
             $sheet = $xls->getActiveSheet();
             #$sheet->setTitle();
 
-            $debtor = Debtor::findOne($id);
-            $court = HelpersDebt::findCourtAddressForDebtor($debtor, 'common\models\Court');
+            if ($debtor = Debtor::findOne($id)) {
+                $court = HelpersDebt::findCourtAddressForDebtor($debtor, 'common\models\Court');
+            } else {
+                throw new \Exception(Yii::t('app', 'Не найден должник.'));
+            }
 
             HelpersDebt::fillInvoiceBlank($debtor, $court, $sheet);
         }

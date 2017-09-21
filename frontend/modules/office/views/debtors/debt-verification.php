@@ -37,41 +37,147 @@ $columns = [
         'order' => DynaGrid::ORDER_FIX_LEFT,
     ],*/
     //'id',
-    'LS_EIRC',
-    'LS_IKU_provider',
-    'IKU',
-    'name_mixed',
-    'city',
-    'street',
-    'building',
-    'appartment',
-    //'privatized',
+    //'LS_EIRC',
     [
+        'attribute' => 'debtor.LS_EIRC',
+        'value' => 'debtor.LS_EIRC',
+    ],
+    /*[
+        'attribute' => 'LS_EIRC',
+        'value' => function ($model, $key, $index) {
+            return $model->debtor->LS_EIRC;
+        },
+        'format' => 'raw',
+    ],*/
+    //'LS_IKU_provider',
+    [
+        'attribute' => 'debtor.LS_IKU_provider',
+        'value' => 'debtor.LS_IKU_provider',
+    ],
+    /*[
+        'attribute' => 'LS_IKU_provider',
+        'value' => function ($model, $key, $index) {
+            return $model->debtor->LS_IKU_provider;
+        },
+        'format' => 'raw',
+    ],*/
+    //'IKU',
+    [
+        'attribute' => 'debtor.IKU',
+        'value' => 'debtor.IKU',
+    ],
+    /*[
+        'attribute' => 'IKU',
+        'value' => function ($model, $key, $index) {
+            return $model->debtor->IKU;
+        },
+        'format' => 'raw',
+    ],*/
+    //'name_mixed',
+    [
+        'attribute' => 'debtor.name_mixed',
+        'value' => 'debtor.name_mixed',
+    ],
+    /*[
+        'attribute' => 'name_mixed',
+        'value' => function ($model, $key, $index) {
+            return $model->debtor->name_mixed;
+        },
+        'format' => 'raw',
+    ],*/
+    //'city',
+    [
+        'attribute' => 'debtor.city',
+        'value' => 'debtor.city',
+    ],
+    /*[
+        'attribute' => 'city',
+        'value' => function ($model, $key, $index) {
+            return $model->debtor->city;
+        },
+        'format' => 'raw',
+    ],*/
+    //'street',
+    [
+        'attribute' => 'debtor.street',
+        'value' => 'debtor.street',
+    ],
+    /*[
+        'attribute' => 'street',
+        'value' => function ($model, $key, $index) {
+            return $model->debtor->street;
+        },
+        'format' => 'raw',
+    ],*/
+    //'building',
+    [
+        'attribute' => 'debtor.building',
+        'value' => 'debtor.building',
+    ],
+    /*[
+        'attribute' => 'building',
+        'value' => function ($model, $key, $index) {
+            return $model->debtor->building;
+        },
+        'format' => 'raw',
+    ],*/
+    //'appartment',
+    [
+        'attribute' => 'debtor.appartment',
+        'value' => 'debtor.appartment',
+    ],
+    /*[
+        'attribute' => 'appartment',
+        'value' => function ($model, $key, $index) {
+            return $model->debtor->appartment;
+        },
+        'format' => 'raw',
+    ],*/
+    //'privatized',
+    /*[
         'attribute' => 'privatized',
+        'value' => 'debtor.privatized',
+    ],*/
+    [
+        'attribute' => Yii::t('app', 'Тип'),
         'value' => function ($model, $key, $index) {
             //TODO: исправить костыль
-            return $model->privatized ? 'Приватизированное' : 'Муниципальное';
+            return $model->debtor->privatized ? 'Приватизированное' : 'Муниципальное';
         },
         'format' => 'raw',
     ],
-    'phone',
+    //'phone',
     [
+        'attribute' => 'debtor.phone',
+        'value' => 'debtor.phone',
+    ],
+    /*[
+        'attribute' => 'phone',
+        'value' => function ($model, $key, $index) {
+            return $model->debtor->phone;
+        },
+        'format' => 'raw',
+    ],*/
+    'amount',
+    /*[
         'attribute' => Yii::t('app', 'Сумма долга'),
         'value' => function ($model, $key, $index) {
             return $model->debtDetails[0]->amount;
         },
         'format' => ['decimal', 2],
         'hAlign' => 'right',
-    ],
-    [
+    ],*/
+    'amount_additional_services',
+    /*[
         'attribute' => Yii::t('app', 'Сумма долга с допуслугами'),
         'value' => function ($model, $key, $index) {
             return $model->debtDetails[0]->amount_additional_services;
         },
         'format' => ['decimal', 2],
         'hAlign' => 'right',
-    ],
-    [
+    ],*/
+    'payment_date',
+    /*[
         'attribute' => Yii::t('app', 'Дата оплаты'),
         'value' => function ($model, $key, $index) {
             //return $model->debtDetails[0]->payment_date;
@@ -83,11 +189,11 @@ $columns = [
             return $model->debtDetails[0]->payment_date;
         },
         'format' => 'raw',
-    ],
+    ],*/
     [
         'attribute' => Yii::t('app', 'Пошлина'),
-        'value' => function (Debtor $model, $key, $index) {
-            return $model->calculateStateFee();
+        'value' => function (\common\models\DebtDetails $model, $key, $index) {
+            return $model->debtor->calculateStateFee();
         },
         'format' => ['decimal', 2],
         'hAlign' => 'right',
