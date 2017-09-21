@@ -12,8 +12,17 @@ use common\models\DebtDetails;
  */
 class DebtDetailsSearch extends DebtDetails
 {
-    //public $debtor;
+    public $LS_EIRC;
+    public $LS_IKU_provider;
+    public $IKU;
     public $name_mixed;
+    public $city;
+    public $street;
+    public $building;
+    public $appartment;
+    public $privatized;
+    public $phone;
+
 
     /**
      * @inheritdoc
@@ -21,16 +30,11 @@ class DebtDetailsSearch extends DebtDetails
     public function rules()
     {
         return [
-            [['name_mixed'], 'safe'],
+            [['LS_EIRC', 'LS_IKU_provider', 'IKU', 'name_mixed', 'city', 'street', 'building', 'appartment', 'privatized', 'phone'], 'safe'],
             [['id', 'debtor_id', 'public_service_id'], 'integer'],
             [['amount', 'amount_additional_services'], 'number'],
             [['date', 'payment_date'], 'safe'],
         ];
-    }
-
-    public function getDebtor()
-    {
-        return $this->hasOne(Debtor::className(), ['id' => 'debtor_id']);
     }
 
     /**
@@ -60,9 +64,45 @@ class DebtDetailsSearch extends DebtDetails
             'query' => $query,
         ]);
 
+        $dataProvider->sort->attributes['LS_EIRC'] = [
+            'asc' => ['debtor.LS_EIRC' => SORT_ASC],
+            'desc' => ['debtor.LS_EIRC' => SORT_DESC],
+        ];
+        $dataProvider->sort->attributes['LS_IKU_provider'] = [
+            'asc' => ['debtor.LS_IKU_provider' => SORT_ASC],
+            'desc' => ['debtor.LS_IKU_provider' => SORT_DESC],
+        ];
+        $dataProvider->sort->attributes['IKU'] = [
+            'asc' => ['debtor.IKU' => SORT_ASC],
+            'desc' => ['debtor.IKU' => SORT_DESC],
+        ];
         $dataProvider->sort->attributes['name_mixed'] = [
             'asc' => ['debtor.name_mixed' => SORT_ASC],
             'desc' => ['debtor.name_mixed' => SORT_DESC],
+        ];
+        $dataProvider->sort->attributes['city'] = [
+            'asc' => ['debtor.city' => SORT_ASC],
+            'desc' => ['debtor.city' => SORT_DESC],
+        ];
+        $dataProvider->sort->attributes['street'] = [
+            'asc' => ['debtor.street' => SORT_ASC],
+            'desc' => ['debtor.street' => SORT_DESC],
+        ];
+        $dataProvider->sort->attributes['building'] = [
+            'asc' => ['debtor.building' => SORT_ASC],
+            'desc' => ['debtor.building' => SORT_DESC],
+        ];
+        $dataProvider->sort->attributes['appartment'] = [
+            'asc' => ['debtor.appartment' => SORT_ASC],
+            'desc' => ['debtor.appartment' => SORT_DESC],
+        ];
+        $dataProvider->sort->attributes['privatized'] = [
+            'asc' => ['debtor.privatized' => SORT_ASC],
+            'desc' => ['debtor.privatized' => SORT_DESC],
+        ];
+        $dataProvider->sort->attributes['phone'] = [
+            'asc' => ['debtor.phone' => SORT_ASC],
+            'desc' => ['debtor.phone' => SORT_DESC],
         ];
 
         $this->load($params);
@@ -82,9 +122,17 @@ class DebtDetailsSearch extends DebtDetails
             'date' => $this->date,
             'payment_date' => $this->payment_date,
             'public_service_id' => $this->public_service_id,
-        ])->andFilterWhere(['like', 'debtor.name_mixed', $this->debtor]);
-
-
+        ])
+            ->andFilterWhere(['like', 'debtor.LS_EIRC', $this->LS_EIRC])
+            ->andFilterWhere(['like', 'debtor.LS_IKU_provider', $this->LS_IKU_provider])
+            ->andFilterWhere(['like', 'debtor.IKU', $this->IKU])
+            ->andFilterWhere(['like', 'debtor.name_mixed', $this->name_mixed])
+            ->andFilterWhere(['like', 'debtor.city', $this->city])
+            ->andFilterWhere(['like', 'debtor.street', $this->street])
+            ->andFilterWhere(['like', 'debtor.building', $this->building])
+            ->andFilterWhere(['like', 'debtor.appartment', $this->appartment])
+            ->andFilterWhere(['like', 'debtor.privatized', $this->privatized])
+            ->andFilterWhere(['like', 'debtor.phone', $this->phone]);
 
         return $dataProvider;
     }

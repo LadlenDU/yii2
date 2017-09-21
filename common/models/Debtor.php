@@ -112,12 +112,12 @@ class Debtor extends \yii\db\ActiveRecord
         return $this->hasMany(PublicService::className(), ['id' => 'public_service_id'])->viaTable('debtor_public_service', ['debtor_id' => 'id']);
     }
 
-    public function calculateStateFee()
+    /*public function calculateStateFee()
     {
         //TODO: косяк - в таблице надо использовать не Debtor, a DebtDetails класс (и текущцю функцию вызывать из него напрямую)
         $fee = $this->getDebtDetails()->one()->calculateStateFee();
         return $fee;
-    }
+    }*/
 
     public function getFIOName()
     {
