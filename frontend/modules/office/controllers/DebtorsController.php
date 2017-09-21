@@ -108,7 +108,7 @@ class DebtorsController extends Controller
             $sheet = $xls->getActiveSheet();
             #$sheet->setTitle();
 
-            if ($debtor = Debtor::findOne($id)) {
+            if ($debtor = DebtDetails::findOne($id)) {
                 $court = HelpersDebt::findCourtAddressForDebtor($debtor, 'common\models\Court');
             } else {
                 throw new \Exception(Yii::t('app', 'Не найден должник.'));
