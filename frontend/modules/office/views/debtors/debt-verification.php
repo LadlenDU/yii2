@@ -119,18 +119,18 @@ $columns = [
 
 ?>
 
-<div class="arrow-steps clearfix">
-    <div class="step"><span><?= Yii::t('app', 'Досудебная практика') ?></span></div>
-    <div class="step current"><span><?= Yii::t('app', 'Судебная практика') ?></span></div>
-    <div class="step"><span> <?= Yii::t('app', 'Исполнительное производство') ?></span></div>
-</div>
+    <div class="arrow-steps clearfix">
+        <div class="step"><span><?= Yii::t('app', 'Досудебная практика') ?></span></div>
+        <div class="step current"><span><?= Yii::t('app', 'Судебная практика') ?></span></div>
+        <div class="step"><span> <?= Yii::t('app', 'Исполнительное производство') ?></span></div>
+    </div>
 
-<br><br>
+    <br><br>
 
-<div class="grid-head">
-    <div class="row">
-        <div class="col-sm-12 controls-buttons">
-            <!--<div class="btn-group">
+    <div class="grid-head">
+        <div class="row">
+            <div class="col-sm-12 controls-buttons">
+                <!--<div class="btn-group">
                 <button id="debtors-bottom-menu" class="btn btn-primary btn-sm dropdown-toggle"
                         data-toggle="dropdown" aria-expanded="true">
                     <? /*= Yii::t('app', 'Действия к должникам') */ ?> <b class="caret"></b></button>
@@ -148,28 +148,28 @@ $columns = [
                 </ul>
             </div>-->
 
-            <!--<button class="btn-sm toggle-filter btn btn-primary" id="show_debtors_filter" data-toggle="collapse"
+                <!--<button class="btn-sm toggle-filter btn btn-primary" id="show_debtors_filter" data-toggle="collapse"
                     data-target="#search-debtors">
                 <i class="icon-search icon-white"></i><? /*= Yii::t('app', 'Поиск должников') */ ?>
             </button>-->
-            <!--<button class="hide btn-sm btn btn-grey" id="reset-debtors-filter" style="display: none">
+                <!--<button class="hide btn-sm btn btn-grey" id="reset-debtors-filter" style="display: none">
                 <i class="fa fa-filter"></i><? /*= Yii::t('app', 'Сбросить фильтр') */ ?>
             </button>-->
 
-            <button class="btn-sm toggle-filter btn btn-primary" id="load_debtors" data-toggle="collapse"
-                    data-target="#load-debtors"
-                    title="<?= Yii::t('app', 'Загрузка должников из файла') ?>">
-                <i class="icon-search icon-white"></i><?= Yii::t('app', 'Загрузка должников') ?>
-            </button>
+                <button class="btn-sm toggle-filter btn btn-primary" id="load_debtors" data-toggle="collapse"
+                        data-target="#load-debtors"
+                        title="<?= Yii::t('app', 'Загрузка должников из файла') ?>">
+                    <i class="icon-search icon-white"></i><?= Yii::t('app', 'Загрузка должников') ?>
+                </button>
 
-            <button class="btn-sm btn btn-primary" id="print_invoices"
-                    title="<?= Yii::t('app', 'Распечатка бланков выбранных должников') ?>">
-                <i class="icon-search icon-white"></i><?= Yii::t('app', 'Распечатка бланков') ?>
-            </button>
+                <button class="btn-sm btn btn-primary" id="print_invoices"
+                        title="<?= Yii::t('app', 'Распечатка бланков выбранных должников') ?>">
+                    <i class="icon-search icon-white"></i><?= Yii::t('app', 'Распечатка бланков') ?>
+                </button>
 
-            <div class="clearfix"></div>
-        </div>
-        <!--<div class="col-sm-6">
+                <div class="clearfix"></div>
+            </div>
+            <!--<div class="col-sm-6">
             <div class="pull-right" style="white-space: nowrap;"><? /*= Yii::t('app', 'Показывать записей') */ ?>
                 <select id="debtors-grid_sizer" class="page-sizer" name="pageSize_Accounts">
                     <option value="10">10</option>
@@ -179,8 +179,8 @@ $columns = [
                 </select>
             </div>
         </div>-->
+        </div>
     </div>
-</div>
 
 <?php /* ?>
 <div class="row collapse" id="search-debtors">
@@ -276,18 +276,18 @@ $columns = [
 </div>
  */ ?>
 
-<br>
+    <br>
 
-<div class="row collapse" id="load-debtors">
-    <div class="col-xs-12">
-        <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]) ?>
-        <?= $form->field($uploadModel, 'excelFile')->fileInput() ?>
-        <button><?= Yii::t('app', 'Отправить') ?></button>
-        <?php ActiveForm::end() ?>
+    <div class="row collapse" id="load-debtors">
+        <div class="col-xs-12">
+            <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]) ?>
+            <?= $form->field($uploadModel, 'excelFile')->fileInput() ?>
+            <button><?= Yii::t('app', 'Отправить') ?></button>
+            <?php ActiveForm::end() ?>
+        </div>
     </div>
-</div>
 
-<br>
+    <br>
 
 <?php
 #$address = new Address(); // your address model
@@ -323,39 +323,40 @@ echo DynaGrid::widget([
 ]);
 ?>
 
-<script>
-    function openExcelFile(strLocation) {
-        if (window.ActiveXObject) {
-            try {
-                var objExcel;
-                objExcel = new ActiveXObject("Excel.Application");
-                objExcel.Visible = true;
-                objExcel.Workbooks.Open(strLocation, false, true);
-            }
-            catch (e) {
-                alert (e.message);
-            }
-        }
-        else {
-            alert ("Your browser does not support this.");
-        }
-    }
+    <script>
+        /*function openExcelFile(strLocation) {
+         if (window.ActiveXObject) {
+         try {
+         var objExcel;
+         objExcel = new ActiveXObject("Excel.Application");
+         objExcel.Visible = true;
+         objExcel.Workbooks.Open(strLocation, false, true);
+         }
+         catch (e) {
+         alert (e.message);
+         }
+         }
+         else {
+         alert ("Your browser does not support this.");
+         }
+         }*/
 
-    function showInvoice(debtorId) {
-        var url = '/office/debtors/invoice-prev/?debtorId=' + encodeURIComponent(debtorId);
-        //window.open(url, '_blank');
-        openExcelFile(url);
-    }
-</script>
+        function showInvoice(debtorId) {
+            var url = '/office/debtors/invoice-prev/?debtorIds=' + encodeURIComponent(debtorId);
+            window.open(url, '_blank');
+            //openExcelFile(url);
+        }
+    </script>
 
 <?php
 $script = <<<JS
     $("#print_invoices").click(function () {
         var keys = $('#dynagrid-debtors-options').yiiGridView('getSelectedRows');
-        for (var k in keys) {
+        /*for (var k in keys) {
             //console.log(keys[k]);            
-        }
-        
+        }*/
+        var url = '/office/debtors/invoice-prev/?' + $.param({debtorIds:keys});
+        window.open(url, '_blank');
     });
 JS;
 $this->registerJs($script, yii\web\View::POS_READY, 'debt-verification');

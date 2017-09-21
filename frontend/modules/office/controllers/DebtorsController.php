@@ -88,18 +88,42 @@ class DebtorsController extends Controller
             ]);
     }
 
-    public function actionInvoicePrev($debtorId)
+    public function actionInvoicePrev(array $debtorIds)
     {
-        $debtor = Debtor::findOne($debtorId);
-        $court = HelpersDebt::findCourtAddressForDebtor($debtor, 'common\models\Court');
+        $fileName = \Yii::getAlias('@common/data/sber_pd4.xls');
+        $xls = \PHPExcel_IOFactory::load($fileName);
 
-        HelpersDebt::fillInvoiceBlank($debtor, $court);
+        #$debtorIds = (array)$debtorIds;
 
-        return $this->renderPartial('invoice-prev',
+        foreach ($debtorIds as $key => $id) {
+
+            $xls->setActiveSheetIndex($key);
+            $sheet = $xls->getActiveSheet();
+
+            $debtor = Debtor::findOne($id);
+            $court = HelpersDebt::findCourtAddressForDebtor($debtor, 'common\models\Court');
+
+            HelpersDebt::fillInvoiceBlank($debtor, $court, $sheet);
+        }
+
+        header("Expires: Mon, 1 Apr 1974 05:00:00 GMT");
+        header("Last-Modified: " . gmdate("D,d M YH:i:s") . " GMT");
+        header("Cache-Control: no-cache, must-revalidate");
+        header("Pragma: no-cache");
+        header("Content-type: application/vnd.ms-excel");
+        header("Content-Disposition: attachment; filename=pd4.xls");
+
+        // Выводим содержимое файла
+        $objWriter = new \PHPExcel_Writer_Excel5($xls);
+        $objWriter->save('php://output');
+
+        exit;
+
+        /*return $this->renderPartial('invoice-prev',
             [
                 'debtorId' => $debtorId,
                 'debtor' => $debtor,
                 'court' => $court,
-            ]);
+            ]);*/
     }
 }

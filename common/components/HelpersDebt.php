@@ -19,14 +19,8 @@ class HelpersDebt
         return $targetModel::find()->one();
     }
 
-    public static function fillInvoiceBlank(Debtor $debtor, Court $court)
+    public static function fillInvoiceBlank(Debtor $debtor, Court $court, $sheet)
     {
-        $fileName = \Yii::getAlias('@common/data/sber_pd4.xls');
-
-        $xls = \PHPExcel_IOFactory::load($fileName);
-        $xls->setActiveSheetIndex(0);
-        $sheet = $xls->getActiveSheet();
-
         // наименование получателя платежа
         $sheet->setCellValueByColumnAndRow(16, 3, $court->name_of_payee);
 
@@ -60,19 +54,5 @@ class HelpersDebt
 
         // Итого
         $sheet->setCellValueByColumnAndRow(20, 15, $debtor->debtDetails[0]->amount);
-
-
-        header("Expires: Mon, 1 Apr 1974 05:00:00 GMT");
-        header("Last-Modified: " . gmdate("D,d M YH:i:s") . " GMT");
-        header("Cache-Control: no-cache, must-revalidate");
-        header("Pragma: no-cache");
-        header("Content-type: application/vnd.ms-excel");
-        header("Content-Disposition: attachment; filename=pd4.xls");
-
-        // Выводим содержимое файла
-        $objWriter = new \PHPExcel_Writer_Excel5($xls);
-        $objWriter->save('php://output');
-
-        exit;
     }
 }
