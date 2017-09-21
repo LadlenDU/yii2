@@ -50,6 +50,10 @@ class DebtorSearch extends Debtor
             'query' => $query,
         ]);
 
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
         $this->load($params);
 
         if (!$this->validate()) {

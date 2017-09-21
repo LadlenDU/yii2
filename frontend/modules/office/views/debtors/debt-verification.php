@@ -75,7 +75,8 @@ $columns = [
     ],*/
     //'name_mixed',
     [
-        'attribute' => 'debtor.name_mixed',
+        'attribute' => 'name_mixed',
+        'label' => Yii::t('app', 'ФИО'),
         'value' => 'debtor.name_mixed',
     ],
     /*[
