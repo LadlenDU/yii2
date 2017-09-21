@@ -157,8 +157,8 @@ $columns = [
             </button>-->
 
             <button class="btn-sm toggle-filter btn btn-primary" id="load_debtors" data-toggle="collapse"
-                             data-target="#load-debtors"
-                             title="<?= Yii::t('app', 'Загрузка должников из файла') ?>">
+                    data-target="#load-debtors"
+                    title="<?= Yii::t('app', 'Загрузка должников из файла') ?>">
                 <i class="icon-search icon-white"></i><?= Yii::t('app', 'Загрузка должников') ?>
             </button>
 
@@ -317,23 +317,45 @@ echo DynaGrid::widget([
             'heading' => '<h3 class="panel-title">' . Yii::t('app', 'Список должников') . '</h3>',
             'before' => '{dynagrid}',
         ],
+        'options' => ['id' => 'dynagrid-debtors-options'],
     ],
-    'options' => ['id' => 'dynagrid-1'] // a unique identifier is important
+    'options' => ['id' => 'dynagrid-debtors'] // a unique identifier is important
 ]);
 ?>
 
 <script>
-    function showInvoice(debtorId)
-    {
-        window.open('/office/debtors/invoice-prev/?debtorId=' + encodeURIComponent(debtorId), '_blank');
+    function openExcelFile(strLocation) {
+        if (window.ActiveXObject) {
+            try {
+                var objExcel;
+                objExcel = new ActiveXObject("Excel.Application");
+                objExcel.Visible = true;
+                objExcel.Workbooks.Open(strLocation, false, true);
+            }
+            catch (e) {
+                alert (e.message);
+            }
+        }
+        else {
+            alert ("Your browser does not support this.");
+        }
     }
-    
-    jQuery(function ($) {
-        $("#print_invoices").click(function () {
-            
-        });
-    });
+
+    function showInvoice(debtorId) {
+        var url = '/office/debtors/invoice-prev/?debtorId=' + encodeURIComponent(debtorId);
+        //window.open(url, '_blank');
+        openExcelFile(url);
+    }
 </script>
 
-
-
+<?php
+$script = <<<JS
+    $("#print_invoices").click(function () {
+        var keys = $('#dynagrid-debtors-options').yiiGridView('getSelectedRows');
+        for (var k in keys) {
+            //console.log(keys[k]);            
+        }
+        
+    });
+JS;
+$this->registerJs($script, yii\web\View::POS_READY, 'debt-verification');
