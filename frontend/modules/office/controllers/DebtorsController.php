@@ -93,12 +93,18 @@ class DebtorsController extends Controller
         $fileName = \Yii::getAlias('@common/data/sber_pd4.xls');
         $xls = \PHPExcel_IOFactory::load($fileName);
 
-        #$debtorIds = (array)$debtorIds;
-
         foreach ($debtorIds as $key => $id) {
+
+            #$xls->copy();
+            if ($key) {
+                $newSheet = clone $sheet;
+                $newSheet->setTitle('Должник ' . $id);
+                $xls->addSheet($newSheet);
+            }
 
             $xls->setActiveSheetIndex($key);
             $sheet = $xls->getActiveSheet();
+            #$sheet->setTitle();
 
             $debtor = Debtor::findOne($id);
             $court = HelpersDebt::findCourtAddressForDebtor($debtor, 'common\models\Court');
