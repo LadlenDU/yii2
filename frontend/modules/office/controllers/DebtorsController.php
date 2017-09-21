@@ -94,7 +94,7 @@ class DebtorsController extends Controller
 
     public function actionStatement($debtorId)
     {
-        $this->layout = 'empty';
+        $this->layout = 'statement';
         $this->view->title = \Yii::t('app', 'Заявление в суд');
 
         $debtDetails = DebtDetails::findOne($debtorId);

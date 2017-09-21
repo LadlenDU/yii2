@@ -18,7 +18,10 @@ use yii\helpers\Html;
         }
         table td {
             vertical-align: top;
-            padding: 0.5em;
+            padding: 0 0.5em 0.5em;
+        }
+        p {
+            text-indent: 4em;
         }
     </style>
 </head>
