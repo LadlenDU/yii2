@@ -92,12 +92,28 @@ class DebtorsController extends Controller
             ]);
     }
 
+    public function actionStatement($debtorId)
+    {
+        $this->layout = 'empty';
+        $this->title = \Yii::t('app', 'Заявление в суд');
+
+        $debtDetails = DebtDetails::findOne($debtorId);
+        $court = HelpersDebt::findCourtAddressForDebtor($debtDetails, 'common\models\Court');
+
+        return $this->render('statement',
+            [
+                'debtDetails' => $debtDetails,
+                'court' => $court,
+            ]);
+    }
+
     public function actionInvoicePrev(array $debtorIds)
     {
         $fileName = \Yii::getAlias('@common/data/sber_pd4.xls');
         $xls = \PHPExcel_IOFactory::load($fileName);
 
         foreach ($debtorIds as $key => $id) {
+            //TODO: лажа - переделать (заодно переименовывать первую страницу)
             if ($key) {
                 $newSheet = clone $sheet;
                 $newSheet->setTitle('Должник ' . $id);

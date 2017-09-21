@@ -80,4 +80,10 @@ class Court extends \yii\db\ActiveRecord
             'KBK' => Yii::t('app', 'КБК'),
         ];
     }
+
+    public function getFullAddress()
+    {
+        $addr = implode(', ', [$this->region, $this->district, $this->city, $this->street, $this->building]);
+        return $addr;
+    }
 }

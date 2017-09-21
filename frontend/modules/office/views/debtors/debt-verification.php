@@ -26,7 +26,7 @@ $columns = [
         'order' => DynaGrid::ORDER_FIX_LEFT,
     ],
     /*[
-        'attribute' => 'Кв-я',
+        'attribute' => 'Квитанция',
         'value' => function ($model, $key, $index) {
             return '<button style="height:21px;width:21px;display:inline-block;vertical-align:middle" title="'
                 . \Yii::t('app', 'Показать квитанцию') . '" onclick="showInvoice(' . $key . ')"></button>';
@@ -36,6 +36,17 @@ $columns = [
         'format' => 'raw',
         'order' => DynaGrid::ORDER_FIX_LEFT,
     ],*/
+    [
+        'attribute' => 'Заявление',
+        'value' => function ($model, $key, $index) {
+            return '<button style="height:21px;width:21px;display:inline-block;vertical-align:middle" title="'
+                . \Yii::t('app', 'Показать заявление') . '" onclick="showStatement(' . $key . ')"></button>';
+        },
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'format' => 'raw',
+        'order' => DynaGrid::ORDER_FIX_LEFT,
+    ],
     [
         'attribute' => 'LS_EIRC',
         'label' => Yii::t('app', 'ЛС ЕИРЦ'),
@@ -322,7 +333,10 @@ echo DynaGrid::widget([
         function showInvoice(debtorId) {
             var url = '/office/debtors/invoice-prev/?debtorIds=' + encodeURIComponent(debtorId);
             window.open(url, '_blank');
-            //openExcelFile(url);
+        }
+        function showStatement(debtorId) {
+            var url = '/office/debtors/statement/?debtorId=' + encodeURIComponent(debtorId);
+            window.open(url, '_blank');
         }
     </script>
 
