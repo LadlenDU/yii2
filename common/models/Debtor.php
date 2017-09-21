@@ -125,7 +125,7 @@ class Debtor extends \yii\db\ActiveRecord
             return $this->name_mixed;
         }
 
-        $fio = $this->second_name;
+        /*$fio = $this->second_name;
         if ($this->first_name) {
             $fio .= ' ';
         }
@@ -133,7 +133,13 @@ class Debtor extends \yii\db\ActiveRecord
         if ($this->patronymic) {
             $fio .= ' ';
         }
-        $fio .= $this->patronymic;
+        $fio .= $this->patronymic;*/
+
+        $fio = trim(implode(' ', [$this->second_name, $this->first_name, $this->patronymic]));
+
+        if (!$fio) {
+            $fio = '(Нет имени)';
+        }
 
         return $fio;
     }

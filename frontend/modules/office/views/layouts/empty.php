@@ -4,7 +4,6 @@ use yii\helpers\Html;
 /* @var $this \yii\web\View */
 /* @var $content string */
 ?>
-
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>">
@@ -16,6 +15,10 @@ use yii\helpers\Html;
         body {
             font-family: "Times New Roman", Georgia, serif;
             font-size: 16px;
+        }
+        table td {
+            vertical-align: top;
+            padding: 0.5em;
         }
     </style>
 </head>
