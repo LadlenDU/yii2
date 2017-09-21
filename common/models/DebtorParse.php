@@ -186,6 +186,8 @@ class DebtorParse extends Model
         if ($info['headers']) {
             //TODO: костыль - сделать сравнение пользователей
             Debtor::deleteAll();
+            //TODO: кроме того, посмотреть корректность удаления
+            DebtDetails::deleteAll();
 
             foreach ($info['colInfo'] as $rowInfo) {
                 $debtor = new Debtor;
