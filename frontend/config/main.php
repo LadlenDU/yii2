@@ -44,6 +44,7 @@ return [
                 '<module:\w+>/<controller:\w+>/<action:[\w-]+>' => '<module>/<controller>/<action>',
                 //'<module:\w+>/<action:[\w-]+>/<id:(.*?)>' => '<module>/default/<action>/<id>',
                 //'<module:\w+>/<action:[\w-]+>' => '<module>/default/<action>',
+                '/office/my-organization'=> 'office/default/my-organization',
                 'pages/<page:[\w-]+>' => 'pages/default/index',
             ],
         ],
