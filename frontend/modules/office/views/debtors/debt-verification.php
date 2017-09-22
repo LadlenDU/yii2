@@ -186,6 +186,11 @@ $columns = [
                     <i class="icon-search icon-white"></i><?= Yii::t('app', 'Распечатка бланков') ?>
                 </button>
 
+                <button class="btn-sm btn btn-primary" id="print_invoices"
+                        title="<?= Yii::t('app', 'Распечатка заявлений в суд на выбранных должников') ?>">
+                    <i class="icon-search icon-white"></i><?= Yii::t('app', 'Распечатка заявлений') ?>
+                </button>
+
                 <div class="clearfix"></div>
             </div>
             <!--<div class="col-sm-6">
