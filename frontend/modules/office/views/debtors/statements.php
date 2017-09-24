@@ -1,7 +1,8 @@
 <?php
 /**
  * @var yii\web\View $this
- * @var array $params
+ * @var array $debts
+ * @var common\models\UserInfo $userInfo
  */
 
 use yii\helpers\Html;
@@ -16,6 +17,10 @@ $this->registerCss($css);
 
 ?>
 
-<?php echo $this->render('statement', $params) ?>
+<?php
+    foreach ($debts as $d) {
+        echo $this->render('statement', $d + ['userInfo' => $userInfo]);
+    }
+?>
 
 <div class="page-break"></div>

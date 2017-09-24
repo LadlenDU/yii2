@@ -186,7 +186,7 @@ $columns = [
                     <i class="icon-search icon-white"></i><?= Yii::t('app', 'Распечатка бланков') ?>
                 </button>
 
-                <button class="btn-sm btn btn-primary" id="print_invoices"
+                <button class="btn-sm btn btn-primary" id="print_statements"
                         title="<?= Yii::t('app', 'Распечатка заявлений в суд на выбранных должников') ?>">
                     <i class="icon-search icon-white"></i><?= Yii::t('app', 'Распечатка заявлений') ?>
                 </button>
@@ -355,5 +355,11 @@ $script = <<<JS
         var url = '/office/debtors/invoice-prev/?' + $.param({debtorIds:keys});
         window.open(url, '_blank');
     });
+    $("#print_statements").click(function () {
+        var keys = $('#dynagrid-debtors-options').yiiGridView('getSelectedRows');
+        var url = '/office/debtors/statements/?' + $.param({debtorIds:keys});
+        window.open(url, '_blank');
+    });
+
 JS;
 $this->registerJs($script, yii\web\View::POS_READY, 'debt-verification');

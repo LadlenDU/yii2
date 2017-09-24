@@ -105,12 +105,40 @@ class DebtorsController extends Controller
 
         return $this->render('statements',
             [
-                'params' =>
-                    [
-                        'debtDetails' => $debtDetails,
-                        'court' => $court,
-                        'userInfo' => Yii::$app->user->identity->userInfo,
-                    ],
+                'debtDetails' => $debtDetails,
+                'court' => $court,
+                'userInfo' => Yii::$app->user->identity->userInfo,
+            ]
+        );
+    }
+
+    public function actionStatements(array $debtorIds)
+    {
+        $this->layout = 'statement';
+        $this->view->title = \Yii::t('app', 'Заявления в суд');
+
+        $debts = [];
+
+        //TODO: оптимизировать
+        foreach ($debtorIds as $dId) {
+            $debtDetails = DebtDetails::findOne($dId);
+            if ($debtDetails) {
+                $court = HelpersDebt::findCourtAddressForDebtor($debtDetails, 'common\models\Court');
+                $debts[] = [
+                    'debtDetails' => $debtDetails,
+                    'court' => $court,
+                ];
+            }
+        }
+
+        if (!$debts) {
+            throw new \yii\web\NotFoundHttpException();
+        }
+
+        return $this->render('statements',
+            [
+                'debts' => $debts,
+                'userInfo' => Yii::$app->user->identity->userInfo,
             ]
         );
     }
