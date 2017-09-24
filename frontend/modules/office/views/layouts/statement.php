@@ -24,6 +24,7 @@ use yii\helpers\Html;
             text-indent: 4em;
         }
     </style>
+    <?php $this->head() ?>
 </head>
 <body>
 <?php echo $content ?>
