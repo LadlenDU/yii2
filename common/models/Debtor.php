@@ -4,10 +4,6 @@ namespace common\models;
 
 use Yii;
 
-//TODO: вынести код в extension
-include Yii::getAlias('@app/../lib/NameCaseLib/Library/NCLNameCaseRu.php');
-
-
 /**
  * This is the model class for table "debtor".
  *
@@ -127,7 +123,7 @@ class Debtor extends \yii\db\ActiveRecord
      * @param int|null $caseNum номер падежа (0-based)
      * @return string
      */
-    public function getFIOName($caseNum = null)
+    public function getFIOName($case = null)
     {
         if ($this->name_mixed) {
             $fio = $this->name_mixed;
@@ -148,9 +144,12 @@ class Debtor extends \yii\db\ActiveRecord
         }
 
         if ($fio) {
-            $nc = new \NCLNameCaseRu();
+            /*$nc = new \NCLNameCaseRu();
             if ($caseNum !== null) {
                 $fio = $nc->q($fio, $caseNum);
+            }*/
+            if ($case) {
+                $fio = \morphos\Russian\inflectName($fio, $case);
             }
         } else {
             $fio = '(Нет имени)';
