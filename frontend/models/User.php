@@ -6,8 +6,19 @@ use dektrium\user\models\User as BaseUser;
 use dektrium\user\models\Token;
 use common\models\UserInfo;
 
+/**
+ * @property UserInfo[] $userInfos
+ */
 class User extends BaseUser
 {
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUserInfo()
+    {
+        return $this->hasOne(UserInfo::className(), ['user_id' => 'id'])->inverseOf('user');
+    }
+
     public function attemptConfirmation($code)
     {
         $token = $this->finder->findTokenByParams($this->id, $code, Token::TYPE_CONFIRMATION);
@@ -39,6 +50,11 @@ class User extends BaseUser
         }*/
 
         return $showRegistrationForm;
+    }
+
+    public function ifHasRequiredInfo()
+    {
+        //$this->userInfo->
     }
 
     /*public function registrationInfo()

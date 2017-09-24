@@ -6,7 +6,9 @@ use Yii;
 use common\models\info\Individual;
 use common\models\info\IndividualEntrepreneur;
 use common\models\info\LegalEntity;
+//use common\models\info\TariffPlan;
 use dektrium\user\models\User;
+
 
 /**
  * This is the model class for table "user_info".
@@ -15,11 +17,14 @@ use dektrium\user\models\User;
  * @property integer $user_id
  * @property integer $complete
  * @property integer $registration_type_id
+ * @property string $balance
+ * @property integer $tariff_plan_id
  *
  * @property Individual[] $individuals
  * @property IndividualEntrepreneur[] $individualEntrepreneurs
  * @property LegalEntity[] $legalEntities
  * @property RegistrationType $registrationType
+ * @property TariffPlan $tariffPlan
  * @property User $user
  */
 class UserInfo extends \yii\db\ActiveRecord
@@ -49,8 +54,11 @@ class UserInfo extends \yii\db\ActiveRecord
     {
         return [
             [['user_id'], 'required'],
-            [['user_id', 'complete', 'registration_type_id'], 'integer'],
+            [['user_id', 'complete', 'registration_type_id', 'tariff_plan_id'], 'integer'],
+            [['balance'], 'number'],
+            [['user_id'], 'unique'],
             [['registration_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => RegistrationType::className(), 'targetAttribute' => ['registration_type_id' => 'id']],
+            [['tariff_plan_id'], 'exist', 'skipOnError' => true, 'targetClass' => TariffPlan::className(), 'targetAttribute' => ['tariff_plan_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
@@ -63,8 +71,10 @@ class UserInfo extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'user_id' => Yii::t('app', 'User ID'),
-            'complete' => Yii::t('app', 'Complete'),
-            'registration_type_id' => Yii::t('app', 'Registration Type ID'),
+            'complete' => Yii::t('app', 'Завершен ли процесс заполнения информации'),
+            'registration_type_id' => Yii::t('app', 'Вариант регистрации'),
+            'balance' => Yii::t('app', 'Balance'),
+            'tariff_plan_id' => Yii::t('app', 'Tariff Plan ID'),
         ];
     }
 
@@ -103,8 +113,16 @@ class UserInfo extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getTariffPlan()
+    {
+        return $this->hasOne(TariffPlan::className(), ['id' => 'tariff_plan_id'])->inverseOf('userInfos');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getUser()
     {
-        return $this->hasOne(User::className(), ['id' => 'user_id'])->inverseOf('userInfos');
+        return $this->hasOne(User::className(), ['id' => 'user_id'])->inverseOf('userInfo');
     }
 }
