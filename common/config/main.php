@@ -31,6 +31,7 @@ return [
                         ],
                     ],
                 ],
+                'export' => 'phpnt\exportFile\controllers\ExportController',
             ],
             'pathToImages' => '@webroot/images',
             'urlToImages' => '@web/images',

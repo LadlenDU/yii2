@@ -103,12 +103,16 @@ class DebtorsController extends Controller
         }
         $court = HelpersDebt::findCourtAddressForDebtor($debtDetails, 'common\models\Court');
 
-        return $this->render('statement',
+        return $this->render('statements',
             [
-                'debtDetails' => $debtDetails,
-                'court' => $court,
-                'userInfo' => Yii::$app->user->identity->userInfo,
-            ]);
+                'params' =>
+                    [
+                        'debtDetails' => $debtDetails,
+                        'court' => $court,
+                        'userInfo' => Yii::$app->user->identity->userInfo,
+                    ],
+            ]
+        );
     }
 
     public function actionInvoicePrev(array $debtorIds)
