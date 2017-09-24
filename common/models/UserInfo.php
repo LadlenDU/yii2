@@ -20,9 +20,9 @@ use dektrium\user\models\User;
  * @property string $balance
  * @property integer $tariff_plan_id
  *
- * @property Individual[] $individuals
- * @property IndividualEntrepreneur[] $individualEntrepreneurs
- * @property LegalEntity[] $legalEntities
+ * @property Individual $individual
+ * @property IndividualEntrepreneur $individualEntrepreneur
+ * @property LegalEntity $legalEntity
  * @property RegistrationType $registrationType
  * @property TariffPlan $tariffPlan
  * @property User $user
@@ -81,25 +81,25 @@ class UserInfo extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getIndividuals()
+    public function getIndividual()
     {
-        return $this->hasMany(Individual::className(), ['user_info_id' => 'id'])->inverseOf('userInfo');
+        return $this->hasOne(Individual::className(), ['user_info_id' => 'id'])->inverseOf('userInfo');
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getIndividualEntrepreneurs()
+    public function getIndividualEntrepreneur()
     {
-        return $this->hasMany(IndividualEntrepreneur::className(), ['user_info_id' => 'id'])->inverseOf('userInfo');
+        return $this->hasOne(IndividualEntrepreneur::className(), ['user_info_id' => 'id'])->inverseOf('userInfo');
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getLegalEntities()
+    public function getLegalEntity()
     {
-        return $this->hasMany(LegalEntity::className(), ['user_info_id' => 'id'])->inverseOf('userInfo');
+        return $this->hasOne(LegalEntity::className(), ['user_info_id' => 'id'])->inverseOf('userInfo');
     }
 
     /**
@@ -124,5 +124,33 @@ class UserInfo extends \yii\db\ActiveRecord
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'user_id'])->inverseOf('userInfo');
+    }
+
+    /**
+     * Вернуть название (имя) в зависимости от типа регистрации.
+     */
+    public function getNameOfEntity()
+    {
+        $name = '';
+
+        switch ($this->registrationType->id) {
+            case 1: {
+                $name = $this->legalEntity->company_name;
+                break;
+            }
+            case 2: {
+                $name = $this->individualEntrepreneur->full_name;
+                break;
+            }
+            case 3: {
+                $name = $this->individual->full_name;
+                break;
+            }
+            default: {
+                break;
+            }
+        }
+
+        return $name;
     }
 }

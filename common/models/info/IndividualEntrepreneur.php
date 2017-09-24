@@ -64,6 +64,6 @@ class IndividualEntrepreneur extends \yii\db\ActiveRecord
      */
     public function getUserInfo()
     {
-        return $this->hasOne(UserInfo::className(), ['id' => 'user_info_id'])->inverseOf('individualEntrepreneurs');
+        return $this->hasOne(UserInfo::className(), ['id' => 'user_info_id'])->inverseOf('individualEntrepreneur');
     }
 }

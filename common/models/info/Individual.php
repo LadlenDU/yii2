@@ -48,8 +48,8 @@ class Individual extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'user_info_id' => Yii::t('app', 'User Info ID'),
-            'full_name' => Yii::t('app', Yii::t('app', 'ФИО')),
-            'INN' => Yii::t('app', Yii::t('app', 'ИНН')),
+            'full_name' => Yii::t('app', 'ФИО'),
+            'INN' => Yii::t('app', 'ИНН'),
             'checking_account_num' => Yii::t('app', '№ расчетного счета'),
         ];
     }
@@ -59,6 +59,6 @@ class Individual extends \yii\db\ActiveRecord
      */
     public function getUserInfo()
     {
-        return $this->hasOne(UserInfo::className(), ['id' => 'user_info_id'])->inverseOf('individuals');
+        return $this->hasOne(UserInfo::className(), ['id' => 'user_info_id'])->inverseOf('individual');
     }
 }
