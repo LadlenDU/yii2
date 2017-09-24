@@ -98,6 +98,9 @@ class DebtorsController extends Controller
         $this->view->title = \Yii::t('app', 'Заявление в суд');
 
         $debtDetails = DebtDetails::findOne($debtorId);
+        if (!$debtDetails) {
+            throw new \yii\web\NotFoundHttpException();
+        }
         $court = HelpersDebt::findCourtAddressForDebtor($debtDetails, 'common\models\Court');
 
         return $this->render('statement',
