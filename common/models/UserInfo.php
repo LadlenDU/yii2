@@ -153,4 +153,29 @@ class UserInfo extends \yii\db\ActiveRecord
 
         return $name;
     }
+
+    public function getEntity()
+    {
+        $entity = false;
+
+        switch ($this->registrationType->id) {
+            case 1: {
+                $entity = $this->legalEntity;
+                break;
+            }
+            case 2: {
+                $entity = $this->individualEntrepreneur;
+                break;
+            }
+            case 3: {
+                $entity = $this->individual;
+                break;
+            }
+            default: {
+                break;
+            }
+        }
+
+        return $entity;
+    }
 }

@@ -107,6 +107,7 @@ class DebtorsController extends Controller
             [
                 'debtDetails' => $debtDetails,
                 'court' => $court,
+                'userInfo' => Yii::$app->user->identity->userInfo,
             ]);
     }
 

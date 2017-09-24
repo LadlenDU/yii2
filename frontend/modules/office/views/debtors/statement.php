@@ -3,6 +3,7 @@
  * @var yii\web\View $this
  * @var common\models\DebtDetails $debtDetails
  * @var common\models\Court $court
+ * @var common\models\UserInfo $userInfo
  */
 
 use yii\helpers\Html;
@@ -12,9 +13,9 @@ use yii\helpers\Html;
 <table style="width: 100%">
     <tr>
         <td style="text-align: center">
-            <strong><?= Html::encode($court->name) ?></strong><br>
-            ИНН <?= Html::encode($court->INN) ?><br>
-            ОГРН <?= Html::encode($court->OKTMO) ?><br>
+            <strong><?= Html::encode($userInfo->getNameOfEntity()) ?></strong><br>
+            ИНН <?= Html::encode($userInfo->getEntity()->INN) ?><br>
+            ОГРН <?= Html::encode($userInfo->getEntity()->OGRN) ?><br>
             ***<br>
             адрес: <?= Html::encode($court->getFullAddress()) ?>
         </td>
