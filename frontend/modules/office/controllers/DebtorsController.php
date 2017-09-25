@@ -112,8 +112,11 @@ class DebtorsController extends Controller
         );
     }
 
-    public function actionStatements(array $debtorIds)
+    public function actionStatements()
     {
+        #$debtorIds = $_POST['debtorIds'];
+        $debtorIds = Yii::$app->request->post('debtorIds');
+
         $this->layout = 'statement';
         $this->view->title = \Yii::t('app', 'Заявления в суд');
 

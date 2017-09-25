@@ -36,7 +36,7 @@ $columns = [
         'format' => 'raw',
         'order' => DynaGrid::ORDER_FIX_LEFT,
     ],*/
-    [
+    /*[
         'attribute' => 'Заявление',
         'value' => function ($model, $key, $index) {
             return '<button style="height:21px;width:21px;display:inline-block;vertical-align:middle" title="'
@@ -46,7 +46,7 @@ $columns = [
         'vAlign' => 'middle',
         'format' => 'raw',
         'order' => DynaGrid::ORDER_FIX_LEFT,
-    ],
+    ],*/
     [
         'attribute' => 'LS_EIRC',
         'label' => Yii::t('app', 'ЛС ЕИРЦ'),
@@ -346,6 +346,7 @@ echo DynaGrid::widget([
     </script>
 
 <?php
+$printErrorTxt = Html::encode(Yii::t('app', 'Ошибка печати!'));
 $script = <<<JS
     $("#print_invoices").click(function () {
         var keys = $('#dynagrid-debtors-options').yiiGridView('getSelectedRows');
@@ -357,8 +358,19 @@ $script = <<<JS
     });
     $("#print_statements").click(function () {
         var keys = $('#dynagrid-debtors-options').yiiGridView('getSelectedRows');
-        var url = '/office/debtors/statements/?' + $.param({debtorIds:keys});
-        window.open(url, '_blank');
+        //var url = '/office/debtors/statements/?' + $.param({debtorIds:keys});
+        var url = '/office/debtors/statements';
+        $.post(url, {debtorIds:keys}, function(html) {
+            //var statementWnd = window.open(url, '_blank');
+            var statementWnd = window.open('', '_blank');
+            statementWnd.document.write(html);
+            statementWnd.document.close();
+            statementWnd.focus();
+            statementWnd.print();
+            statementWnd.close();          
+        }, 'html').fail(function() {
+            alert( "$printErrorTxt" );
+        });
     });
 
 JS;
