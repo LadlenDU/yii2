@@ -346,18 +346,24 @@ echo DynaGrid::widget([
     </script>
 
 <?php
-$printErrorTxt = Html::encode(Yii::t('app', 'Ошибка печати!'));
+$printErrorTxt = json_encode(Yii::t('app', 'Ошибка печати!'));
+$noDebtorsSelectedTxt = json_encode(Yii::t('app', 'Выберите пожалуйста должников.'));
 $script = <<<JS
     $("#print_invoices").click(function () {
         var keys = $('#dynagrid-debtors-options').yiiGridView('getSelectedRows');
-        /*for (var k in keys) {
-            //console.log(keys[k]);            
-        }*/
+        if (!keys.length) {
+            alert($noDebtorsSelectedTxt);
+            return;
+        }
         var url = '/office/debtors/invoice-prev/?' + $.param({debtorIds:keys});
         window.open(url, '_blank');
     });
     $("#print_statements").click(function () {
         var keys = $('#dynagrid-debtors-options').yiiGridView('getSelectedRows');
+        if (!keys.length) {
+            alert($noDebtorsSelectedTxt);
+            return;
+        }
         //var url = '/office/debtors/statements/?' + $.param({debtorIds:keys});
         var url = '/office/debtors/statements';
         $.post(url, {debtorIds:keys}, function(html) {
@@ -369,7 +375,7 @@ $script = <<<JS
             statementWnd.print();
             statementWnd.close();          
         }, 'html').fail(function() {
-            alert( "$printErrorTxt" );
+            alert($printErrorTxt);
         });
     });
 
