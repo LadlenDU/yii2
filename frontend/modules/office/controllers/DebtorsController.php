@@ -103,7 +103,7 @@ class DebtorsController extends Controller
         }
         $court = HelpersDebt::findCourtAddressForDebtor($debtDetails, 'common\models\Court');
 
-        return $this->render('statements',
+        return $this->render('statement',
             [
                 'debtDetails' => $debtDetails,
                 'court' => $court,

@@ -36,7 +36,7 @@ $columns = [
         'format' => 'raw',
         'order' => DynaGrid::ORDER_FIX_LEFT,
     ],*/
-    /*[
+    [
         'attribute' => 'Заявление',
         'value' => function ($model, $key, $index) {
             return '<button style="height:21px;width:21px;display:inline-block;vertical-align:middle" title="'
@@ -46,7 +46,7 @@ $columns = [
         'vAlign' => 'middle',
         'format' => 'raw',
         'order' => DynaGrid::ORDER_FIX_LEFT,
-    ],*/
+    ],
     [
         'attribute' => 'LS_EIRC',
         'label' => Yii::t('app', 'ЛС ЕИРЦ'),

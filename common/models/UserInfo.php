@@ -6,7 +6,7 @@ use Yii;
 use common\models\info\Individual;
 use common\models\info\IndividualEntrepreneur;
 use common\models\info\LegalEntity;
-//use common\models\info\TariffPlan;
+use common\models\TariffPlan;
 use dektrium\user\models\User;
 
 
@@ -19,10 +19,14 @@ use dektrium\user\models\User;
  * @property integer $registration_type_id
  * @property string $balance
  * @property integer $tariff_plan_id
+ * @property integer $location_id
+ * @property resource $document_1
+ * @property resource $document_2
  *
  * @property Individual $individual
  * @property IndividualEntrepreneur $individualEntrepreneur
  * @property LegalEntity $legalEntity
+ * @property Location $location
  * @property RegistrationType $registrationType
  * @property TariffPlan $tariffPlan
  * @property User $user
@@ -55,8 +59,11 @@ class UserInfo extends \yii\db\ActiveRecord
         return [
             [['user_id'], 'required'],
             [['user_id', 'complete', 'registration_type_id', 'tariff_plan_id'], 'integer'],
+            [['user_id', 'complete', 'registration_type_id', 'tariff_plan_id', 'location_id'], 'integer'],
             [['balance'], 'number'],
+            [['document_1', 'document_2'], 'string'],
             [['user_id'], 'unique'],
+            [['location_id'], 'exist', 'skipOnError' => true, 'targetClass' => Location::className(), 'targetAttribute' => ['location_id' => 'id']],
             [['registration_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => RegistrationType::className(), 'targetAttribute' => ['registration_type_id' => 'id']],
             [['tariff_plan_id'], 'exist', 'skipOnError' => true, 'targetClass' => TariffPlan::className(), 'targetAttribute' => ['tariff_plan_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
@@ -75,6 +82,9 @@ class UserInfo extends \yii\db\ActiveRecord
             'registration_type_id' => Yii::t('app', 'Вариант регистрации'),
             'balance' => Yii::t('app', 'Balance'),
             'tariff_plan_id' => Yii::t('app', 'Tariff Plan ID'),
+            'location_id' => Yii::t('app', 'Location ID'),
+            'document_1' => Yii::t('app', 'Document 1'),
+            'document_2' => Yii::t('app', 'Document 2'),
         ];
     }
 
@@ -100,6 +110,14 @@ class UserInfo extends \yii\db\ActiveRecord
     public function getLegalEntity()
     {
         return $this->hasOne(LegalEntity::className(), ['user_info_id' => 'id'])->inverseOf('userInfo');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getLocation()
+    {
+        return $this->hasOne(Location::className(), ['id' => 'location_id'])->inverseOf('userInfos');
     }
 
     /**
