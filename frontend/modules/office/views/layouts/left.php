@@ -36,11 +36,16 @@
                     ['label' => 'Организации', 'icon' => 'users', 'options' => ['class' => 'header']/*, 'url' => ['/office/organizations']*/],
                     ['label' => 'Дома', 'icon' => 'file-code-o', 'options' => ['class' => 'header']/*, 'url' => ['/office/buildings']*/],
                     [
-                        'label' => 'Работа с Должниками',
+                        //'label' => 'Работа с Должниками',
+                        'label' => 'Должники',
                         'icon' => 'dashboard',
-                        'url' => ['/office/debtors/debt-verification'],
-                        /*'url' => ['#'],
+                        //'url' => ['/office/debtors/debt-verification'],
+                        'url' => ['#'],
                         'items' => [
+                            ['label' => 'Работа с Должниками', 'icon' => 'file-code-o', 'url' => ['/office/debtors/debt-verification'],],
+                            ['label' => 'Список должников', 'icon' => 'dashboard', 'url' => ['/debtor'],],
+                        ],
+                        /*'items' => [
                             ['label' => 'Досудебная работа', 'icon' => 'file-code-o', 'url' => ['/office/debtors/verify-registration'],],
                             ['label' => 'Судебная работа', 'icon' => 'dashboard', 'url' => ['/office/debtors/debt-verification'],],
                             ['label' => 'Работа с приставами', 'icon' => 'dashboard', 'url' => ['/office/debtors/calculation-of-duty'],],
