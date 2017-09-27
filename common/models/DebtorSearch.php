@@ -19,7 +19,7 @@ class DebtorSearch extends Debtor
     {
         return [
             [['id', 'privatized', 'general_manager_id'], 'integer'],
-            [['first_name', 'second_name', 'patronymic', 'name_mixed', 'address', 'city', 'street', 'building', 'appartment', 'phone', 'LS_EIRC', 'LS_IKU_provider', 'IKU'], 'safe'],
+            [['first_name', 'second_name', 'patronymic', 'name_mixed', 'address', 'region', 'regionId', 'district', 'districtId', 'city', 'cityId', 'street', 'streetId', 'building', 'buildingId', 'appartment', 'phone', 'LS_EIRC', 'LS_IKU_provider', 'IKU'], 'safe'],
             [['space_common', 'space_living'], 'number'],
         ];
     }
@@ -50,10 +50,6 @@ class DebtorSearch extends Debtor
             'query' => $query,
         ]);
 
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-        ]);
-
         $this->load($params);
 
         if (!$this->validate()) {
@@ -76,9 +72,16 @@ class DebtorSearch extends Debtor
             ->andFilterWhere(['like', 'patronymic', $this->patronymic])
             ->andFilterWhere(['like', 'name_mixed', $this->name_mixed])
             ->andFilterWhere(['like', 'address', $this->address])
+            ->andFilterWhere(['like', 'region', $this->region])
+            ->andFilterWhere(['like', 'regionId', $this->regionId])
+            ->andFilterWhere(['like', 'district', $this->district])
+            ->andFilterWhere(['like', 'districtId', $this->districtId])
             ->andFilterWhere(['like', 'city', $this->city])
+            ->andFilterWhere(['like', 'cityId', $this->cityId])
             ->andFilterWhere(['like', 'street', $this->street])
+            ->andFilterWhere(['like', 'streetId', $this->streetId])
             ->andFilterWhere(['like', 'building', $this->building])
+            ->andFilterWhere(['like', 'buildingId', $this->buildingId])
             ->andFilterWhere(['like', 'appartment', $this->appartment])
             ->andFilterWhere(['like', 'phone', $this->phone])
             ->andFilterWhere(['like', 'LS_EIRC', $this->LS_EIRC])
