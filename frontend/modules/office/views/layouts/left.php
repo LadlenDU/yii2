@@ -43,7 +43,7 @@
                         'url' => ['#'],
                         'items' => [
                             ['label' => 'Работа с Должниками', 'icon' => 'file-code-o', 'url' => ['/office/debtors/debt-verification'],],
-                            ['label' => 'Список должников', 'icon' => 'dashboard', 'url' => ['/debtor'],],
+                            ['label' => 'Список Должников', 'icon' => 'dashboard', 'url' => ['/debtor'],],
                         ],
                         /*'items' => [
                             ['label' => 'Досудебная работа', 'icon' => 'file-code-o', 'url' => ['/office/debtors/verify-registration'],],
@@ -52,6 +52,7 @@
                         ],*/
                     ],
                     ['label' => 'Справочник судов', 'icon' => 'bank', 'url' => ['/court']],
+                    ['label' => 'Список генеральных директоров', 'icon' => 'bank', 'url' => ['/general-manager']],
                     [
                         //'label' => 'Заявление в суд',
                         'label' => 'Квартплата',
