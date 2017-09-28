@@ -378,7 +378,7 @@ $script = <<<JS
             statementWnd.document.close();
             statementWnd.focus();
             statementWnd.print();
-            statementWnd.close();          
+            statementWnd.close();
         }, 'html').fail(function() {
             alert($printErrorTxt);
         });

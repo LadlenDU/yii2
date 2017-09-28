@@ -162,4 +162,23 @@ class Debtor extends \yii\db\ActiveRecord
     {
         return "$this->city $this->street $this->building $this->appartment";
     }
+
+    public function getShortName()
+    {
+        $name = '';
+        if ($this->generalManager) {
+            if ($this->generalManager->second_name) {
+                $name .= "$this->generalManager->second_name ";
+            }
+            if ($this->generalManager->first_name) {
+                $name .= mb_substr($this->generalManager->first_name, 0, 1, Yii::$app->charset) . '.';
+            }
+            if ($this->generalManager->patronymic) {
+                $name .= mb_substr($this->generalManager->patronymic, 0, 1, Yii::$app->charset) . '.';
+            }
+        }
+
+        return $name;
+        //return $name ?: Yii::t('app', 'Нет имени');
+    }
 }

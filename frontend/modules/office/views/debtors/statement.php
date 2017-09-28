@@ -108,5 +108,5 @@ use yii\helpers\Html;
 </ol>
 <br>
 <br>
-Генеральный директор ________________Мукин В.И.
+Генеральный директор ________________ <?= Html::encode($debtDetails->debtor->getShortName()) ?>
 
