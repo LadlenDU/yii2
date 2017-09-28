@@ -39,12 +39,12 @@
                         //'label' => 'Работа с Должниками',
                         'label' => 'Должники',
                         'icon' => 'dashboard',
-                        //'url' => ['/office/debtors/debt-verification'],
-                        'url' => ['#'],
+                        'url' => ['/office/debtors/debt-verification'],
+                        /*'url' => ['#'],
                         'items' => [
                             ['label' => 'Работа с Должниками', 'icon' => 'file-code-o', 'url' => ['/office/debtors/debt-verification'],],
                             ['label' => 'Список Должников', 'icon' => 'dashboard', 'url' => ['/debtor'],],
-                        ],
+                        ],*/
                         /*'items' => [
                             ['label' => 'Досудебная работа', 'icon' => 'file-code-o', 'url' => ['/office/debtors/verify-registration'],],
                             ['label' => 'Судебная работа', 'icon' => 'dashboard', 'url' => ['/office/debtors/debt-verification'],],
