@@ -14,7 +14,7 @@ use kartik\date\DatePicker;
 ?>
 <div class="individual_entrepreneur">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
 
     <? /*= $form->field($model, 'user_info_id') */ ?>
     <? /*= $form->field($model, 'birthday') */ ?>
@@ -33,6 +33,10 @@ use kartik\date\DatePicker;
     <?= $form->field($model, 'INN') ?>
     <?= $form->field($model, 'BIC') ?>
     <?= $form->field($model, 'checking_account_num') ?>
+    <?/*= $form->field($model->userInfo->location, 'district') */?>
+
+    <?= $form->field($model, 'user_info_document_1')->fileInput() ?>
+    <?= $form->field($model, 'user_info_document_2')->fileInput() ?>
 
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Сохранить'), ['class' => 'btn btn-primary']) ?>

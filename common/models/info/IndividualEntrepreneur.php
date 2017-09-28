@@ -21,6 +21,9 @@ use common\models\UserInfo;
  */
 class IndividualEntrepreneur extends \yii\db\ActiveRecord
 {
+    public $user_info_document_1;
+    public $user_info_document_2;
+
     /**
      * @inheritdoc
      */
@@ -38,6 +41,7 @@ class IndividualEntrepreneur extends \yii\db\ActiveRecord
             //[['user_info_id'], 'required'],
             //[['user_info_id'], 'integer'],
             [['user_info_id'], 'safe'],
+            [['user_info_document_1', 'user_info_document_2'], 'file', 'skipOnEmpty' => true, 'extensions' => 'pdf'],
             [['birthday'], 'safe'],
             [['full_name'], 'string', 'max' => 255],
             [['OGRN', 'INN', 'BIC', 'checking_account_num'], 'string', 'max' => 40],
@@ -60,6 +64,8 @@ class IndividualEntrepreneur extends \yii\db\ActiveRecord
             'BIC' => Yii::t('app', 'БИК'),
             'checking_account_num' => Yii::t('app', '№ расчетного счета'),
             'birthday' => Yii::t('app', 'День рождения'),
+            'user_info_document_1' => Yii::t('app', 'Pdf документ 1'),
+            'user_info_document_2' => Yii::t('app', 'Pdf документ 2'),
         ];
     }
 

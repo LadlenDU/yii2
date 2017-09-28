@@ -31,7 +31,7 @@ use kartik\date\DatePicker;
     <?= $form->field($model, 'INN') ?>
     <?= $form->field($model, 'checking_account_num') ?>
 
-    <?= $form->field($model->location->district, 'district') ?>
+    <?/*= $form->field($model->location->district, 'district') */?>
 
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Сохранить'), ['class' => 'btn btn-primary']) ?>
