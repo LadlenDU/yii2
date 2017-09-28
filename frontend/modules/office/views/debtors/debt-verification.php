@@ -191,6 +191,11 @@ $columns = [
                     <i class="icon-search icon-white"></i><?= Yii::t('app', 'Распечатка заявлений') ?>
                 </button>
 
+                <button class="btn-sm btn btn-primary" id="print_documents"
+                        title="<?= Yii::t('app', 'Распечатка документов выбранных должников') ?>">
+                    <i class="icon-search icon-white"></i><?= Yii::t('app', 'Распечатка документов') ?>
+                </button>
+
                 <div class="clearfix"></div>
             </div>
             <!--<div class="col-sm-6">
@@ -377,6 +382,15 @@ $script = <<<JS
         }, 'html').fail(function() {
             alert($printErrorTxt);
         });
+    });
+    $("#print_documents").click(function () {
+        var keys = $('#dynagrid-debtors-options').yiiGridView('getSelectedRows');
+        if (!keys.length) {
+            alert($noDebtorsSelectedTxt);
+            return;
+        }
+        var url = '/office/debtors/documents/?' + $.param({debtorIds:keys});
+        window.open(url, '_blank');
     });
 
 JS;
