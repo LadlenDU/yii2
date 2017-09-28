@@ -79,6 +79,7 @@ class DefaultController extends Controller
 
             if (!empty($model)) {
                 if ($model->load(Yii::$app->request->post())) {
+                    $model->birthday = date('Y-m-d H:i:s', strtotime($model->birthday));
                     if ($model->validate()) {
                         $model->user_info_id = $infoModel->id;
                         if ($model->save()) {

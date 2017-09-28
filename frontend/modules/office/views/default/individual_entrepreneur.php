@@ -22,6 +22,7 @@ use kartik\date\DatePicker;
     <?php
     echo $form->field($model, 'birthday')->widget(DatePicker::classname(), [
         'options' => ['placeholder' => Yii::t('app', 'Введите дату рождения')],
+        'value' => date('d.m.Y', strtotime($model->birthday)),
         'pluginOptions' => [
             'autoclose' => true,
             'format' => 'dd.mm.yyyy',
