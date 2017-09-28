@@ -9,11 +9,12 @@ use yii\widgets\ActiveForm;
 
 //TODO: title из БД
 ?>
-<div class="frontend-views-manager-legal_entity">
+<div class="legal_entity">
 
     <?php $form = ActiveForm::begin(); ?>
 
-        <?= $form->field($model, 'user_info_id') ?>
+        <?/*= $form->field($model, 'user_info_id') */?>
+        <?= $form->field($model, 'registration_date') ?>
         <?= $form->field($model, 'company_name') ?>
         <?= $form->field($model, 'CEO_name') ?>
         <?= $form->field($model, 'INN') ?>
@@ -27,4 +28,4 @@ use yii\widgets\ActiveForm;
         </div>
     <?php ActiveForm::end(); ?>
 
-</div><!-- frontend-views-manager-legal_entity -->
+</div><!-- legal_entity -->
