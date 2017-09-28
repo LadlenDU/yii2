@@ -4,6 +4,7 @@ namespace common\models\info;
 
 use Yii;
 use common\models\UserInfo;
+use yii\base\Model;
 
 /**
  * This is the model class for table "individual_entrepreneur".
@@ -75,5 +76,15 @@ class IndividualEntrepreneur extends \yii\db\ActiveRecord
     public function getUserInfo()
     {
         return $this->hasOne(UserInfo::className(), ['id' => 'user_info_id'])->inverseOf('individualEntrepreneur');
+    }
+
+    public function upload()
+    {
+        if ($this->validate()) {
+            $this->imageFile->saveAs('uploads/' . $this->user_info_document_1->baseName . '.' . $this->imageFile->extension);
+            return true;
+        } else {
+            return false;
+        }
     }
 }

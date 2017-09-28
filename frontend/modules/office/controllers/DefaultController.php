@@ -9,7 +9,7 @@ use common\models\UserInfo;
 use common\models\info\LegalEntity;
 use common\models\info\IndividualEntrepreneur;
 use common\models\info\Individual;
-
+use yii\web\UploadedFile;
 
 /**
  * Default controller for the `office` module
@@ -82,7 +82,26 @@ class DefaultController extends Controller
                     $model->birthday = date('Y-m-d H:i:s', strtotime($model->birthday));
                     if ($model->validate()) {
                         $model->user_info_id = $infoModel->id;
+
+                        $document_1 = UploadedFile::getInstance($model, 'user_info_document_1');
+                        $document_2 = UploadedFile::getInstance($model, 'user_info_document_2');
+
+                        if ($document_1) {
+                            $infoModel->document_1 = file_get_contents($document_1->tempName);
+                        }
+                        if ($document_2) {
+                            $infoModel->document_2 = file_get_contents($document_2->tempName);
+                        }
+
                         if ($model->save()) {
+                            if ($document_1 || $document_2) {
+                                //TODO: add transaction - https://stackoverflow.com/questions/32522404/yii2-saving-file-to-oracle-blob
+                                $infoModel->save(false);
+                            }
+                            /*if ($model->upload()) {
+                                // file is uploaded successfully
+                                // TODO обработка неудачной загрузки
+                            }*/
                             // form inputs are valid, do something here
                             Yii::$app->session->setFlash('success', Yii::t('app', 'Форма успешно сохранена.'));
                             //return;
