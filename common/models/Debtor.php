@@ -168,7 +168,7 @@ class Debtor extends \yii\db\ActiveRecord
         $name = '';
         if ($this->generalManager) {
             if ($this->generalManager->second_name) {
-                $name .= "$this->generalManager->second_name ";
+                $name .= "{$this->generalManager->second_name} ";
             }
             if ($this->generalManager->first_name) {
                 $name .= mb_substr($this->generalManager->first_name, 0, 1, Yii::$app->charset) . '.';

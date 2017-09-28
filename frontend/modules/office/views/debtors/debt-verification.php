@@ -25,6 +25,30 @@ $columns = [
         'class' => 'kartik\grid\CheckboxColumn',
         'order' => DynaGrid::ORDER_FIX_LEFT,
     ],
+    [
+        //'class' => 'yii\grid\ActionColumn',
+        'attribute' => '',
+        'value' => function ($model, $key, $index) {
+            // TODO: костыль - исправить
+            $html = <<<HTML
+<a href="/debt-details/view?id=$key" title="Просмотр" aria-label="Просмотр" data-pjax="0">
+    <span class="glyphicon glyphicon-eye-open"></span>
+</a>
+<a href="/debt-details/update?id=$key" title="Редактировать" aria-label="Редактировать" data-pjax="0">
+    <span class="glyphicon glyphicon-pencil"></span>
+</a>
+<a href="/debt-details/delete?id=$key" title="Удалить" aria-label="Удалить" data-pjax="0" data-confirm="Вы уверены, что хотите удалить этот элемент?" data-method="post">
+    <span class="glyphicon glyphicon-trash"></span>
+</a>
+HTML;
+
+            return $html;
+        },
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'format' => 'raw',
+        'order' => DynaGrid::ORDER_FIX_LEFT,
+    ],
     /*[
         'attribute' => 'Квитанция',
         'value' => function ($model, $key, $index) {
@@ -36,7 +60,7 @@ $columns = [
         'format' => 'raw',
         'order' => DynaGrid::ORDER_FIX_LEFT,
     ],*/
-    [
+    /*[
         'attribute' => 'Заявление',
         'value' => function ($model, $key, $index) {
             return '<button style="height:21px;width:21px;display:inline-block;vertical-align:middle" title="'
@@ -46,7 +70,7 @@ $columns = [
         'vAlign' => 'middle',
         'format' => 'raw',
         'order' => DynaGrid::ORDER_FIX_LEFT,
-    ],
+    ],*/
     [
         'attribute' => 'LS_EIRC',
         'label' => Yii::t('app', 'ЛС ЕИРЦ'),
