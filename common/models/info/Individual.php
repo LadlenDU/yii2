@@ -13,6 +13,7 @@ use common\models\UserInfo;
  * @property string $full_name
  * @property string $INN
  * @property string $checking_account_num
+ * @property string $birthday
  *
  * @property UserInfo $userInfo
  */
@@ -34,8 +35,10 @@ class Individual extends \yii\db\ActiveRecord
         return [
             [['user_info_id'], 'required'],
             [['user_info_id'], 'integer'],
+            [['birthday'], 'safe'],
             [['full_name'], 'string', 'max' => 255],
             [['INN', 'checking_account_num'], 'string', 'max' => 40],
+            [['user_info_id'], 'unique'],
             [['user_info_id'], 'exist', 'skipOnError' => true, 'targetClass' => UserInfo::className(), 'targetAttribute' => ['user_info_id' => 'id']],
         ];
     }
@@ -51,6 +54,7 @@ class Individual extends \yii\db\ActiveRecord
             'full_name' => Yii::t('app', 'ФИО'),
             'INN' => Yii::t('app', 'ИНН'),
             'checking_account_num' => Yii::t('app', '№ расчетного счета'),
+            'birthday' => Yii::t('app', 'День рождения'),
         ];
     }
 
