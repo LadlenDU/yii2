@@ -64,7 +64,7 @@ class IndividualEntrepreneur extends \yii\db\ActiveRecord
             'INN' => Yii::t('app', 'ИНН'),
             'BIC' => Yii::t('app', 'БИК'),
             'checking_account_num' => Yii::t('app', '№ расчетного счета'),
-            'birthday' => Yii::t('app', 'День рождения'),
+            'birthday' => Yii::t('app', 'Дата рождения'),
             'user_info_document_1' => Yii::t('app', 'Pdf документ 1'),
             'user_info_document_2' => Yii::t('app', 'Pdf документ 2'),
         ];
@@ -78,7 +78,7 @@ class IndividualEntrepreneur extends \yii\db\ActiveRecord
         return $this->hasOne(UserInfo::className(), ['id' => 'user_info_id'])->inverseOf('individualEntrepreneur');
     }
 
-    public function upload()
+    /*public function upload()
     {
         if ($this->validate()) {
             $this->imageFile->saveAs('uploads/' . $this->user_info_document_1->baseName . '.' . $this->imageFile->extension);
@@ -86,5 +86,5 @@ class IndividualEntrepreneur extends \yii\db\ActiveRecord
         } else {
             return false;
         }
-    }
+    }*/
 }

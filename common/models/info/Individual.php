@@ -54,7 +54,7 @@ class Individual extends \yii\db\ActiveRecord
             'full_name' => Yii::t('app', 'ФИО'),
             'INN' => Yii::t('app', 'ИНН'),
             'checking_account_num' => Yii::t('app', '№ расчетного счета'),
-            'birthday' => Yii::t('app', 'День рождения'),
+            'birthday' => Yii::t('app', 'Дата рождения'),
         ];
     }
 
