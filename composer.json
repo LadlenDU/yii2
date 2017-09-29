@@ -30,7 +30,8 @@
         "kartik-v/yii2-widget-datepicker": "@dev",
         "andkon/yii2kladr": "^1.0",
         "wapmorgan/morphos": "^3.2",
-        "phpnt/yii2-export": "*"
+        "phpnt/yii2-export": "*",
+        "kartik-v/yii2-widget-fileinput": "@dev"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
