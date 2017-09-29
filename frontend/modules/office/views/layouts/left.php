@@ -32,13 +32,13 @@
                 'items' => [
                     //['label' => 'Меню Yii2', 'options' => ['class' => 'header']],
                     ['label' => 'Рабочий стол', 'icon' => 'share-alt', 'options' => ['class' => 'header']/*, 'url' => ['/office/desctop']*/],
-                    ['label' => 'Моя организация', 'icon' => 'file-code-o', 'url' => ['/office/my-organization']],
+                    ['label' => 'Моя организация', 'icon' => 'id-card', 'url' => ['/office/my-organization']],
                     ['label' => 'Организации', 'icon' => 'users', 'options' => ['class' => 'header']/*, 'url' => ['/office/organizations']*/],
                     ['label' => 'Дома', 'icon' => 'file-code-o', 'options' => ['class' => 'header']/*, 'url' => ['/office/buildings']*/],
                     [
                         //'label' => 'Работа с Должниками',
                         'label' => 'Должники',
-                        'icon' => 'dashboard',
+                        'icon' => 'users',
                         'url' => ['/office/debtors/debt-verification'],
                         /*'url' => ['#'],
                         'items' => [
@@ -52,16 +52,16 @@
                         ],*/
                     ],
                     ['label' => 'Справочник судов', 'icon' => 'bank', 'url' => ['/court']],
-                    ['label' => 'Компании', 'icon' => 'bank', 'url' => ['/office/company']],
-                    [
+                    ['label' => 'Компании', 'icon' => 'handshake-o', 'url' => ['/office/company']],
+                    /*[
                         //'label' => 'Заявление в суд',
                         'label' => 'Квартплата',
                         'icon' => 'dashboard',
                         'url' => ['#'],
                         'items' => [
-                            ['label' => 'Курьер', 'icon' => 'file-code-o', 'options' => ['class' => 'header']/*, 'url' => ['/office/court/courier'],*/],
+                            ['label' => 'Курьер', 'icon' => 'file-code-o', 'options' => ['class' => 'header'], 'url' => ['/office/court/courier'],],
                         ],
-                    ],
+                    ],*/
                     //['label' => 'Заявление приставам', 'icon' => 'file-code-o', 'url' => ['/office/statement-to-bailiffs']],
                     ['label' => 'Диспетчерская', 'icon' => 'file-code-o', 'options' => ['class' => 'header']/*, 'url' => ['/office/statement-to-bailiffs']*/],
                     ['label' => 'Рассылки', 'icon' => 'file-code-o', 'options' => ['class' => 'header']/*, 'url' => ['/office/newsletters']*/],
