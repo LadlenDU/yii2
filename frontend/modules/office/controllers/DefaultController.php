@@ -46,6 +46,7 @@ class DefaultController extends Controller
         $params = [];
         $viewName = 'index';
 
+        //TODO: код переместить в модель
         if ($infoModel = UserInfo::find()->where(['user_id' => Yii::$app->user->identity->getId()])->one()) {
             switch ($infoModel->attributes['registration_type_id']) {
                 case 1: {
