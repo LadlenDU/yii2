@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use kartik\date\DatePicker;
+//use kartik\date\DatePicker;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\info\IndividualEntrepreneur */
@@ -20,7 +20,7 @@ use kartik\date\DatePicker;
     <? /*= $form->field($model, 'birthday') */ ?>
     <?= $form->field($model, 'full_name') ?>
     <?php
-    echo $form->field($model, 'birthday')->widget(DatePicker::classname(), [
+    /*echo $form->field($model, 'birthday')->widget(DatePicker::classname(), [
         'options' => ['placeholder' => Yii::t('app', 'Введите дату рождения')],
         'value' => date('d.m.Y', strtotime($model->birthday)),
         'pluginOptions' => [
@@ -28,7 +28,7 @@ use kartik\date\DatePicker;
             'format' => 'dd.mm.yyyy',
         ]
     ]);
-    ?>
+    */?>
     <?= $form->field($model, 'OGRN') ?>
     <?= $form->field($model, 'INN') ?>
     <?= $form->field($model, 'BIC') ?>
