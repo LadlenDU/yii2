@@ -102,6 +102,7 @@ class DefaultController extends Controller
                                 $userFiles->mime_type = $upFile->type;
                                 $userFiles->save();
                                 $infoModel->link('userFiles', $userFiles);
+                                $infoModel->save(false);
                             }
                         }
 
