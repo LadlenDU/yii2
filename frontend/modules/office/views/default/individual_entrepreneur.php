@@ -2,6 +2,8 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use kartik\file\FileInput;
+
 //use kartik\date\DatePicker;
 
 /* @var $this yii\web\View */
@@ -28,15 +30,20 @@ use yii\widgets\ActiveForm;
             'format' => 'dd.mm.yyyy',
         ]
     ]);
-    */?>
+    */ ?>
     <?= $form->field($model, 'OGRN') ?>
     <?= $form->field($model, 'INN') ?>
     <?= $form->field($model, 'BIC') ?>
     <?= $form->field($model, 'checking_account_num') ?>
-    <?/*= $form->field($model->userInfo->location, 'district') */?>
+    <? /*= $form->field($model->userInfo->location, 'district') */ ?>
 
-    <?= $form->field($model, 'user_info_document_1')->fileInput() ?>
-    <?= $form->field($model, 'user_info_document_2')->fileInput() ?>
+    <? /*= $form->field($model, 'user_info_document_1')->fileInput() */ ?><!--
+    --><? /*= $form->field($model, 'user_info_document_2')->fileInput() */ ?>
+
+    <?= $form->field($model, 'user_info_document_1')->widget(FileInput::classname()/*, [
+        'options' => ['accept' => 'image/*'],
+    ]*/);
+    ?>
 
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Сохранить'), ['class' => 'btn btn-primary']) ?>
