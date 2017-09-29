@@ -52,7 +52,7 @@
                         ],*/
                     ],
                     ['label' => 'Справочник судов', 'icon' => 'bank', 'url' => ['/court']],
-                    ['label' => 'Список генеральных директоров', 'icon' => 'bank', 'url' => ['/general-manager']],
+                    ['label' => 'Компании', 'icon' => 'bank', 'url' => ['/office/company']],
                     [
                         //'label' => 'Заявление в суд',
                         'label' => 'Квартплата',

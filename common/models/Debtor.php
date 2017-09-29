@@ -26,7 +26,6 @@ use Yii;
  * @property integer $general_manager_id
  *
  * @property DebtDetails[] $debtDetails
- * @property GeneralManager $generalManager
  * @property DebtorPublicService[] $debtorPublicServices
  * @property PublicService[] $publicServices
  */
@@ -49,7 +48,6 @@ class Debtor extends \yii\db\ActiveRecord
             [['space_common', 'space_living'], 'number'],
             [['privatized', 'general_manager_id'], 'integer'],
             [['first_name', 'second_name', 'patronymic', 'name_mixed', 'address', 'city', 'street', 'building', 'appartment', 'phone', 'LS_EIRC', 'LS_IKU_provider'], 'string', 'max' => 255],
-            [['general_manager_id'], 'exist', 'skipOnError' => true, 'targetClass' => GeneralManager::className(), 'targetAttribute' => ['general_manager_id' => 'id']],
         ];
     }
 
@@ -76,7 +74,6 @@ class Debtor extends \yii\db\ActiveRecord
             'space_common' => Yii::t('app', 'Общая площадь'),
             'space_living' => Yii::t('app', 'Жилая площадь'),
             'privatized' => Yii::t('app', 'Приватизировано'),
-            'general_manager_id' => Yii::t('app', 'ID главного менеджера'),
         ];
     }
 
@@ -86,14 +83,6 @@ class Debtor extends \yii\db\ActiveRecord
     public function getDebtDetails()
     {
         return $this->hasMany(DebtDetails::className(), ['debtor_id' => 'id'])->inverseOf('debtor');
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getGeneralManager()
-    {
-        return $this->hasOne(GeneralManager::className(), ['id' => 'general_manager_id'])->inverseOf('debtors');
     }
 
     /**
@@ -166,7 +155,7 @@ class Debtor extends \yii\db\ActiveRecord
     public function getShortName()
     {
         $name = '';
-        if ($this->generalManager) {
+        /*if ($this->generalManager) {
             if ($this->generalManager->second_name) {
                 $name .= "{$this->generalManager->second_name} ";
             }
@@ -176,7 +165,7 @@ class Debtor extends \yii\db\ActiveRecord
             if ($this->generalManager->patronymic) {
                 $name .= mb_substr($this->generalManager->patronymic, 0, 1, Yii::$app->charset) . '.';
             }
-        }
+        }*/
 
         return $name;
         //return $name ?: Yii::t('app', 'Нет имени');
