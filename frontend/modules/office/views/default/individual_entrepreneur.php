@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\file\FileInput;
+use yii\helpers\Url;
 
 //use kartik\date\DatePicker;
 
@@ -13,6 +14,22 @@ use kartik\file\FileInput;
 //TODO: title из БД
 
 #labels = $model->attributeLabels();
+
+$userFiles = $model->userInfo->userFiles;
+
+$filesPluginOptions = [
+    'initialPreview' => [],
+    'initialPreviewConfig' => [],
+];
+
+foreach ($userFiles as $file) {
+    //TODO: проверить (реализовать) секьюрность (чтобы чужие файлы не открывались)
+    $filesPluginOptions['initialPreview'][] = Url::to(['/office/user-file', 'uInfoId' => $model->userInfo->user_id, 'fId' => $file->id]);
+    $filesPluginOptions['initialPreviewConfig'][] = [
+        'caption' => $file->name,
+        //'size' => '873727'
+    ];
+}
 ?>
 <div class="individual_entrepreneur">
 
@@ -40,9 +57,26 @@ use kartik\file\FileInput;
     <? /*= $form->field($model, 'user_info_document_1')->fileInput() */ ?><!--
     --><? /*= $form->field($model, 'user_info_document_2')->fileInput() */ ?>
 
-    <?= $form->field($model, 'user_info_document_1')->widget(FileInput::classname()/*, [
-        'options' => ['accept' => 'image/*'],
-    ]*/);
+    <?= //$form->field($model->userInfo->userFiles, 'id')->widget(FileInput::classname(), [
+        $form->field($model->userInfo, 'user_files[]')->widget(FileInput::classname(), [
+        'options' => [
+            'accept' => 'application/pdf',
+            'multiple' => true,
+        ],
+        'pluginOptions' => [
+            'initialPreview' => $filesPluginOptions['initialPreview'],/*[
+                "http://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/FullMoon2010.jpg/631px-FullMoon2010.jpg",
+                "http://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Earth_Eastern_Hemisphere.jpg/600px-Earth_Eastern_Hemisphere.jpg"
+            ],*/
+            'initialPreviewAsData' => true,
+            'initialCaption' => Yii::t('app', 'Дополнительные файлы'),
+            'initialPreviewConfig' => $filesPluginOptions['initialPreviewConfig'],/*[
+                ['caption' => 'Moon.jpg', 'size' => '873727'],
+                ['caption' => 'Earth.jpg', 'size' => '1287883'],
+            ],*/
+            'overwriteInitial' => false,
+        ]
+    ]);
     ?>
 
     <div class="form-group">

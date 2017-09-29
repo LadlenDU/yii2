@@ -39,6 +39,8 @@ class UserInfo extends \yii\db\ActiveRecord
 {
     const SCENARIO_SELECT_REGISTRATION_TYPE = 'select_registration_type';
 
+    public $user_files = [];
+
     /**
      * @inheritdoc
      */
@@ -65,6 +67,7 @@ class UserInfo extends \yii\db\ActiveRecord
             [['user_id', 'complete', 'registration_type_id', 'tariff_plan_id', 'location_id'], 'integer'],
             [['balance'], 'number'],
             [['user_id'], 'unique'],
+            [['user_files'], 'safe'],
             [['location_id'], 'exist', 'skipOnError' => true, 'targetClass' => Location::className(), 'targetAttribute' => ['location_id' => 'id']],
             [['registration_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => RegistrationType::className(), 'targetAttribute' => ['registration_type_id' => 'id']],
             [['tariff_plan_id'], 'exist', 'skipOnError' => true, 'targetClass' => TariffPlan::className(), 'targetAttribute' => ['tariff_plan_id' => 'id']],
@@ -85,6 +88,7 @@ class UserInfo extends \yii\db\ActiveRecord
             'balance' => Yii::t('app', 'Balance'),
             'tariff_plan_id' => Yii::t('app', 'Tariff Plan ID'),
             'location_id' => Yii::t('app', 'Location ID'),
+            'user_files' => Yii::t('app', 'Пользовательские файлы'),
         ];
     }
 

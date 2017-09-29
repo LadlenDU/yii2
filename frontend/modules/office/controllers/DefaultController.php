@@ -84,7 +84,7 @@ class DefaultController extends Controller
                     if ($model->validate()) {
                         $model->user_info_id = $infoModel->id;
 
-                        $document_1 = UploadedFile::getInstance($model, 'user_info_document_1');
+                        /*$document_1 = UploadedFile::getInstance($model, 'user_info_document_1');
                         $document_2 = UploadedFile::getInstance($model, 'user_info_document_2');
 
                         if ($document_1) {
@@ -92,13 +92,13 @@ class DefaultController extends Controller
                         }
                         if ($document_2) {
                             $infoModel->document_2 = file_get_contents($document_2->tempName);
-                        }
+                        }*/
 
                         if ($model->save()) {
-                            if ($document_1 || $document_2) {
+                            /*if ($document_1 || $document_2) {
                                 //TODO: add transaction - https://stackoverflow.com/questions/32522404/yii2-saving-file-to-oracle-blob
                                 $infoModel->save(false);
-                            }
+                            }*/
                             /*if ($model->upload()) {
                                 // file is uploaded successfully
                                 // TODO обработка неудачной загрузки

@@ -3,6 +3,8 @@
 namespace common\models\info;
 
 use Yii;
+use common\models\UserInfo;
+use common\models\UserInfoUserFiles;
 
 /**
  * This is the model class for table "user_files".
