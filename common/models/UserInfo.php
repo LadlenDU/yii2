@@ -8,6 +8,7 @@ use common\models\info\IndividualEntrepreneur;
 use common\models\info\LegalEntity;
 use common\models\TariffPlan;
 use common\models\info\Company;
+use common\models\info\UserFiles;
 use dektrium\user\models\User;
 
 
@@ -21,8 +22,6 @@ use dektrium\user\models\User;
  * @property string $balance
  * @property integer $tariff_plan_id
  * @property integer $location_id
- * @property resource $document_1
- * @property resource $document_2
  *
  * @property Individual $individual
  * @property IndividualEntrepreneur $individualEntrepreneur
@@ -33,6 +32,8 @@ use dektrium\user\models\User;
  * @property User $user
  * @property UserInfoCompany[] $userInfoCompanies
  * @property Company[] $companies
+ * @property UserInfoUserFiles[] $userInfoUserFiles
+ * @property UserFiles[] $userFiles
  */
 class UserInfo extends \yii\db\ActiveRecord
 {
@@ -61,10 +62,8 @@ class UserInfo extends \yii\db\ActiveRecord
     {
         return [
             [['user_id'], 'required'],
-            [['user_id', 'complete', 'registration_type_id', 'tariff_plan_id'], 'integer'],
             [['user_id', 'complete', 'registration_type_id', 'tariff_plan_id', 'location_id'], 'integer'],
             [['balance'], 'number'],
-            [['document_1', 'document_2'], 'string'],
             [['user_id'], 'unique'],
             [['location_id'], 'exist', 'skipOnError' => true, 'targetClass' => Location::className(), 'targetAttribute' => ['location_id' => 'id']],
             [['registration_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => RegistrationType::className(), 'targetAttribute' => ['registration_type_id' => 'id']],
@@ -86,8 +85,6 @@ class UserInfo extends \yii\db\ActiveRecord
             'balance' => Yii::t('app', 'Balance'),
             'tariff_plan_id' => Yii::t('app', 'Tariff Plan ID'),
             'location_id' => Yii::t('app', 'Location ID'),
-            'document_1' => Yii::t('app', 'Document 1'),
-            'document_2' => Yii::t('app', 'Document 2'),
         ];
     }
 
@@ -214,5 +211,21 @@ class UserInfo extends \yii\db\ActiveRecord
     public function getCompanies()
     {
         return $this->hasMany(Company::className(), ['id' => 'company_id'])->viaTable('user_info_company', ['user_info_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUserInfoUserFiles()
+    {
+        return $this->hasMany(UserInfoUserFiles::className(), ['user_info_id' => 'id'])->inverseOf('userInfo');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUserFiles()
+    {
+        return $this->hasMany(UserFiles::className(), ['id' => 'user_files_id'])->viaTable('user_info_user_files', ['user_info_id' => 'id']);
     }
 }
