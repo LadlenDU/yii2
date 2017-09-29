@@ -24,7 +24,7 @@ $filesPluginOptions = [
 
 foreach ($userFiles as $file) {
     //TODO: проверить (реализовать) секьюрность (чтобы чужие файлы не открывались)
-    $filesPluginOptions['initialPreview'][] = Url::to(['/office/user-file', 'uInfoId' => $model->userInfo->user_id, 'fId' => $file->id]);
+    $filesPluginOptions['initialPreview'][] = Url::to(['/office/user-file', 'id' => $file->id]);
     $filesPluginOptions['initialPreviewConfig'][] = [
         'caption' => $file->name,
         //'size' => '873727'

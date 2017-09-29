@@ -2,6 +2,7 @@
 
 namespace frontend\modules\office\controllers;
 
+use common\models\info\UserFiles;
 use Yii;
 use yii\web\Controller;
 use yii\filters\AccessControl;
@@ -39,6 +40,13 @@ class DefaultController extends Controller
     public function actionIndex()
     {
         return $this->render('index');
+    }
+
+    public function actionUserFile($id)
+    {
+        if ($infoModel = UserInfo::find()->where(['user_id' => Yii::$app->user->identity->getId()])->one()) {
+            $file = $infoModel->userFile;
+        }
     }
 
     public function actionMyOrganization()
@@ -83,6 +91,19 @@ class DefaultController extends Controller
                     //$model->birthday = date('Y-m-d H:i:s', strtotime($model->birthday));
                     if ($model->validate()) {
                         $model->user_info_id = $infoModel->id;
+
+                        if ($uploadedFiles = UploadedFile::getInstances($model->userInfo, 'user_files')) {
+                            foreach ($uploadedFiles as $upFile) {
+                                //$infoModel->link(= file_get_contents($upFile->tempName);
+                                $userFiles = new UserFiles();
+                                //$userFiles = $model->userInfo->userFiles;
+                                $userFiles->content = file_get_contents($upFile->tempName);
+                                $userFiles->name = $upFile->name;
+                                $userFiles->mime_type = $upFile->type;
+                                $userFiles->save();
+                                $infoModel->link('userFiles', $userFiles);
+                            }
+                        }
 
                         /*$document_1 = UploadedFile::getInstance($model, 'user_info_document_1');
                         $document_2 = UploadedFile::getInstance($model, 'user_info_document_2');
