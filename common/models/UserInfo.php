@@ -7,6 +7,7 @@ use common\models\info\Individual;
 use common\models\info\IndividualEntrepreneur;
 use common\models\info\LegalEntity;
 use common\models\TariffPlan;
+use common\models\info\Company;
 use dektrium\user\models\User;
 
 
@@ -30,6 +31,8 @@ use dektrium\user\models\User;
  * @property RegistrationType $registrationType
  * @property TariffPlan $tariffPlan
  * @property User $user
+ * @property UserInfoCompany[] $userInfoCompanies
+ * @property Company[] $companies
  */
 class UserInfo extends \yii\db\ActiveRecord
 {
@@ -195,5 +198,21 @@ class UserInfo extends \yii\db\ActiveRecord
         }
 
         return $entity;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUserInfoCompanies()
+    {
+        return $this->hasMany(UserInfoCompany::className(), ['user_info_id' => 'id'])->inverseOf('userInfo');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCompanies()
+    {
+        return $this->hasMany(Company::className(), ['id' => 'company_id'])->viaTable('user_info_company', ['user_info_id' => 'id']);
     }
 }

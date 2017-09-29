@@ -5,6 +5,8 @@ namespace common\models\info;
 use Yii;
 use common\models\Name;
 use common\models\Location;
+use common\models\UserInfo;
+use common\models\UserInfoCompany;
 
 /**
  * This is the model class for table "company".
@@ -30,6 +32,8 @@ use common\models\Location;
  * @property Name $cEO
  * @property Location $actualAddressLocation
  * @property Location $legalAddressLocation
+ * @property UserInfoCompany[] $userInfoCompanies
+ * @property UserInfo[] $userInfos
  */
 class Company extends \yii\db\ActiveRecord
 {
@@ -104,5 +108,30 @@ class Company extends \yii\db\ActiveRecord
     public function getLegalAddressLocation()
     {
         return $this->hasOne(Location::className(), ['id' => 'legal_address_location_id'])->inverseOf('companies0');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUserInfoCompanies()
+    {
+        return $this->hasMany(UserInfoCompany::className(), ['company_id' => 'id'])->inverseOf('company');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUserInfos()
+    {
+        return $this->hasMany(UserInfo::className(), ['id' => 'user_info_id'])->viaTable('user_info_company', ['company_id' => 'id']);
+    }
+
+    /**
+     * @inheritdoc
+     * @return CompanyQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new CompanyQuery(get_called_class());
     }
 }
