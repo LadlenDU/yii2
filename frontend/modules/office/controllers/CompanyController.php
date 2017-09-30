@@ -67,15 +67,12 @@ class CompanyController extends Controller
         $model = new Company();
 
         if ($model->load(Yii::$app->request->post())) {
-//            $userInfoModel = UserInfo::findOne(Yii::$app->user->identity->getId());
-//            $model->link('userInfos', $userInfoModel);
-            /*$userInfoModel = UserInfo::find()->where(['user_id' => Yii::$app->user->identity->getId()])->one();
-            $userInfoModel->link('companies', $model);*/
             if ($model->save()) {
                 $userInfoModel = UserInfo::find()->where(['user_id' => Yii::$app->user->identity->getId()])->one();
                 $userInfoModel->link('companies', $model);
-                //$model->link('userInfos', $userInfoModel);
-                return $this->redirect(['view', 'id' => $model->id]);
+                //return $this->redirect(['view', 'id' => $model->id]);
+                //TODO может понадобиться скорректировать
+                return $this->redirect('/office/my-organization');
             }
         }
 
@@ -95,7 +92,8 @@ class CompanyController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            //return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect('/office/my-organization');
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -113,7 +111,9 @@ class CompanyController extends Controller
     {
         $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect('/office/my-organization');
+        //return $this->redirect(Yii::$app->request->referrer ?: ['index']);
+        //return $this->redirect(['index']);
     }
 
     /**

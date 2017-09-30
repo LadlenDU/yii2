@@ -74,7 +74,25 @@ foreach ($userFiles as $key => $file) {
             // 'fax',
             // 'email:email',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'urlCreator' => function ($action, $model, $key, $index) {
+                    $url = Url::to(["/office/company/$action", 'id' => $model->id]);
+                    return $url;
+                    /*if ($action === 'view') {
+                        $url = 'index.php?r=client-login/lead-view&id=' . $model->id;
+                        return $url;
+                    }
+                    if ($action === 'update') {
+                        $url = 'index.php?r=client-login/lead-update&id=' . $model->id;
+                        return $url;
+                    }
+                    if ($action === 'delete') {
+                        $url = 'index.php?r=client-login/lead-delete&id=' . $model->id;
+                        return $url;
+                    }*/
+                },
+            ],
         ],
     ]); ?>
     <?php Pjax::end(); ?></div>
