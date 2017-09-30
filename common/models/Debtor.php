@@ -13,19 +13,28 @@ use Yii;
  * @property string $patronymic
  * @property string $name_mixed
  * @property string $address
+ * @property string $region
+ * @property string $regionId
+ * @property string $district
+ * @property string $districtId
  * @property string $city
+ * @property string $cityId
  * @property string $street
+ * @property string $streetId
  * @property string $building
+ * @property string $buildingId
  * @property string $appartment
  * @property string $phone
  * @property string $LS_EIRC
  * @property string $LS_IKU_provider
+ * @property string $IKU
  * @property double $space_common
  * @property double $space_living
  * @property integer $privatized
- * @property integer $general_manager_id
+ * @property integer $location_id
  *
  * @property DebtDetails[] $debtDetails
+ * @property Location $location
  * @property DebtorPublicService[] $debtorPublicServices
  * @property PublicService[] $publicServices
  */
@@ -46,8 +55,9 @@ class Debtor extends \yii\db\ActiveRecord
     {
         return [
             [['space_common', 'space_living'], 'number'],
-            [['privatized', 'general_manager_id'], 'integer'],
-            [['first_name', 'second_name', 'patronymic', 'name_mixed', 'address', 'city', 'street', 'building', 'appartment', 'phone', 'LS_EIRC', 'LS_IKU_provider'], 'string', 'max' => 255],
+            [['privatized', 'location_id'], 'integer'],
+            [['first_name', 'second_name', 'patronymic', 'name_mixed', 'address', 'region', 'regionId', 'district', 'districtId', 'city', 'cityId', 'street', 'streetId', 'building', 'buildingId', 'appartment', 'phone', 'LS_EIRC', 'LS_IKU_provider', 'IKU'], 'string', 'max' => 255],
+            [['location_id'], 'exist', 'skipOnError' => true, 'targetClass' => Location::className(), 'targetAttribute' => ['location_id' => 'id']],
         ];
     }
 
@@ -63,9 +73,16 @@ class Debtor extends \yii\db\ActiveRecord
             'patronymic' => Yii::t('app', 'Отчество'),
             'name_mixed' => Yii::t('app', 'ФИО'),
             'address' => Yii::t('app', 'Адрес'),
-            'city' => Yii::t('app', 'Населённый пункт'),
+            'region' => Yii::t('app', 'Область'),
+            'regionId' => Yii::t('app', 'Region ID'),
+            'district' => Yii::t('app', 'Район'),
+            'districtId' => Yii::t('app', 'District ID'),
+            'city' => Yii::t('app', 'Город'),
+            'cityId' => Yii::t('app', 'City ID'),
             'street' => Yii::t('app', 'Улица'),
-            'building' => Yii::t('app', 'Дом'),
+            'streetId' => Yii::t('app', 'Street ID'),
+            'building' => Yii::t('app', 'Строение'),
+            'buildingId' => Yii::t('app', 'Building ID'),
             'appartment' => Yii::t('app', 'Квартира'),
             'phone' => Yii::t('app', 'Телефон'),
             'LS_EIRC' => Yii::t('app', 'ЛС ЕИРЦ'),
@@ -74,6 +91,7 @@ class Debtor extends \yii\db\ActiveRecord
             'space_common' => Yii::t('app', 'Общая площадь'),
             'space_living' => Yii::t('app', 'Жилая площадь'),
             'privatized' => Yii::t('app', 'Приватизировано'),
+            'location_id' => Yii::t('app', 'Location ID'),
         ];
     }
 
@@ -83,6 +101,14 @@ class Debtor extends \yii\db\ActiveRecord
     public function getDebtDetails()
     {
         return $this->hasMany(DebtDetails::className(), ['debtor_id' => 'id'])->inverseOf('debtor');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getLocation()
+    {
+        return $this->hasOne(Location::className(), ['id' => 'location_id'])->inverseOf('debtors');
     }
 
     /**
@@ -101,73 +127,12 @@ class Debtor extends \yii\db\ActiveRecord
         return $this->hasMany(PublicService::className(), ['id' => 'public_service_id'])->viaTable('debtor_public_service', ['debtor_id' => 'id']);
     }
 
-    /*public function calculateStateFee()
-    {
-        //TODO: косяк - в таблице надо использовать не Debtor, a DebtDetails класс (и текущцю функцию вызывать из него напрямую)
-        $fee = $this->getDebtDetails()->one()->calculateStateFee();
-        return $fee;
-    }*/
-
     /**
-     * @param int|null $caseNum номер падежа (0-based)
-     * @return string
+     * @inheritdoc
+     * @return DebtorQuery the active query used by this AR class.
      */
-    public function getFIOName($case = null)
+    public static function find()
     {
-        if ($this->name_mixed) {
-            $fio = $this->name_mixed;
-        } else {
-
-
-            /*$fio = $this->second_name;
-            if ($this->first_name) {
-                $fio .= ' ';
-            }
-            $fio .= $this->first_name;
-            if ($this->patronymic) {
-                $fio .= ' ';
-            }
-            $fio .= $this->patronymic;*/
-
-            $fio = trim(implode(' ', [$this->second_name, $this->first_name, $this->patronymic]));
-        }
-
-        if ($fio) {
-            /*$nc = new \NCLNameCaseRu();
-            if ($caseNum !== null) {
-                $fio = $nc->q($fio, $caseNum);
-            }*/
-            if ($case) {
-                $fio = \morphos\Russian\inflectName($fio, $case);
-            }
-        } else {
-            $fio = '(Нет имени)';
-        }
-
-        return $fio;
-    }
-
-    public function getFullAddress()
-    {
-        return "$this->city $this->street $this->building $this->appartment";
-    }
-
-    public function getShortName()
-    {
-        $name = '';
-        /*if ($this->generalManager) {
-            if ($this->generalManager->second_name) {
-                $name .= "{$this->generalManager->second_name} ";
-            }
-            if ($this->generalManager->first_name) {
-                $name .= mb_substr($this->generalManager->first_name, 0, 1, Yii::$app->charset) . '.';
-            }
-            if ($this->generalManager->patronymic) {
-                $name .= mb_substr($this->generalManager->patronymic, 0, 1, Yii::$app->charset) . '.';
-            }
-        }*/
-
-        return $name;
-        //return $name ?: Yii::t('app', 'Нет имени');
+        return new DebtorQuery(get_called_class());
     }
 }
