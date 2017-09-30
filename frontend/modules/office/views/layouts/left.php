@@ -33,6 +33,7 @@
                     //['label' => 'Меню Yii2', 'options' => ['class' => 'header']],
                     ['label' => 'Рабочий стол', 'icon' => 'share-alt', 'options' => ['class' => 'header']/*, 'url' => ['/office/desctop']*/],
                     ['label' => 'Моя организация', 'icon' => 'id-card', 'url' => ['/office/my-organization']],
+                    ['label' => 'Компании', 'icon' => 'handshake-o', 'url' => ['/office/company']],
                     ['label' => 'Организации', 'icon' => 'users', 'options' => ['class' => 'header']/*, 'url' => ['/office/organizations']*/],
                     ['label' => 'Дома', 'icon' => 'file-code-o', 'options' => ['class' => 'header']/*, 'url' => ['/office/buildings']*/],
                     [
@@ -52,7 +53,7 @@
                         ],*/
                     ],
                     ['label' => 'Справочник судов', 'icon' => 'bank', 'url' => ['/court']],
-                    ['label' => 'Организации', 'icon' => 'handshake-o', 'url' => ['/office/company']],
+                    //['label' => 'Компании', 'icon' => 'handshake-o', 'url' => ['/office/company']],
                     /*[
                         //'label' => 'Заявление в суд',
                         'label' => 'Квартплата',
