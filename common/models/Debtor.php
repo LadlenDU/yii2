@@ -86,7 +86,9 @@ class Debtor extends \yii\db\ActiveRecord
             'appartment' => Yii::t('app', 'Квартира'),
             'phone' => Yii::t('app', 'Телефон'),
             'LS_EIRC' => Yii::t('app', 'ЛС ЕИРЦ'),
-            'LS_IKU_provider' => Yii::t('app', 'ЛС ИКУ/поставщика'),
+            //'LS_IKU_provider' => Yii::t('app', 'ЛС ИКУ/поставщика'),
+            // № лицевого счета
+            'LS_IKU_provider' => Yii::t('app', '№ ЛС'),
             'IKU' => Yii::t('app', 'ИКУ'),
             'space_common' => Yii::t('app', 'Общая площадь'),
             'space_living' => Yii::t('app', 'Жилая площадь'),

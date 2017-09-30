@@ -79,8 +79,9 @@ HTML;
         'value' => 'debtor.LS_EIRC',
     ],
     [
+        //TODO: разобраться с label
         'attribute' => 'LS_IKU_provider',
-        'label' => Yii::t('app', 'ЛС ИКУ/поставщика'),
+        'label' => Yii::t('app', '№ ЛС'),
         'value' => 'debtor.LS_IKU_provider',
     ],
     [
