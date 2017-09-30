@@ -72,6 +72,7 @@ foreach ($userFiles as $key => $file) {
         ],
         //TODO: в модель
         'pluginOptions' => [
+            'showRemove' => false,
             'initialPreview' => $filesPluginOptions['initialPreview'],
             'initialPreviewAsData' => true,
             'initialPreviewFileType' => 'pdf',
