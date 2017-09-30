@@ -55,6 +55,7 @@ class DebtorsController extends Controller
             throw new \Exception(Yii::t('app', 'Не найден должник.'));
         }
 
+        //TODO: use Yii::$app->getResponse()->sendContentAsFile(...)->send();
         header("Expires: Mon, 1 Apr 1974 05:00:00 GMT");
         header("Last-Modified: " . gmdate("D,d M YH:i:s") . " GMT");
         header("Cache-Control: no-cache, must-revalidate");
@@ -194,6 +195,7 @@ class DebtorsController extends Controller
             HelpersDebt::fillInvoiceBlank($debtor, $court, $sheet);
         }
 
+        //TODO: use Yii::$app->getResponse()->sendContentAsFile(...)->send();
         header("Expires: Mon, 1 Apr 1974 05:00:00 GMT");
         header("Last-Modified: " . gmdate("D,d M YH:i:s") . " GMT");
         header("Cache-Control: no-cache, must-revalidate");
