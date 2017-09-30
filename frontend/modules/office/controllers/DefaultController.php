@@ -120,7 +120,7 @@ class DefaultController extends Controller
                         if ($uploadedFiles = UploadedFile::getInstances($model->userInfo, 'user_files')) {
                             foreach ($uploadedFiles as $upFile) {
                                 //$infoModel->link(= file_get_contents($upFile->tempName);
-                                $userFiles = new UserFiles();
+                                $userFiles = new UserFilesExt();
                                 //$userFiles = $model->userInfo->userFiles;
                                 $userFiles->content = file_get_contents($upFile->tempName);
                                 $userFiles->name = $upFile->name;

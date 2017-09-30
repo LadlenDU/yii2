@@ -42,7 +42,9 @@ class UserFilesExt extends UserFiles
     {
         //TODO: секьюрный косяк???
         if ($model = self::findOne($id)) {
+            //TODO: обработка ошибок удаления
             $model->delete();
+            echo json_encode([]);
             exit;
         } else {
             //TODO: при ajax - косяк

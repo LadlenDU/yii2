@@ -17,6 +17,7 @@ use yii\helpers\Url;
 
 $userFiles = $model->userInfo->userFiles;
 
+//TODO: поместить в модель
 $filesPluginOptions = [
     'initialPreview' => [],
     'initialPreviewConfig' => [],
@@ -32,8 +33,8 @@ foreach ($userFiles as $key => $file) {
         'filetype' => $file->mime_type,
         'caption' => $file->name,
         'size' => strlen($file->content),
-        'url' => Url::to(['/office/user-file', ['id' => $file->id, 'action' => 'remove']]),
-        'downloadUrl' => Url::to(['/office/user-file', ['id' => $file->id, 'action' => 'download']]),
+        'url' => Url::to(['/office/user-file', 'id' => $file->id, 'action' => 'remove']),
+        'downloadUrl' => Url::to(['/office/user-file', 'id' => $file->id, 'action' => 'download']),
     ];
 }
 ?>
@@ -69,6 +70,7 @@ foreach ($userFiles as $key => $file) {
             'accept' => 'application/pdf',
             'multiple' => true,
         ],
+        //TODO: в модель
         'pluginOptions' => [
             'initialPreview' => $filesPluginOptions['initialPreview'],
             'initialPreviewAsData' => true,
@@ -76,7 +78,13 @@ foreach ($userFiles as $key => $file) {
             'initialCaption' => Yii::t('app', 'Дополнительные файлы'),
             'initialPreviewConfig' => $filesPluginOptions['initialPreviewConfig'],
             'overwriteInitial' => false,
-        ]
+        ],
+        'pluginEvents' => [
+            'filebeforedelete' => 'function() {
+                var aborted = !window.confirm(' . json_encode(Yii::t('app', 'Вы уверены что хотите удалить элемент?')) . ');
+                return aborted;
+            }',
+        ],
     ]);
     ?>
 
