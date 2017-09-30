@@ -28,11 +28,12 @@ foreach ($userFiles as $key => $file) {
     $filesPluginOptions['initialPreviewConfig'][] = [
         'key' => $key,
         //TODO: pdf - может быть другой ???
-        'type' => 'pdf',
+        //'type' => 'pdf',
+        'filetype' => $file->mime_type,
         'caption' => $file->name,
         'size' => strlen($file->content),
-        'url' => \yii\helpers\Url::to(Url::to(['/office/user-file', 'id' => $file->id])),
-        'downloadUrl' => false,
+        'url' => Url::to(['/office/user-file', ['id' => $file->id, 'action' => 'remove']]),
+        'downloadUrl' => Url::to(['/office/user-file', ['id' => $file->id, 'action' => 'download']]),
     ];
 }
 ?>

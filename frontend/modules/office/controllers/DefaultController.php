@@ -2,7 +2,6 @@
 
 namespace frontend\modules\office\controllers;
 
-use common\models\info\UserFiles;
 use Yii;
 use yii\web\Controller;
 use yii\filters\AccessControl;
@@ -11,6 +10,7 @@ use common\models\info\LegalEntity;
 use common\models\info\IndividualEntrepreneur;
 use common\models\info\Individual;
 use yii\web\UploadedFile;
+use common\models\info\UserFilesExt;
 
 /**
  * Default controller for the `office` module
@@ -42,11 +42,25 @@ class DefaultController extends Controller
         return $this->render('index');
     }
 
-    public function actionUserFile($id)
+    public function actionUserFile($id, $action = false)
     {
-        //TODO: секьюрный косяк???
+        switch ($action) {
+            case 'download': {
+                UserFilesExt::outputFile($id);
+                break;
+            }
+            case 'remove': {
+                UserFilesExt::remove($id);
+                break;
+            }
+            default: {
+                // inline
+                UserFilesExt::outputInline($id);
+                break;
+            }
+        }
         //if ($infoModel = UserFiles::find()->where(['user_id' => Yii::$app->user->identity->getId()])->one()) {
-        if ($infoModel = UserFiles::findOne($id)) {
+        /*if ($infoModel = UserFiles::findOne($id)) {
             header("Expires: Mon, 1 Apr 1974 05:00:00 GMT");
             header("Last-Modified: " . gmdate("D,d M YH:i:s") . " GMT");
             header("Cache-Control: no-cache, must-revalidate");
@@ -57,7 +71,7 @@ class DefaultController extends Controller
 
             echo $infoModel->content;
             exit;
-        }
+        }*/
     }
 
     public function actionMyOrganization()
