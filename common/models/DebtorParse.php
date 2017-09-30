@@ -185,12 +185,12 @@ class DebtorParse extends Model
     {
         if ($info['headers']) {
             //TODO: костыль - сделать сравнение пользователей
-            Debtor::deleteAll();
+            DebtorExt::deleteAll();
             //TODO: кроме того, посмотреть корректность удаления
             DebtDetails::deleteAll();
 
             foreach ($info['colInfo'] as $rowInfo) {
-                $debtor = new Debtor;
+                $debtor = new DebtorExt;
                 $debtDetails = new DebtDetails();
                 foreach ($rowInfo as $key => $colInfo) {
                     if (!empty($info['headers'][$key])) {

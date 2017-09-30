@@ -20,8 +20,8 @@ class UploadForm extends Model
     {
         return [
             //[['imageFile'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg'],
-            [['excelFile'], 'file', 'skipOnEmpty' => false, 'extensions' => 'xls, xlsx'],
-            [['csvFile'], 'file', 'skipOnEmpty' => false, 'extensions' => 'csv'],
+            [['excelFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'xls, xlsx'],
+            [['csvFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'csv'],
         ];
     }
 
@@ -30,8 +30,8 @@ class UploadForm extends Model
         if ($this->validate()) {
             //if ($this->excelFile) {
             //$this->imageFile->saveAs('uploads/' . $this->imageFile->baseName . '.' . $this->imageFile->extension);
-            $fileName = tempnam(Yii::getAlias('@common') . '/uploads/debtors', 'exc_');
-            $fileName .= '.' . $this->excelFile->extension;
+            $fileName = tempnam(Yii::getAlias('@common') . '/uploads/debtors', 'excel_');
+            //$fileName .= '.' . $this->excelFile->extension;
             $this->excelFile->saveAs($fileName);
             return $fileName;
         }
@@ -43,7 +43,7 @@ class UploadForm extends Model
     {
         if ($this->validate()) {
             $fileName = tempnam(Yii::getAlias('@common') . '/uploads/debtors', 'csv_');
-            $fileName .= '.' . $this->csvFile->extension;
+            //$fileName .= '.' . $this->csvFile->extension;
             $this->csvFile->saveAs($fileName);
             return $fileName;
         }
