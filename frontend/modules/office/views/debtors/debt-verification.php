@@ -334,16 +334,32 @@ HTML;
     <br>
 
     <div class="row collapse" id="load-debtors">
-        <!--<div class="col-xs-12">
-            <?php
-/*            $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]);
-            echo $form->field($uploadModel, 'excelFile')->widget(FileInput::classname(), $uploadModel->fileUploadConfig('excel'));
-            ActiveForm::end();
-            */?>
-        </div>-->
         <div class="col-xs-12">
             <?php
-            $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]);
+            $form = ActiveForm::begin([
+                'action' => [
+                    '/office/debtors/debt-verification',
+                    'action' => 'upload_debtors_excel',
+                ],
+                'options' => [
+                    'enctype' => 'multipart/form-data',
+                ],
+            ]);
+            echo $form->field($uploadModel, 'excelFile')->widget(FileInput::classname(), $uploadModel->fileUploadConfig('excel'));
+            ActiveForm::end();
+            ?>
+        </div>
+        <div class="col-xs-12">
+            <?php
+            $form = ActiveForm::begin([
+                'action' => [
+                    '/office/debtors/debt-verification',
+                    'action' => 'upload_debtors_csv',
+                ],
+                'options' => [
+                    'enctype' => 'multipart/form-data',
+                ],
+            ]);
             echo $form->field($uploadModel, 'csvFile')->widget(FileInput::classname(), $uploadModel->fileUploadConfig('csv'));
             ActiveForm::end();
             ?>

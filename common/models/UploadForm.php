@@ -25,17 +25,39 @@ class UploadForm extends Model
         ];
     }
 
-    public function upload()
+    public function uploadExcel()
     {
         if ($this->validate()) {
+            //if ($this->excelFile) {
             //$this->imageFile->saveAs('uploads/' . $this->imageFile->baseName . '.' . $this->imageFile->extension);
-            $fileName = tempnam(Yii::getAlias('@common') . '/uploads/excel', 'exc_');
-            #$fileName .= '.' . $this->excelFile->extension;
+            $fileName = tempnam(Yii::getAlias('@common') . '/uploads/debtors', 'exc_');
+            $fileName .= '.' . $this->excelFile->extension;
             $this->excelFile->saveAs($fileName);
             return $fileName;
         }
 
         return false;
+    }
+
+    public function uploadCsv()
+    {
+        if ($this->validate()) {
+            $fileName = tempnam(Yii::getAlias('@common') . '/uploads/debtors', 'csv_');
+            $fileName .= '.' . $this->csvFile->extension;
+            $this->csvFile->saveAs($fileName);
+            return $fileName;
+        }
+
+        return false;
+    }
+
+    public function attributeLabels()
+    {
+        $labels = parent::attributeLabels();
+        $labels['excelFile'] = Yii::t('app', 'Файл Excel');
+        $labels['csvFile'] = Yii::t('app', 'Файл СSV');
+
+        return $labels;
     }
 
     public function fileUploadConfig($type)
@@ -49,13 +71,14 @@ class UploadForm extends Model
                 'multiple' => false,
             ],
             'pluginOptions' => [
+                'showPreview' => false,
                 'showRemove' => false,
-                'showUpload' => false,
-                'allowedFileExtensions' => ($type == 'excel') ? ['xls', 'xlsx'] : ['csv'],
-                'initialPreviewAsData' => true,
+                'showUpload' => true,
+                //'allowedFileExtensions' => ($type == 'excel') ? ['xls', 'xlsx'] : ['csv'],
+                //'initialPreviewAsData' => true,
                 //'initialPreviewFileType' => 'xlsx',
                 'initialCaption' => Yii::t('app', 'Список должников'),
-                'overwriteInitial' => false,
+                //'overwriteInitial' => false,
             ],
         ];
 
