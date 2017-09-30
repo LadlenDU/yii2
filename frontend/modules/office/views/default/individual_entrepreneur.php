@@ -44,7 +44,7 @@ foreach ($userFiles as $key => $file) {
 
 <div class="company-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <label class="control-label"><?= Html::encode(Yii::t('app', 'Список компаний')) ?></label>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>

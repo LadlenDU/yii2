@@ -75,7 +75,7 @@ class DefaultController extends Controller
         $viewName = 'index';
 
         //TODO: код переместить в модель
-        if ($infoModel = UserInfo::find()->with('companies')->where(['user_id' => Yii::$app->user->identity->getId()])->one()) {
+        if ($infoModel = UserInfo::find()->where(['user_id' => Yii::$app->user->identity->getId()])->one()) {
             switch ($infoModel->attributes['registration_type_id']) {
                 case 1: {
                     // юридическое лицо
@@ -141,14 +141,19 @@ class DefaultController extends Controller
         }
 
         // Компании пользователя
-//        $searchModel = new CompanySearch();
-//        $dataProvider = $searchModel->search(Yii::$app->user->identity->getId(), Yii::$app->request->queryParams);
-        $dataProvider = $infoModel->companies->search(Yii::$app->request->queryParams);
-        //$params['companies'] = $infoModel->companies;
+        $searchModel = new CompanySearch();
+        $dataProvider = $searchModel->search(Yii::$app->user->identity->getId(), Yii::$app->request->queryParams);
         $params['companies'] = [
-            'searchModel' => $infoModel->companies,
+            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ];
+
+        //$dataProvider = $infoModel->companies->search(Yii::$app->request->queryParams);
+        //$params['companies'] = $infoModel->companies;
+        /*$params['companies'] = [
+            'searchModel' => $infoModel->companies,
+            'dataProvider' => $dataProvider,
+        ];*/
 
         return $this->render($viewName, $params);
     }

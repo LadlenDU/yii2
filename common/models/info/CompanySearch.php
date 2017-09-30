@@ -39,7 +39,7 @@ class CompanySearch extends Company
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($userId, $params)
     {
         $query = Company::find();
 
@@ -56,6 +56,9 @@ class CompanySearch extends Company
             // $query->where('0=1');
             return $dataProvider;
         }
+
+        //$query->joinWith(['user_info_company'])->andFilterWhere(['user_info_company.user_info_id' => $userId]);
+        $query->joinWith(['userInfoCompanies'])->andFilterWhere(['user_info_company.user_info_id' => $userId]);
 
         // grid filtering conditions
         $query->andFilterWhere([
