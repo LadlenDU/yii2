@@ -75,6 +75,7 @@ class DefaultController extends Controller
         $viewName = 'index';
 
         //TODO: код переместить в модель
+        //TODO: также проверить корректно ли работает  UserInfo::find()->where(['user_id' => Yii::$app->user->identity->getId()])->one()
         if ($infoModel = UserInfo::find()->where(['user_id' => Yii::$app->user->identity->getId()])->one()) {
             switch ($infoModel->attributes['registration_type_id']) {
                 case 1: {
@@ -142,7 +143,7 @@ class DefaultController extends Controller
 
         // Компании пользователя
         $searchModel = new CompanySearch();
-        $dataProvider = $searchModel->search(Yii::$app->user->identity->getId(), Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $params['companies'] = [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,

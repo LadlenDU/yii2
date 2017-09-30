@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use common\models\info\Company;
 
 /**
  * This is the model class for table "user_info_company".

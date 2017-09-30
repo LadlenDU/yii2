@@ -48,21 +48,21 @@ foreach ($userFiles as $key => $file) {
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a(Yii::t('app', 'Создать компанию'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('app', 'Создать компанию'), ['/office/company/create'], ['class' => 'btn btn-success']) ?>
     </p>
     <?php Pjax::begin(); ?>    <?= GridView::widget([
         'dataProvider' => $companies['dataProvider'],
         'filterModel' => $companies['searchModel'],
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+            //['class' => 'yii\grid\SerialColumn'],
 
-            'id',
+            //'id',
             'full_name',
             'short_name',
             'legal_address_location_id',
             'actual_address_location_id',
-            // 'INN',
-            // 'KPP',
+            'INN',
+            'KPP',
             // 'BIK',
             // 'OGRN',
             // 'checking_account',

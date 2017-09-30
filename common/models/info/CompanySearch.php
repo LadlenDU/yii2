@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\info\Company;
+use common\models\UserInfo;
 
 /**
  * CompanySearch represents the model behind the search form about `common\models\info\Company`.
@@ -39,8 +40,11 @@ class CompanySearch extends Company
      *
      * @return ActiveDataProvider
      */
-    public function search($userId, $params)
+    public function search($params)
     {
+        //TODO: проверить работу: должен быть пользователь обязательно
+        $userInfoId = UserInfo::find()->where(['user_id' => Yii::$app->user->identity->getId()])->one()->primaryKey;
+
         $query = Company::find();
 
         // add conditions that should always apply here
@@ -57,8 +61,7 @@ class CompanySearch extends Company
             return $dataProvider;
         }
 
-        //$query->joinWith(['user_info_company'])->andFilterWhere(['user_info_company.user_info_id' => $userId]);
-        $query->joinWith(['userInfoCompanies'])->andFilterWhere(['user_info_company.user_info_id' => $userId]);
+        $query->joinWith(['userInfoCompanies'])->andFilterWhere(['user_info_company.user_info_id' => $userInfoId]);
 
         // grid filtering conditions
         $query->andFilterWhere([

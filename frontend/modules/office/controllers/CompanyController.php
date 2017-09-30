@@ -8,6 +8,7 @@ use common\models\info\CompanySearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use common\models\UserInfo;
 
 /**
  * CompanyController implements the CRUD actions for Company model.
@@ -65,13 +66,22 @@ class CompanyController extends Controller
     {
         $model = new Company();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+        if ($model->load(Yii::$app->request->post())) {
+//            $userInfoModel = UserInfo::findOne(Yii::$app->user->identity->getId());
+//            $model->link('userInfos', $userInfoModel);
+            /*$userInfoModel = UserInfo::find()->where(['user_id' => Yii::$app->user->identity->getId()])->one();
+            $userInfoModel->link('companies', $model);*/
+            if ($model->save()) {
+                $userInfoModel = UserInfo::find()->where(['user_id' => Yii::$app->user->identity->getId()])->one();
+                $userInfoModel->link('companies', $model);
+                //$model->link('userInfos', $userInfoModel);
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         }
+
+        return $this->render('create', [
+            'model' => $model,
+        ]);
     }
 
     /**
@@ -115,10 +125,16 @@ class CompanyController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = Company::findOne($id)) !== null) {
+        $userInfoId = UserInfo::find()->where(['user_id' => Yii::$app->user->identity->getId()])->one()->primaryKey;
+        $model = Company::find()
+            ->joinWith(['userInfoCompanies'])
+            ->andFilterWhere(['user_info_company.user_info_id' => $userInfoId, 'company.id' => $id])
+            ->one();
+
+        if ($model !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
+            throw new NotFoundHttpException(Yii::t('app', 'Запрашиваемая страница не найдена.'));
         }
     }
 }
