@@ -22,12 +22,17 @@ $filesPluginOptions = [
     'initialPreviewConfig' => [],
 ];
 
-foreach ($userFiles as $file) {
+foreach ($userFiles as $key => $file) {
     //TODO: проверить (реализовать) секьюрность (чтобы чужие файлы не открывались)
     $filesPluginOptions['initialPreview'][] = Url::to(['/office/user-file', 'id' => $file->id]);
     $filesPluginOptions['initialPreviewConfig'][] = [
+        'key' => $key,
+        //TODO: pdf - может быть другой ???
+        'type' => 'pdf',
         'caption' => $file->name,
-        //'size' => '873727'
+        'size' => strlen($file->content),
+        'url' => \yii\helpers\Url::to(Url::to(['/office/user-file', 'id' => $file->id])),
+        'downloadUrl' => false,
     ];
 }
 ?>
@@ -58,22 +63,17 @@ foreach ($userFiles as $file) {
     --><? /*= $form->field($model, 'user_info_document_2')->fileInput() */ ?>
 
     <?= //$form->field($model->userInfo->userFiles, 'id')->widget(FileInput::classname(), [
-        $form->field($model->userInfo, 'user_files[]')->widget(FileInput::classname(), [
+    $form->field($model->userInfo, 'user_files[]')->widget(FileInput::classname(), [
         'options' => [
             'accept' => 'application/pdf',
             'multiple' => true,
         ],
         'pluginOptions' => [
-            'initialPreview' => $filesPluginOptions['initialPreview'],/*[
-                "http://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/FullMoon2010.jpg/631px-FullMoon2010.jpg",
-                "http://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Earth_Eastern_Hemisphere.jpg/600px-Earth_Eastern_Hemisphere.jpg"
-            ],*/
+            'initialPreview' => $filesPluginOptions['initialPreview'],
             'initialPreviewAsData' => true,
+            'initialPreviewFileType' => 'pdf',
             'initialCaption' => Yii::t('app', 'Дополнительные файлы'),
-            'initialPreviewConfig' => $filesPluginOptions['initialPreviewConfig'],/*[
-                ['caption' => 'Moon.jpg', 'size' => '873727'],
-                ['caption' => 'Earth.jpg', 'size' => '1287883'],
-            ],*/
+            'initialPreviewConfig' => $filesPluginOptions['initialPreviewConfig'],
             'overwriteInitial' => false,
         ]
     ]);

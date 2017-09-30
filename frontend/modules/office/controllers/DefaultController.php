@@ -44,8 +44,19 @@ class DefaultController extends Controller
 
     public function actionUserFile($id)
     {
-        if ($infoModel = UserInfo::find()->where(['user_id' => Yii::$app->user->identity->getId()])->one()) {
-            $file = $infoModel->userFile;
+        //TODO: секьюрный косяк???
+        //if ($infoModel = UserFiles::find()->where(['user_id' => Yii::$app->user->identity->getId()])->one()) {
+        if ($infoModel = UserFiles::findOne($id)) {
+            header("Expires: Mon, 1 Apr 1974 05:00:00 GMT");
+            header("Last-Modified: " . gmdate("D,d M YH:i:s") . " GMT");
+            header("Cache-Control: no-cache, must-revalidate");
+            header("Pragma: no-cache");
+            header("Content-type: " . $infoModel->mime_type);
+            //header("Content-Disposition: attachment; filename=" . $infoModel->name);
+            header("Content-Disposition: inline");
+
+            echo $infoModel->content;
+            exit;
         }
     }
 
