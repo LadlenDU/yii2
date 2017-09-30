@@ -337,14 +337,16 @@ HTML;
         <div class="col-xs-12">
             <?php
             $form = ActiveForm::begin([
-                'action' => [
+                /*'action' => [
                     '/office/debtors/debt-verification',
                     'action' => 'upload_debtors_excel',
-                ],
+                ],*/
                 'options' => [
                     'enctype' => 'multipart/form-data',
                 ],
             ]);
+            //echo $form->field($uploadModel, 'action')->hiddenInput(['value' => 'upload_debtors_excel']);
+            echo Html::hiddenInput('action', 'upload_debtors_excel');
             echo $form->field($uploadModel, 'excelFile')->widget(FileInput::classname(), $uploadModel->fileUploadConfig('excel'));
             ActiveForm::end();
             ?>
@@ -352,14 +354,16 @@ HTML;
         <div class="col-xs-12">
             <?php
             $form = ActiveForm::begin([
-                'action' => [
+                /*'action' => [
                     '/office/debtors/debt-verification',
                     'action' => 'upload_debtors_csv',
-                ],
+                ],*/
                 'options' => [
                     'enctype' => 'multipart/form-data',
                 ],
             ]);
+            //echo $form->field($uploadModel, 'action')->hiddenInput(['value' => 'upload_debtors_csv']);
+            echo Html::hiddenInput('action', 'upload_debtors_csv');
             echo $form->field($uploadModel, 'csvFile')->widget(FileInput::classname(), $uploadModel->fileUploadConfig('csv'));
             ActiveForm::end();
             ?>

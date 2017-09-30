@@ -114,7 +114,7 @@ class DebtorsController extends Controller
         //$sheetData = '';
 
         if (Yii::$app->request->isPost) {
-            switch (Yii::$app->request->get('action'))
+            switch (Yii::$app->request->post('action'))
             {
                 case 'upload_debtors_excel':
                 {
