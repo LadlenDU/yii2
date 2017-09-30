@@ -20,6 +20,8 @@ use kartik\grid\GridView;
 
 use andkon\yii2kladr\Kladr;
 
+use kartik\file\FileInput;
+
 $columns = [
     [
         'class' => 'kartik\grid\CheckboxColumn',
@@ -332,11 +334,19 @@ HTML;
     <br>
 
     <div class="row collapse" id="load-debtors">
+        <!--<div class="col-xs-12">
+            <?php
+/*            $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]);
+            echo $form->field($uploadModel, 'excelFile')->widget(FileInput::classname(), $uploadModel->fileUploadConfig('excel'));
+            ActiveForm::end();
+            */?>
+        </div>-->
         <div class="col-xs-12">
-            <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]) ?>
-            <?= $form->field($uploadModel, 'excelFile')->fileInput() ?>
-            <button><?= Yii::t('app', 'Отправить') ?></button>
-            <?php ActiveForm::end() ?>
+            <?php
+            $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]);
+            echo $form->field($uploadModel, 'csvFile')->widget(FileInput::classname(), $uploadModel->fileUploadConfig('csv'));
+            ActiveForm::end();
+            ?>
         </div>
     </div>
 

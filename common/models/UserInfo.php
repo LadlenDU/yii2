@@ -258,7 +258,6 @@ class UserInfo extends \yii\db\ActiveRecord
                 'accept' => 'application/pdf',
                 'multiple' => true,
             ],
-            //TODO: в модель
             'pluginOptions' => [
                 'showRemove' => false,
                 'initialPreview' => $filesPluginOptions['initialPreview'],

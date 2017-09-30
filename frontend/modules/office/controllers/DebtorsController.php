@@ -16,6 +16,7 @@ use common\models\DebtorParse;
 use common\components\ColumnNotFoundException;
 use yii\data\ActiveDataProvider;
 use yii\data\ArrayDataProvider;
+use common\models\UserInfo;
 
 /**
  * Default controller for the `office` module
@@ -106,12 +107,15 @@ class DebtorsController extends Controller
         $searchModel = new DebtDetailsSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
+        //$userInfoModel = UserInfo::find()->where(['user_id' => Yii::$app->user->identity->getId()])->one();
+
         return $this->render('debt-verification',
             [
                 'uploadModel' => $uploadModel,
                 'sheetData' => $sheetData,
                 'dataProvider' => $dataProvider,
                 'searchModel' => $searchModel,
+                //'userInfoModel' => $userInfoModel,
             ]);
     }
 
