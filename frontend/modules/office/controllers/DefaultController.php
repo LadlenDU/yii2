@@ -11,6 +11,8 @@ use common\models\info\IndividualEntrepreneur;
 use common\models\info\Individual;
 use yii\web\UploadedFile;
 use common\models\info\UserFilesExt;
+use yii\filters\VerbFilter;
+use common\models\info\CompanySearch;
 
 /**
  * Default controller for the `office` module
@@ -28,6 +30,12 @@ class DefaultController extends Controller
                         'allow' => true,
                         'roles' => ['@'],
                     ],
+                ],
+            ],
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'delete' => ['POST'],
                 ],
             ],
         ];
@@ -59,19 +67,6 @@ class DefaultController extends Controller
                 break;
             }
         }
-        //if ($infoModel = UserFiles::find()->where(['user_id' => Yii::$app->user->identity->getId()])->one()) {
-        /*if ($infoModel = UserFiles::findOne($id)) {
-            header("Expires: Mon, 1 Apr 1974 05:00:00 GMT");
-            header("Last-Modified: " . gmdate("D,d M YH:i:s") . " GMT");
-            header("Cache-Control: no-cache, must-revalidate");
-            header("Pragma: no-cache");
-            header("Content-type: " . $infoModel->mime_type);
-            //header("Content-Disposition: attachment; filename=" . $infoModel->name);
-            header("Content-Disposition: inline");
-
-            echo $infoModel->content;
-            exit;
-        }*/
     }
 
     public function actionMyOrganization()
@@ -80,7 +75,7 @@ class DefaultController extends Controller
         $viewName = 'index';
 
         //TODO: код переместить в модель
-        if ($infoModel = UserInfo::find()->where(['user_id' => Yii::$app->user->identity->getId()])->one()) {
+        if ($infoModel = UserInfo::find()->with('companies')->where(['user_id' => Yii::$app->user->identity->getId()])->one()) {
             switch ($infoModel->attributes['registration_type_id']) {
                 case 1: {
                     // юридическое лицо
@@ -119,9 +114,7 @@ class DefaultController extends Controller
 
                         if ($uploadedFiles = UploadedFile::getInstances($model->userInfo, 'user_files')) {
                             foreach ($uploadedFiles as $upFile) {
-                                //$infoModel->link(= file_get_contents($upFile->tempName);
                                 $userFiles = new UserFilesExt();
-                                //$userFiles = $model->userInfo->userFiles;
                                 $userFiles->content = file_get_contents($upFile->tempName);
                                 $userFiles->name = $upFile->name;
                                 $userFiles->mime_type = $upFile->type;
@@ -131,25 +124,7 @@ class DefaultController extends Controller
                             }
                         }
 
-                        /*$document_1 = UploadedFile::getInstance($model, 'user_info_document_1');
-                        $document_2 = UploadedFile::getInstance($model, 'user_info_document_2');
-
-                        if ($document_1) {
-                            $infoModel->document_1 = file_get_contents($document_1->tempName);
-                        }
-                        if ($document_2) {
-                            $infoModel->document_2 = file_get_contents($document_2->tempName);
-                        }*/
-
                         if ($model->save()) {
-                            /*if ($document_1 || $document_2) {
-                                //TODO: add transaction - https://stackoverflow.com/questions/32522404/yii2-saving-file-to-oracle-blob
-                                $infoModel->save(false);
-                            }*/
-                            /*if ($model->upload()) {
-                                // file is uploaded successfully
-                                // TODO обработка неудачной загрузки
-                            }*/
                             // form inputs are valid, do something here
                             Yii::$app->session->setFlash('success', Yii::t('app', 'Форма успешно сохранена.'));
                             //return;
@@ -164,6 +139,16 @@ class DefaultController extends Controller
                 $params['model'] = $model;
             }
         }
+
+        // Компании пользователя
+//        $searchModel = new CompanySearch();
+//        $dataProvider = $searchModel->search(Yii::$app->user->identity->getId(), Yii::$app->request->queryParams);
+        $dataProvider = $infoModel->companies->search(Yii::$app->request->queryParams);
+        //$params['companies'] = $infoModel->companies;
+        $params['companies'] = [
+            'searchModel' => $infoModel->companies,
+            'dataProvider' => $dataProvider,
+        ];
 
         return $this->render($viewName, $params);
     }

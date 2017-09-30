@@ -4,12 +4,15 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\file\FileInput;
 use yii\helpers\Url;
+use yii\widgets\Pjax;
+use kartik\grid\GridView;
 
 //use kartik\date\DatePicker;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\info\IndividualEntrepreneur */
 /* @var $form ActiveForm */
+/* @var $companies array */
 
 //TODO: title из БД
 
@@ -38,6 +41,44 @@ foreach ($userFiles as $key => $file) {
     ];
 }
 ?>
+
+<div class="company-index">
+
+    <h1><?= Html::encode($this->title) ?></h1>
+    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+
+    <p>
+        <?= Html::a(Yii::t('app', 'Создать компанию'), ['create'], ['class' => 'btn btn-success']) ?>
+    </p>
+    <?php Pjax::begin(); ?>    <?= GridView::widget([
+        'dataProvider' => $companies['dataProvider'],
+        'filterModel' => $companies['searchModel'],
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+
+            'id',
+            'full_name',
+            'short_name',
+            'legal_address_location_id',
+            'actual_address_location_id',
+            // 'INN',
+            // 'KPP',
+            // 'BIK',
+            // 'OGRN',
+            // 'checking_account',
+            // 'correspondent_account',
+            // 'full_bank_name',
+            // 'CEO',
+            // 'operates_on_the_basis_of',
+            // 'phone',
+            // 'fax',
+            // 'email:email',
+
+            ['class' => 'yii\grid\ActionColumn'],
+        ],
+    ]); ?>
+    <?php Pjax::end(); ?></div>
+
 <div class="individual_entrepreneur">
 
     <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
