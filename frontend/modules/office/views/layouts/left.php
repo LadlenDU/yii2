@@ -52,7 +52,7 @@
                         ],*/
                     ],
                     ['label' => 'Справочник судов', 'icon' => 'bank', 'url' => ['/court']],
-                    ['label' => 'Компании', 'icon' => 'handshake-o', 'url' => ['/office/company']],
+                    //['label' => 'Компании', 'icon' => 'handshake-o', 'url' => ['/office/company']],
                     /*[
                         //'label' => 'Заявление в суд',
                         'label' => 'Квартплата',

@@ -18,28 +18,8 @@ use kartik\grid\GridView;
 
 #labels = $model->attributeLabels();
 
-$userFiles = $model->userInfo->userFiles;
+$fileUploadConfig = $model->userInfo->fileUploadConfig();
 
-//TODO: поместить в модель
-$filesPluginOptions = [
-    'initialPreview' => [],
-    'initialPreviewConfig' => [],
-];
-
-foreach ($userFiles as $key => $file) {
-    //TODO: проверить (реализовать) секьюрность (чтобы чужие файлы не открывались)
-    $filesPluginOptions['initialPreview'][] = Url::to(['/office/user-file', 'id' => $file->id]);
-    $filesPluginOptions['initialPreviewConfig'][] = [
-        'key' => $key,
-        //TODO: pdf - может быть другой ???
-        //'type' => 'pdf',
-        'filetype' => $file->mime_type,
-        'caption' => $file->name,
-        'size' => strlen($file->content),
-        'url' => Url::to(['/office/user-file', 'id' => $file->id, 'action' => 'remove']),
-        'downloadUrl' => Url::to(['/office/user-file', 'id' => $file->id, 'action' => 'download']),
-    ];
-}
 ?>
 
 <div class="company-index">
@@ -124,28 +104,7 @@ foreach ($userFiles as $key => $file) {
     --><? /*= $form->field($model, 'user_info_document_2')->fileInput() */ ?>
 
     <?= //$form->field($model->userInfo->userFiles, 'id')->widget(FileInput::classname(), [
-    $form->field($model->userInfo, 'user_files[]')->widget(FileInput::classname(), [
-        'options' => [
-            'accept' => 'application/pdf',
-            'multiple' => true,
-        ],
-        //TODO: в модель
-        'pluginOptions' => [
-            'showRemove' => false,
-            'initialPreview' => $filesPluginOptions['initialPreview'],
-            'initialPreviewAsData' => true,
-            'initialPreviewFileType' => 'pdf',
-            'initialCaption' => Yii::t('app', 'Дополнительные файлы'),
-            'initialPreviewConfig' => $filesPluginOptions['initialPreviewConfig'],
-            'overwriteInitial' => false,
-        ],
-        'pluginEvents' => [
-            'filebeforedelete' => 'function() {
-                var aborted = !window.confirm(' . json_encode(Yii::t('app', 'Вы уверены что хотите удалить элемент?')) . ');
-                return aborted;
-            }',
-        ],
-    ]);
+    $form->field($model->userInfo, 'user_files[]')->widget(FileInput::classname(), $fileUploadConfig);
     ?>
 
     <div class="form-group">

@@ -10,7 +10,7 @@ use common\models\TariffPlan;
 use common\models\info\Company;
 use common\models\info\UserFiles;
 use dektrium\user\models\User;
-
+use yii\helpers\Url;
 
 /**
  * This is the model class for table "user_info".
@@ -231,5 +231,52 @@ class UserInfo extends \yii\db\ActiveRecord
     public function getUserFiles()
     {
         return $this->hasMany(UserFiles::className(), ['id' => 'user_files_id'])->viaTable('user_info_user_files', ['user_info_id' => 'id']);
+    }
+
+    public function fileUploadConfig()
+    {
+        $filesPluginOptions = [
+            'initialPreview' => [],
+            'initialPreviewConfig' => [],
+        ];
+
+        foreach ($this->userFiles as $key => $file) {
+            //TODO: проверить (реализовать) секьюрность (чтобы чужие файлы не открывались)
+            $filesPluginOptions['initialPreview'][] = Url::to(['/office/user-file', 'id' => $file->id]);
+            $filesPluginOptions['initialPreviewConfig'][] = [
+                'key' => $key,
+                'filetype' => $file->mime_type,
+                'caption' => $file->name,
+                'size' => strlen($file->content),
+                'url' => Url::to(['/office/user-file', 'id' => $file->id, 'action' => 'remove']),
+                'downloadUrl' => Url::to(['/office/user-file', 'id' => $file->id, 'action' => 'download']),
+            ];
+        }
+
+        $options = [
+            'options' => [
+                'accept' => 'application/pdf',
+                'multiple' => true,
+            ],
+            //TODO: в модель
+            'pluginOptions' => [
+                'showRemove' => false,
+                'initialPreview' => $filesPluginOptions['initialPreview'],
+                'initialPreviewAsData' => true,
+                'initialPreviewFileType' => 'pdf',
+                'initialCaption' => Yii::t('app', 'Дополнительные файлы'),
+                'initialPreviewConfig' => $filesPluginOptions['initialPreviewConfig'],
+                'overwriteInitial' => false,
+            ],
+            'pluginEvents' => [
+                'filebeforedelete' =>
+                    'function() {
+                        var aborted = !window.confirm(' . json_encode(Yii::t('app', 'Вы уверены что хотите удалить элемент?')) . ');
+                        return aborted;
+                    }',
+            ],
+        ];
+
+        return $options;
     }
 }
