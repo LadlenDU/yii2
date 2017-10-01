@@ -205,7 +205,13 @@ class DebtorParse extends Model
                             //TODO: цифровой формат может иметь запятую в качестве разделителя разрядов (1,336.44)
                             //в то время как в оригинале будет 1336,44 (1 336,44)
                             //выяснить почему и как обойтись без потенциальных ошибок
-                            $col = str_replace([' ', ','], '', $colPrepared);
+                            //TODO 2: в CSV запятая разделяет копейки. Попробуем искать точку, если она есть, то действуем
+                            //как прежде.
+                            if (strpos($colPrepared, '.') !== false) {
+                                $col = str_replace([' ', ','], '', $colPrepared);
+                            } else {
+                                $col = str_replace([' ', ','], ['', '.'], $colPrepared);
+                            }
                         } elseif ($headers[$key][1] == 'privatized') {
                             $col = ($colPrepared == 'приватизированное') ? 1 : 0;
                         } elseif ($headers[$key][1] == 'date' || $headers[$key][1] == 'payment_date') {
