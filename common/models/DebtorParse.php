@@ -9,6 +9,21 @@ use yii\base\UserException;
 
 class DebtorParse extends Model
 {
+    protected static $MONTHS = [
+        'янв' => 1,
+        'фев' => 2,
+        'мар' => 3,
+        'апр' => 4,
+        'май' => 5,
+        'июн' => 6,
+        'июл' => 7,
+        'авг' => 8,
+        'сен' => 9,
+        'окт' => 10,
+        'ноя' => 11,
+        'дек' => 12,
+    ];
+
     protected static $FIELDS_DEBTOR = [
         'first_name' => [
             'имя',
@@ -193,9 +208,9 @@ class DebtorParse extends Model
     {
         if ($info['headers']) {
             //TODO: костыль - сделать сравнение пользователей
-            DebtorExt::deleteAll();
+            //DebtorExt::deleteAll();
             //TODO: кроме того, посмотреть корректность удаления
-            DebtDetails::deleteAll();
+            //DebtDetails::deleteAll();
 
             foreach ($info['colInfo'] as $rowInfo) {
                 $debtor = new DebtorExt;
@@ -291,6 +306,20 @@ class DebtorParse extends Model
             }
 
             $sheetData[$key] = $row;
+
+            // дата
+            $sheetData[$key][14] = trim($sheetData[$key][14]);
+            if ($sheetData[$key][14]) {
+                list($month, $year) = explode('.', $sheetData[$key][14]);
+                $monthShortName = mb_substr(trim($month), 0, 3, 'UTF-8');
+                $year = '20' . trim($year);
+                $monthNumber = isset(self::$MONTHS[$monthShortName]) ? self::$MONTHS[$monthShortName] : 1;
+                if ($monthNumber < 10) {
+                    $monthNumber = '0' . $monthNumber;
+                }
+                $sheetData[$key][14] = "01/$monthNumber/$year";
+            }
+
             $sheetData[$key][15] = $street;
             $sheetData[$key][16] = $building;
         }
