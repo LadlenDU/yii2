@@ -259,14 +259,14 @@ class DebtorParse extends Model
                 continue;
             }
 
-            if (!$sheetData[$key][0]) {
+            if (!$row[0]) {
                 // Начало части "улица-дом"
                 $startPart = 1;
                 continue;
             }
 
             // Вычисляем конец части "улица-дом"
-            $itogo = mb_strtolower(mb_substr($sheetData[$key][0], 0, 5, 'UTF-8'), 'UTF-8');
+            $itogo = mb_strtolower(mb_substr($row[0], 0, 5, 'UTF-8'), 'UTF-8');
             if ($itogo == 'итого') {
                 /*if ('Итого по всем домам' == $sheetData[$key][0]) {
                 }*/
@@ -274,7 +274,7 @@ class DebtorParse extends Model
             }
 
             if ($startPart == 1) {
-                list($street, $building) = explode('д.', $sheetData[$key][0]);
+                list($street, $building) = explode('д.', $row[0]);
                 //list($street, $building) = explode('ул.', $sheetData[$key][0]);
                 /*$parts = explode('ул.', $sheetData[$key][0]);
                 if (empty($parts[1])) {

@@ -57,6 +57,7 @@ class DebtDetails extends \yii\db\ActiveRecord
             'date' => Yii::t('app', 'Дата'),
             'payment_date' => Yii::t('app', 'Дата оплаты'),
             'public_service_id' => Yii::t('app', 'Public Service ID'),
+            'debtor.LS_IKU_provider' => 'TTYYTU',
         ];
     }
 
