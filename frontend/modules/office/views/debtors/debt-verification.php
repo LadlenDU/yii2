@@ -11,6 +11,7 @@ use yii\widgets\ActiveForm;
 use kartik\helpers\Enum;
 use yii\helpers\Html;
 use common\models\Debtor;
+use common\models\DebtDetailsExt;
 
 #use yiister\adminlte\widgets\grid\GridView;
 #use yii\grid\GridView;
@@ -50,6 +51,7 @@ HTML;
         'vAlign' => 'middle',
         'format' => 'raw',
         'order' => DynaGrid::ORDER_FIX_LEFT,
+        'pageSummary' => Yii::t('app', 'Сумма:'),
     ],
     /*[
         'attribute' => 'Квитанция',
@@ -133,6 +135,11 @@ HTML;
         'label' => Yii::t('app', 'Сумма долга'),
         'format' => ['decimal', 2],
         'hAlign' => 'right',
+        //'pageSummary' => true,
+        'pageSummary' => function () {
+            //return 400;
+            return DebtDetailsExt::getTotalAmount();
+        },
     ],
     [
         'attribute' => 'amount_additional_services',
@@ -382,6 +389,7 @@ echo DynaGrid::widget([
     'gridOptions' => [
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'showPageSummary' => true,
         /*'floatHeader' => true,*/
         'pjax' => true,
         'panel' => [
