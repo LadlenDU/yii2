@@ -14,12 +14,24 @@ use Yii;
  * @property string $date
  * @property string $payment_date
  * @property integer $public_service_id
+ * @property string $incoming_balance_debit
+ * @property string $incoming_balance_credit
+ * @property string $charges_permanent
+ * @property string $accrued_subsidies
+ * @property string $one_time_charges
+ * @property string $paid
+ * @property string $paid_insurance
+ * @property string $grants_paid
+ * @property string $outgoing_balance_debit
+ * @property string $outgoing_balance_credit
+ * @property string $overdue_debts
  *
  * @property Debtor $debtor
  * @property PublicService $publicService
  */
 class DebtDetails extends \yii\db\ActiveRecord
 {
+    //TODO: перенести в DebtDetailsExt
     const DEBT_DIVISION_VALUE = 20000;
 
     /**
@@ -37,7 +49,7 @@ class DebtDetails extends \yii\db\ActiveRecord
     {
         return [
             [['debtor_id', 'public_service_id'], 'integer'],
-            [['amount', 'amount_additional_services'], 'number'],
+            [['amount', 'amount_additional_services', 'incoming_balance_debit', 'incoming_balance_credit', 'charges_permanent', 'accrued_subsidies', 'one_time_charges', 'paid', 'paid_insurance', 'grants_paid', 'outgoing_balance_debit', 'outgoing_balance_credit', 'overdue_debts'], 'number'],
             [['date', 'payment_date'], 'safe'],
             [['debtor_id'], 'exist', 'skipOnError' => true, 'targetClass' => Debtor::className(), 'targetAttribute' => ['debtor_id' => 'id']],
             [['public_service_id'], 'exist', 'skipOnError' => true, 'targetClass' => PublicService::className(), 'targetAttribute' => ['public_service_id' => 'id']],
@@ -57,7 +69,17 @@ class DebtDetails extends \yii\db\ActiveRecord
             'date' => Yii::t('app', 'Дата'),
             'payment_date' => Yii::t('app', 'Дата оплаты'),
             'public_service_id' => Yii::t('app', 'Public Service ID'),
-            'debtor.LS_IKU_provider' => 'TTYYTU',
+            'incoming_balance_debit' => Yii::t('app', 'Входящее сальдо (дебет)'),
+            'incoming_balance_credit' => Yii::t('app', 'Входящее сальдо (кредит)'),
+            'charges_permanent' => Yii::t('app', 'Начисления постоянные'),
+            'accrued_subsidies' => Yii::t('app', 'Начисленные субсидии'),
+            'one_time_charges' => Yii::t('app', 'Начисления разовые'),
+            'paid' => Yii::t('app', 'Оплачено'),
+            'paid_insurance' => Yii::t('app', 'Оплачено страховки'),
+            'grants_paid' => Yii::t('app', 'Оплачено субсидий'),
+            'outgoing_balance_debit' => Yii::t('app', 'Исходящее сальдо (дебет)'),
+            'outgoing_balance_credit' => Yii::t('app', 'Исходящее сальдо (кредит)'),
+            'overdue_debts' => Yii::t('app', 'Просроченная задолженность'),
         ];
     }
 

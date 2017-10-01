@@ -160,6 +160,63 @@ HTML;
         },
         'format' => 'raw',
     ],
+
+    [
+        'attribute' => 'incoming_balance_debit',
+        'format' => ['decimal', 2],
+        'hAlign' => 'right',
+    ],
+    [
+        'attribute' => 'incoming_balance_credit',
+        'format' => ['decimal', 2],
+        'hAlign' => 'right',
+    ],
+    [
+        'attribute' => 'charges_permanent',
+        'format' => ['decimal', 2],
+        'hAlign' => 'right',
+    ],
+    [
+        'attribute' => 'accrued_subsidies',
+        'format' => ['decimal', 2],
+        'hAlign' => 'right',
+    ],
+    [
+        'attribute' => 'one_time_charges',
+        'format' => ['decimal', 2],
+        'hAlign' => 'right',
+    ],
+    [
+        'attribute' => 'paid',
+        'format' => ['decimal', 2],
+        'hAlign' => 'right',
+    ],
+    [
+        'attribute' => 'paid_insurance',
+        'format' => ['decimal', 2],
+        'hAlign' => 'right',
+    ],
+    [
+        'attribute' => 'grants_paid',
+        'format' => ['decimal', 2],
+        'hAlign' => 'right',
+    ],
+    [
+        'attribute' => 'outgoing_balance_debit',
+        'format' => ['decimal', 2],
+        'hAlign' => 'right',
+    ],
+    [
+        'attribute' => 'outgoing_balance_credit',
+        'format' => ['decimal', 2],
+        'hAlign' => 'right',
+    ],
+    [
+        'attribute' => 'overdue_debts',
+        'format' => ['decimal', 2],
+        'hAlign' => 'right',
+    ],
+
     [
         'attribute' => Yii::t('app', 'Пошлина'),
         'value' => function (\common\models\DebtDetails $model, $key, $index) {

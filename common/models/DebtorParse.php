@@ -108,9 +108,39 @@ class DebtorParse extends Model
             'дата оплаты',
             'Месяц последней оплаты',
         ],
-        /*'payment_date' => [
-            'дата оплаты',
-        ],*/
+        'incoming_balance_debit' => [
+            'Входящее сальдо (дебет)',
+        ],
+        'incoming_balance_credit' => [
+            'Входящее сальдо (кредит)',
+        ],
+        'charges_permanent' => [
+            'Начисления постоянные',
+        ],
+        'accrued_subsidies' => [
+            'Начисленные субсидии',
+        ],
+        'one_time_charges' => [
+            'Начисления разовые',
+        ],
+        'paid' => [
+            'Оплачено',
+        ],
+        'paid_insurance' => [
+            'Оплачено страховки',
+        ],
+        'grants_paid' => [
+            'Оплачено субсидий',
+        ],
+        'outgoing_balance_debit' => [
+            'Исходящее сальдо (дебет)',
+        ],
+        'outgoing_balance_credit' => [
+            'Исходящее сальдо (кредит)',
+        ],
+        'overdue_debts' => [
+            'Просроченная задолженность',
+        ],
     ];
 
     protected static $FIELDS_IGNORE = [
@@ -161,10 +191,9 @@ class DebtorParse extends Model
                         if ($debtDetailsColName = self::findColumName(self::$FIELDS_DEBT_DETAILS, $col)) {
                             $headers[$key] = ['debt_details', $debtDetailsColName, $col];
                         } else {
-                            //TODO: Не распознанные колонки игнорируем (пока)
-                            /*$exception = new ColumnNotFoundException(Yii::t('app', "Колонка '$col' не найдена."));
+                            $exception = new ColumnNotFoundException(Yii::t('app', "Колонка '$col' не найдена."));
                             $exception->setWrongColumnName($col);
-                            throw $exception;*/
+                            throw $exception;
                         }
                     }
                 } else {
