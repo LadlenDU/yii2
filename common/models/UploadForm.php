@@ -41,6 +41,7 @@ class UploadForm extends Model
 
     public function uploadCsv()
     {
+        //TODO: косяк, костыль - исправить
         //if ($this->validate()) {
         if (1) {
             $fileName = tempnam(Yii::getAlias('@common') . '/uploads/debtors', 'csv_');
