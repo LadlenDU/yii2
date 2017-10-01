@@ -137,8 +137,7 @@ HTML;
         'hAlign' => 'right',
         //'pageSummary' => true,
         'pageSummary' => function () {
-            //return 400;
-            return DebtDetailsExt::getTotalAmount();
+            return DebtDetailsExt::getTotalOfColumn('amount');
         },
     ],
     [
@@ -165,56 +164,89 @@ HTML;
         'attribute' => 'incoming_balance_debit',
         'format' => ['decimal', 2],
         'hAlign' => 'right',
+        'pageSummary' => function () {
+            return DebtDetailsExt::getTotalOfColumn('incoming_balance_debit');
+        },
     ],
     [
         'attribute' => 'incoming_balance_credit',
         'format' => ['decimal', 2],
         'hAlign' => 'right',
+        'pageSummary' => function () {
+            return DebtDetailsExt::getTotalOfColumn('incoming_balance_credit');
+        },
     ],
     [
         'attribute' => 'charges_permanent',
         'format' => ['decimal', 2],
         'hAlign' => 'right',
+        'pageSummary' => function () {
+            return DebtDetailsExt::getTotalOfColumn('charges_permanent');
+        },
     ],
     [
         'attribute' => 'accrued_subsidies',
         'format' => ['decimal', 2],
         'hAlign' => 'right',
+        'pageSummary' => function () {
+            return DebtDetailsExt::getTotalOfColumn('accrued_subsidies');
+        },
     ],
     [
         'attribute' => 'one_time_charges',
         'format' => ['decimal', 2],
         'hAlign' => 'right',
+        'pageSummary' => function () {
+            return DebtDetailsExt::getTotalOfColumn('one_time_charges');
+        },
     ],
     [
         'attribute' => 'paid',
         'format' => ['decimal', 2],
         'hAlign' => 'right',
+        'pageSummary' => function () {
+            return DebtDetailsExt::getTotalOfColumn('paid');
+        },
     ],
     [
         'attribute' => 'paid_insurance',
         'format' => ['decimal', 2],
         'hAlign' => 'right',
+        'pageSummary' => function () {
+            return DebtDetailsExt::getTotalOfColumn('paid_insurance');
+        },
     ],
     [
         'attribute' => 'grants_paid',
         'format' => ['decimal', 2],
         'hAlign' => 'right',
+        'pageSummary' => function () {
+            return DebtDetailsExt::getTotalOfColumn('grants_paid');
+        },
     ],
     [
         'attribute' => 'outgoing_balance_debit',
         'format' => ['decimal', 2],
         'hAlign' => 'right',
+        'pageSummary' => function () {
+            return DebtDetailsExt::getTotalOfColumn('outgoing_balance_debit');
+        },
     ],
     [
         'attribute' => 'outgoing_balance_credit',
         'format' => ['decimal', 2],
         'hAlign' => 'right',
+        'pageSummary' => function () {
+            return DebtDetailsExt::getTotalOfColumn('outgoing_balance_credit');
+        },
     ],
     [
         'attribute' => 'overdue_debts',
         'format' => ['decimal', 2],
         'hAlign' => 'right',
+        'pageSummary' => function () {
+            return DebtDetailsExt::getTotalOfColumn('overdue_debts');
+        },
     ],
 
     [

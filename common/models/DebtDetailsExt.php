@@ -9,10 +9,10 @@ class DebtDetailsExt extends DebtDetails
     /**
      * Возвращает тотальную сумму долга.
      */
-    public static function getTotalAmount()
+    public static function getTotalOfColumn($fieldName)
     {
         $query = (new \yii\db\Query())->from(self::tableName());
-        $sum = $query->sum('amount');
+        $sum = $query->sum($fieldName);
         return $sum;
     }
 }
