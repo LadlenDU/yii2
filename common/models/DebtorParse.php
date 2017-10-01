@@ -206,15 +206,43 @@ class DebtorParse extends Model
 
     public static function saveDebtors(array $info)
     {
+        $saveResult = [
+            'added' => 0,
+            'updated' => 0,
+        ];
+
         if ($info['headers']) {
             //TODO: костыль - сделать сравнение пользователей
             //DebtorExt::deleteAll();
             //TODO: кроме того, посмотреть корректность удаления
             //DebtDetails::deleteAll();
 
+            // Найдем индекс, по которому искать уникальность пользователя
+            $uniqueIndex = '';
+            foreach ($info['headers'] as $key => $elem) {
+                if ($elem[1] == 'LS_IKU_provider') {
+                    $uniqueIndex = $key;
+                    break;
+                }
+            }
+
             foreach ($info['colInfo'] as $rowInfo) {
-                $debtor = new DebtorExt;
-                $debtDetails = new DebtDetails();
+
+                $whetherUpdate = false;
+
+                // Поиск уникального
+                if ($debtor = Debtor::find()->where(['LS_IKU_provider' => $rowInfo[$uniqueIndex]])->one()) {
+                    // Обновляем
+                    $whetherUpdate = true;
+                    //TODO: косяк - должник может иметь несколько долгов (пока оставим)
+                    $debtDetails = $debtor->debtDetails[0];
+                } else {
+                    $debtor = new DebtorExt;
+                    $debtDetails = new DebtDetails();
+                }
+
+                //$debtor = new DebtorExt;
+                //$debtDetails = new DebtDetails();
                 foreach ($rowInfo as $key => $colInfo) {
                     if (!empty($info['headers'][$key])) {
                         if ($info['headers'][$key][0] == 'debtor') {
@@ -233,6 +261,9 @@ class DebtorParse extends Model
                 if ($debtor->validate()) {
                     $debtor->save();
                     $debtor->link('debtDetails', $debtDetails);
+
+                    $whetherUpdate ? ++$saveResult['updated'] : ++$saveResult['added'];
+
                 } else {
                     $err = print_r($debtor->getErrors(), true);
                     throw new UserException(Yii::t('app', "Данные не прошли валидацию: $err"));
@@ -241,6 +272,8 @@ class DebtorParse extends Model
         } else {
             throw new UserException(Yii::t('app', 'Не обнаружены заголовки.'));
         }
+
+        return $saveResult;
     }
 
     /**

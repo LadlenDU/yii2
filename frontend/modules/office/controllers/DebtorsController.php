@@ -108,8 +108,13 @@ class DebtorsController extends Controller
     {
         try {
             $info = DebtorParse::scrapeDebtorsFromArray($sheetData);
-            DebtorParse::saveDebtors($info);
-            Yii::$app->getSession()->setFlash('success', Yii::t('app', 'Должники успешно добавлены в БД.'));
+            $saveResult = DebtorParse::saveDebtors($info);
+            $msg = Yii::t('app', 'Успешно прошла операция добавления в БД.') . "\n";
+            $addedNumber = empty($saveResult['added']) ? 0 : $saveResult['added'];
+            $updatedNumber = empty($saveResult['updated']) ? 0 : $saveResult['updated'];
+            $msg .= "Должников добавлено: $addedNumber\n"
+                . "Должников обновлено: $updatedNumber\n";
+            Yii::$app->getSession()->setFlash('success', $msg);
         } catch (\Exception $e) {
             Yii::$app->getSession()->setFlash('error', $e->getMessage());
         }
