@@ -146,9 +146,10 @@ class DebtorParse extends Model
                         if ($debtDetailsColName = self::findColumName(self::$FIELDS_DEBT_DETAILS, $col)) {
                             $headers[$key] = ['debt_details', $debtDetailsColName, $col];
                         } else {
-                            $exception = new ColumnNotFoundException(Yii::t('app', "Колонка '$col' не найдена."));
+                            //TODO: Не распознанные колонки игнорируем (пока)
+                            /*$exception = new ColumnNotFoundException(Yii::t('app', "Колонка '$col' не найдена."));
                             $exception->setWrongColumnName($col);
-                            throw $exception;
+                            throw $exception;*/
                         }
                     }
                 } else {
@@ -234,6 +235,10 @@ class DebtorParse extends Model
      */
     public function format_1(array $sheetDataRaw)
     {
+        //TODO: ужасный костыль - исправить
+        ini_set('memory_limit', '-1');
+        ini_set('max_execution_time', 1000);
+
         $sheetData = [];
 
         $startPart = 0;
