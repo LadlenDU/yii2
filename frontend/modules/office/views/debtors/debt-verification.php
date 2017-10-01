@@ -252,7 +252,7 @@ HTML;
     [
         'attribute' => Yii::t('app', 'Пошлина'),
         'value' => function (\common\models\DebtDetails $model, $key, $index) {
-            return $model->calculateStateFee();
+            return $model->calculateStateFee2();
         },
         'format' => ['decimal', 2],
         'hAlign' => 'right',

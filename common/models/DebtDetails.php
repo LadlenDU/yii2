@@ -31,7 +31,7 @@ use Yii;
  */
 class DebtDetails extends \yii\db\ActiveRecord
 {
-    //TODO: перенести в DebtDetailsExt
+    //TODO: перенести в DebtDetailsExt (есть проблемы с этим, однако - можно оставить)
     const DEBT_DIVISION_VALUE = 20000;
 
     /**
@@ -99,6 +99,11 @@ class DebtDetails extends \yii\db\ActiveRecord
         return $this->hasOne(PublicService::className(), ['id' => 'public_service_id'])->inverseOf('debtDetails');
     }
 
+    /**
+     * Расчет пошлины.
+     *
+     * @return float|int
+     */
     public function calculateStateFee()
     {
         if ($this->amount < self::DEBT_DIVISION_VALUE) {
@@ -107,6 +112,39 @@ class DebtDetails extends \yii\db\ActiveRecord
         } else {
             $midVal = $this->amount - self::DEBT_DIVISION_VALUE;
             $fee = $midVal / 100 * 3 + 800;
+        }
+
+        return $fee;
+    }
+
+    /**
+     * Расчет пошлины - новая редакция (действует на Oct.01.2017).
+     *
+     * @return float|int
+     */
+    public function calculateStateFee2()
+    {
+        if ($this->amount <= 10000) {
+            // до 10 000 рублей - 2 процента цены иска, но не менее 200 рублей;
+            $fee = $this->amount / 100 * 2;
+            $fee = ($fee < 200) ? 200 : $fee;
+        } elseif ($this->amount <= 20000) {
+            // до 20 000 рублей - 2 процента цены иска, но не менее 400 рублей;
+            $fee = $this->amount / 100 * 2;
+            $fee = ($fee < 400) ? 400 : $fee;
+        } elseif ($this->amount <= 100000) {
+            // от 20 001 рубля до 100 000 рублей - 400 рублей плюс 1,5 процента суммы, превышающей 20 000 рублей;
+            $fee = 400 + $this->amount / 100 * 1.5;
+        } elseif ($this->amount <= 200000) {
+            // от 100 001 рубля до 200 000 рублей - 800 рублей плюс 1 процента суммы, превышающей 100 000 рублей;
+            $fee = 800 + $this->amount / 100 * 1;
+        } elseif ($this->amount <= 1000000) {
+            // от 200 001 рубля до 1 000 000 рублей - 1700 рублей плюс 1 процент суммы, превышающей 200 000 рублей;
+            $fee = 1700 + $this->amount / 100 * 1;
+        } else {
+            // свыше 1 000 000 рублей - 4150 рублей плюс 0,5 процента суммы, превышающей 1 000 000 рублей, но не более 30 000 рублей;
+            $fee = 4150 + $this->amount / 100 * .5;
+            $fee = ($fee > 30000) ? 30000 : $fee;
         }
 
         return $fee;
