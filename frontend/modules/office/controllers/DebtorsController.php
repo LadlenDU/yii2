@@ -78,14 +78,7 @@ class DebtorsController extends Controller
             // file is uploaded successfully
             $objPHPExcel = \PHPExcel_IOFactory::load($fileName);
             $sheetData = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
-
-            try {
-                $info = DebtorParse::scrapeDebtorsFromArray($sheetData);
-                DebtorParse::saveDebtors($info);
-                Yii::$app->getSession()->setFlash('success', Yii::t('app', 'Должники успешно добавлены в БД.'));
-            } catch (\Exception $e) {
-                Yii::$app->getSession()->setFlash('error', $e->getMessage());
-            }
+            $this->addDebtors($sheetData);
         }
     }
 
@@ -93,17 +86,32 @@ class DebtorsController extends Controller
     {
         $uploadModel->csvFile = UploadedFile::getInstance($uploadModel, 'csvFile');
         if ($fileName = $uploadModel->uploadCsv()) {
-            // file is uploaded successfully
-            /*$objPHPExcel = \PHPExcel_IOFactory::load($fileName);
-            $sheetData = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
+            if ($handle = fopen($fileName, 'r')) {
+                $sheetDataRaw = [];
+                $count = 0;
+                while (($data = fgetcsv($handle, 0, ';')) !== false) {
+                    $sheetDataRaw[] = $data;
+                }
+                fclose($handle);
 
-            try {
-                $info = DebtorParse::scrapeDebtorsFromArray($sheetData);
-                DebtorParse::saveDebtors($info);
-                Yii::$app->getSession()->setFlash('success', Yii::t('app', 'Должники успешно добавлены в БД.'));
-            } catch (\Exception $e) {
-                Yii::$app->getSession()->setFlash('error', $e->getMessage());
-            }*/
+                $sheetData = DebtorParse::format_1($sheetDataRaw);
+                $this->addDebtors($sheetData);
+
+            } else {
+                //TODO: логирование
+                Yii::$app->getSession()->setFlash('error', Yii::t('app', 'Не удался импорт из-за внутренней ошибки.'));
+            }
+        }
+    }
+
+    protected function addDebtors($sheetData)
+    {
+        try {
+            $info = DebtorParse::scrapeDebtorsFromArray($sheetData);
+            DebtorParse::saveDebtors($info);
+            Yii::$app->getSession()->setFlash('success', Yii::t('app', 'Должники успешно добавлены в БД.'));
+        } catch (\Exception $e) {
+            Yii::$app->getSession()->setFlash('error', $e->getMessage());
         }
     }
 
@@ -114,20 +122,16 @@ class DebtorsController extends Controller
         //$sheetData = '';
 
         if (Yii::$app->request->isPost) {
-            switch (Yii::$app->request->post('action'))
-            {
-                case 'upload_debtors_excel':
-                {
+            switch (Yii::$app->request->post('action')) {
+                case 'upload_debtors_excel': {
                     $this->handleDebtorsExcelFile($uploadModel);
                     break;
                 }
-                case 'upload_debtors_csv':
-                {
+                case 'upload_debtors_csv': {
                     $this->handleDebtorsCsvFile($uploadModel);
                     break;
                 }
-                default:
-                {
+                default: {
                     break;
                 }
             }

@@ -222,4 +222,55 @@ class DebtorParse extends Model
             throw new UserException(Yii::t('app', 'Не обнаружены заголовки.'));
         }
     }
+
+    /**
+     * Форматирование "сырого" формата первого csv файла ("2014.csv")
+     *
+     * @param array $sheetDataRaw
+     */
+    public function format_1(array $sheetDataRaw)
+    {
+        $sheetData = [];
+
+        $startPart = 0;
+        $street = '';
+        $building = 0;
+
+        foreach ($sheetDataRaw as $key => $row) {
+            if ($key < 9) {
+                continue;
+            }
+
+            $sheetData[$key] = $row;
+
+            if ($key == 9) {
+                $sheetData[9][3] = 'Входящее сальдо (дебет)';
+                $sheetData[9][4] = 'Входящее сальдо (кредит)';
+                $sheetData[9][11] = 'Исходящее сальдо (дебет)';
+                $sheetData[9][12] = 'Исходящее сальдо (кредит)';
+                // Отсутствующие поля
+                $sheetData[9][15] = 'Улица';
+                $sheetData[9][16] = 'Дом';
+                continue;
+            }
+
+            if (!$sheetData[$key][0]) {
+                $startPart = 1;
+                continue;
+            }
+
+            if ($startPart == 1) {
+                list($street, $building) = explode('ул.', $sheetData[0]);
+                $street = trim($street);
+                $building = trim(str_replace('д.', '', $building));
+                $startPart = 2;
+                continue;
+            }
+
+            $sheetData[$key][15] = $street;
+            $sheetData[$key][16] = $building;
+        }
+
+        return $sheetData;
+    }
 }
