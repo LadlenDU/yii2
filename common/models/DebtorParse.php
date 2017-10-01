@@ -23,6 +23,7 @@ class DebtorParse extends Model
             'ФИО',
             'фамилия,имя,отчество',
             'фамилия, имя, отчество',
+            'ФИО квартиросъемщика',
         ],
         'address' => [
             'адрес',
@@ -39,6 +40,7 @@ class DebtorParse extends Model
         'appartment' => [
             'кв.',
             'квартира',
+            '№ кв.',
         ],
         'phone' => [
             'телефон',
@@ -79,6 +81,7 @@ class DebtorParse extends Model
     protected static $FIELDS_DEBT_DETAILS = [
         'amount' => [
             'сумма долга',
+            'исходящее сальдо (кредит)'
         ],
         'amount_additional_services' => [
             'сумма долга с допуслугами',
@@ -88,6 +91,7 @@ class DebtorParse extends Model
         ],
         'payment_date' => [
             'дата оплаты',
+            'Месяц последней оплаты',
         ],
         /*'payment_date' => [
             'дата оплаты',
@@ -241,9 +245,10 @@ class DebtorParse extends Model
                 continue;
             }
 
-            $sheetData[$key] = $row;
+            //$sheetData[$key] = $row;
 
             if ($key == 9) {
+                $sheetData[$key] = $row;
                 $sheetData[9][3] = 'Входящее сальдо (дебет)';
                 $sheetData[9][4] = 'Входящее сальдо (кредит)';
                 $sheetData[9][11] = 'Исходящее сальдо (дебет)';
@@ -255,18 +260,32 @@ class DebtorParse extends Model
             }
 
             if (!$sheetData[$key][0]) {
+                // Начало части "улица-дом"
                 $startPart = 1;
                 continue;
             }
 
+            // Вычисляем конец части "улица-дом"
+            $itogo = mb_strtolower(mb_substr($sheetData[$key][0], 0, 5, 'UTF-8'), 'UTF-8');
+            if ($itogo == 'итого') {
+                /*if ('Итого по всем домам' == $sheetData[$key][0]) {
+                }*/
+                continue;
+            }
+
             if ($startPart == 1) {
-                list($street, $building) = explode('ул.', $sheetData[0]);
+                list($street, $building) = explode('д.', $sheetData[$key][0]);
+                //list($street, $building) = explode('ул.', $sheetData[$key][0]);
+                /*$parts = explode('ул.', $sheetData[$key][0]);
+                if (empty($parts[1])) {
+                }*/
                 $street = trim($street);
                 $building = trim(str_replace('д.', '', $building));
                 $startPart = 2;
                 continue;
             }
 
+            $sheetData[$key] = $row;
             $sheetData[$key][15] = $street;
             $sheetData[$key][16] = $building;
         }
