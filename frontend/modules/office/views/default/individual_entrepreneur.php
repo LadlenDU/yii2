@@ -88,7 +88,7 @@ $companies = $model->userInfo->companies;
 
     <?php
     $items = ['' => Yii::t('app', 'Не выбрано')] + ArrayHelper::map($model->userInfo->companies, 'id', 'full_name');
-    echo $form->field($model->userInfo, 'primary_company')->dropDownList($items);
+    echo $form->field(Yii::$app->user->identity->userInfo, 'primary_company')->dropDownList($items, ['id' => 'primary_company']);
     ?>
 
     <? /*= $form->field($model, 'user_info_id') */ ?>

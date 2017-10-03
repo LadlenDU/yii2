@@ -76,7 +76,8 @@ class DefaultController extends Controller
 
         //TODO: код переместить в модель
         //TODO: также проверить корректно ли работает  UserInfo::find()->where(['user_id' => Yii::$app->user->identity->getId()])->one()
-        if ($infoModel = UserInfo::find()->where(['user_id' => Yii::$app->user->identity->getId()])->one()) {
+        //if ($infoModel = UserInfo::find()->where(['user_id' => Yii::$app->user->identity->getId()])->one()) {
+        if ($infoModel = Yii::$app->user->identity->userInfo) {
             switch ($infoModel->attributes['registration_type_id']) {
                 case 1: {
                     // юридическое лицо
