@@ -16,7 +16,18 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'short_name')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'legal_address_location_id')->textInput() ?>
+    <? /*= $form->field($model, 'legal_address_location_id')->textInput() */ ?>
+    <?php
+
+    #$this->render('@frontend/modules/office/views/_location', ['model' => $model->legalAddressLocation]);
+    echo Yii::$app->controller->renderPartial('@frontend/modules/office/views/_location',
+        [
+            'form' => $form,
+            'model' => $model->legalAddressLocation,
+        ]
+    );
+
+    ?>
 
     <?= $form->field($model, 'actual_address_location_id')->textInput() ?>
 
@@ -45,7 +56,7 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Создать') : Yii::t('app', 'Обновить'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

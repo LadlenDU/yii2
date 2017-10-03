@@ -127,7 +127,7 @@ class CompanyController extends Controller
     {
         $userInfoId = UserInfo::find()->where(['user_id' => Yii::$app->user->identity->getId()])->one()->primaryKey;
         $model = Company::find()
-            ->joinWith(['userInfoCompanies'])
+            ->joinWith(['userInfoCompanies', 'legalAddressLocation'])
             ->andFilterWhere(['user_info_company.user_info_id' => $userInfoId, 'company.id' => $id])
             ->one();
 

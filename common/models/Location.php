@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use common\models\info\Company;
 
 /**
  * This is the model class for table "location".
@@ -21,6 +22,9 @@ use Yii;
  * @property string $zip_code
  * @property string $arbitraty
  *
+ * @property Company[] $companies
+ * @property Company[] $companies0
+ * @property Debtor[] $debtors
  * @property UserInfo[] $userInfos
  */
 class Location extends \yii\db\ActiveRecord
@@ -63,6 +67,30 @@ class Location extends \yii\db\ActiveRecord
             'zip_code' => Yii::t('app', 'почтовый индекс'),
             'arbitraty' => Yii::t('app', 'произвольная строка адреса (если не дано разделение по элементам)'),
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCompanies()
+    {
+        return $this->hasMany(Company::className(), ['actual_address_location_id' => 'id'])->inverseOf('actualAddressLocation');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCompanies0()
+    {
+        return $this->hasMany(Company::className(), ['legal_address_location_id' => 'id'])->inverseOf('legalAddressLocation');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDebtors()
+    {
+        return $this->hasMany(Debtor::className(), ['location_id' => 'id'])->inverseOf('location');
     }
 
     /**
