@@ -6,6 +6,7 @@ use kartik\file\FileInput;
 use yii\helpers\Url;
 use yii\widgets\Pjax;
 use kartik\grid\GridView;
+use yii\helpers\ArrayHelper;
 
 //use kartik\date\DatePicker;
 
@@ -22,15 +23,15 @@ $fileUploadConfig = $model->userInfo->fileUploadConfig();
 
 ?>
 
-<div class="company-index">
+<!--<div class="company-index">
 
-    <label class="control-label"><?= Html::encode(Yii::t('app', 'Список компаний')) ?></label>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <label class="control-label"><? /*= Html::encode(Yii::t('app', 'Список компаний')) */ ?></label>
+    <?php /*// echo $this->render('_search', ['model' => $searchModel]); */ ?>
 
     <p>
-        <?= Html::a(Yii::t('app', 'Создать компанию'), ['/office/company/create'], ['class' => 'btn btn-success']) ?>
+        <? /*= Html::a(Yii::t('app', 'Создать компанию'), ['/office/company/create'], ['class' => 'btn btn-success']) */ ?>
     </p>
-    <?php Pjax::begin(); ?>    <?= GridView::widget([
+    <?php /*Pjax::begin(); */ ?>    <? /*= GridView::widget([
         'dataProvider' => $companies['dataProvider'],
         'filterModel' => $companies['searchModel'],
         'columns' => [
@@ -59,27 +60,36 @@ $fileUploadConfig = $model->userInfo->fileUploadConfig();
                 'urlCreator' => function ($action, $model, $key, $index) {
                     $url = Url::to(["/office/company/$action", 'id' => $model->id]);
                     return $url;
-                    /*if ($action === 'view') {
-                        $url = 'index.php?r=client-login/lead-view&id=' . $model->id;
-                        return $url;
-                    }
-                    if ($action === 'update') {
-                        $url = 'index.php?r=client-login/lead-update&id=' . $model->id;
-                        return $url;
-                    }
-                    if ($action === 'delete') {
-                        $url = 'index.php?r=client-login/lead-delete&id=' . $model->id;
-                        return $url;
-                    }*/
                 },
             ],
         ],
-    ]); ?>
-    <?php Pjax::end(); ?></div>
+    ]); */ ?>
+    <?php /*Pjax::end(); */ ?></div>-->
+
+<?php
+
+/*$companies = $model->userInfo->companies;
+foreach ($companies as $comp) {
+    echo '$comp';
+}*/
+
+#$authors = Author::find()->all();
+// формируем массив, с ключем равным полю 'id' и значением равным полю 'name'
+#$items = ArrayHelper::map($model->userInfo->companies, 'id', 'full_name');
+#echo $form->field($model->userInfo->companies, 'full_name')->dropDownList($items);
+
+$companies = $model->userInfo->companies;
+
+?>
 
 <div class="individual_entrepreneur">
 
     <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
+
+    <?php
+    $items = ['' => Yii::t('app', 'Не выбрано')] + ArrayHelper::map($model->userInfo->companies, 'id', 'full_name');
+    echo $form->field($model->userInfo, 'primary_company')->dropDownList($items);
+    ?>
 
     <? /*= $form->field($model, 'user_info_id') */ ?>
     <? /*= $form->field($model, 'birthday') */ ?>

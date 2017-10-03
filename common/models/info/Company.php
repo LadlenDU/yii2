@@ -32,8 +32,9 @@ use common\models\UserInfoCompany;
  * @property Name $cEO
  * @property Location $actualAddressLocation
  * @property Location $legalAddressLocation
- * @property UserInfoCompany[] $userInfoCompanies
  * @property UserInfo[] $userInfos
+ * @property UserInfoCompany[] $userInfoCompanies
+ * @property UserInfo[] $userInfos0
  */
 class Company extends \yii\db\ActiveRecord
 {
@@ -113,6 +114,14 @@ class Company extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getUserInfos()
+    {
+        return $this->hasMany(UserInfo::className(), ['primary_company' => 'id'])->inverseOf('primaryCompany');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getUserInfoCompanies()
     {
         return $this->hasMany(UserInfoCompany::className(), ['company_id' => 'id'])->inverseOf('company');
@@ -121,7 +130,7 @@ class Company extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUserInfos()
+    public function getUserInfos0()
     {
         return $this->hasMany(UserInfo::className(), ['id' => 'user_info_id'])->viaTable('user_info_company', ['company_id' => 'id']);
     }

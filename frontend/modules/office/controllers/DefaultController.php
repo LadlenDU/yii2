@@ -121,7 +121,14 @@ class DefaultController extends Controller
                                 $userFiles->mime_type = $upFile->type;
                                 $userFiles->save();
                                 $infoModel->link('userFiles', $userFiles);
-                                $infoModel->save(false);
+                                //$infoModel->save(false);
+                            }
+                        }
+
+                        //TODO: оптимизировать
+                        if ($infoModel->load(Yii::$app->request->post())) {
+                            if (!$infoModel->validate() || !$infoModel->save()) {
+                                Yii::$app->session->setFlash('danger', Yii::t('app', 'Произошла ошибка при сохранении формы.'));
                             }
                         }
 

@@ -22,11 +22,13 @@ use yii\helpers\Url;
  * @property string $balance
  * @property integer $tariff_plan_id
  * @property integer $location_id
+ * @property integer $primary_company
  *
  * @property Individual $individual
  * @property IndividualEntrepreneur $individualEntrepreneur
  * @property LegalEntity $legalEntity
  * @property Location $location
+ * @property Company $primaryCompany
  * @property RegistrationType $registrationType
  * @property TariffPlan $tariffPlan
  * @property User $user
@@ -64,11 +66,12 @@ class UserInfo extends \yii\db\ActiveRecord
     {
         return [
             [['user_id'], 'required'],
-            [['user_id', 'complete', 'registration_type_id', 'tariff_plan_id', 'location_id'], 'integer'],
+            [['user_id', 'complete', 'registration_type_id', 'tariff_plan_id', 'location_id', 'primary_company'], 'integer'],
             [['balance'], 'number'],
             [['user_id'], 'unique'],
             [['user_files'], 'safe'],
             [['location_id'], 'exist', 'skipOnError' => true, 'targetClass' => Location::className(), 'targetAttribute' => ['location_id' => 'id']],
+            [['primary_company'], 'exist', 'skipOnError' => true, 'targetClass' => Company::className(), 'targetAttribute' => ['primary_company' => 'id']],
             [['registration_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => RegistrationType::className(), 'targetAttribute' => ['registration_type_id' => 'id']],
             [['tariff_plan_id'], 'exist', 'skipOnError' => true, 'targetClass' => TariffPlan::className(), 'targetAttribute' => ['tariff_plan_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
@@ -89,6 +92,8 @@ class UserInfo extends \yii\db\ActiveRecord
             'tariff_plan_id' => Yii::t('app', 'Tariff Plan ID'),
             'location_id' => Yii::t('app', 'Location ID'),
             'user_files' => Yii::t('app', 'Пользовательские файлы'),
+            //'companies' => Yii::t('app', 'Компании'),
+            'primary_company' => Yii::t('app', 'Компания по умолчанию'),
         ];
     }
 
@@ -122,6 +127,14 @@ class UserInfo extends \yii\db\ActiveRecord
     public function getLocation()
     {
         return $this->hasOne(Location::className(), ['id' => 'location_id'])->inverseOf('userInfos');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPrimaryCompany()
+    {
+        return $this->hasOne(Company::className(), ['id' => 'primary_company'])->inverseOf('userInfos');
     }
 
     /**
