@@ -125,9 +125,13 @@ class HelpersFine
     protected $rateType;
     protected $back;
     protected $resultView;
+
     protected $payDates = [];
     protected $paySums = [];
     protected $payFor = [];
+
+    protected $loanDates = [];
+    protected $loanSums = [];
 
     protected $rateTypes = [
         1 => 'на конец периода',
@@ -175,7 +179,18 @@ class HelpersFine
      * @param bool $back Применять обратную силу закона (не рекомендуется)
      * @param array $payDates Частичная оплата задолженности
      */
-    public function fineCalculator($loanAmount, $dateStart, $dateFinish, $rateType = 2, $back = false, $resultView = 0, $payDates = [], $paySums = [], $payFor = [])
+    public function fineCalculator($loanAmount,
+                                   $dateStart,
+                                   $dateFinish,
+                                   $rateType = 2,
+                                   $back = false,
+                                   $resultView = 0,
+                                   $payDates = [],
+                                   $paySums = [],
+                                   $payFor = [],
+                                   $loanDates = [],
+                                   $loanSums = []
+    )
     {
         $this->loanAmount = $loanAmount;
         $this->dateStart = $dateStart;
@@ -186,6 +201,8 @@ class HelpersFine
         $this->payDates = $payDates;
         $this->paySums = $paySums;
         $this->payFor = $payFor;
+        $this->loanDates = $loanDates;
+        $this->loanSums = $loanSums;
     }
 
     //TODO: заполнить
@@ -225,6 +242,77 @@ class HelpersFine
         }
 
         return $res;
+    }
+
+    protected function collectLoans()
+    {
+        $res = [];
+        $payDates = $this->loanDates;
+        if (!$payDates) {
+            return $res;
+        }
+        $val = null;
+        if ($payDates) {// больше, чем 2 оплаты
+            $paySums = $this->loanSums;
+            for ($i = 0; $i < count($payDates); $i++) {
+                $val = $this->testLoanLine($payDates[$i], $paySums[$i]);
+                if (!$val) {
+                    return null;
+                }
+                if ($val['date'] != null) {
+                    $res[] = $val;
+                }
+            }
+        } else {
+            $val = $this->testLoanLine($this->loanDates, $this->loanSums);
+            if (!$val) {
+                return null;
+            }
+            if ($val['date'] != null) {
+                $res[] = $val;
+            }
+        }
+
+        return $res;
+    }
+
+    protected function preparePayments($payments)
+    {
+        if (!$payments) {
+            return '';
+        }
+        $res = '';
+        /*for ($i = 0; $i < count($payments); $i++) {
+            $p = $payments[$i];
+            $res .= ';' . fd($p['date']) . '_' . $p['sum'] . '_' . ($p['payFor'] ? (($p['payFor'].getMonth() < (10 - 1)? '0' : '') . ($p['payFor'].getMonth() + 1)) . '.' . $p['payFor'].getFullYear(): '');
+        }*/
+        return substr($res, 1);     //.substring(1);
+    }
+
+    protected function fd($date)
+    {
+        return '';
+        //$day = $date.getDate();
+        /*if (day < 10)
+            day = '0' + day;
+        var monthIndex = date.getMonth() + 1;
+        if (monthIndex < 10)
+            monthIndex = '0' + monthIndex;
+        var year = date.getFullYear();
+        return day + '.' + monthIndex + '.' + year;*/
+    }
+
+    function prepareLoans($payments)
+    {
+        if (!$payments) {
+            return '';
+        }
+        $res = '';
+        for ($i = 0; $i < count($payments); $i++) {
+            $p = $payments[$i];
+            $res .= ';' . $this->fd($p['date']) . '_' . $p['sum'];
+        }
+        return substr($res, 1);
     }
 
 
