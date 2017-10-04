@@ -2,7 +2,7 @@
 
 class HelpersFine
 {
-    public $data = [
+    protected $data = [
         [0, '01.01.2999'],
         [8.5, '18.09.2017'],
         [9.0, '19.06.2017'],
@@ -97,43 +97,46 @@ class HelpersFine
         [20, '01.01.1992']
     ];
 
-    public $datesBase = [];
-    public $percents = [];
+    protected $datesBase = [];
+    protected $percents = [];
 
-    public $DATA_TYPE_INFO = 1;
-    public $DATA_TYPE_PAYED = 2;
+    protected $DATA_TYPE_INFO = 1;
+    protected $DATA_TYPE_PAYED = 2;
 
-    public $RATE_TYPE_SINGLE = 1;
-    public $RATE_TYPE_PERIOD = 2;
-    public $RATE_TYPE_PAY = 3;
-    public $RATE_TYPE_TODAY = 4;
+    protected $RATE_TYPE_SINGLE = 1;
+    protected $RATE_TYPE_PERIOD = 2;
+    protected $RATE_TYPE_PAY = 3;
+    protected $RATE_TYPE_TODAY = 4;
 
-    public $RESULT_VIEW_SIMPLE = 0;
-    public $RESULT_VIEW_BUH = 1;
+    protected $RESULT_VIEW_SIMPLE = 0;
+    protected $RESULT_VIEW_BUH = 1;
 
-    public $NEW_LAW; //2016, 0, 1
+    protected $NEW_LAW; //2016, 0, 1
 
     //TODO: возможно, надо будет заполнить в конструкторе
-    public $VACATION_DAYS = [];
-    public $WORK_DAYS = [];
+    protected $VACATION_DAYS = [];
+    protected $WORK_DAYS = [];
 
 
     // my variables
-    public $loanAmount;
-    public $dateStart;
-    public $dateFinish;
-    public $rateType;
-    public $back;
-    public $resultView;
+    protected $loanAmount;
+    protected $dateStart;
+    protected $dateFinish;
+    protected $rateType;
+    protected $back;
+    protected $resultView;
+    protected $payDates = [];
+    protected $paySums = [];
+    protected $payFor = [];
 
-    public $rateTypes = [
+    protected $rateTypes = [
         1 => 'на конец периода',
         2 => 'по периодам действия ставки рефинансирования',
         3 => 'на день частичной оплаты',
         4 => 'на день подачи иска в суд (сегодня)',
     ];
 
-    public $resultViews = [
+    protected $resultViews = [
         0 => 'Обычный',
         1 => 'Бухгалтерский',
     ];
@@ -170,8 +173,9 @@ class HelpersFine
      * @param \DateTime $dateFinish - желательно предыдущий день
      * @param array $rateType
      * @param bool $back Применять обратную силу закона (не рекомендуется)
+     * @param array $payDates Частичная оплата задолженности
      */
-    public function fineCalculator($loanAmount, $dateStart, $dateFinish, $rateType = 2, $back = false, $resultView = 0)
+    public function fineCalculator($loanAmount, $dateStart, $dateFinish, $rateType = 2, $back = false, $resultView = 0, $payDates = [], $paySums = [], $payFor = [])
     {
         $this->loanAmount = $loanAmount;
         $this->dateStart = $dateStart;
@@ -179,10 +183,52 @@ class HelpersFine
         $this->rateType = $rateType;
         $this->back = $rateType;
         $this->resultView = $resultView;
+        $this->payDates = $payDates;
+        $this->paySums = $paySums;
+        $this->payFor = $payFor;
+    }
+
+    //TODO: заполнить
+    protected function testPaymentLine()
+    {
+
+    }
+
+    protected function collectPayments()
+    {
+        $res = [];
+        $payDates = $this->payDates;
+        if ($payDates) {
+            return $res;
+        }
+        $val = null;
+        if ($payDates) {// больше, чем 2 оплаты
+            $paySums = $this->paySums;
+            $payOrders = $this->payFor;
+            for ($i = 0; $i < count($payDates); $i++) {
+                $val = $this->testPaymentLine($payDates[$i], $paySums[$i], $payOrders[$i]);
+                if (!$val) {
+                    return null;
+                }
+                if ($val['date'] != null) {
+                    $res[] = $val;
+                }
+            }
+        } else {
+            $val = $this->testPaymentLine($payDates[0], $this->paySums[0], $this->payFor[0]);
+            if (!$val) {
+                return null;
+            }
+            if ($val['date'] != null) {
+                $res[] = $val;
+            }
+        }
+
+        return $res;
     }
 
 
-    public function updateData($showErrors)
+    protected function updateData($showErrors)
     {
         $dates = $this->datesBase;
         //$('.calc .error-field').removeClass('error-field');
@@ -229,72 +275,43 @@ class HelpersFine
         $rateType = $hash['rateType'] = $this->rateTypes[$this->rateType];
 
         $reverse = $hash['back'] = $this->back;
-        $resultView = $hash['resultView'] = parseInt($('form[name=calcTable] input[name=resultView]:checked') . val());
+        $resultView = $hash['resultView'] = $this->resultView;
 
-        var
-        payments = collectPayments();
-        if (payments === null) {
-            errors . push('Ошибка заполнения полей погашения задолженности');
+        $payments = $this->collectPayments();
+        if ($payments === null) {
+            throw new \Exception(Yii::t('app', 'Ошибка заполнения полей погашения задолженности'));
         }
-        var
-        loans = collectLoans();
-        if (loans === null) {
-            errors . push('Ошибка заполнения полей новых задолженностей');
+        $loans = $this->collectLoans();
+        if ($loans === null) {
+            throw new \Exception(Yii::t('app', 'Ошибка заполнения полей новых задолженностей'));
         }
 
+        $hash['payments'] = $this->preparePayments($payments);
+        $hash['loans'] = $this->prepareLoans($loans);
+        $this->updateHash($hash);
+        $this->checkVacationInput('lfWarn', 'dateStart', true);
 
-        var
-        el = $('#error-pane');
-        if (errors . length) {
-            if (showErrors) {
-                var
-                html = '<ul>';
-                for (var i = 0; i < errors . length; i++)
-				html += '<li>' + errors[i] + '</li>';
-			html += '</ul>';
-			el . html(html);
-			el . show();
-			document . location . hash = '';
-			document . location . hash = 'calc-error';
-		}
-            return;
+        //$loans.unshift({sum: loanAmount, date: dateStart, order: ''});
+        array_unshift($loans, ['sum' => $loanAmount, 'date' => $dateStart, 'order' => '']);
+
+        $toPayments = $this->clearLoans($loans);
+        $loans = $this->sortLoans($loans);
+        $payments = $this->sortPayments(payments + toPayments);
+
+        $payments = $this->splitPayments($payments, $loans, $loanAmount, $dateStart, $dateFinish);
+
+        $periods = [];
+        for ($i = 0; $i < count($loans); $i++) {
+            $loan = $loans[$i];
+            $periods[] = $this->countForPeriod($loan['sum'], $loan['date'], $dateFinish, $payments[$i], $rateType, $reverse);
         }
-        el . hide();
 
-        hash['payments'] = preparePayments(payments);
-        hash['loans'] = prepareLoans(loans);
-        updateHash(hash);
-        checkVacationInput('lfWarn', 'dateStart', true);
+        // html format
+        $resultPane = ($resultView == $this->RESULT_VIEW_BUH) ? $this->getBuhHtml($periods) : $this->getClassicHtml($periods);
 
-        loans . unshift({sum: loanAmount, date: dateStart, order: ''});
+//	document . getElementById('dateStartRes') . innerHTML = fd(dateStart);
+//	document . getElementById('dateFinishRes') . innerHTML = fd(dateFinish);
+//	document . getElementById('rateTypeRes') . innerHTML = document . getElementById('rateType') . options[document . getElementById('rateType') . selectedIndex] . innerHTML;
 
-	var toPayments = clearLoans(loans);
-	loans = sortLoans(loans);
-	payments = sortPayments(payments . concat(toPayments));
-
-	payments = splitPayments(payments, loans, loanAmount, dateStart, dateFinish);
-
-	var periods = [];
-	for (var i = 0; i < loans . length; i++) {
-        var
-        loan = loans[i];
-        periods . push(countForPeriod(loan . sum, loan . date, dateFinish, payments[i], rateType, reverse));
     }
-
-
-	document . getElementById('resultPane') . innerHTML =
-        resultView == RESULT_VIEW_BUH ? getBuhHtml(periods) : getClassicHtml(periods);
-
-	document . getElementById('dateStartRes') . innerHTML = fd(dateStart);
-	document . getElementById('dateFinishRes') . innerHTML = fd(dateFinish);
-	document . getElementById('rateTypeRes') . innerHTML = document . getElementById('rateType') . options[document . getElementById('rateType') . selectedIndex] . innerHTML;
-
-	var href = document . location . href;
-	$('#djuLink') . html(href);
-	var aHref = $('#djuHref');
-	aHref . attr('href', href);
-	aHref . html(cutLink(href));
-
-	clips . show();
-}
 }
