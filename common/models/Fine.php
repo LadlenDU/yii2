@@ -122,7 +122,21 @@ class HelpersFine
     public $loanAmount;
     public $dateStart;
     public $dateFinish;
+    public $rateType;
+    public $back;
+    public $resultView;
 
+    public $rateTypes = [
+        1 => 'на конец периода',
+        2 => 'по периодам действия ставки рефинансирования',
+        3 => 'на день частичной оплаты',
+        4 => 'на день подачи иска в суд (сегодня)',
+    ];
+
+    public $resultViews = [
+        0 => 'Обычный',
+        1 => 'Бухгалтерский',
+    ];
 
     public function _construct()
     {
@@ -153,13 +167,18 @@ class HelpersFine
      *
      * @param float $loanAmount
      * @param \DateTime $dateStart
-     * @param \DateTime $dateFinish
+     * @param \DateTime $dateFinish - желательно предыдущий день
+     * @param array $rateType
+     * @param bool $back Применять обратную силу закона (не рекомендуется)
      */
-    public function fineCalculator($loanAmount, $dateStart, $dateFinish)
+    public function fineCalculator($loanAmount, $dateStart, $dateFinish, $rateType = 2, $back = false, $resultView = 0)
     {
         $this->loanAmount = $loanAmount;
         $this->dateStart = $dateStart;
         $this->dateFinish = $dateFinish;
+        $this->rateType = $rateType;
+        $this->back = $rateType;
+        $this->resultView = $resultView;
     }
 
 
@@ -204,17 +223,13 @@ class HelpersFine
             throw new \Exception(Yii::t('app', 'Дата начала периода оказалась больше даты окончания'));
         }
 
-        var
-        rateType = hash['rateType'] = document . getElementById('rateType') . options[document . getElementById('rateType') . selectedIndex] . value;
-        if (!rateType) {
-            wrongData('rateType');
-            errors . push('Тип расчёта процентных ставок не выбран');
+        if (!$this->rateType) {
+            throw new \Exception(Yii::t('app', 'Тип расчёта процентных ставок не выбран'));
         }
+        $rateType = $hash['rateType'] = $this->rateTypes[$this->rateType];
 
-        var
-        reverse = hash['back'] = document . getElementById('back') . checked;
-        var
-        resultView = hash['resultView'] = parseInt($('form[name=calcTable] input[name=resultView]:checked') . val());
+        $reverse = $hash['back'] = $this->back;
+        $resultView = $hash['resultView'] = parseInt($('form[name=calcTable] input[name=resultView]:checked') . val());
 
         var
         payments = collectPayments();
