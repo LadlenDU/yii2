@@ -302,7 +302,7 @@ class HelpersFine
         return day + '.' + monthIndex + '.' + year;*/
     }
 
-    function prepareLoans($payments)
+    protected function prepareLoans($payments)
     {
         if (!$payments) {
             return '';
@@ -315,6 +315,143 @@ class HelpersFine
         return substr($res, 1);
     }
 
+    protected function updateHash($requestData)
+    {
+        $this->uh($requestData);
+    }
+
+    protected function uh($requestData)
+    {
+        $res = '';
+        foreach ($requestData as $word => $data) {
+            if ($data) {
+                $res .= "&" . $word . "=" . $data;
+            }
+        }
+
+    }
+
+    protected function clearLoans($arr)
+    {
+        $res = [];
+        $i = 0;
+        while ($i < count($arr)) {
+            $c = $arr[$i];
+            if ($c['sum'] < 0) {
+                $res[count($res)] = ['date' => $c['date'], 'datePlus' => $c['datePlus'], 'sum' => -$c['sum'], 'payFor' => null];
+                //arr . splice(i, 1);
+                unset($arr[$i]);
+            } else {
+                $i++;
+            }
+        }
+        return $res;
+    }
+
+    protected function checkVacationInput($errorId, $inputId, $isExpire)
+    {
+        return;
+        /*$input = document . getElementById($inputId);
+        $d = $this->dateStart;
+        if ($isExpire) {
+            $d . setDate($d . getDate() - 1);
+        }
+
+        var
+        el = errorId ? $('#' + errorId) : null;
+        if (!d || !checkVacation(d)) {
+            $(input) . removeClass('warning-field');
+            if (el) el . hide();
+            return;
+        }
+        // это выходной!
+        do {
+            d = new Date(d . getTime() + ONE_DAY);
+        } while (checkVacation(d));
+        $(input) . addClass('warning-field');
+        var
+        newDate = fd(isExpire ? new Date(d . getTime() + ONE_DAY) : d);
+        if (el) {
+            if (isExpire)
+                el . html('Дата, предшествующая дню просрочки, установлена на выходной день. Согласно <a style="color:#990000" target="_blank" href="https://dogovor-urist.ru/кодексы/гк_рф_1/статья_193/">ст. 193 ГК РФ</a> необходимо изменить дату на ближайший рабочий день.<br><a href="javascript:" onclick="var el = document.getElementById(\'' + inputId + '\'); el.value=\'' + newDate + '\'; el.onchange()">Изменить на ' + newDate + '</a>');
+            else
+                el . html('Дата установлена на выходной день. Согласно <a style="color:#990000" target="_blank" href="https://dogovor-urist.ru/кодексы/гк_рф_1/статья_193/">ст. 193 ГК РФ</a> необходимо изменить дату на ближайший рабочий день. <a href="javascript:" onclick="var el = document.getElementById(\'' + inputId + '\'); el.value=\'' + newDate + '\'; el.onchange()">Изменить на ' + newDate + '</a>');
+            el . show();
+        }*/
+    }
+
+    protected function sortLoans($arr) {
+            return $arr;
+        /*for (var i = 0; i + 1 < arr.length; i++)
+        for (var j = i + 1; j < arr.length; j++)
+            if (arr[i].date > arr[j].date) {
+                var tmp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = tmp;
+            }
+    return arr;*/
+    }
+
+    protected function sortPayments($arr) {
+            return $arr;
+        /*for (var i = 0; i + 1 < arr.length; i++) {
+            for (var j = i + 1; j < arr.length; j++) {
+                if (arr[i].date > arr[j].date) {
+                    var tmp = arr[i];
+                    arr[i] = arr[j];
+                    arr[j] = tmp;
+                }
+            }
+        }
+        return arr;*/
+    }
+
+    protected function splitPayments($payments, $loans) {
+	$res = [];
+	$i;
+	//$loans = $loans.slice(0);
+
+	for ($i = 0; $i < count($loans); $i++) {
+		$res[$i] = [];
+		$c = $loans[$i];
+		$loans[$i] = {sum: c.sum, date: c.date, month: c.date.getFullYear()*12 + c.date.getMonth(), order: c.order};
+}
+
+for (i = 0; i < payments.length; i++) {
+    var payment = payments[i];
+    if (payment.payFor) {
+        var curMonth = payment.payFor.getFullYear()*12 + payment.payFor.getMonth() + 1;
+        var j;
+        // ищем текущий месяц
+        for (j = 0; j < loans.length; j++) {
+            if (loans[j].month == curMonth)
+                break;
+        }
+
+        if (j < loans.length) { // нашли
+            var loan = loans[j];
+            var toCut = Math.min(payment.sum, loan.sum);
+            if (toCut >= 0.01) {
+                loan.sum -= toCut;
+                payment.sum -= toCut;
+                res[j].push({date: payment.date, datePlus: payment.datePlus, sum: toCut, payFor: payment.payFor});
+				}
+        }
+    }
+
+    for (j = 0; j < loans.length && payment.sum > 0; j++) {
+        var loan = loans[j];
+        var toCut = Math.min(payment.sum, loan.sum);
+
+        if (toCut >= 0.01) {
+            loan.sum -= toCut;
+            payment.sum -= toCut;
+            res[j].push({date: payment.date, datePlus: payment.datePlus, sum: toCut, payFor: payment.payFor});
+			}
+    }
+}
+return res;
+}
 
     protected function updateData($showErrors)
     {
@@ -384,7 +521,7 @@ class HelpersFine
 
         $toPayments = $this->clearLoans($loans);
         $loans = $this->sortLoans($loans);
-        $payments = $this->sortPayments(payments + toPayments);
+        $payments = $this->sortPayments($payments + $toPayments);
 
         $payments = $this->splitPayments($payments, $loans, $loanAmount, $dateStart, $dateFinish);
 
