@@ -630,8 +630,9 @@ class Fine
     protected function countCost($money, $days, $percent, $ratePart)
     {
         $res = $money * $days * $percent * $ratePart / 100.;
-        $res = round($res * 100) / 100;
-        return (float)$this->toDigitsAfter($res, 2);
+        $res = round($res, 2);
+        //return (float)$this->toDigitsAfter($res, 2);
+        return $res;
     }
 
     protected function processData($sum, $data, $dateStart, $dateFinish)
@@ -965,7 +966,9 @@ class Fine
         }
 
         // html format
+        echo '<pre>';
         print_r($periods);
+        echo '</pre>';
         //$resultPane = ($resultView == $this->RESULT_VIEW_BUH) ? $this->getBuhHtml($periods) : $this->getClassicHtml($periods);
 
 //	document . getElementById('dateStartRes') . innerHTML = fd(dateStart);
