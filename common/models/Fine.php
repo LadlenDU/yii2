@@ -2,13 +2,15 @@
 
 namespace common\models;
 
+use Yii;
+
 class Fine
 {
     protected $ONE_DAY;
 
     protected $data = [
         //[0, '01.01.2999'],
-        [0, '01.01.2099'],
+        [0, '01.01.2038'],  // на 32-битных системах
         [8.5, '18.09.2017'],
         [9.0, '19.06.2017'],
         [9.25, '02.05.2017'],
@@ -159,7 +161,8 @@ class Fine
             $this->percents[] = $this->data[$i][0];
         }
 
-        $ONE_DAY = 1000 * 60 * 60 * 24;
+        //$this->ONE_DAY = 1000 * 60 * 60 * 24;
+        $this->ONE_DAY = 60 * 60 * 24;
 
         $this->NEW_LAW = strtotime('2016-00-01');
 
@@ -190,7 +193,7 @@ class Fine
     public function fineCalculator($loanAmount,
                                    $dateStart,
                                    $dateFinish,
-                                   $rateType = 2,
+                                   $rateType = 4,
                                    $back = false,
                                    $resultView = 0,
                                    $payDates = [],
@@ -294,6 +297,7 @@ class Fine
 
     protected function collectPayments()
     {
+        return [];  //TODO: fix
         $res = [];
         $payDates = $this->payDates;
         if ($payDates) {
@@ -401,7 +405,7 @@ class Fine
         $this->uh($requestData);
     }
 
-    protected function uh($requestData)
+    protected function uh($requestData) // just an url hash?
     {
         $res = '';
         foreach ($requestData as $word => $data) {
@@ -412,15 +416,15 @@ class Fine
 
     }
 
-    protected function clearLoans($arr)
+    protected function clearLoans($arr)     // Отчистка долгов с отрицательной суммой
     {
         $res = [];
         $i = 0;
-        while ($i < count($arr)) {
+        while ($i < count($arr)) {  //TODO: get rid of count
             $c = $arr[$i];
             if ($c['sum'] < 0) {
-                $res[count($res)] = ['date' => $c['date'], 'datePlus' => $c['datePlus'], 'sum' => -$c['sum'], 'payFor' => null];
-                //arr . splice(i, 1);
+                $res[] = ['date' => $c['date'], 'datePlus' => isset($c['datePlus']) ? $c['datePlus'] : null, 'sum' => -$c['sum'], 'payFor' => null];
+                //arr.splice(i, 1);
                 unset($arr[$i]);
             } else {
                 $i++;
@@ -493,19 +497,19 @@ class Fine
     {
         $res = [];
         //$loans = $loans.slice(0);
-
-        for ($i = 0; $i < count($loans); $i++) {
+        $loans = array_values($loans);  //$loans = $loans.slice(0); ???
+        for ($i = 0; $i < count($loans); $i++) {    //TODO: get rid of count()
             $res[$i] = [];
             $c = $loans[$i];
             //$loans[$i] = ['sum' => $c['sum'], 'date' => $c['date'], 'month' => $c['date'].getFullYear()*12 + c.date.getMonth(), order: c.order];
-            $loans[$i] = ['sum' => $c['sum'], 'date' => $c['date'], 'month' => 1, 'order' => $c['order']];
+            $loans[$i] = ['sum' => $c['sum'], 'date' => $c['date'], 'month' => date('Y', $c['date']) * 12 + date('n', $c['date']) - 1, 'order' => $c['order']];
         }
 
-        for ($i = 0; $i < count($payments); $i++) {
+        for ($i = 0; $i < count($payments); $i++) { //TODO: get rid of count()
             $payment = $payments[$i];
             if ($payment['payFor']) {
                 //$curMonth = payment.payFor.getFullYear()*12 + payment.payFor.getMonth() + 1;
-                $curMonth = 2017;
+                $curMonth = date('Y', $payment['payFor']) * 12 + date('n', $payment['payFor']);
                 // ищем текущий месяц
                 for ($j = 0; $j < count($loans); $j++) {
                     if ($loans[$j]['month'] == $curMonth) {
@@ -732,29 +736,29 @@ class Fine
         } else if ($rateType == $this->RATE_TYPE_PAY) {
             $payDates = [$dateStart];
             $payPercents = [];
-		$curPercents = 0;
-		for ($i = 0; $i < count($payments) && $curPercents < count($percents); $i++) {
-            for (; $curPercents < count($percents); $curPercents++) {
-                if ($payments[$i]['date'] < $datesBase[$curPercents]) {
-                    $payDates[] = $payments[$i]['datePlus'];
-                    $payPercents[] = $curPercents >= 1 ? $percents[$curPercents - 1] : 0;
+            $curPercents = 0;
+            for ($i = 0; $i < count($payments) && $curPercents < count($percents); $i++) {
+                for (; $curPercents < count($percents); $curPercents++) {
+                    if ($payments[$i]['date'] < $datesBase[$curPercents]) {
+                        $payDates[] = $payments[$i]['datePlus'];
+                        $payPercents[] = $curPercents >= 1 ? $percents[$curPercents - 1] : 0;
+                        break;
+                    }
+                }
+            }
+            $dateFinishInd = 0;
+            for ($i = count($datesBase) - 1; $i >= 0; $i--) {
+                if ($dateFinish >= $datesBase[$i]) {
+                    $payPercents[] = $percents[$i];
                     break;
                 }
             }
-        }
-		$dateFinishInd = 0;
-		for ($i = count($datesBase) - 1; $i >= 0; $i--) {
-            if ($dateFinish >= $datesBase[$i]) {
-                $payPercents[] = $percents[$i];
-                break;
-            }
-        }
-		$payDates[] = mktime(0, 0, 0, 1, 1, 3000);
-		$payPercents[] = 0;
+            $payDates[] = mktime(0, 0, 0, 1, 1, 3000);
+            $payPercents[] = 0;
 
-		$preData = $this->pushRules($payDates, $payPercents, $rulesData, $dateStart, $dateFinish);
+            $preData = $this->pushRules($payDates, $payPercents, $rulesData, $dateStart, $dateFinish);
 
-	} else if ($rateType == $this->RATE_TYPE_TODAY) {
+        } else if ($rateType == $this->RATE_TYPE_TODAY) {
             $today = time();
             //today.setHours(0, 0, 0, 0);   //TODO: fix!!!
             $dateFinishInd = 0;
@@ -834,7 +838,7 @@ class Fine
                         $sum = 0;
                         continue;
                     }
-
+                    //TODO: count() вместо 'length' ???
                     if ($j + 1 >= $payments['length'] || $j + 1 < $payments['length'] && $payments[$j + 1]['datePlus'] > $data['dateFinish'] && $payment['date'] != $payments[$j + 1]['date']) {
                         $resData[] = ['type' => $this->DATA_TYPE_INFO, 'data' => $this->processData($sum, $data, $dateStartInPeriod, $data['dateFinish'])];
                     } else if ($j + 1 < $payments['length'] && $payments[$j + 1]['datePlus'] <= $data['dateFinish'] && $payment['date'] != $payments[$j + 1]['date']) {
@@ -867,7 +871,7 @@ class Fine
                 $sum = 0;
             }
 
-           $resData[] = ['type' => $this->DATA_TYPE_PAYED, 'data' => ['sum' => $toCut, 'date' => $payment['date'], 'order' => $payment['order']]];
+            $resData[] = ['type' => $this->DATA_TYPE_PAYED, 'data' => ['sum' => $toCut, 'date' => $payment['date'], 'order' => $payment['order']]];
         }
         return ['dateStart' => $dateStart, 'dateFinish' => $dateFinish, 'data' => $resData, 'endSum' => (float)$sum];
     }
@@ -898,19 +902,19 @@ class Fine
         $dateStart = $hash['dateStart'] = $this->dateStart;
         if (!$dateStart) {
             throw new \Exception(Yii::t('app', 'Дата начала периода не введена'));
-        } elseif ($dateStart > $dates[count($dates)]) {
+        } elseif ($dateStart > $dates[count($dates) - 1]) {
             throw new \Exception(Yii::t('app', 'Дата начала периода слишком большая'));
         }
 
         $dateFinish = $hash['dateFinish'] = $this->dateFinish;
         if (!$dateFinish) {
             throw new \Exception(Yii::t('app', 'Дата конца периода не введена'));
-        } else if ($dateFinish > $dates[count($dates)]) {
+        } else if ($dateFinish > $dates[count($dates) - 1]) {
             throw new \Exception(Yii::t('app', 'Дата конца периода слишком большая'));
         }
 
-        $totalDays = 0;
-        if ($dateFinish > $dateStart) {
+        $totalDays = ($dateFinish - $dateStart) / $this->ONE_DAY;
+        if ($totalDays <= 1) {
             throw new \Exception(Yii::t('app', 'Дата начала периода оказалась больше даты окончания'));
         }
 
@@ -946,7 +950,7 @@ class Fine
         $payments = $this->splitPayments($payments, $loans, $loanAmount, $dateStart, $dateFinish);
 
         $periods = [];
-        for ($i = 0; $i < count($loans); $i++) {
+        for ($i = 0; $i < count($loans); $i++) {    //TODO: gr of count()
             $loan = $loans[$i];
             $periods[] = $this->countForPeriod($loan['sum'], $loan['date'], $dateFinish, $payments[$i], $rateType, $reverse);
         }
