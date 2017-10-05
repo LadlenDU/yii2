@@ -863,7 +863,7 @@ class Fine
                 break;
             }
             if ($lastStartJ == $startJ) { // не было периода в диапазоне ставки
-                $resData[] = ['type' => $this->DATA_TYPE_INFO, $data => $this->processData($sum, $data, $data['dateStart'], $data['dateFinish'])];
+                $resData[] = ['type' => $this->DATA_TYPE_INFO, 'data' => $this->processData($sum, $data, $data['dateStart'], $data['dateFinish'])];
             }
         }
 
