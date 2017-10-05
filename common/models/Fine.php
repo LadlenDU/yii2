@@ -525,6 +525,32 @@ class HelpersFine
 
     }
 
+    protected function toDigitsAfter($amount, $digitsAfter)
+    {
+        //TODO: ??? - 'e'
+        $number = +round(+($amount . 'e' . $digitsAfter)) . 'e' . -$digitsAfter;
+        return number_format($number, $digitsAfter);
+    }
+
+
+    protected function getRate($part)
+    {
+        if ($part == '1/300') {
+            return 1. / 300;
+        }
+        if ($part == '1/130') {
+            return 1. / 130;
+        }
+        return 0;
+    }
+
+    protected function countCost($money, $days, $percent, $ratePart)
+    {
+        $res = $money * $days * $percent * $ratePart / 100.;
+        $res = round($res * 100) / 100;
+        return (float)$this->toDigitsAfter($res, 2);
+    }
+
     protected function processData($sum, $data, $dateStart, $dateFinish)
     {
         $ratePart = $data['rate'];
@@ -625,7 +651,8 @@ class HelpersFine
                 $dateStart,
                 $dateFinish);
         } else if ($rateType == $this->RATE_TYPE_PAY) {
-            $payDates = [$dateStart], $payPercents = [];
+            $payDates = [$dateStart]
+            $payPercents = [];
 		$curPercents = 0;
 		for ($i = 0; $i < count($payments) && $curPercents < count($percents); $i++) {
             for (; $curPercents < count($percents); $curPercents++) {
@@ -637,11 +664,12 @@ class HelpersFine
             }
         }
 		$dateFinishInd = 0;
-		for ($i = count($datesBase) - 1; $i >= 0; $i--)
+		for ($i = count($datesBase) - 1; $i >= 0; $i--) {
             if ($dateFinish >= $datesBase[$i]) {
                 $payPercents[] = $percents[$i];
                 break;
             }
+        }
 		$payDates[] = mktime(0, 0, 0, 1, 1, 3000);
 		$payPercents[] = 0;
 
@@ -845,7 +873,8 @@ class HelpersFine
         }
 
         // html format
-        $resultPane = ($resultView == $this->RESULT_VIEW_BUH) ? $this->getBuhHtml($periods) : $this->getClassicHtml($periods);
+        print_r($periods);
+        //$resultPane = ($resultView == $this->RESULT_VIEW_BUH) ? $this->getBuhHtml($periods) : $this->getClassicHtml($periods);
 
 //	document . getElementById('dateStartRes') . innerHTML = fd(dateStart);
 //	document . getElementById('dateFinishRes') . innerHTML = fd(dateFinish);
