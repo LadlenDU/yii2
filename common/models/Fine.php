@@ -164,19 +164,19 @@ class Fine
         //$this->ONE_DAY = 1000 * 60 * 60 * 24;
         $this->ONE_DAY = 60 * 60 * 24;
 
-        $this->NEW_LAW = strtotime('2016-00-01');
+        $this->NEW_LAW = strtotime('2016-01-01');
 
         // 2017
         for ($i = 1; $i <= 8; $i++) {
-            $this->VACATION_DAYS[] = strtotime("2017-0-$i");
-            $this->VACATION_DAYS[] = strtotime("2017-1-23");
-            $this->VACATION_DAYS[] = strtotime("2017-1-24");
-            $this->VACATION_DAYS[] = strtotime("2017-2-8");
-            $this->VACATION_DAYS[] = strtotime("2017-4-1");
-            $this->VACATION_DAYS[] = strtotime("2017-4-8");
-            $this->VACATION_DAYS[] = strtotime("2017-4-9");
-            $this->VACATION_DAYS[] = strtotime("2017-5-12");
-            $this->VACATION_DAYS[] = strtotime("2017-10-6");
+            $this->VACATION_DAYS[] = strtotime("2017-1-$i");
+            $this->VACATION_DAYS[] = strtotime("2017-2-23");
+            $this->VACATION_DAYS[] = strtotime("2017-2-24");
+            $this->VACATION_DAYS[] = strtotime("2017-3-8");
+            $this->VACATION_DAYS[] = strtotime("2017-5-1");
+            $this->VACATION_DAYS[] = strtotime("2017-5-8");
+            $this->VACATION_DAYS[] = strtotime("2017-5-9");
+            $this->VACATION_DAYS[] = strtotime("2017-6-12");
+            $this->VACATION_DAYS[] = strtotime("2017-11-6");
         }
     }
 
@@ -660,7 +660,6 @@ class Fine
      */
     protected function countForPeriod($sum, $dateStart, $dateFinish, $payments, $rateType, $reverse)
     {
-
         $rulesData = [];
         if ($reverse) {
             $newDate = $dateStart;
@@ -689,7 +688,7 @@ class Fine
             }
 
             if ($dateFinish >= $this->NEW_LAW) {
-                $newDate = ($dateStart < $this->NEW_LAW) ? $this->NEW_LAW : $this->dateStart;
+                $newDate = ($dateStart < $this->NEW_LAW) ? $this->NEW_LAW : $dateStart;
                 $days30 = $dateStart + (30 - 1) * $this->ONE_DAY;
                 $days90 = $dateStart + (90 - 1) * $this->ONE_DAY;
 
@@ -715,8 +714,8 @@ class Fine
 
         if ($rateType == $this->RATE_TYPE_SINGLE) {
             $dateFinishInd = 0;
-            for ($i = count($datesBase) - 1; $i >= 0; $i--)
-                if ($dateFinish >= $datesBase[$i]) {
+            for ($i = count($this->datesBase) - 1; $i >= 0; $i--)
+                if ($dateFinish >= $this->datesBase[$i]) {
                     $dateFinishInd = $i;
                     break;
                 }
@@ -727,7 +726,7 @@ class Fine
                     mktime(0, 0, 0, 1, 1, 3000)
                 ],
                 [
-                    $percents[$dateFinishInd],
+                    $this->percents[$dateFinishInd],
                     0,
                 ],
                 $rulesData,
@@ -737,19 +736,19 @@ class Fine
             $payDates = [$dateStart];
             $payPercents = [];
             $curPercents = 0;
-            for ($i = 0; $i < count($payments) && $curPercents < count($percents); $i++) {
-                for (; $curPercents < count($percents); $curPercents++) {
-                    if ($payments[$i]['date'] < $datesBase[$curPercents]) {
+            for ($i = 0; $i < count($payments) && $curPercents < count($this->datesBase); $i++) {
+                for (; $curPercents < count($this->percents); $curPercents++) {
+                    if ($payments[$i]['date'] < $this->datesBase[$curPercents]) {
                         $payDates[] = $payments[$i]['datePlus'];
-                        $payPercents[] = $curPercents >= 1 ? $percents[$curPercents - 1] : 0;
+                        $payPercents[] = $curPercents >= 1 ? $this->percents[$curPercents - 1] : 0;
                         break;
                     }
                 }
             }
             $dateFinishInd = 0;
-            for ($i = count($datesBase) - 1; $i >= 0; $i--) {
-                if ($dateFinish >= $datesBase[$i]) {
-                    $payPercents[] = $percents[$i];
+            for ($i = count($this->datesBase) - 1; $i >= 0; $i--) {
+                if ($dateFinish >= $this->datesBase[$i]) {
+                    $payPercents[] = $this->percents[$i];
                     break;
                 }
             }
@@ -760,10 +759,14 @@ class Fine
 
         } else if ($rateType == $this->RATE_TYPE_TODAY) {
             $today = time();
-            //today.setHours(0, 0, 0, 0);   //TODO: fix!!!
+            //today.setHours(0, 0, 0, 0);
+            $dt = new \DateTime();
+            $dt->setTimestamp($today);
+            $dt->setTime(0, 0);
+            $today = $dt->getTimestamp();
             $dateFinishInd = 0;
-            for ($i = count($datesBase) - 1; $i >= 0; $i--)
-                if ($today >= $datesBase[$i]) {
+            for ($i = count($this->datesBase) - 1; $i >= 0; $i--)
+                if ($today >= $this->datesBase[$i]) {
                     $dateFinishInd = $i;
                     break;
                 }
@@ -773,16 +776,16 @@ class Fine
                     mktime(0, 0, 0, 1, 1, 3000),
                 ],
                 [
-                    $percents[$dateFinishInd], 0
+                    $this->percents[$dateFinishInd], 0
                 ], $rulesData, $dateStart, $dateFinish);
         } else {
-            $preData = $this->pushRules($datesBase, $percents, $rulesData, $dateStart, $dateFinish);
+            $preData = $this->pushRules($this->datesBase, $this->percents, $rulesData, $dateStart, $dateFinish);
         }
 
         $resData = [];
         $startJ = 0;
 
-        $data;
+        $data = null;
 
         for ($j = $startJ; $j < count($payments); $j++) {
             $payment = $payments[$j];
@@ -790,7 +793,7 @@ class Fine
                 break;
             }
 
-            $toCut;
+            $toCut = null;
             if ($payment['sum'] <= $sum) {
                 $toCut = $payment['sum'];
                 $sum -= $payment['sum'];
@@ -860,7 +863,7 @@ class Fine
 
         for ($j = $startJ; $j < count($payments); $j++) {
             $payment = $payments[$j];
-            $toCut;
+            $toCut = null;
             if ($payment['sum'] <= $sum) {
                 $toCut = $payment['sum'];
                 $sum -= $payment['sum'];
@@ -918,10 +921,10 @@ class Fine
             throw new \Exception(Yii::t('app', 'Дата начала периода оказалась больше даты окончания'));
         }
 
+        $rateType = $hash['rateType'] = $this->rateType;
         if (!$this->rateType) {
             throw new \Exception(Yii::t('app', 'Тип расчёта процентных ставок не выбран'));
         }
-        $rateType = $hash['rateType'] = $this->rateTypes[$this->rateType];
 
         $reverse = $hash['back'] = $this->back;
         $resultView = $hash['resultView'] = $this->resultView;
