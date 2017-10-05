@@ -589,10 +589,10 @@ class Fine
             }
         }
 
-        for ($i = 0; $i < count($res); $i++) {
+        for ($i = 0; $i < count($res); $i++) {    //(возможно) TODO: зачем это? - похоже, в JS формируется ссылка на объект
             $d = $res[$i];
-            //d.dateStart = new Date(d.dateStart);
-            //d.dateFinish = new Date(d.dateFinish);
+            //$d['dateStart'] = new Date(d.dateStart);
+            //$d['dateFinish'] = new Date(d.dateFinish);
         }
 
         return $res;
@@ -723,7 +723,7 @@ class Fine
             $preData = $this->pushRules(
                 [
                     $dateStart,
-                    mktime(0, 0, 0, 1, 1, 3000)
+                    mktime(0, 0, 0, 1, 1, 2038),
                 ],
                 [
                     $this->percents[$dateFinishInd],
@@ -752,7 +752,7 @@ class Fine
                     break;
                 }
             }
-            $payDates[] = mktime(0, 0, 0, 1, 1, 3000);
+            $payDates[] = mktime(0, 0, 0, 1, 1, 2038);
             $payPercents[] = 0;
 
             $preData = $this->pushRules($payDates, $payPercents, $rulesData, $dateStart, $dateFinish);
@@ -765,19 +765,25 @@ class Fine
             $dt->setTime(0, 0);
             $today = $dt->getTimestamp();
             $dateFinishInd = 0;
-            for ($i = count($this->datesBase) - 1; $i >= 0; $i--)
+            for ($i = count($this->datesBase) - 1; $i >= 0; $i--) {
                 if ($today >= $this->datesBase[$i]) {
                     $dateFinishInd = $i;
                     break;
                 }
+            }
             $preData = $this->pushRules(
                 [
                     $dateStart,
-                    mktime(0, 0, 0, 1, 1, 3000),
+                    mktime(0, 0, 0, 1, 1, 2038),
                 ],
                 [
-                    $this->percents[$dateFinishInd], 0
-                ], $rulesData, $dateStart, $dateFinish);
+                    $this->percents[$dateFinishInd],
+                    0,
+                ],
+                $rulesData,
+                $dateStart,
+                $dateFinish
+            );
         } else {
             $preData = $this->pushRules($this->datesBase, $this->percents, $rulesData, $dateStart, $dateFinish);
         }
@@ -787,7 +793,7 @@ class Fine
 
         $data = null;
 
-        for ($j = $startJ; $j < count($payments); $j++) {
+        for ($j = $startJ; $j < count($payments); $j++) {   //TODO: gr of count()
             $payment = $payments[$j];
             if ($dateStart <= $payment['datePlus']) { // убрал, потому что если платёж 12.02.2015, а просрочка с 16.02.2015, то расчёт ведётся только с 01.01.2016
                 break;
@@ -808,7 +814,7 @@ class Fine
         }
         $startJ = $j;
 
-        for ($i = 0; $i < count($preData); $i++) {
+        for ($i = 0; $i < count($preData); $i++) {  //TODO: rg of count()
             $data = $preData[$i];
             $lastStartJ = $startJ;
             for ($j = $startJ; $j < count($payments) && $sum > 0; $j++) {
