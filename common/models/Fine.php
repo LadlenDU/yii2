@@ -2,7 +2,7 @@
 
 class HelpersFine
 {
-    protected $ONE_DAY = 1000*60*60*24;
+    protected $ONE_DAY = 1000 * 60 * 60 * 24;
 
     protected $data = [
         [0, '01.01.2999'],
@@ -297,10 +297,10 @@ class HelpersFine
         //$day = $date.getDate();
         /*if (day < 10)
             day = '0' + day;
-        var monthIndex = date.getMonth() + 1;
+        $monthIndex = date.getMonth() + 1;
         if (monthIndex < 10)
             monthIndex = '0' + monthIndex;
-        var year = date.getFullYear();
+        $year = date.getFullYear();
         return day + '.' + monthIndex + '.' + year;*/
     }
 
@@ -375,9 +375,9 @@ class HelpersFine
         newDate = fd(isExpire ? new Date(d . getTime() + ONE_DAY) : d);
         if (el) {
             if (isExpire)
-                el . html('Дата, предшествующая дню просрочки, установлена на выходной день. Согласно <a style="color:#990000" target="_blank" href="https://dogovor-urist.ru/кодексы/гк_рф_1/статья_193/">ст. 193 ГК РФ</a> необходимо изменить дату на ближайший рабочий день.<br><a href="javascript:" onclick="var el = document.getElementById(\'' + inputId + '\'); el.value=\'' + newDate + '\'; el.onchange()">Изменить на ' + newDate + '</a>');
+                el . html('Дата, предшествующая дню просрочки, установлена на выходной день. Согласно <a style="color:#990000" target="_blank" href="https://dogovor-urist.ru/кодексы/гк_рф_1/статья_193/">ст. 193 ГК РФ</a> необходимо изменить дату на ближайший рабочий день.<br><a href="javascript:" onclick="$el = document.getElementById(\'' + inputId + '\'); el.value=\'' + newDate + '\'; el.onchange()">Изменить на ' + newDate + '</a>');
             else
-                el . html('Дата установлена на выходной день. Согласно <a style="color:#990000" target="_blank" href="https://dogovor-urist.ru/кодексы/гк_рф_1/статья_193/">ст. 193 ГК РФ</a> необходимо изменить дату на ближайший рабочий день. <a href="javascript:" onclick="var el = document.getElementById(\'' + inputId + '\'); el.value=\'' + newDate + '\'; el.onchange()">Изменить на ' + newDate + '</a>');
+                el . html('Дата установлена на выходной день. Согласно <a style="color:#990000" target="_blank" href="https://dogovor-urist.ru/кодексы/гк_рф_1/статья_193/">ст. 193 ГК РФ</a> необходимо изменить дату на ближайший рабочий день. <a href="javascript:" onclick="$el = document.getElementById(\'' + inputId + '\'); el.value=\'' + newDate + '\'; el.onchange()">Изменить на ' + newDate + '</a>');
             el . show();
         }*/
     }
@@ -385,10 +385,10 @@ class HelpersFine
     protected function sortLoans($arr)
     {
         return $arr;
-        /*for (var i = 0; i + 1 < arr.length; i++)
-        for (var j = i + 1; j < arr.length; j++)
+        /*for ($i = 0; i + 1 < arr.length; i++)
+        for ($j = i + 1; j < arr.length; j++)
             if (arr[i].date > arr[j].date) {
-                var tmp = arr[i];
+                $tmp = arr[i];
                 arr[i] = arr[j];
                 arr[j] = tmp;
             }
@@ -398,10 +398,10 @@ class HelpersFine
     protected function sortPayments($arr)
     {
         return $arr;
-        /*for (var i = 0; i + 1 < arr.length; i++) {
-            for (var j = i + 1; j < arr.length; j++) {
+        /*for ($i = 0; i + 1 < arr.length; i++) {
+            for ($j = i + 1; j < arr.length; j++) {
                 if (arr[i].date > arr[j].date) {
-                    var tmp = arr[i];
+                    $tmp = arr[i];
                     arr[i] = arr[j];
                     arr[j] = tmp;
                 }
@@ -459,6 +459,88 @@ class HelpersFine
         return $res;
     }
 
+    protected function pushRules($dates, $percents, $rules, $dateStartUser, $dateFinishUser)
+    {
+        $res = [];
+        $len = count($dates);
+        $ds = $dateStartUser;
+        $df = $dateFinishUser;
+        $rulePos = 0;
+        for ($i = 0; $i + 1 < $len; $i++) {
+            $dateStart = $dates[$i];
+            $dateFinish = $dates[$i + 1] - $this->ONE_DAY;
+            if ($dateFinish < $ds || $dateStart > $df) {
+                continue;
+            }
+            if ($dateStart < $ds) {
+                $dateStart = $ds;
+            }
+            if ($dateFinish > $df) {
+                $dateFinish = $df;
+            }
+
+            for ($j = $rulePos; $j < count($rules); $j++) {
+                $rule = $rules[$j];
+                $ruleStart = $rule['dateStart'];
+                $ruleEnd = $rule['dateFinish'];
+
+                if ($ruleStart < $dateStart && $ruleEnd >= $dateStart && $ruleEnd <= $dateFinish) { // [ dS]dF
+                    $res[] = ['rate' => $rule['rate'], 'dateStart' => $dateStart, 'dateFinish' => $rule['dateFinish'], 'percent' => $percents[$i]];
+                } else if ($ruleStart < $dateStart && $ruleEnd > $dateFinish) { // [ dS dF ]
+                    $res[] = ['rate' => $rule['rate'], 'dateStart' => $dateStart, 'dateFinish' => $dateFinish, 'percent' => $percents[$i]];
+                } else if ($ruleStart >= $dateStart && $ruleEnd <= $dateFinish) // dS[ ]dF
+                    $res[] = ['rate' => $rule['rate'], 'dateStart' => $ruleStart, 'dateFinish' => $ruleEnd, 'percent' => $percents[$i]];
+                else if ($ruleStart >= $dateStart && $ruleStart <= $dateFinish && $ruleEnd > $dateFinish) // dS[dF ]
+                    $res[] = ['rate' => $rule['rate'], 'dateStart' => $ruleStart, 'dateFinish' => $dateFinish, 'percent' => $percents[$i]];
+                else { // не было периода в диапазоне ставки
+                    $res[] = ['rate' => $rule['rate'], 'dateStart' => $dateStart, 'dateFinish' => $dateFinish, 'percent' => $percents[$i]];
+                }
+                if ($ruleEnd <= $dateFinish) {
+                    $rulePos++;
+                    if ($ruleEnd == $dateFinish) {
+                        break;
+                    }
+                } else {
+                    break;
+                }
+            }
+        }
+
+        for ($i = 0; $i < count($res); $i++) {
+            $d = $res[$i];
+            //d.dateStart = new Date(d.dateStart);
+            //d.dateFinish = new Date(d.dateFinish);
+        }
+
+        return $res;
+    }
+
+    protected function dateDiff($date1, $date2)
+    {
+        $date1_ms = $date1;
+        $date2_ms = $date2;
+        $difference_ms = $date1_ms - $date2_ms;
+        $absDiff = round($difference_ms / $this->ONE_DAY);
+        return $absDiff + 1;
+
+    }
+
+    protected function processData($sum, $data, $dateStart, $dateFinish)
+    {
+        $ratePart = $data['rate'];
+        $days = $this->dateDiff($dateFinish, $dateStart);
+        return [
+            'rate' => $data['rate'],
+            'percent' => $data['percent'],
+            'cost' => $this->countCost($sum, $days, $data['percent'], $this->getRate($ratePart)),
+            'days' => $days,
+            'dateStart' => $dateStart,
+            'dateFinish' => $dateFinish,
+            'sum' => $sum
+        ];
+    }
+
+
     /**
      * @param $sum
      * @param int $dateStart Datetime
@@ -467,55 +549,56 @@ class HelpersFine
      * @param $rateType
      * @param $reverse
      */
-    protected function countForPeriod($sum, $dateStart, $dateFinish, $payments, $rateType, $reverse) {
+    protected function countForPeriod($sum, $dateStart, $dateFinish, $payments, $rateType, $reverse)
+    {
 
         $rulesData = [];
         if ($reverse) {
             $newDate = $dateStart;
-            $days30 = $dateStart + (30 - 1)*$this->ONE_DAY;
-            $days90 = $dateStart + (90 - 1)*$this->ONE_DAY;
+            $days30 = $dateStart + (30 - 1) * $this->ONE_DAY;
+            $days90 = $dateStart + (90 - 1) * $this->ONE_DAY;
 
             if ($newDate <= $days30) {
-                $till = ($dateFinish > $days30)? $days30 : $dateFinish;
+                $till = ($dateFinish > $days30) ? $days30 : $dateFinish;
                 $rulesData[] = ['rate' => '0', 'dateStart' => $newDate, 'dateFinish' => $till];
 
-		}
+            }
             if ($newDate <= $days90 && $dateFinish > $days30) {
-                $from = ($newDate > $days30)? $newDate : $days30 + $this->ONE_DAY;
-                $till = ($dateFinish > $days90)? $days90 : $dateFinish;
+                $from = ($newDate > $days30) ? $newDate : $days30 + $this->ONE_DAY;
+                $till = ($dateFinish > $days90) ? $days90 : $dateFinish;
                 $rulesData[] = ['rate' => '1/300', 'dateStart' => $from, 'dateFinish' => $till];
-		}
+            }
 
             if ($dateFinish > $days90) {
-                $from = ($newDate >= $days90)? $newDate : $days90 + $this->ONE_DAY;
+                $from = ($newDate >= $days90) ? $newDate : $days90 + $this->ONE_DAY;
                 $rulesData[] = ['rate' => '1/130', 'dateStart' => $from, 'dateFinish' => $dateFinish];
-		}
+            }
         } else {
             if ($dateStart < $this->NEW_LAW) {
                 $newDate = ($dateFinish >= $this->NEW_LAW) ? ($this->NEW_LAW - $this->ONE_DAY) : $dateFinish;
-                $rulesData[] = ['rate'=> '1/300', 'dateStart'=> $dateStart, 'dateFinish' => $newDate];
-		}
+                $rulesData[] = ['rate' => '1/300', 'dateStart' => $dateStart, 'dateFinish' => $newDate];
+            }
 
             if ($dateFinish >= $this->NEW_LAW) {
-                $newDate = ($dateStart < $this->NEW_LAW)? $this->NEW_LAW : $this->dateStart;
-                $days30 = $dateStart + (30 - 1)*$this->ONE_DAY;
-                $days90 = $dateStart + (90 - 1)*$this->ONE_DAY;
+                $newDate = ($dateStart < $this->NEW_LAW) ? $this->NEW_LAW : $this->dateStart;
+                $days30 = $dateStart + (30 - 1) * $this->ONE_DAY;
+                $days90 = $dateStart + (90 - 1) * $this->ONE_DAY;
 
                 if ($newDate <= $days30) {
-                    $till = ($dateFinish > $days30)? $days30 : $dateFinish;
+                    $till = ($dateFinish > $days30) ? $days30 : $dateFinish;
                     $rulesData[] = ['rate' => '0', 'dateStart' => $newDate, 'dateFinish' => $till];
 
-			}
+                }
                 if ($newDate <= $days90 && $dateFinish > $days30) {
-                    $from = ($newDate > $days30)? $newDate : $days30 + $this->ONE_DAY;
-                    $till = ($dateFinish > $days90)? $days90 : $dateFinish;
+                    $from = ($newDate > $days30) ? $newDate : $days30 + $this->ONE_DAY;
+                    $till = ($dateFinish > $days90) ? $days90 : $dateFinish;
                     $rulesData[] = ['rate' => '1/300', 'dateStart' => $from, 'dateFinish' => $till];
-			}
+                }
 
                 if ($dateFinish > $days90) {
-                    $from = ($newDate >= $days90)? $newDate : $days90 + $this->ONE_DAY;
+                    $from = ($newDate >= $days90) ? $newDate : $days90 + $this->ONE_DAY;
                     $rulesData[] = ['rate' => '1/130', 'dateStart' => $from, 'dateFinish' => $dateFinish];
-			}
+                }
             }
         }
 
@@ -523,39 +606,39 @@ class HelpersFine
 
         if ($rateType == $this->RATE_TYPE_SINGLE) {
             $dateFinishInd = 0;
-            for ($i = count(datesBase) - 1; $i >= 0; $i--)
-			if ($dateFinish >= $datesBase[$i]) {
-                $dateFinishInd = $i;
-                break;
-            }
-		//$preData = pushRules([$dateStart, new Date(3000, 0, 1)], [percents[dateFinishInd], 0], rulesData, dateStart, dateFinish);
+            for ($i = count($datesBase) - 1; $i >= 0; $i--)
+                if ($dateFinish >= $datesBase[$i]) {
+                    $dateFinishInd = $i;
+                    break;
+                }
+            //$preData = pushRules([$dateStart, new Date(3000, 0, 1)], [percents[dateFinishInd], 0], rulesData, dateStart, dateFinish);
             $preData = $this->pushRules(
                 [
-                $dateStart,
-                    mktime(0, 0, 0, 1, 1, 3000)
-            ],
-                    [
-                        $percents[$dateFinishInd],
-                        0
-                    ],
-                    $rulesData,
                     $dateStart,
-                    $dateFinish);
-	} else if ($rateType == $this->RATE_TYPE_PAY) {
+                    mktime(0, 0, 0, 1, 1, 3000)
+                ],
+                [
+                    $percents[$dateFinishInd],
+                    0,
+                ],
+                $rulesData,
+                $dateStart,
+                $dateFinish);
+        } else if ($rateType == $this->RATE_TYPE_PAY) {
             $payDates = [$dateStart], $payPercents = [];
 		$curPercents = 0;
 		for ($i = 0; $i < count($payments) && $curPercents < count($percents); $i++) {
-                for (; $curPercents < count($percents); $curPercents++) {
-                    if ($payments[$i]['date'] < $datesBase[$curPercents]) {
-                        $payDates[] = $payments[$i]['datePlus'];
-                        $payPercents[] = $curPercents >= 1 ? $percents[$curPercents - 1] : 0;
-                        break;
-                    }
+            for (; $curPercents < count($percents); $curPercents++) {
+                if ($payments[$i]['date'] < $datesBase[$curPercents]) {
+                    $payDates[] = $payments[$i]['datePlus'];
+                    $payPercents[] = $curPercents >= 1 ? $percents[$curPercents - 1] : 0;
+                    break;
                 }
             }
+        }
 		$dateFinishInd = 0;
 		for ($i = count($datesBase) - 1; $i >= 0; $i--)
-			if ($dateFinish >= $datesBase[$i]) {
+            if ($dateFinish >= $datesBase[$i]) {
                 $payPercents[] = $percents[$i];
                 break;
             }
@@ -569,19 +652,19 @@ class HelpersFine
             //today.setHours(0, 0, 0, 0);   //TODO: fix!!!
             $dateFinishInd = 0;
             for ($i = count($datesBase) - 1; $i >= 0; $i--)
-			if ($today >= $datesBase[$i]) {
-                $dateFinishInd = $i;
-                break;
-            }
-		$preData = $this->pushRules(
-		    [
-		    $dateStart,
-                mktime(0, 0, 0, 1, 1, 3000),
-            ],
+                if ($today >= $datesBase[$i]) {
+                    $dateFinishInd = $i;
+                    break;
+                }
+            $preData = $this->pushRules(
+                [
+                    $dateStart,
+                    mktime(0, 0, 0, 1, 1, 3000),
+                ],
                 [
                     $percents[$dateFinishInd], 0
                 ], $rulesData, $dateStart, $dateFinish);
-	} else {
+        } else {
             $preData = $this->pushRules($datesBase, $percents, $rulesData, $dateStart, $dateFinish);
         }
 
@@ -608,86 +691,86 @@ class HelpersFine
             }
 
             $resData[] = ['type' => $this->DATA_TYPE_PAYED, 'data' => ['sum' => $toCut, 'date' => $payment['date'], 'order' => $payment['order']]];
-	}
-	$startJ = $j;
+        }
+        $startJ = $j;
 
-
-	for (var i = 0; i < preData.length; i++) {
-            data = preData[i];
-            var lastStartJ = startJ;
-            for (var j = startJ; j < payments.length && sum > 0; j++) {
-                var payment = payments[j];
-                if (payment.sum >= 0.01 && payment.datePlus <= data.dateFinish) {
-                    startJ = j + 1;
-                    var dateStartInPeriod;
-                    if (payment.datePlus.getTime() > data.$dateStart) {
-                        if ( j == 0 || j >= 1 && payments[j - 1].datePlus < data.dateStart) {
-                            resData.push({type: DATA_TYPE_INFO, data: processData(sum, data, data.dateStart, payment.date)});
-					}
-                        dateStartInPeriod = payment.datePlus;
-                    } else
-                        dateStartInPeriod = data.dateStart;
-                    var toCut;
-                    if (payment.sum <= sum) {
-                        toCut = payment.sum;
-                        sum -= payment.sum;
-                        payment.sum = 0;
+        for ($i = 0; $i < count($preData); $i++) {
+            $data = $preData[$i];
+            $lastStartJ = $startJ;
+            for ($j = $startJ; $j < count($payments) && $sum > 0; $j++) {
+                $payment = $payments[$j];
+                if ($payment['sum'] >= 0.01 && $payment['datePlus'] <= $data['dateFinish']) {
+                    $startJ = $j + 1;
+                    $dateStartInPeriod = null;
+                    if ($payment['datePlus'] > $data['dateStart']) {
+                        if ($j == 0 || $j >= 1 && $payments[$j - 1]['datePlus'] < $data['dateStart']) {
+                            $resData[] = ['type' => $this->DATA_TYPE_INFO, 'data' => $this->processData('sum', 'data', $data['dateStart'], $payment['date'])];
+                        }
+                        $dateStartInPeriod = $payment['datePlus'];
                     } else {
-                        toCut = sum;
-                        payment.sum -= sum;
-                        sum = 0;
+                        $dateStartInPeriod = $data['dateStart'];
+                    }
+                    $toCut = null;
+                    if ($payment['sum'] <= $sum) {
+                        $toCut = $payment['sum'];
+                        $sum -= $payment['sum'];
+                        $payment['sum'] = 0;
+                    } else {
+                        $toCut = $sum;
+                        $payment['sum'] -= $sum;
+                        $sum = 0;
                     }
 
-                    resData.push({type: DATA_TYPE_PAYED, data: {sum: toCut, date: payment.date, order: payment.order}});
+                    $resData[] = ['type' => $this->DATA_TYPE_PAYED, 'data' => ['sum' => $toCut, 'date' => $payment['date'], 'order' => $payment['order']]];
 
-				if (sum < 0.01) {
-                    sum = 0;
-                    continue;
-                }
+                    if ($sum < 0.01) {
+                        $sum = 0;
+                        continue;
+                    }
 
-				if (j + 1 >= payments.length || j + 1 < payments.length && payments[j + 1].datePlus > data.dateFinish && payment.date.getTime() != payments[j + 1].date.getTime()) {
-                    resData.push({type: DATA_TYPE_INFO, data: processData(sum, data, dateStartInPeriod, data.dateFinish)});
-				} else if (j + 1 < payments.length && payments[j + 1].datePlus <= data.dateFinish && payment.date.getTime() != payments[j + 1].date.getTime()) {
-                    resData.push({type: DATA_TYPE_INFO, data: processData(sum, data, dateStartInPeriod, payments[j + 1].date)});
-				}
+                    if ($j + 1 >= $payments['length'] || $j + 1 < $payments['length'] && $payments[$j + 1]['datePlus'] > $data['dateFinish'] && $payment['date'] != $payments[$j + 1]['date']) {
+                        $resData[] = ['type' => $this->DATA_TYPE_INFO, 'data' => $this->processData($sum, $data, $dateStartInPeriod, $data['dateFinish'])];
+                    } else if ($j + 1 < $payments['length'] && $payments[$j + 1]['datePlus'] <= $data['dateFinish'] && $payment['date'] != $payments[$j + 1]['date']) {
+                        $resData[] = ['type' => $this->DATA_TYPE_INFO, 'data' => $this->processData($sum, $data, $dateStartInPeriod, $payments[$j + 1]['date'])];
+                    }
 
-			} else {//if (data.dateFinish <= payment.date) { // все остальные платежи уже из будущих
+                } else {//if (data.dateFinish <= payment.date) { // все остальные платежи уже из будущих
                     break;
                 }
             }
-		if (sum < 0.01) {
-            sum = 0;
-            break;
+            if ($sum < 0.01) {
+                $sum = 0;
+                break;
+            }
+            if ($lastStartJ == $startJ) { // не было периода в диапазоне ставки
+                $resData[] = ['type' => $this->DATA_TYPE_INFO, $data => $this->processData($sum, $data, $data['dateStart'], $data['dateFinish'])];
+            }
         }
-		if (lastStartJ == startJ) { // не было периода в диапазоне ставки
-            resData.push({type: DATA_TYPE_INFO, data: processData(sum, data, data.dateStart, data.dateFinish)});
-		}
-	}
 
-	for (var j = startJ; j < payments.length; j++) {
-            var payment = payments[j];
-            var toCut;
-            if (payment.sum <= sum) {
-                toCut = payment.sum;
-                sum -= payment.sum;
-                payment.sum = 0;
+        for ($j = $startJ; $j < count($payments); $j++) {
+            $payment = $payments[$j];
+            $toCut;
+            if ($payment['sum'] <= $sum) {
+                $toCut = $payment['sum'];
+                $sum -= $payment['sum'];
+                $payment['sum'] = 0;
             } else {
-                toCut = sum;
-                payment.sum -= sum;
-                sum = 0;
+                $toCut = $sum;
+                $payment['sum'] -= $sum;
+                $sum = 0;
             }
 
-            resData.push({type: DATA_TYPE_PAYED, data: {sum: toCut, date: payment.date, order: payment.order}});
-	}
-	return {dateStart: dateStart, dateFinish: dateFinish, data: resData, endSum: parseFloat(sum)};
-}
+            $resData[] = ['type' => $this->DATA_TYPE_PAYED, 'data' => ['sum' => $toCut, 'date' => $payment['date'], 'order' => $payment['order']];
+        }
+        return ['dateStart' => $dateStart, 'dateFinish' => $dateFinish, 'data' => $resData, 'endSum' => (float)$sum];
+    }
 
 
     protected function updateData($showErrors)
     {
         $dates = $this->datesBase;
         //$('.calc .error-field').removeClass('error-field');
-        #var clips = $('.resultAppearing');
+        #$clips = $('.resultAppearing');
         #clips.hide();
         $hash = [];
         $errors = [];
