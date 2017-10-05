@@ -7,7 +7,8 @@ class Fine
     protected $ONE_DAY;
 
     protected $data = [
-        [0, '01.01.2999'],
+        //[0, '01.01.2999'],
+        [0, '01.01.2099'],
         [8.5, '18.09.2017'],
         [9.0, '19.06.2017'],
         [9.25, '02.05.2017'],
@@ -149,11 +150,12 @@ class Fine
         1 => 'Бухгалтерский',
     ];
 
-    public function _construct()
+    public function __construct()
     {
         $dataLength = count($this->data);
         for ($i = $dataLength - 1; $i >= 0; $i--) {
-            $this->datesBase[] = date_parse($this->data[$i][1]);
+            //$this->datesBase[] = date_parse($this->data[$i][1]);
+            $this->datesBase[] = strtotime($this->data[$i][1]); //TODO: проверить (https://www.epochconverter.com/ - выдает на день ранше)
             $this->percents[] = $this->data[$i][0];
         }
 
@@ -728,7 +730,7 @@ class Fine
                 $dateStart,
                 $dateFinish);
         } else if ($rateType == $this->RATE_TYPE_PAY) {
-            $payDates = [$dateStart]
+            $payDates = [$dateStart];
             $payPercents = [];
 		$curPercents = 0;
 		for ($i = 0; $i < count($payments) && $curPercents < count($percents); $i++) {
@@ -865,7 +867,7 @@ class Fine
                 $sum = 0;
             }
 
-            $resData[] = ['type' => $this->DATA_TYPE_PAYED, 'data' => ['sum' => $toCut, 'date' => $payment['date'], 'order' => $payment['order']];
+           $resData[] = ['type' => $this->DATA_TYPE_PAYED, 'data' => ['sum' => $toCut, 'date' => $payment['date'], 'order' => $payment['order']]];
         }
         return ['dateStart' => $dateStart, 'dateFinish' => $dateFinish, 'data' => $resData, 'endSum' => (float)$sum];
     }
