@@ -965,6 +965,12 @@ class Fine
             $periods[] = $this->countForPeriod($loan['sum'], $loan['date'], $dateFinish, $payments[$i], $rateType, $reverse);
         }
 
+        array_walk_recursive($periods, function (&$item, $key) {
+            if ($key == 'dateStart' || $key == 'dateFinish') {
+                $item = date(DATE_ATOM, $item);
+            }
+        });
+
         // html format
         echo '<pre>';
         print_r($periods);
