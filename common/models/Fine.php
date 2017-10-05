@@ -1,8 +1,10 @@
 <?php
 
-class HelpersFine
+namespace common\models;
+
+class Fine
 {
-    protected $ONE_DAY = 1000 * 60 * 60 * 24;
+    protected $ONE_DAY;
 
     protected $data = [
         [0, '01.01.2999'],
@@ -155,19 +157,21 @@ class HelpersFine
             $this->percents[] = $this->data[$i][0];
         }
 
-        $this->NEW_LAW = new DateTime('2016-00-01');
+        $ONE_DAY = 1000 * 60 * 60 * 24;
+
+        $this->NEW_LAW = strtotime('2016-00-01');
 
         // 2017
         for ($i = 1; $i <= 8; $i++) {
-            $this->VACATION_DAYS[] = new DateTime("2017-0-$i");
-            $this->VACATION_DAYS[] = new DateTime("2017-1-23");
-            $this->VACATION_DAYS[] = new DateTime("2017-1-24");
-            $this->VACATION_DAYS[] = new DateTime("2017-2-8");
-            $this->VACATION_DAYS[] = new DateTime("2017-4-1");
-            $this->VACATION_DAYS[] = new DateTime("2017-4-8");
-            $this->VACATION_DAYS[] = new DateTime("2017-4-9");
-            $this->VACATION_DAYS[] = new DateTime("2017-5-12");
-            $this->VACATION_DAYS[] = new DateTime("2017-10-6");
+            $this->VACATION_DAYS[] = strtotime("2017-0-$i");
+            $this->VACATION_DAYS[] = $strtotime("2017-1-23");
+            $this->VACATION_DAYS[] = $strtotime("2017-1-24");
+            $this->VACATION_DAYS[] = $strtotime("2017-2-8");
+            $this->VACATION_DAYS[] = $strtotime("2017-4-1");
+            $this->VACATION_DAYS[] = $strtotime("2017-4-8");
+            $this->VACATION_DAYS[] = $strtotime("2017-4-9");
+            $this->VACATION_DAYS[] = $strtotime("2017-5-12");
+            $this->VACATION_DAYS[] = $strtotime("2017-10-6");
         }
     }
 
@@ -175,8 +179,8 @@ class HelpersFine
      * Калькулятор пени.
      *
      * @param float $loanAmount
-     * @param \DateTime $dateStart
-     * @param \DateTime $dateFinish - желательно предыдущий день
+     * @param int $dateStart unix timestamp
+     * @param int $dateFinish unix timestamp - желательно предыдущий день
      * @param array $rateType
      * @param bool $back Применять обратную силу закона (не рекомендуется)
      * @param array $payDates Частичная оплата задолженности
@@ -198,20 +202,74 @@ class HelpersFine
         $this->dateStart = $dateStart;
         $this->dateFinish = $dateFinish;
         $this->rateType = $rateType;
-        $this->back = $rateType;
+        $this->back = $back;
         $this->resultView = $resultView;
         $this->payDates = $payDates;
         $this->paySums = $paySums;
         $this->payFor = $payFor;
         $this->loanDates = $loanDates;
         $this->loanSums = $loanSums;
+
+        $this->updateData(true);
     }
 
-    //TODO: заполнить
-    protected function testPaymentLine()
-    {
 
+    protected function dateParse($dateStr) {
+        if (dateStr == null) return null;
+        var dateParts = dateStr.split(".");
+        if (dateParts.length != 3)
+            return null;
+        var d = new Date(dateParts[2], (dateParts[1] - 1), dateParts[0]);
+        if (d && !isNaN(d.getTime())) {
+            var fy = parseInt(dateParts[2]);
+            if (fy < 50)
+                d.setFullYear(2000 + fy);
+            else if (fy < 100)
+                d.setFullYear(1900 + fy);
+            return d;
+        }
+        return null;
     }
+
+
+    protected function testPaymentLine($payDate, $paySum, $payFor) {
+        if (!($payDate['value'] && $paySum['value'])) {
+            return ['date' => null, 'sum' => null, 'isCurrent' => false];
+        }
+	$resDate = null;
+	if ($payDate['value']) {
+        $resDate = $this->dateParse($payDate['value']);
+        if (resDate.getFullYear() < 1990) {
+            resDate = null;
+        }
+    }
+
+	if (!resDate) {
+        wrongData($(payDate).attr('id'));
+        return null;
+    }
+
+	$resSum = null;
+	if (paySum.value) {
+        resSum = normalizeLoan(paySum.value);
+    }
+
+	if (!resSum) {
+        wrongData($(paySum).attr('id'));
+        return null;
+    }
+
+	$resFor = null;
+	if (payFor.value) {
+        resFor = dateParse('01.' + payFor.value);
+        if (!resFor) {
+            wrongData($(payFor).attr('id'));
+            return null;
+        }
+    }
+
+	return {date: resDate, datePlus: new Date(resDate.getTime() + ONE_DAY), sum: resSum, payFor: resFor};
+}
 
     protected function collectPayments()
     {
