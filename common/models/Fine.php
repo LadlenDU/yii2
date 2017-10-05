@@ -164,14 +164,14 @@ class Fine
         // 2017
         for ($i = 1; $i <= 8; $i++) {
             $this->VACATION_DAYS[] = strtotime("2017-0-$i");
-            $this->VACATION_DAYS[] = $strtotime("2017-1-23");
-            $this->VACATION_DAYS[] = $strtotime("2017-1-24");
-            $this->VACATION_DAYS[] = $strtotime("2017-2-8");
-            $this->VACATION_DAYS[] = $strtotime("2017-4-1");
-            $this->VACATION_DAYS[] = $strtotime("2017-4-8");
-            $this->VACATION_DAYS[] = $strtotime("2017-4-9");
-            $this->VACATION_DAYS[] = $strtotime("2017-5-12");
-            $this->VACATION_DAYS[] = $strtotime("2017-10-6");
+            $this->VACATION_DAYS[] = strtotime("2017-1-23");
+            $this->VACATION_DAYS[] = strtotime("2017-1-24");
+            $this->VACATION_DAYS[] = strtotime("2017-2-8");
+            $this->VACATION_DAYS[] = strtotime("2017-4-1");
+            $this->VACATION_DAYS[] = strtotime("2017-4-8");
+            $this->VACATION_DAYS[] = strtotime("2017-4-9");
+            $this->VACATION_DAYS[] = strtotime("2017-5-12");
+            $this->VACATION_DAYS[] = strtotime("2017-10-6");
         }
     }
 
@@ -214,8 +214,10 @@ class Fine
     }
 
 
-    protected function dateParse($dateStr) {
-        if (dateStr == null) return null;
+    protected function dateParse($dateStr)
+    {
+        return $dateStr;
+        /*if (dateStr == null) return null;
         var dateParts = dateStr.split(".");
         if (dateParts.length != 3)
             return null;
@@ -228,48 +230,65 @@ class Fine
                 d.setFullYear(1900 + fy);
             return d;
         }
-        return null;
+        return null;*/
+    }
+
+    protected function wrongData($id)
+    {
+//	var d = $('#' + id);
+//	d.addClass('error-field');
     }
 
 
-    protected function testPaymentLine($payDate, $paySum, $payFor) {
+    protected function testPaymentLine($payDate, $paySum, $payFor)
+    {
         if (!($payDate['value'] && $paySum['value'])) {
             return ['date' => null, 'sum' => null, 'isCurrent' => false];
         }
-	$resDate = null;
-	if ($payDate['value']) {
-        $resDate = $this->dateParse($payDate['value']);
-        if (resDate.getFullYear() < 1990) {
-            resDate = null;
+        $resDate = null;
+        if ($payDate['value']) {
+            $resDate = $this->dateParse($payDate['value']);
+            //if (resDate.getFullYear() < 1990) {
+            if (date('Y', $resDate) < 1990) {
+                $resDate = null;
+            }
         }
-    }
 
-	if (!resDate) {
-        wrongData($(payDate).attr('id'));
-        return null;
-    }
-
-	$resSum = null;
-	if (paySum.value) {
-        resSum = normalizeLoan(paySum.value);
-    }
-
-	if (!resSum) {
-        wrongData($(paySum).attr('id'));
-        return null;
-    }
-
-	$resFor = null;
-	if (payFor.value) {
-        resFor = dateParse('01.' + payFor.value);
-        if (!resFor) {
-            wrongData($(payFor).attr('id'));
+        if (!$resDate) {
+            $this->wrongData($payDate);
             return null;
         }
+
+        $resSum = null;
+        if ($paySum['value']) {
+            $resSum = normalizeLoan($paySum['value']);
+        }
+
+        if (!$resSum) {
+            $this->wrongData($paySum);
+            return null;
+        }
+
+        $resFor = null;
+        if ($payFor['value']) {
+            //TODO: '01.' = ???
+            //$resFor = $this->dateParse('01.' + $payFor['value']);
+            $resFor = $this->dateParse($payFor['value']);
+            if (!$resFor) {
+                $this->wrongData($payFor);
+                return null;
+            }
+        }
+
+        return ['date' => $resDate, 'datePlus' => $resDate + $this->ONE_DAY, 'sum' => $resSum, 'payFor' => $resFor];
     }
 
-	return {date: resDate, datePlus: new Date(resDate.getTime() + ONE_DAY), sum: resSum, payFor: resFor};
-}
+    protected function normalizeLoan($money)
+    {
+        //$money = ($money).replace(',', '.').replace(/ /g,"").replace(/ /g,"");
+        $money = str_replace([',', ' '], ['.', ''], $money);
+        return (float)$money;
+    }
 
     protected function collectPayments()
     {
