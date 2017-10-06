@@ -17,6 +17,8 @@ use Yii;
  * @property integer $privatized
  * @property integer $location_id
  * @property integer $name_id
+ * @property string $expiration_start
+ * @property string $debt_total
  *
  * @property DebtDetails[] $debtDetails
  * @property Location $location
@@ -26,8 +28,6 @@ use Yii;
  */
 class Debtor extends \yii\db\ActiveRecord
 {
-    #public $name_mixed;
-
     /**
      * @inheritdoc
      */
@@ -42,8 +42,9 @@ class Debtor extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['space_common', 'space_living'], 'number'],
+            [['space_common', 'space_living', 'debt_total'], 'number'],
             [['privatized', 'location_id', 'name_id'], 'integer'],
+            [['expiration_start'], 'safe'],
             [['phone', 'LS_EIRC', 'LS_IKU_provider', 'IKU'], 'string', 'max' => 255],
             [['location_id'], 'exist', 'skipOnError' => true, 'targetClass' => Location::className(), 'targetAttribute' => ['location_id' => 'id']],
             [['name_id'], 'exist', 'skipOnError' => true, 'targetClass' => Name::className(), 'targetAttribute' => ['name_id' => 'id']],
@@ -68,6 +69,8 @@ class Debtor extends \yii\db\ActiveRecord
             'privatized' => Yii::t('app', 'Приватизировано'),
             'location_id' => Yii::t('app', 'Location ID'),
             'name_id' => Yii::t('app', 'Name ID'),
+            'expiration_start' => Yii::t('app', 'Начало просрочки'),
+            'debt_total' => Yii::t('app', 'Сумма долга'),
         ];
     }
 
@@ -119,31 +122,4 @@ class Debtor extends \yii\db\ActiveRecord
     {
         return new DebtorQuery(get_called_class());
     }
-
-    /*public function getName_Mixed()
-    {
-        return 'sdfsd';
-    }
-
-    public function getCity()
-    {
-        return 'SOmeCIty';
-    }
-
-    public function getStreet()
-    {
-        return 'SOmestreet';
-    }
-
-    public function getBuilding()
-    {
-        return 'SOme building';
-    }
-
-    public function getAppartment()
-    {
-        return 'SOme appartment';
-    }*/
-
-
 }
