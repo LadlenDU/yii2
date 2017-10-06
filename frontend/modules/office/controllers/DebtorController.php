@@ -69,10 +69,10 @@ class DebtorController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
 
-            $locationModel = Location::find()->where(['user_id' => Yii::$app->user->identity->getId()])->one();
+            $locationModel = Location::find()->where(['location_id' => $this->location->id])->one();
             $locationModel->link('location', $model);
 
-            $nameModel = Name::find()->where(['user_id' => Yii::$app->user->identity->getId()])->one();
+            $nameModel = Name::find()->where(['name_id' => $this->name->id])->one();
             $nameModel->link('name', $model);
 
             return $this->redirect(['view', 'id' => $model->id]);
@@ -95,11 +95,20 @@ class DebtorController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
 
-            $locationModel = Location::find()->where(['user_id' => Yii::$app->user->identity->getId()])->one();
-            $locationModel->link('location', $model);
+            if (!$model->location) {
 
-            $nameModel = Name::find()->where(['user_id' => Yii::$app->user->identity->getId()])->one();
-            $nameModel->link('name', $model);
+            }
+            //$locationModel = Location::find()->where(['location_id' => $this->location->id])->one();
+            $locationModel = $model->location ? $model->location : new Location;
+            //TODO: проверить
+            $locationModel->save();
+            $locationModel->link('debtors', $model);
+
+            //$nameModel = Name::find()->where(['name_id' => $this->name->id])->one();
+            $nameModel = $model->name ? $model->name : new Name;
+            //TODO: проверить
+            $nameModel->save();
+            $nameModel->link('debtors', $model);
 
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
