@@ -215,7 +215,7 @@ class Fine
         $this->loanDates = $loanDates;
         $this->loanSums = $loanSums;
 
-        $this->updateData(true);
+        return $this->updateData(true);
     }
 
 
@@ -971,10 +971,12 @@ class Fine
             }
         });
 
+        return $periods;
+
         // html format
-        echo '<pre>';
-        print_r($periods);
-        echo '</pre>';
+//        echo '<pre>';
+//        print_r($periods);
+//        echo '</pre>';
         //$resultPane = ($resultView == $this->RESULT_VIEW_BUH) ? $this->getBuhHtml($periods) : $this->getClassicHtml($periods);
 
 //	document . getElementById('dateStartRes') . innerHTML = fd(dateStart);

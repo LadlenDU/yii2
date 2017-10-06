@@ -28,6 +28,28 @@ $columns = [
     ['attribute' => 'privatized'],*/
     ['attribute' => 'location.region'],
     ['attribute' => 'name.first_name'],
+    ['attribute' => 'expiration_start'],
+    [
+        'attribute' => 'debt_total',
+        'format' => ['decimal', 2],
+        'hAlign' => 'right',
+    ],
+    /*[
+        'attribute' => Yii::t('app', 'Пошлина'),
+        'value' => function (\common\models\DebtDetails $model, $key, $index) {
+            return $model->calculateStateFee2();
+        },
+        'format' => ['decimal', 2],
+        'hAlign' => 'right',
+    ],*/
+    [
+        'attribute' => Yii::t('app', 'Пеня'),
+        'value' => function (\common\models\Debtor $model, $key, $index) {
+            return $model->calcFine();
+        },
+        'format' => ['decimal', 2],
+        'hAlign' => 'right',
+    ],
     /*[
         //TODO: разобраться с label
         'attribute' => 'LS_IKU_provider',

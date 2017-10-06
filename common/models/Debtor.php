@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use common\models\Fine;
 
 /**
  * This is the model class for table "debtor".
@@ -121,5 +122,28 @@ class Debtor extends \yii\db\ActiveRecord
     public static function find()
     {
         return new DebtorQuery(get_called_class());
+    }
+
+    public function calcFine()
+    {
+        if ($this->expiration_start && $this->debt_total) {
+            $dateStart = strtotime($this->expiration_start);
+            $dateFinish = time() - 60 * 60 * 24;
+
+            $fine = new Fine();
+            $res = $fine->fineCalculator($this->debt_total, $dateStart, $dateFinish);
+
+            $sum = 0;
+
+            if (!empty($res[0]['data'])) {
+                foreach ($res[0]['data'] as $r) {
+                    $sum += (int)$r['data']['cost'];
+                }
+            }
+
+            return $sum;
+        }
+
+        return 0;
     }
 }
