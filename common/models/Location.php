@@ -19,6 +19,7 @@ use common\models\info\Company;
  * @property string $streetId
  * @property string $building
  * @property string $buildingId
+ * @property string $appartment
  * @property string $zip_code
  * @property string $arbitraty
  *
@@ -43,7 +44,7 @@ class Location extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['region', 'regionId', 'district', 'districtId', 'city', 'cityId', 'street', 'streetId', 'building', 'buildingId', 'zip_code', 'arbitraty'], 'string', 'max' => 255],
+            [['region', 'regionId', 'district', 'districtId', 'city', 'cityId', 'street', 'streetId', 'building', 'buildingId', 'appartment', 'zip_code', 'arbitraty'], 'string', 'max' => 255],
         ];
     }
 
@@ -64,6 +65,7 @@ class Location extends \yii\db\ActiveRecord
             'streetId' => Yii::t('app', 'код улицы'),
             'building' => Yii::t('app', 'дом (строение)'),
             'buildingId' => Yii::t('app', 'код дома (строения)'),
+            'appartment' => Yii::t('app', 'Квартира'),
             'zip_code' => Yii::t('app', 'почтовый индекс'),
             'arbitraty' => Yii::t('app', 'произвольная строка адреса (если не дано разделение по элементам)'),
         ];
@@ -99,5 +101,14 @@ class Location extends \yii\db\ActiveRecord
     public function getUserInfos()
     {
         return $this->hasMany(UserInfo::className(), ['location_id' => 'id'])->inverseOf('location');
+    }
+
+    /**
+     * @inheritdoc
+     * @return LocationQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new LocationQuery(get_called_class());
     }
 }
