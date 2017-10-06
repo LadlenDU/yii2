@@ -19,13 +19,18 @@ use yii\widgets\ActiveForm;
     <? /*= $form->field($model, 'legal_address_location_id')->textInput() */ ?>
     <?php
 
-    #$this->render('@frontend/modules/office/views/_location', ['model' => $model->legalAddressLocation]);
-    echo Yii::$app->controller->renderPartial('@frontend/modules/office/views/_location',
+    echo $this->render('@frontend/modules/office/views/_location',
+        [
+            'form' => $form,
+            'model' => $model->legalAddressLocation
+        ]
+    );
+    /*echo Yii::$app->controller->renderPartial('@frontend/modules/office/views/_location',
         [
             'form' => $form,
             'model' => $model->legalAddressLocation,
         ]
-    );
+    );*/
 
     ?>
 
