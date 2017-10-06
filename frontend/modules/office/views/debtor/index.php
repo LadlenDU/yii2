@@ -25,7 +25,7 @@ $columns = [
     /*['attribute' => 'space_common'],
     ['attribute' => 'space_living'],
     ['attribute' => 'privatized'],*/
-    ['attribute' => 'location.	region'],
+    ['attribute' => 'location.region'],
     ['attribute' => 'name.first_name'],
     /*[
         //TODO: разобраться с label

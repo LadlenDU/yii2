@@ -94,21 +94,22 @@ class DebtorController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-
-            if (!$model->location) {
-
-            }
             //$locationModel = Location::find()->where(['location_id' => $this->location->id])->one();
             $locationModel = $model->location ? $model->location : new Location;
-            //TODO: проверить
+            //TODO: проверить, рефакторинг
             $locationModel->save();
-            $locationModel->link('debtors', $model);
+            //$locationModel->link('debtors', $model);
+            $model->link('location', $locationModel);
+            $locationModel->load(Yii::$app->request->post());
+            $locationModel->save();
 
             //$nameModel = Name::find()->where(['name_id' => $this->name->id])->one();
             $nameModel = $model->name ? $model->name : new Name;
-            //TODO: проверить
+            //TODO: проверить, рефакторинг
             $nameModel->save();
             $nameModel->link('debtors', $model);
+            $nameModel->load(Yii::$app->request->post());
+            $nameModel->save();
 
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
