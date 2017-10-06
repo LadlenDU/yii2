@@ -43,7 +43,7 @@
                     ],
                     [
                         'label' => 'Задолженности',
-                        'icon' => 'users',
+                        'icon' => 'list-alt',
                         'url' => ['/office/debtors/debt-verification'],
                         /*'url' => ['#'],
                         'items' => [

@@ -9,6 +9,14 @@ use kartik\tabs\TabsX;
 /* @var $model common\models\Debtor */
 /* @var $form yii\widgets\ActiveForm */
 
+$css = <<<CSS
+.debtor-form .glyphicon {
+    margin-right: 10px;
+}
+CSS;
+
+$this->registerCss($css);
+
 ?>
 
 <div class="debtor-form">
@@ -18,16 +26,16 @@ use kartik\tabs\TabsX;
 
     $tabItems = [
         [
-            'label' => '<i class="glyphicon glyphicon-home"></i>' . Yii::t('app', 'Общие данные'),
+            'label' => '<i class="glyphicon glyphicon-list-alt"></i>' . Yii::t('app', 'Общие данные'),
             'content' => $this->render('_common_data', ['form' => $form, 'model' => $model]),
             'active' => true,
         ],
         [
-            'label' => '<i class="glyphicon glyphicon-user"></i>' . Yii::t('app', 'Документооборот'),
+            'label' => '<i class="glyphicon glyphicon-folder-open"></i>' . Yii::t('app', 'Документооборот'),
             'content' => 'empty',
         ],
         [
-            'label' => '<i class="glyphicon glyphicon-list-alt"></i>' . Yii::t('app', 'Финансовые данные'),
+            'label' => '<i class="glyphicon glyphicon-usd"></i>' . Yii::t('app', 'Финансовые данные'),
             'content' => $this->render('_financial_data', ['form' => $form, 'model' => $model]),
         ],
     ];
