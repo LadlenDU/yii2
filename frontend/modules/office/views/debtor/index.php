@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 use kartik\dynagrid\DynaGrid;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\DebtorSearch */
@@ -181,7 +182,7 @@ $columns = [
                                 'type' => 'button',
                                 'title' => Yii::t('app', 'Добавить должника'),
                                 'class' => 'btn btn-success',
-                                'href' => 'google.com'
+                                'href' => Url::to('/office/debtor/create'),
                             ]
                         ) . ' ' .
                         Html::a('<i class="glyphicon glyphicon-repeat"></i>',
