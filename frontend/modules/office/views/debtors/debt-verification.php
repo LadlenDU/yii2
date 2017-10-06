@@ -469,9 +469,7 @@ HTML;
 
     <br>
 
-<?php
-
-echo DynaGrid::widget([
+<?= DynaGrid::widget([
     'columns' => $columns,
     'storage' => DynaGrid::TYPE_COOKIE,
     'theme' => 'simple-striped',
@@ -482,12 +480,12 @@ echo DynaGrid::widget([
         /*'floatHeader' => true,*/
         'pjax' => true,
         'panel' => [
-            'heading' => '<h3 class="panel-title">' . Yii::t('app', 'Список должников') . '</h3>',
+            'heading' => '<h3 class="panel-title">' . Yii::t('app', 'Список задолженностей') . '</h3>',
             'before' => '{dynagrid}',
         ],
-        'options' => ['id' => 'dynagrid-debtors-options'],
+        'options' => ['id' => 'dynagrid-debts-options'],
     ],
-    'options' => ['id' => 'dynagrid-debtors'] // a unique identifier is important
+    'options' => ['id' => 'dynagrid-debts'] // a unique identifier is important
 ]);
 ?>
 
@@ -507,7 +505,7 @@ $printErrorTxt = json_encode(Yii::t('app', 'Ошибка печати!'));
 $noDebtorsSelectedTxt = json_encode(Yii::t('app', 'Выберите пожалуйста должников.'));
 $script = <<<JS
     $("#print_invoices").click(function () {
-        var keys = $('#dynagrid-debtors-options').yiiGridView('getSelectedRows');
+        var keys = $('#dynagrid-debts-options').yiiGridView('getSelectedRows');
         if (!keys.length) {
             alert($noDebtorsSelectedTxt);
             return;
@@ -516,7 +514,7 @@ $script = <<<JS
         window.open(url, '_blank');
     });
     $("#print_statements").click(function () {
-        var keys = $('#dynagrid-debtors-options').yiiGridView('getSelectedRows');
+        var keys = $('#dynagrid-debts-options').yiiGridView('getSelectedRows');
         if (!keys.length) {
             alert($noDebtorsSelectedTxt);
             return;
@@ -536,7 +534,7 @@ $script = <<<JS
         });
     });
     $("#print_documents").click(function () {
-        var keys = $('#dynagrid-debtors-options').yiiGridView('getSelectedRows');
+        var keys = $('#dynagrid-debts-options').yiiGridView('getSelectedRows');
         if (!keys.length) {
             alert($noDebtorsSelectedTxt);
             return;
