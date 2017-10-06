@@ -94,27 +94,27 @@ HTML;
     [
         'attribute' => 'name_mixed',
         'label' => Yii::t('app', 'ФИО'),
-        'value' => 'debtor.name_mixed',
+        'value' => 'debtor.name.full_name',
     ],
     [
         'attribute' => 'city',
         'label' => Yii::t('app', 'Населённый пункт'),
-        'value' => 'debtor.city',
+        'value' => 'debtor.location.city',
     ],
     [
         'attribute' => 'street',
         'label' => Yii::t('app', 'Улица'),
-        'value' => 'debtor.street',
+        'value' => 'debtor.location.street',
     ],
     [
         'attribute' => 'building',
         'label' => Yii::t('app', 'Дом'),
-        'value' => 'debtor.building',
+        'value' => 'debtor.location.building',
     ],
     [
         'attribute' => 'appartment',
         'label' => Yii::t('app', 'Квартира'),
-        'value' => 'debtor.appartment',
+        'value' => 'debtor.location.appartment',
     ],
     [
         'attribute' => 'privatized',

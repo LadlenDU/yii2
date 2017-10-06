@@ -26,9 +26,27 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'privatized')->textInput() ?>
 
-    <?= $form->field($model, 'location_id')->textInput() ?>
+    <?/*= $form->field($model, 'location_id')->textInput() */?><!--
 
-    <?= $form->field($model, 'name_id')->textInput() ?>
+    --><?/*= $form->field($model, 'name_id')->textInput() */?>
+
+    <?php
+
+    echo $this->render('@frontend/modules/office/views/_location',
+        [
+            'form' => $form,
+            'model' => $model->location,
+        ]
+    );
+
+    echo $this->render('@frontend/modules/office/views/_name',
+        [
+            'form' => $form,
+            'model' => $model->name,
+        ]
+    );
+
+    ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Создать') : Yii::t('app', 'Обновить'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

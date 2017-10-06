@@ -5,6 +5,8 @@ namespace frontend\controllers;
 use Yii;
 use common\models\Debtor;
 use common\models\DebtorSearch;
+use common\models\Location;
+use common\models\Name;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -68,6 +70,13 @@ class DebtorController extends Controller
         $model = new Debtor();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+
+            $locationModel = Location::find()->where(['user_id' => Yii::$app->user->identity->getId()])->one();
+            $locationModel->link('location', $model);
+
+            $nameModel = Name::find()->where(['user_id' => Yii::$app->user->identity->getId()])->one();
+            $nameModel->link('name', $model);
+
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
@@ -87,6 +96,13 @@ class DebtorController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+
+            $locationModel = Location::find()->where(['user_id' => Yii::$app->user->identity->getId()])->one();
+            $locationModel->link('location', $model);
+
+            $nameModel = Name::find()->where(['user_id' => Yii::$app->user->identity->getId()])->one();
+            $nameModel->link('name', $model);
+
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [

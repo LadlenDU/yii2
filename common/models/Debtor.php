@@ -26,6 +26,8 @@ use Yii;
  */
 class Debtor extends \yii\db\ActiveRecord
 {
+    #public $name_mixed;
+
     /**
      * @inheritdoc
      */
@@ -117,4 +119,31 @@ class Debtor extends \yii\db\ActiveRecord
     {
         return new DebtorQuery(get_called_class());
     }
+
+    /*public function getName_Mixed()
+    {
+        return 'sdfsd';
+    }
+
+    public function getCity()
+    {
+        return 'SOmeCIty';
+    }
+
+    public function getStreet()
+    {
+        return 'SOmestreet';
+    }
+
+    public function getBuilding()
+    {
+        return 'SOme building';
+    }
+
+    public function getAppartment()
+    {
+        return 'SOme appartment';
+    }*/
+
+
 }

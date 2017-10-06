@@ -149,4 +149,5 @@ class DebtDetails extends \yii\db\ActiveRecord
 
         return $fee;
     }
+
 }
