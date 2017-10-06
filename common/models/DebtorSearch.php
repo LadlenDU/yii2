@@ -18,7 +18,7 @@ class DebtorSearch extends Debtor
     public function rules()
     {
         return [
-            [['id', 'privatized', 'general_manager_id'], 'integer'],
+            [['id', 'privatized', 'location_id'], 'integer'],
             [['first_name', 'second_name', 'patronymic', 'name_mixed', 'address', 'region', 'regionId', 'district', 'districtId', 'city', 'cityId', 'street', 'streetId', 'building', 'buildingId', 'appartment', 'phone', 'LS_EIRC', 'LS_IKU_provider', 'IKU'], 'safe'],
             [['space_common', 'space_living'], 'number'],
         ];
@@ -64,7 +64,7 @@ class DebtorSearch extends Debtor
             'space_common' => $this->space_common,
             'space_living' => $this->space_living,
             'privatized' => $this->privatized,
-            'general_manager_id' => $this->general_manager_id,
+            'location_id' => $this->location_id,
         ]);
 
         $query->andFilterWhere(['like', 'first_name', $this->first_name])
