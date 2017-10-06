@@ -17,45 +17,13 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'id') ?>
 
-    <?= $form->field($model, 'first_name') ?>
+    <?= $form->field($model, 'phone') ?>
 
-    <?= $form->field($model, 'second_name') ?>
+    <?= $form->field($model, 'LS_EIRC') ?>
 
-    <?= $form->field($model, 'patronymic') ?>
+    <?= $form->field($model, 'LS_IKU_provider') ?>
 
-    <?= $form->field($model, 'name_mixed') ?>
-
-    <?php // echo $form->field($model, 'address') ?>
-
-    <?php // echo $form->field($model, 'region') ?>
-
-    <?php // echo $form->field($model, 'regionId') ?>
-
-    <?php // echo $form->field($model, 'district') ?>
-
-    <?php // echo $form->field($model, 'districtId') ?>
-
-    <?php // echo $form->field($model, 'city') ?>
-
-    <?php // echo $form->field($model, 'cityId') ?>
-
-    <?php // echo $form->field($model, 'street') ?>
-
-    <?php // echo $form->field($model, 'streetId') ?>
-
-    <?php // echo $form->field($model, 'building') ?>
-
-    <?php // echo $form->field($model, 'buildingId') ?>
-
-    <?php // echo $form->field($model, 'appartment') ?>
-
-    <?php // echo $form->field($model, 'phone') ?>
-
-    <?php // echo $form->field($model, 'LS_EIRC') ?>
-
-    <?php // echo $form->field($model, 'LS_IKU_provider') ?>
-
-    <?php // echo $form->field($model, 'IKU') ?>
+    <?= $form->field($model, 'IKU') ?>
 
     <?php // echo $form->field($model, 'space_common') ?>
 
@@ -63,7 +31,9 @@ use yii\widgets\ActiveForm;
 
     <?php // echo $form->field($model, 'privatized') ?>
 
-    <?php // echo $form->field($model, 'general_manager_id') ?>
+    <?php // echo $form->field($model, 'location_id') ?>
+
+    <?php // echo $form->field($model, 'name_id') ?>
 
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Поиск'), ['class' => 'btn btn-primary']) ?>

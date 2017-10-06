@@ -15,11 +15,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
+        <?= Html::a(Yii::t('app', 'Обновить'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a(Yii::t('app', 'Удалить'), ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => Yii::t('app', 'Вы уверены что хотите удалить карточку должника?'),
+                'confirm' => Yii::t('app', 'Вы уверены что хотите удалить этот элемент?'),
                 'method' => 'post',
             ],
         ]) ?>
@@ -29,22 +29,6 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
-            'first_name',
-            'second_name',
-            'patronymic',
-            'name_mixed',
-            'address',
-            'region',
-            'regionId',
-            'district',
-            'districtId',
-            'city',
-            'cityId',
-            'street',
-            'streetId',
-            'building',
-            'buildingId',
-            'appartment',
             'phone',
             'LS_EIRC',
             'LS_IKU_provider',
@@ -52,7 +36,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'space_common',
             'space_living',
             'privatized',
-            'general_manager_id',
+            'location_id',
+            'name_id',
         ],
     ]) ?>
 

@@ -18,8 +18,8 @@ class DebtorSearch extends Debtor
     public function rules()
     {
         return [
-            [['id', 'privatized', 'location_id'], 'integer'],
-            [['first_name', 'second_name', 'patronymic', 'name_mixed', 'address', 'region', 'regionId', 'district', 'districtId', 'city', 'cityId', 'street', 'streetId', 'building', 'buildingId', 'appartment', 'phone', 'LS_EIRC', 'LS_IKU_provider', 'IKU'], 'safe'],
+            [['id', 'privatized', 'location_id', 'name_id'], 'integer'],
+            [['phone', 'LS_EIRC', 'LS_IKU_provider', 'IKU'], 'safe'],
             [['space_common', 'space_living'], 'number'],
         ];
     }
@@ -65,25 +65,10 @@ class DebtorSearch extends Debtor
             'space_living' => $this->space_living,
             'privatized' => $this->privatized,
             'location_id' => $this->location_id,
+            'name_id' => $this->name_id,
         ]);
 
-        $query->andFilterWhere(['like', 'first_name', $this->first_name])
-            ->andFilterWhere(['like', 'second_name', $this->second_name])
-            ->andFilterWhere(['like', 'patronymic', $this->patronymic])
-            ->andFilterWhere(['like', 'name_mixed', $this->name_mixed])
-            ->andFilterWhere(['like', 'address', $this->address])
-            ->andFilterWhere(['like', 'region', $this->region])
-            ->andFilterWhere(['like', 'regionId', $this->regionId])
-            ->andFilterWhere(['like', 'district', $this->district])
-            ->andFilterWhere(['like', 'districtId', $this->districtId])
-            ->andFilterWhere(['like', 'city', $this->city])
-            ->andFilterWhere(['like', 'cityId', $this->cityId])
-            ->andFilterWhere(['like', 'street', $this->street])
-            ->andFilterWhere(['like', 'streetId', $this->streetId])
-            ->andFilterWhere(['like', 'building', $this->building])
-            ->andFilterWhere(['like', 'buildingId', $this->buildingId])
-            ->andFilterWhere(['like', 'appartment', $this->appartment])
-            ->andFilterWhere(['like', 'phone', $this->phone])
+        $query->andFilterWhere(['like', 'phone', $this->phone])
             ->andFilterWhere(['like', 'LS_EIRC', $this->LS_EIRC])
             ->andFilterWhere(['like', 'LS_IKU_provider', $this->LS_IKU_provider])
             ->andFilterWhere(['like', 'IKU', $this->IKU]);
