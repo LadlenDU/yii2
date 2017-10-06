@@ -132,11 +132,11 @@ $columns = [
 ?>
 <div class="debtor-index">
 
-<!--    <h1><?/*= Html::encode($this->title) */?></h1>
-    <?php /*// echo $this->render('_search', ['model' => $searchModel]); */?>
+    <!--    <h1><? /*= Html::encode($this->title) */ ?></h1>
+    <?php /*// echo $this->render('_search', ['model' => $searchModel]); */ ?>
 
     <p>
-        <?/*= Html::a(Yii::t('app', 'Создать должника'), ['create'], ['class' => 'btn btn-success']) */?>
+        <? /*= Html::a(Yii::t('app', 'Создать должника'), ['create'], ['class' => 'btn btn-success']) */ ?>
     </p>-->
     <?php /*Pjax::begin(); */ ?><!--    <? /*= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -173,6 +173,31 @@ $columns = [
                 'before' => '{dynagrid}',
             ],
             'options' => ['id' => 'dynagrid-debtors-options'],
+            'toolbar' => [
+                [
+                    'content' =>
+                        Html::button('<i class="glyphicon glyphicon-plus"></i>',
+                            [
+                                'type' => 'button',
+                                'title' => Yii::t('app', 'Добавить должника'),
+                                'class' => 'btn btn-success',
+                                'href' => 'google.com'
+                            ]
+                        ) . ' ' .
+                        Html::a('<i class="glyphicon glyphicon-repeat"></i>',
+                            ['dynagrid-demo'],
+                            [
+                                'data-pjax' => 0,
+                                'class' => 'btn btn-default',
+                                'title' => Yii::t('app', 'Сбросить'),
+                            ]
+                        ),
+                ],
+                [
+                    'content' => '{dynagridFilter}{dynagridSort}{dynagrid}'
+                ],
+                '{export}',
+            ],
         ],
         'options' => ['id' => 'dynagrid-debtors'] // a unique identifier is important
     ]);

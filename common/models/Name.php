@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use common\models\info\Company;
 
 /**
  * This is the model class for table "name".
@@ -43,10 +44,10 @@ class Name extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'first_name' => Yii::t('app', 'First Name'),
-            'second_name' => Yii::t('app', 'Second Name'),
-            'patronymic' => Yii::t('app', 'Patronymic'),
-            'full_name' => Yii::t('app', 'Full Name'),
+            'first_name' => Yii::t('app', 'Имя'),
+            'second_name' => Yii::t('app', 'Фамилия'),
+            'patronymic' => Yii::t('app', 'Отчество'),
+            'full_name' => Yii::t('app', 'ФИО'),
         ];
     }
 

@@ -55,19 +55,19 @@ class Location extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'region' => Yii::t('app', 'регион (область)'),
-            'regionId' => Yii::t('app', 'код региона (области)'),
-            'district' => Yii::t('app', 'район'),
-            'districtId' => Yii::t('app', 'код района'),
-            'city' => Yii::t('app', 'город (населённый пункт)'),
-            'cityId' => Yii::t('app', 'код города (населённого пункта)'),
-            'street' => Yii::t('app', 'улица'),
-            'streetId' => Yii::t('app', 'код улицы'),
-            'building' => Yii::t('app', 'дом (строение)'),
-            'buildingId' => Yii::t('app', 'код дома (строения)'),
+            'region' => Yii::t('app', 'Регион (область)'),
+            'regionId' => Yii::t('app', 'Код региона (области)'),
+            'district' => Yii::t('app', 'Район'),
+            'districtId' => Yii::t('app', 'Код района'),
+            'city' => Yii::t('app', 'Город (населённый пункт)'),
+            'cityId' => Yii::t('app', 'Код города (населённого пункта)'),
+            'street' => Yii::t('app', 'Улица'),
+            'streetId' => Yii::t('app', 'Код улицы'),
+            'building' => Yii::t('app', 'Дом (строение)'),
+            'buildingId' => Yii::t('app', 'Код дома (строения)'),
             'appartment' => Yii::t('app', 'Квартира'),
-            'zip_code' => Yii::t('app', 'почтовый индекс'),
-            'arbitraty' => Yii::t('app', 'произвольная строка адреса (если не дано разделение по элементам)'),
+            'zip_code' => Yii::t('app', 'Почтовый индекс'),
+            'arbitraty' => Yii::t('app', 'Произвольная строка адреса'),
         ];
     }
 
