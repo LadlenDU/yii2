@@ -16,7 +16,7 @@
 
 <?= $form->field($model, 'space_living')->textInput() ?>
 
-<?= $form->field($model, 'privatized')->textInput() ?>
+<?/*= $form->field($model, 'ownership_type_id')->textInput() */?>
 
 <? /*= $form->field($model, 'location_id')->textInput() */ ?><!--
 

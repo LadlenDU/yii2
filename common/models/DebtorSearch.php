@@ -18,7 +18,7 @@ class DebtorSearch extends Debtor
     public function rules()
     {
         return [
-            [['id', 'privatized', 'location_id', 'name_id'], 'integer'],
+            [['id', 'ownership_type_id', 'location_id', 'name_id'], 'integer'],
             [['phone', 'LS_EIRC', 'LS_IKU_provider', 'IKU'], 'safe'],
             [['space_common', 'space_living'], 'number'],
         ];
@@ -63,7 +63,7 @@ class DebtorSearch extends Debtor
             'id' => $this->id,
             'space_common' => $this->space_common,
             'space_living' => $this->space_living,
-            'privatized' => $this->privatized,
+            'ownership_type_id' => $this->ownership_type_id,
             'location_id' => $this->location_id,
             'name_id' => $this->name_id,
         ]);

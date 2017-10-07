@@ -15,7 +15,7 @@ use common\models\Fine;
  * @property string $IKU
  * @property double $space_common
  * @property double $space_living
- * @property integer $privatized
+ * @property integer $ownership_type_id
  * @property integer $location_id
  * @property integer $name_id
  * @property string $expiration_start
@@ -24,6 +24,7 @@ use common\models\Fine;
  * @property DebtDetails[] $debtDetails
  * @property Location $location
  * @property Name $name
+ * @property OwnershipType $ownershipType
  * @property DebtorPublicService[] $debtorPublicServices
  * @property PublicService[] $publicServices
  */
@@ -44,11 +45,12 @@ class Debtor extends \yii\db\ActiveRecord
     {
         return [
             [['space_common', 'space_living', 'debt_total'], 'number'],
-            [['privatized', 'location_id', 'name_id'], 'integer'],
+            [['ownership_type_id', 'location_id', 'name_id'], 'integer'],
             [['expiration_start'], 'safe'],
             [['phone', 'LS_EIRC', 'LS_IKU_provider', 'IKU'], 'string', 'max' => 255],
             [['location_id'], 'exist', 'skipOnError' => true, 'targetClass' => Location::className(), 'targetAttribute' => ['location_id' => 'id']],
             [['name_id'], 'exist', 'skipOnError' => true, 'targetClass' => Name::className(), 'targetAttribute' => ['name_id' => 'id']],
+            [['ownership_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => OwnershipType::className(), 'targetAttribute' => ['ownership_type_id' => 'id']],
         ];
     }
 
@@ -67,7 +69,7 @@ class Debtor extends \yii\db\ActiveRecord
             'IKU' => Yii::t('app', 'ИКУ'),
             'space_common' => Yii::t('app', 'Общая площадь'),
             'space_living' => Yii::t('app', 'Жилая площадь'),
-            'privatized' => Yii::t('app', 'Приватизировано'),
+            'ownership_type_id' => Yii::t('app', 'Форма собственности'),
             'location_id' => Yii::t('app', 'Location ID'),
             'name_id' => Yii::t('app', 'Name ID'),
             'expiration_start' => Yii::t('app', 'Начало просрочки'),
@@ -97,6 +99,14 @@ class Debtor extends \yii\db\ActiveRecord
     public function getName()
     {
         return $this->hasOne(Name::className(), ['id' => 'name_id'])->inverseOf('debtors');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getOwnershipType()
+    {
+        return $this->hasOne(OwnershipType::className(), ['id' => 'ownership_type_id'])->inverseOf('debtors');
     }
 
     /**

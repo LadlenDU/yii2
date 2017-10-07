@@ -79,7 +79,8 @@ class DebtorParse extends Model
         'space_living' => [
             'жилая площадь',
         ],
-        'privatized' => [
+        //'privatized' => [
+        'ownership_type_id' => [
             'приватизировано',
             'приватизирован',
             'приватизирована',
@@ -88,7 +89,7 @@ class DebtorParse extends Model
     ];
 
     /*protected static $FIELDS_DEBTOR_FILTER = [
-        'privatized' => function($val) {
+        'ownership_type_id' => function($val) {
 
         }
     ];*/
@@ -212,7 +213,8 @@ class DebtorParse extends Model
                             } else {
                                 $col = str_replace([' ', ','], ['', '.'], $colPrepared);
                             }
-                        } elseif ($headers[$key][1] == 'privatized') {
+                        //} elseif ($headers[$key][1] == 'privatized') {
+                        } elseif ($headers[$key][1] == 'ownership_type_id') {
                             $col = ($colPrepared == 'приватизированное') ? 1 : 0;
                         } elseif ($headers[$key][1] == 'date' || $headers[$key][1] == 'payment_date') {
                             if ($colPrepared) {

@@ -20,7 +20,7 @@ class DebtDetailsSearch extends DebtDetails
     public $street;
     public $building;
     public $appartment;
-    public $privatized;
+    //public $privatized;
     public $phone;
 
 
@@ -30,8 +30,8 @@ class DebtDetailsSearch extends DebtDetails
     public function rules()
     {
         return [
-            [['LS_EIRC', 'LS_IKU_provider', 'IKU', 'name_mixed', 'city', 'street', 'building', 'appartment', 'privatized', 'phone'], 'safe'],
-            [['id', 'debtor_id', 'public_service_id'], 'integer'],
+            [['LS_EIRC', 'LS_IKU_provider', 'IKU', 'name_mixed', 'city', 'street', 'building', 'appartment', 'phone'], 'safe'],
+            [['id', 'ownership_type_id', 'debtor_id', 'public_service_id'], 'integer'],
             [['amount', 'amount_additional_services'], 'number'],
             [['date', 'payment_date'], 'safe'],
         ];
@@ -96,10 +96,10 @@ class DebtDetailsSearch extends DebtDetails
             'asc' => ['debtor.appartment' => SORT_ASC],
             'desc' => ['debtor.appartment' => SORT_DESC],
         ];
-        $dataProvider->sort->attributes['privatized'] = [
+        /*$dataProvider->sort->attributes['privatized'] = [
             'asc' => ['debtor.privatized' => SORT_ASC],
             'desc' => ['debtor.privatized' => SORT_DESC],
-        ];
+        ];*/
         $dataProvider->sort->attributes['phone'] = [
             'asc' => ['debtor.phone' => SORT_ASC],
             'desc' => ['debtor.phone' => SORT_DESC],
@@ -131,7 +131,7 @@ class DebtDetailsSearch extends DebtDetails
             ->andFilterWhere(['like', 'debtor.street', $this->street])
             ->andFilterWhere(['like', 'debtor.building', $this->building])
             ->andFilterWhere(['like', 'debtor.appartment', $this->appartment])
-            ->andFilterWhere(['like', 'debtor.privatized', $this->privatized])
+            //->andFilterWhere(['like', 'debtor.privatized', $this->privatized])
             ->andFilterWhere(['like', 'debtor.phone', $this->phone]);
 
         return $dataProvider;

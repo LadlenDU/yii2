@@ -116,7 +116,7 @@ HTML;
         'label' => Yii::t('app', 'Квартира'),
         'value' => 'debtor.location.appartment',
     ],
-    [
+    /*[
         'attribute' => 'privatized',
         'label' => Yii::t('app', 'Тип'),
         'value' => function ($model, $key, $index) {
@@ -124,7 +124,7 @@ HTML;
             return $model->debtor->privatized ? 'Приватизированное' : 'Муниципальное';
         },
         'format' => 'raw',
-    ],
+    ],*/
     [
         'attribute' => 'phone',
         'label' => Yii::t('app', 'Телефон'),

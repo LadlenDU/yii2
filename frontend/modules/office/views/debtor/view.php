@@ -35,7 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'IKU',
             'space_common',
             'space_living',
-            'privatized',
+            'ownership_type_id',
             'location_id',
             'name_id',
         ],

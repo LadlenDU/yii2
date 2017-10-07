@@ -29,7 +29,7 @@ use yii\widgets\ActiveForm;
 
     <?php // echo $form->field($model, 'space_living') ?>
 
-    <?php // echo $form->field($model, 'privatized') ?>
+    <?php // echo $form->field($model, 'ownership_type_id') ?>
 
     <?php // echo $form->field($model, 'location_id') ?>
 
