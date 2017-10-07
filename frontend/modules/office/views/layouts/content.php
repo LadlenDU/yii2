@@ -6,6 +6,7 @@ use yii\helpers\Html;
 ?>
 <div class="content-wrapper">
     <section class="content-header">
+        <h1>&nbsp;</h1>
         <?php /*if (isset($this->blocks['content-header'])) { */?><!--
             <h1><?/*= $this->blocks['content-header'] */?></h1>
         <?php /*} else { */?>
