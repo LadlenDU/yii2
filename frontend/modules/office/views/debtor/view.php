@@ -27,11 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </p>
     <?php endif; ?>
 
-    <?php
-
-    $ownershipTypeName = $model->ownershipType ? $model->ownershipType->name : Yii::t('app', '(не задано)');
-
-    echo DetailView::widget([
+    <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
             //'id',
@@ -46,17 +42,27 @@ $this->params['breadcrumbs'][] = $this->title;
             'space_common',
             'space_living',
             //'ownership_type_id',
-            //'ownershipType.name',
-            [                      // the owner name of the model
+            [
                 'label' => 'Форма собственности',
-                'value' => $ownershipTypeName,
+                'attribute' => 'ownershipType.name',
             ],
             //'name_id',
             'name.first_name',
             'name.second_name',
             'name.patronymic',
             'name.full_name',
-            'location_id',
+            //'location_id',
+            'location.region',
+            'location.district',
+            'location.city',
+            'location.street',
+            'location.building',
+            'location.appartment',
+            'location.zip_code',
+            [
+                'label' => 'Произвольное написание',
+                'attribute' => 'location.arbitraty',        //TODO: переименовать
+            ],
         ],
     ]) ?>
 
