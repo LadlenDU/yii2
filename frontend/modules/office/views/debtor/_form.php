@@ -11,7 +11,7 @@ use kartik\tabs\TabsX;
 
 $css = <<<CSS
 .debtor-form .glyphicon {
-    margin-right: 10px;
+    margin-right: .5em;
 }
 CSS;
 

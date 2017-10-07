@@ -58,6 +58,24 @@ if (Yii::$app->controller->action->id === 'login') {
 
     </div>
 
+    <!--<style> //TODO: попытка уменьшения размера
+        body {
+            font-size: 0.7em !important;
+        }
+        h1 {
+            font-size: 1.5em !important;
+        }
+        .content-header > h1 {
+            font-size: 1.2em !important;
+        }
+        .main-header .logo {
+            font-size: 1.5em !important;
+        }
+        .sidebar-menu li.header {
+            font-size: 0.8em !important;
+        }
+    </style>-->
+
     <?php $this->endBody() ?>
     </body>
     </html>
