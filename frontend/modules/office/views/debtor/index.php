@@ -249,13 +249,15 @@ $columns = [
 echo "<div id='modalContent'>SOME MODAL CONTENT</div>";
 yii\bootstrap\Modal::end();*/
 
+$loading = Html::img('/img/loading.gif', ['alt' => Yii::t('app', 'Загрузка...')]);
+
 $this->registerJs(
     "$(document).on('ready pjax:success', function() {  // 'pjax:success' use if you have used pjax
     $('.view').click(function(e){
-       e.preventDefault();      
-       $('#pModal').modal('show')
-                  .find('.modal-content')
-                  .load($(this).attr('href'));  
+       e.preventDefault();
+       var pModal = $('#pModal');
+       pModal.find('.modal-content').html('" . $loading . "');
+       pModal.modal('show').find('.modal-content').load($(this).attr('href'));
    });
 });
 ");
