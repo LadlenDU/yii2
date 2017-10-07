@@ -5,9 +5,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model common\models\Debtor */
 
-$this->title = Yii::t('app', 'Обновить {modelClass}: ', [
-    'modelClass' => 'должника',
-]) . $model->id;
+$this->title = Yii::t('app', 'Обновить данные {modelClass}', ['modelClass' => 'должника',]);
+
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Должники'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = Yii::t('app', 'Обновить');

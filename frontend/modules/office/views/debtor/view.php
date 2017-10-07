@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model common\models\Debtor */
 
-$this->title = $model->id;
+$this->title = Yii::t('app', 'Данные должника');    //$model->id;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Должники'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -14,6 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
+    <?php if (!Yii::$app->request->isAjax): ?>
     <p>
         <?= Html::a(Yii::t('app', 'Обновить'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         <?= Html::a(Yii::t('app', 'Удалить'), ['delete', 'id' => $model->id], [
@@ -24,20 +25,38 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ]) ?>
     </p>
+    <?php endif; ?>
 
-    <?= DetailView::widget([
+    <?php
+
+    $ownershipTypeName = $model->ownershipType ? $model->ownershipType->name : Yii::t('app', '(не задано)');
+
+    echo DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
+            //'id',
             'phone',
             'LS_EIRC',
-            'LS_IKU_provider',
+            //'LS_IKU_provider',
+            [
+                'label' => '№ личного счета',
+                'value' => $model->LS_IKU_provider,
+            ],
             'IKU',
             'space_common',
             'space_living',
-            'ownership_type_id',
+            //'ownership_type_id',
+            //'ownershipType.name',
+            [                      // the owner name of the model
+                'label' => 'Форма собственности',
+                'value' => $ownershipTypeName,
+            ],
+            //'name_id',
+            'name.first_name',
+            'name.second_name',
+            'name.patronymic',
+            'name.full_name',
             'location_id',
-            'name_id',
         ],
     ]) ?>
 
