@@ -166,7 +166,7 @@ $columns = [
 ];
 
 ?>
-    <div class="debtor-index">
+<div class="debtor-index">
 
     <!--    <h1><? /*= Html::encode($this->title) */ ?></h1>
     <?php /*// echo $this->render('_search', ['model' => $searchModel]); */ ?>
@@ -196,75 +196,81 @@ $columns = [
     ]); */ ?>
 <?php /*Pjax::end(); */ ?></div>-->
 
-<?= DynaGrid::widget([
-    'columns' => $columns,
-    'storage' => DynaGrid::TYPE_COOKIE,
-    'theme' => 'simple-striped',
-    'gridOptions' => [
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'pjax' => true,
-        'panel' => [
-            'heading' => '<h3 class="panel-title">' . Yii::t('app', 'Список должников') . '</h3>',
-            'before' => '{dynagrid}',
-        ],
-        'options' => ['id' => 'dynagrid-debtors-options'],
-        'toolbar' => [
-            [
-                'content' =>
-                    Html::button('<i class="glyphicon glyphicon-plus"></i>',
-                        [
-                            'type' => 'button',
-                            'title' => Yii::t('app', 'Добавить должника'),
-                            'class' => 'btn btn-success',
-                            'href' => Url::to('/office/debtor/create'),
-                        ]
-                    ) . ' ' .
-                    Html::a('<i class="glyphicon glyphicon-repeat"></i>',
-                        ['dynagrid-demo'],
-                        [
-                            'data-pjax' => 0,
-                            'class' => 'btn btn-default',
-                            'title' => Yii::t('app', 'Сбросить'),
-                        ]
-                    ),
+    <?= DynaGrid::widget([
+        'columns' => $columns,
+        'storage' => DynaGrid::TYPE_COOKIE,
+        'theme' => 'simple-striped',
+        'gridOptions' => [
+            'dataProvider' => $dataProvider,
+            'filterModel' => $searchModel,
+            'pjax' => true,
+            'panel' => [
+                'heading' => '<h3 class="panel-title">' . Yii::t('app', 'Список должников') . '</h3>',
+                'before' => '{dynagrid}',
             ],
-            [
-                'content' => '{dynagridFilter}{dynagridSort}{dynagrid}'
+            'options' => ['id' => 'dynagrid-debtors-options'],
+            'toolbar' => [
+                [
+                    'content' =>
+                        Html::button('<i class="glyphicon glyphicon-plus"></i>',
+                            [
+                                'type' => 'button',
+                                'title' => Yii::t('app', 'Добавить должника'),
+                                'class' => 'btn btn-success',
+                                'href' => Url::to('/office/debtor/create'),
+                            ]
+                        ) . ' ' .
+                        Html::a('<i class="glyphicon glyphicon-repeat"></i>',
+                            ['dynagrid-demo'],
+                            [
+                                'data-pjax' => 0,
+                                'class' => 'btn btn-default',
+                                'title' => Yii::t('app', 'Сбросить'),
+                            ]
+                        ),
+                ],
+                [
+                    'content' => '{dynagridFilter}{dynagridSort}{dynagrid}'
+                ],
+                '{export}',
             ],
-            '{export}',
         ],
-    ],
-    'options' => ['id' => 'dynagrid-debtors'] // a unique identifier is important
-]);
+        'options' => ['id' => 'dynagrid-debtors'] // a unique identifier is important
+    ]);
 
-/*yii\bootstrap\Modal::begin([
-    'headerOptions' => ['id' => 'modalHeader'],
-    'id' => 'modal',
-    'size' => 'modal-lg',
-    //keeps from closing modal with esc key or by clicking out of the modal.
-    // user must click cancel or X to close
-    'clientOptions' => ['backdrop' => 'static', 'keyboard' => FALSE]
-]);
-echo "<div id='modalContent'>SOME MODAL CONTENT</div>";
-yii\bootstrap\Modal::end();*/
+    /*yii\bootstrap\Modal::begin([
+        'headerOptions' => ['id' => 'modalHeader'],
+        'id' => 'modal',
+        'size' => 'modal-lg',
+        //keeps from closing modal with esc key or by clicking out of the modal.
+        // user must click cancel or X to close
+        'clientOptions' => ['backdrop' => 'static', 'keyboard' => FALSE]
+    ]);
+    echo "<div id='modalContent'>SOME MODAL CONTENT</div>";
+    yii\bootstrap\Modal::end();*/
 
-$loading = Html::img('/img/loading.gif', ['alt' => Yii::t('app', 'Загрузка...')]);
+    $loading = '<div style="text-align: center">' . Html::img('/img/loading.gif', [
+            'alt' => Yii::t('app', 'Загрузка...'),
+            'style' => 'margin:1em',
+        ]) . '</div>';
 
-$this->registerJs(
-    "$(document).on('ready pjax:success', function() {  // 'pjax:success' use if you have used pjax
-    $('.view').click(function(e){
-       e.preventDefault();
-       var pModal = $('#pModal');
-       pModal.find('.modal-content').html('" . $loading . "');
-       pModal.modal('show').find('.modal-content').load($(this).attr('href'));
-   });
-});
-");
+    $this->registerJs(<<<JS
+        $(document).on('ready pjax:success', function() {  // 'pjax:success' use if you have used pjax
+            $('.view').click(function(e){
+               e.preventDefault();
+               var pModal = $('#pModal');
+               pModal.find('.modal-content').html('$loading');
+               pModal.modal('show').find('.modal-content').load($(this).attr('href'));
+           });
+        });
+JS
+    );
 
-yii\bootstrap\Modal::begin([
-    'id'=>'pModal',
-]);
-yii\bootstrap\Modal::end();
+    $this->registerCss('.modal-content {padding: 1em;}');
 
-?>
+    yii\bootstrap\Modal::begin([
+        'id' => 'pModal',
+    ]);
+    yii\bootstrap\Modal::end();
+
+    ?>
