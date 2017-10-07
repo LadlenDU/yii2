@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use kartik\tabs\TabsX;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Debtor */
@@ -27,43 +28,30 @@ $this->params['breadcrumbs'][] = $this->title;
     </p>
     <?php endif; ?>
 
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            //'id',
-            'phone',
-            'LS_EIRC',
-            //'LS_IKU_provider',
-            [
-                'label' => '№ личного счета',
-                'value' => $model->LS_IKU_provider,
-            ],
-            'IKU',
-            'space_common',
-            'space_living',
-            //'ownership_type_id',
-            [
-                'label' => 'Форма собственности',
-                'attribute' => 'ownershipType.name',
-            ],
-            //'name_id',
-            'name.first_name',
-            'name.second_name',
-            'name.patronymic',
-            'name.full_name',
-            //'location_id',
-            'location.region',
-            'location.district',
-            'location.city',
-            'location.street',
-            'location.building',
-            'location.appartment',
-            'location.zip_code',
-            [
-                'label' => 'Произвольное написание',
-                'attribute' => 'location.arbitraty',        //TODO: переименовать
-            ],
+    <?php
+
+    $tabItems = [
+        [
+            'label' => '<i class="glyphicon glyphicon-list-alt"></i>' . Yii::t('app', 'Общие данные'),
+            'content' => $this->render('_view_common_data', ['model' => $model]),
+            'active' => true,
         ],
-    ]) ?>
+        [
+            'label' => '<i class="glyphicon glyphicon-folder-open"></i>' . Yii::t('app', 'Документооборот'),
+            'content' => 'empty',
+        ],
+        [
+            'label' => '<i class="glyphicon glyphicon-usd"></i>' . Yii::t('app', 'Финансовые данные'),
+            'content' => $this->render('_view_financial_data', ['model' => $model]),
+        ],
+    ];
+
+    echo TabsX::widget([
+        'items' => $tabItems,
+        'position' => TabsX::POS_ABOVE,
+        'encodeLabels' => false,
+    ]);
+
+    ?>
 
 </div>

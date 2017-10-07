@@ -27,7 +27,7 @@ $this->registerCss($css);
     $tabItems = [
         [
             'label' => '<i class="glyphicon glyphicon-list-alt"></i>' . Yii::t('app', 'Общие данные'),
-            'content' => $this->render('_common_data', ['form' => $form, 'model' => $model]),
+            'content' => $this->render('_form_common_data', ['form' => $form, 'model' => $model]),
             'active' => true,
         ],
         [
@@ -36,7 +36,7 @@ $this->registerCss($css);
         ],
         [
             'label' => '<i class="glyphicon glyphicon-usd"></i>' . Yii::t('app', 'Финансовые данные'),
-            'content' => $this->render('_financial_data', ['form' => $form, 'model' => $model]),
+            'content' => $this->render('_form_financial_data', ['form' => $form, 'model' => $model]),
         ],
     ];
 
