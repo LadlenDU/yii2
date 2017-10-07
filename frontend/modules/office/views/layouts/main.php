@@ -39,25 +39,37 @@ if (Yii::$app->controller->action->id === 'login') {
             .hu-pane .glyphicon {
                 margin-right: .5em;
             }
-        </style>
 
-        <!--<style> //TODO: попытка уменьшения размера
-        body {
-            font-size: 0.7em !important;
-        }
-        h1 {
-            font-size: 1.5em !important;
-        }
-        .content-header > h1 {
-            font-size: 1.2em !important;
-        }
-        .main-header .logo {
-            font-size: 1.5em !important;
-        }
-        .sidebar-menu li.header {
-            font-size: 0.8em !important;
-        }
-    </style>-->
+            /*TODO: попытка уменьшения размера*/
+            body {
+                font-size: 0.9em !important;
+            }
+
+            h1 {
+                font-size: 1.5em !important;
+            }
+
+            .content-header > h1 {
+                font-size: 1.2em !important;
+            }
+
+            .main-header .logo {
+                font-size: 1.5em !important;
+            }
+
+            .sidebar-menu li.header {
+                font-size: 0.8em !important;
+            }
+
+            .form-control {
+                height: 3em !important;
+                font-size: 1em !important;
+            }
+
+            .panel-title {
+                font-size: 1.5em;
+            }
+        </style>
 
     </head>
     <body class="hold-transition skin-blue sidebar-mini">
