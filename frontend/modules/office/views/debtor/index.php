@@ -24,6 +24,12 @@ $columns = [
             'view' => function ($url, $model) {
                 return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, ['class' => 'view', 'data-pjax' => '0']);
             },
+            'update' => function ($url, $model) {
+                return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, ['class' => 'view', 'data-pjax' => '0']);
+            },
+//            'delete' => function ($url, $model) {
+//                return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, ['class' => 'view', 'data-pjax' => '0']);
+//            },
         ],
     ],
     ['attribute' => 'phone'],
