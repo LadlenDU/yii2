@@ -5,6 +5,7 @@ use yii\grid\GridView;
 use yii\widgets\Pjax;
 use kartik\dynagrid\DynaGrid;
 use yii\helpers\Url;
+use yii\bootstrap\Modal;
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\DebtorSearch */
@@ -268,9 +269,10 @@ JS
 
     $this->registerCss('.modal-content {padding: 1em;}');
 
-    yii\bootstrap\Modal::begin([
+    Modal::begin([
         'id' => 'pModal',
+        'size' => 'modal-lg',
     ]);
-    yii\bootstrap\Modal::end();
+    Modal::end();
 
     ?>

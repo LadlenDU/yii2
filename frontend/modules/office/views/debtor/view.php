@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\DetailView;
+//use yii\widgets\DetailView;
 use kartik\tabs\TabsX;
 
 /* @var $this yii\web\View */
@@ -11,7 +11,7 @@ $this->title = Yii::t('app', 'Данные должника');    //$model->id;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Должники'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="debtor-view">
+<div class="debtor-view hu-pane">
 
     <h1><?= Html::encode($this->title) ?></h1>
 

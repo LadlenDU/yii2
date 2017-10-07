@@ -9,17 +9,9 @@ use kartik\tabs\TabsX;
 /* @var $model common\models\Debtor */
 /* @var $form yii\widgets\ActiveForm */
 
-$css = <<<CSS
-.debtor-form .glyphicon {
-    margin-right: .5em;
-}
-CSS;
-
-$this->registerCss($css);
-
 ?>
 
-<div class="debtor-form">
+<div class="debtor-form hu-pane">
 
     <?php
     $form = ActiveForm::begin();
