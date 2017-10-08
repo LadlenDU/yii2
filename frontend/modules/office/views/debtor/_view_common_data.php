@@ -9,6 +9,7 @@ use kartik\detail\DetailView;
 
 $modelName = $model->name ?: (new common\models\Name);
 $modelLocation = $model->location ?: (new common\models\Location);
+$modelOwnership = $model->ownershipType ?: (new common\models\OwnershipType);
 
 $fm = Yii::$app->formatter;
 
@@ -144,6 +145,71 @@ $attributes = [
                 'value' => $fm->asText($modelLocation->arbitraty),
                 'labelColOptions' => ['style' => 'width:10.3%;text-align:right'],
                 'valueColOptions' => ['style' => 'width:56.3%'],
+                'displayOnly' => true,
+                'format' => 'raw',
+            ],
+        ],
+    ],
+    [
+        'group' => true,
+        'label' => Yii::t('app', 'Данные'),
+        'rowOptions' => ['class' => 'info']
+    ],
+    [
+        'columns' => [
+            [
+                'attribute' => 'phone',
+                'displayOnly' => true,
+            ],
+        ],
+    ],
+    [
+        'columns' => [
+            [
+                'attribute' => 'LS_EIRC',
+                'value' => '<kbd>' . $fm->asText($model->LS_EIRC) . '</kbd>',
+                'labelColOptions' => ['style' => 'width:10.3%;text-align:right'],
+                'valueColOptions' => ['style' => 'width:23%'],
+                'displayOnly' => true,
+                'format' => 'raw',
+            ],
+            [
+                'attribute' => 'LS_IKU_provider',
+                'value' => '<kbd>' . $fm->asText($model->LS_IKU_provider) . '</kbd>',
+                'labelColOptions' => ['style' => 'width:10.3%;text-align:right'],
+                'valueColOptions' => ['style' => 'width:23%'],
+                'displayOnly' => true,
+                'format' => 'raw',
+            ],
+            [
+                'attribute' => 'IKU',
+                'value' => '<kbd>' . $fm->asText($model->IKU) . '</kbd>',
+                'labelColOptions' => ['style' => 'width:10.3%;text-align:right'],
+                'valueColOptions' => ['style' => 'width:23%'],
+                'displayOnly' => true,
+                'format' => 'raw',
+            ],
+        ],
+    ],
+    [
+        'columns' => [
+            [
+                'attribute' => 'space_common',
+                'labelColOptions' => ['style' => 'width:10.3%;text-align:right'],
+                'valueColOptions' => ['style' => 'width:23%'],
+                'displayOnly' => true,
+            ],
+            [
+                'attribute' => 'space_living',
+                'labelColOptions' => ['style' => 'width:10.3%;text-align:right'],
+                'valueColOptions' => ['style' => 'width:23%'],
+                'displayOnly' => true,
+            ],
+            [
+                'attribute' => 'ownership_type_id',
+                'value' => '<kbd>' . $fm->asText($modelOwnership->name) . '</kbd>',
+                'labelColOptions' => ['style' => 'width:10.3%;text-align:right'],
+                'valueColOptions' => ['style' => 'width:23%'],
                 'displayOnly' => true,
                 'format' => 'raw',
             ],
