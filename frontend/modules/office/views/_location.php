@@ -27,6 +27,6 @@ if (!$model) {
         <?= $form->field($model, 'building') ?>
         <?= $form->field($model, 'buildingId') ?>
         <?= $form->field($model, 'zip_code') ?>
-        <?= $form->field($model, 'arbitraty') ?>
+        <?= $form->field($model, 'full_address') ?>
     
 </div><!-- _location -->

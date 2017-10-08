@@ -21,7 +21,7 @@ use common\models\info\Company;
  * @property string $buildingId
  * @property string $appartment
  * @property string $zip_code
- * @property string $arbitraty
+ * @property string $full_address
  *
  * @property Company[] $companies
  * @property Company[] $companies0
@@ -44,7 +44,7 @@ class Location extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['region', 'regionId', 'district', 'districtId', 'city', 'cityId', 'street', 'streetId', 'building', 'buildingId', 'appartment', 'zip_code', 'arbitraty'], 'string', 'max' => 255],
+            [['region', 'regionId', 'district', 'districtId', 'city', 'cityId', 'street', 'streetId', 'building', 'buildingId', 'appartment', 'zip_code', 'full_address'], 'string', 'max' => 255],
         ];
     }
 
@@ -67,7 +67,7 @@ class Location extends \yii\db\ActiveRecord
             'buildingId' => Yii::t('app', 'Код дома (строения)'),
             'appartment' => Yii::t('app', 'Квартира'),
             'zip_code' => Yii::t('app', 'Почтовый индекс'),
-            'arbitraty' => Yii::t('app', 'Произвольная строка адреса'),
+            'full_address' => Yii::t('app', 'Произвольная строка адреса'),
         ];
     }
 

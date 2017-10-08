@@ -134,7 +134,7 @@ $attributes = [
             [
                 'attribute' => 'location_id',
                 'label' => Yii::t('app', 'Полный адрес'),
-                'value' => $fm->asText($modelLocation->arbitraty),
+                'value' => $fm->asText($modelLocation->full_address),
                 'displayOnly' => true,
                 'format' => 'raw',
             ],
@@ -245,7 +245,7 @@ echo DetailView::widget([
 //        'location.zip_code',
 //        [
 //            'label' => 'Произвольное написание',
-//            'attribute' => 'location.arbitraty',        //TODO: переименовать
+//            'attribute' => 'location.full_address',
 //        ],
     ],*/
 ]);
