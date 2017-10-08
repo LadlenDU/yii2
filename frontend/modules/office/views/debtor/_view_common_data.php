@@ -27,7 +27,7 @@ $attributes = [
                 'value' => $fm->asText($modelName->second_name),
                 'labelColOptions' => ['style' => 'width:10.3%;text-align:right'],
                 'valueColOptions' => ['style' => 'width:23%'],
-                'displayOnly' => true,
+                //'displayOnly' => true,
                 'format' => 'raw',
             ],
             [
@@ -36,7 +36,7 @@ $attributes = [
                 'value' => $fm->asText($modelName->first_name),
                 'labelColOptions' => ['style' => 'width:10.3%;text-align:right'],
                 'valueColOptions' => ['style' => 'width:23%'],
-                'displayOnly' => true,
+                //'displayOnly' => true,
                 'format' => 'raw',
             ],
             [
@@ -213,7 +213,18 @@ echo DetailView::widget([
     'bordered' => true,
     'striped' => false,
     'hAlign' => 'right',
-    'mode' => DetailView::MODE_VIEW,
+    'responsive' => true,
+    //'mode' => DetailView::MODE_VIEW,
+    'mode' => DetailView::MODE_EDIT,
+    'panel' => [
+        'heading'=>'&nbsp;',
+        'type' => DetailView::TYPE_INFO,
+    ],
+    /*'deleteOptions'=>[ // your ajax delete parameters
+        'params' => ['id' => 1000, 'kvdelete'=>true],
+    ],
+    'container' => ['id'=>'kv-demo'],
+    'formOptions' => ['action' => yii\helpers\Url::current(['#' => 'kv-demo'])], // your action to delete*/
     'attributes' => $attributes,/*[
         [
             'label' => $model->name->getAttribute('first_name'),
