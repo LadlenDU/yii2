@@ -70,8 +70,8 @@ $attributes = [
         'columns' => [
             [
                 'attribute' => 'location_id',
-                'label' => $modelLocation->getAttributeLabel('region'),
-                'value' => $fm->asText($modelLocation->region) . ' (id: <kbd>' . $fm->asText($modelLocation->regionId) . '</kbd>)',
+                'label' => $modelLocation->getAttributeLabel('zip_code'),
+                'value' => $modelLocation->zip_code,
                 'labelColOptions' => ['style' => 'width:10.3%;text-align:right'],
                 'valueColOptions' => ['style' => 'width:23%'],
                 'displayOnly' => true,
@@ -79,8 +79,8 @@ $attributes = [
             ],
             [
                 'attribute' => 'location_id',
-                'label' => $modelLocation->getAttributeLabel('district'),
-                'value' => $fm->asText($modelLocation->district) . ' (id: <kbd>' . $fm->asText($modelLocation->districtId) . '</kbd>)',
+                'label' => $modelLocation->getAttributeLabel('region'),
+                'value' => $fm->asText($modelLocation->region) . ' (id: <kbd>' . $fm->asText($modelLocation->regionId) . '</kbd>)',
                 'labelColOptions' => ['style' => 'width:10.3%;text-align:right'],
                 'valueColOptions' => ['style' => 'width:23%'],
                 'displayOnly' => true,
@@ -132,19 +132,8 @@ $attributes = [
         'columns' => [
             [
                 'attribute' => 'location_id',
-                'label' => $modelLocation->getAttributeLabel('zip_code'),
-                'value' => $fm->asText($modelLocation->zip_code),
-                'labelColOptions' => ['style' => 'width:10.3%;text-align:right'],
-                'valueColOptions' => ['style' => 'width:23%'],
-                'displayOnly' => true,
-                'format' => 'raw',
-            ],
-            [
-                'attribute' => 'location_id',
-                'label' => Yii::t('app', 'Полный'),
+                'label' => Yii::t('app', 'Адрес полностью'),
                 'value' => $fm->asText($modelLocation->arbitraty),
-                'labelColOptions' => ['style' => 'width:10.3%;text-align:right'],
-                'valueColOptions' => ['style' => 'width:56.3%'],
                 'displayOnly' => true,
                 'format' => 'raw',
             ],
