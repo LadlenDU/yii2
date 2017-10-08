@@ -214,8 +214,8 @@ echo DetailView::widget([
     'striped' => false,
     'hAlign' => 'right',
     'responsive' => true,
-    //'mode' => DetailView::MODE_VIEW,
-    'mode' => DetailView::MODE_EDIT,
+    'mode' => DetailView::MODE_VIEW,
+    //'mode' => DetailView::MODE_EDIT,
     'panel' => [
         'heading'=>'&nbsp;',
         'type' => DetailView::TYPE_INFO,
