@@ -42,7 +42,7 @@ if (Yii::$app->controller->action->id === 'login') {
 
             /*TODO: попытка уменьшения размера*/
             body {
-                font-size: 0.9em !important;
+                font-size: 1.1em !important;
             }
 
             h1 {
@@ -53,7 +53,9 @@ if (Yii::$app->controller->action->id === 'login') {
                 font-size: 1.2em !important;
             }
 
-            .main-header .logo {
+            .main-header .logo,
+            .sidebar-mini.sidebar-collapse .main-header .logo > .logo-mini
+            {
                 font-size: 1.5em !important;
             }
 
