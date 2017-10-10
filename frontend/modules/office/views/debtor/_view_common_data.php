@@ -24,13 +24,12 @@ $attributes = [
     [
         'columns' => [
             [
-                'attribute' => 'name_id',
+                'attribute' => 'name',
                 'label' => $modelName->getAttributeLabel('second_name'),
                 'value' => $fm->asText($modelName->second_name),
                 'labelColOptions' => ['style' => 'width:10.3%;text-align:right'],
                 'valueColOptions' => ['style' => 'width:23%'],
-                //'displayOnly' => true,
-                'format' => 'raw',
+                'displayOnly' => true,
             ],
             [
                 'attribute' => 'name_id',
@@ -38,8 +37,8 @@ $attributes = [
                 'value' => $fm->asText($modelName->first_name),
                 'labelColOptions' => ['style' => 'width:10.3%;text-align:right'],
                 'valueColOptions' => ['style' => 'width:23%'],
-                //'displayOnly' => true,
-                'format' => 'raw',
+                'displayOnly' => true,
+                //'format' => 'raw',
             ],
             [
                 'attribute' => 'name_id',
@@ -47,8 +46,8 @@ $attributes = [
                 'value' => $fm->asText($modelName->patronymic),
                 'labelColOptions' => ['style' => 'width:10.3%;text-align:right'],
                 'valueColOptions' => ['style' => 'width:23%'],
-                //'displayOnly' => true,
-                'format' => 'raw',
+                'displayOnly' => true,
+                //'format' => 'raw',
             ],
         ],
     ],
@@ -201,7 +200,7 @@ $attributes = [
                 'value' => $fm->asText($modelOwnership->id),
                 'labelColOptions' => ['style' => 'width:10.3%;text-align:right'],
                 'valueColOptions' => ['style' => 'width:23%'],
-                'items' => ['id' => '', 'name' => Yii::t('app', 'Не выбрано')] + ArrayHelper::map(OwnershipType::find()->orderBy('name')->asArray()->all(), 'id', 'name'),
+                'items' => [Yii::t('app', 'Не выбрано')] + ArrayHelper::map(OwnershipType::find()->orderBy('name')->asArray()->all(), 'id', 'name'),
                 //'displayOnly' => true,
                 //'format' => 'raw',
                 'type' => DetailView::INPUT_DROPDOWN_LIST,
@@ -217,17 +216,18 @@ echo DetailView::widget([
     'bordered' => true,
     'striped' => false,
     'hAlign' => 'right',
-    'responsive' => true,
+    //'responsive' => true,
     'mode' => DetailView::MODE_EDIT,
-    //'mode' => DetailView::MODE_VIEW,
+    //$'mode' => DetailView::MODE_VIEW,
     //'updateOptions' => '<span class="glyphicon glyphicon-pencil" onclick="alert(123)"></span>',
     //'updateOptions' => ['label' => '<span class="glyphicon glyphicon-pencil" onclick="alert(123)"></span>'],
-    //'mode' => DetailView::MODE_EDIT,
-    /*'panel' => [
-        'heading'=>'&nbsp;',
+    'panel' => [
+        'heading' => '&nbsp;',
         'type' => DetailView::TYPE_INFO,
     ],
-    'buttons1' => '<button type="button" onclick="t.setMode(\'edit\')" class="kv-action-btn kv-btn-update" title="" data-toggle="tooltip" data-container="body" data-original-title="' . Yii::t('app', 'Модифицировать') . '"><i class="glyphicon glyphicon-pencil"></i></button>{delete}',*/
+    'buttons2' => '{save}',
+    //'buttons2' => '<button type="button" onclick="t.setMode(\'edit\')" class="kv-action-btn kv-btn-update" title="" data-toggle="tooltip" data-container="body" data-original-title="' . Yii::t('app', 'Модифицировать') . '"><i class="glyphicon glyphicon-pencil"></i></button>{delete}',
+    //'buttons1' => '<button type="button" onclick="t.setMode(\'edit\')" class="kv-action-btn kv-btn-update" title="" data-toggle="tooltip" data-container="body" data-original-title="' . Yii::t('app', 'Модифицировать') . '"><i class="glyphicon glyphicon-pencil"></i></button>{delete}',
     /*'deleteOptions'=>[ // your ajax delete parameters
         'params' => ['id' => 1000, 'kvdelete'=>true],
     ],

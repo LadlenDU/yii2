@@ -10,6 +10,7 @@ use kartik\tabs\TabsX;
 $this->title = Yii::t('app', 'Данные должника');    //$model->id;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Должники'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div class="debtor-view hu-pane">
 
