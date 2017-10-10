@@ -3,13 +3,15 @@
 use yii\helpers\Html;
 //use yii\widgets\DetailView;
 use kartik\detail\DetailView;
+use yii\helpers\ArrayHelper;
+use common\models\OwnershipType;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Debtor */
 
 $modelName = $model->name ?: (new common\models\Name);
 $modelLocation = $model->location ?: (new common\models\Location);
-$modelOwnership = $model->ownershipType ?: (new common\models\OwnershipType);
+$modelOwnership = $model->ownershipType ?: (new OwnershipType);
 
 $fm = Yii::$app->formatter;
 
@@ -45,7 +47,7 @@ $attributes = [
                 'value' => $fm->asText($modelName->patronymic),
                 'labelColOptions' => ['style' => 'width:10.3%;text-align:right'],
                 'valueColOptions' => ['style' => 'width:23%'],
-                'displayOnly' => true,
+                //'displayOnly' => true,
                 'format' => 'raw',
             ],
         ],
@@ -153,7 +155,7 @@ $attributes = [
                 'value' => '<kbd>' . $fm->asText($model->LS_EIRC) . '</kbd>',
                 'labelColOptions' => ['style' => 'width:20%;text-align:right'],
                 'valueColOptions' => ['style' => 'width:30%'],
-                'displayOnly' => true,
+                //'displayOnly' => true,
                 'format' => 'raw',
             ],
             /*[
@@ -169,7 +171,7 @@ $attributes = [
                 'value' => '<kbd>' . $fm->asText($model->IKU) . '</kbd>',
                 'labelColOptions' => ['style' => 'width:20%;text-align:right'],
                 'valueColOptions' => ['style' => 'width:30%'],
-                'displayOnly' => true,
+                //'displayOnly' => true,
                 'format' => 'raw',
             ],
         ],
@@ -180,13 +182,13 @@ $attributes = [
                 'attribute' => 'phone',
                 'labelColOptions' => ['style' => 'width:10.3%;text-align:right'],
                 'valueColOptions' => ['style' => 'width:23%'],
-                'displayOnly' => true,
+                //'displayOnly' => true,
             ],
             [
                 'attribute' => 'space_common',
                 'labelColOptions' => ['style' => 'width:10.3%;text-align:right'],
                 'valueColOptions' => ['style' => 'width:23%'],
-                'displayOnly' => true,
+                //'displayOnly' => true,
             ],
             /*[
                 'attribute' => 'space_living',
@@ -196,11 +198,13 @@ $attributes = [
             ],*/
             [
                 'attribute' => 'ownership_type_id',
-                'value' => $fm->asText($modelOwnership->name),
+                'value' => $fm->asText($modelOwnership->id),
                 'labelColOptions' => ['style' => 'width:10.3%;text-align:right'],
                 'valueColOptions' => ['style' => 'width:23%'],
-                'displayOnly' => true,
-                'format' => 'raw',
+                'items' => ['id' => '', 'name' => Yii::t('app', 'Не выбрано')] + ArrayHelper::map(OwnershipType::find()->orderBy('name')->asArray()->all(), 'id', 'name'),
+                //'displayOnly' => true,
+                //'format' => 'raw',
+                'type' => DetailView::INPUT_DROPDOWN_LIST,
             ],
         ],
     ],
@@ -214,12 +218,16 @@ echo DetailView::widget([
     'striped' => false,
     'hAlign' => 'right',
     'responsive' => true,
-    'mode' => DetailView::MODE_VIEW,
+    'mode' => DetailView::MODE_EDIT,
+    //'mode' => DetailView::MODE_VIEW,
+    //'updateOptions' => '<span class="glyphicon glyphicon-pencil" onclick="alert(123)"></span>',
+    //'updateOptions' => ['label' => '<span class="glyphicon glyphicon-pencil" onclick="alert(123)"></span>'],
     //'mode' => DetailView::MODE_EDIT,
-    'panel' => [
+    /*'panel' => [
         'heading'=>'&nbsp;',
         'type' => DetailView::TYPE_INFO,
     ],
+    'buttons1' => '<button type="button" onclick="t.setMode(\'edit\')" class="kv-action-btn kv-btn-update" title="" data-toggle="tooltip" data-container="body" data-original-title="' . Yii::t('app', 'Модифицировать') . '"><i class="glyphicon glyphicon-pencil"></i></button>{delete}',*/
     /*'deleteOptions'=>[ // your ajax delete parameters
         'params' => ['id' => 1000, 'kvdelete'=>true],
     ],
