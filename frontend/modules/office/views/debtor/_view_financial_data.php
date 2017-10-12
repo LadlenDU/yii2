@@ -121,7 +121,7 @@ echo DynaGrid::widget([
             'heading' => '<h3 class="panel-title">' . Yii::t('app', 'Список задолженностей') . '</h3>',
             'before' => '{dynagrid}',
         ],
-        'options' => ['id' => 'dynagrid-debtors-options'],
+        'options' => ['id' => 'dynagrid-debts-options'],
         'toolbar' => [
             [
                 'content' =>
@@ -156,5 +156,5 @@ echo DynaGrid::widget([
             '{export}',
         ],
     ],
-    'options' => ['id' => 'dynagrid-debtors'] // a unique identifier is important
+    'options' => ['id' => 'dynagrid-debts'] // a unique identifier is important
 ]);
