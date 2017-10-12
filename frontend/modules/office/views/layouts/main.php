@@ -71,6 +71,10 @@ if (Yii::$app->controller->action->id === 'login') {
             .panel-title {
                 font-size: 1.5em;
             }
+
+            #dynagrid-debtors-grid-modal {
+                z-index: 1051;
+            }
         </style>
 
     </head>
