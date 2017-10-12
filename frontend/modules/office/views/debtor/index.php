@@ -26,11 +26,13 @@ $columns = [
                 return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, ['class' => 'view', 'data-pjax' => '0']);
             },
             'update' => function ($url, $model) {
-                return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, ['class' => 'view', 'data-pjax' => '0']);
+                return '';
+                //return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, ['class' => 'view', 'data-pjax' => '0']);
             },
-//            'delete' => function ($url, $model) {
-//                return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, ['class' => 'view', 'data-pjax' => '0']);
-//            },
+            'delete' => function ($url, $model) {
+                return '';
+                //return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, ['class' => 'view', 'data-pjax' => '0']);
+            },
         ],
     ],
     ['attribute' => 'phone'],
@@ -56,14 +58,14 @@ $columns = [
         'format' => ['decimal', 2],
         'hAlign' => 'right',
     ],*/
-    [
+    /*[
         'attribute' => Yii::t('app', 'Пеня'),
         'value' => function (\common\models\Debtor $model, $key, $index) {
             return $model->calcFine();
         },
         'format' => ['decimal', 2],
         'hAlign' => 'right',
-    ],
+    ],*/
     /*[
         //TODO: разобраться с label
         'attribute' => 'LS_IKU_provider',
@@ -220,7 +222,7 @@ $columns = [
                                 'class' => 'btn btn-success',
                                 'href' => Url::to('/office/debtor/create'),
                             ]
-                        ) . ' ' .
+                        )/* . ' ' .
                         Html::a('<i class="glyphicon glyphicon-repeat"></i>',
                             ['dynagrid-demo'],
                             [
@@ -228,11 +230,11 @@ $columns = [
                                 'class' => 'btn btn-default',
                                 'title' => Yii::t('app', 'Сбросить'),
                             ]
-                        ),
+                        )*/,
                 ],
-                [
+                /*[
                     'content' => '{dynagridFilter}{dynagridSort}{dynagrid}'
-                ],
+                ],*/
                 '{export}',
             ],
         ],
