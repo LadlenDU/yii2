@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "f3909d795217bd0f2a5a345be1ae135d",
+    "content-hash": "4be584f98be3b861e973481c51ca41f6",
     "packages": [
         {
             "name": "almasaeed2010/adminlte",
@@ -1244,16 +1244,16 @@
         },
         {
             "name": "kartik-v/yii2-helpers",
-            "version": "v1.3.6",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-helpers.git",
-                "reference": "0b9d5f17464df9f68e249ed4411f9f1381927b83"
+                "reference": "fbb97c4433d8165960b069cc8b23f36aa8993527"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-helpers/zipball/0b9d5f17464df9f68e249ed4411f9f1381927b83",
-                "reference": "0b9d5f17464df9f68e249ed4411f9f1381927b83",
+                "url": "https://api.github.com/repos/kartik-v/yii2-helpers/zipball/fbb97c4433d8165960b069cc8b23f36aa8993527",
+                "reference": "fbb97c4433d8165960b069cc8b23f36aa8993527",
                 "shasum": ""
             },
             "require": {
@@ -1291,7 +1291,7 @@
                 "yii",
                 "yii2"
             ],
-            "time": "2016-11-26T06:03:52+00:00"
+            "time": "2017-07-06 10:26:18"
         },
         {
             "name": "kartik-v/yii2-krajee-base",
@@ -5135,6 +5135,7 @@
     "stability-flags": {
         "dektrium/yii2-rbac": 20,
         "kartik-v/yii2-tree-manager": 20,
+        "kartik-v/yii2-helpers": 20,
         "kartik-v/yii2-widget-datepicker": 20,
         "kartik-v/yii2-widget-fileinput": 20,
         "kartik-v/yii2-detail-view": 20

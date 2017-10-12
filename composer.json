@@ -25,7 +25,7 @@
         "kartik-v/yii2-tree-manager": "@dev",
         "dektrium/yii2-user": "^0.9.12",
         "phpoffice/phpexcel": "^1.8",
-        "kartik-v/yii2-helpers": "*",
+        "kartik-v/yii2-helpers": "dev-master",
         "kartik-v/yii2-dynagrid": "*",
         "kartik-v/yii2-widget-datepicker": "@dev",
         "andkon/yii2kladr": "^1.0",

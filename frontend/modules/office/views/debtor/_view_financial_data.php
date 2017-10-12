@@ -1,11 +1,13 @@
 <?php
 
-use yii\helpers\Html;
+//use yii\helpers\Html;
 use yii\widgets\DetailView;
 use kartik\dynagrid\DynaGrid;
+use kartik\helpers\Html;
 use yii\helpers\Url;
 use \common\models\DebtDetails;
 use \common\models\DebtDetailsSearch;
+use kartik\tabs\TabsX;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Debtor */
@@ -109,7 +111,50 @@ $searchModel = new DebtDetailsSearch();
 //$dataProvider = $searchModel->search(['debtor_id' => $model->id] + Yii::$app->request->queryParams);
 $dataProvider = $searchModel->search(['debtor_id' => $model->id]);
 
-echo DynaGrid::widget([
+?>
+
+    <div class="row">
+        <div class="col-sm-3"><?= Yii::t('app', 'Начислено') ?></div>
+        <div class="col-sm-3"><?= Yii::t('app', 'Оплачено') ?></div>
+        <div class="col-sm-3"><?= Yii::t('app', 'Задолженность') ?></div>
+        <div class="col-sm-3"><?= Yii::t('app', 'Пеня') ?></div>
+    </div>
+
+<?php
+
+/*echo Html::radioButtonGroup('fin_data', '1',
+    [
+        1 => Yii::t('app', 'Начислено'),
+        2 => Yii::t('app', 'Оплачено'),
+        3 => Yii::t('app', 'Пеня')
+    ]
+);*/
+
+$tabItems = [
+    [
+        'label' => '<i class="glyphicon glyphicon-list-alt"></i>' . Yii::t('app', 'Начислено'),
+        //'content' => $this->render('_form_common_data', ['form' => $form, 'model' => $model]),
+        'content' => 'sdfdsf',
+        'active' => true,
+    ],
+    [
+        'label' => '<i class="glyphicon glyphicon-folder-open"></i>' . Yii::t('app', 'Оплачено'),
+        'content' => 'empty',
+    ],
+    [
+        'label' => '<i class="glyphicon glyphicon-usd"></i>' . Yii::t('app', 'Пеня'),
+        //'content' => $this->render('_form_financial_data', ['form' => $form, 'model' => $model]),
+        'content' => 'sdfdsfssss',
+    ],
+];
+
+echo TabsX::widget([
+    'items' => $tabItems,
+    'position' => TabsX::POS_RIGHT,
+    'encodeLabels' => false,
+]);
+
+DynaGrid::widget([
     'columns' => $columns,
     'storage' => DynaGrid::TYPE_COOKIE,
     'theme' => 'simple-striped',
@@ -129,7 +174,7 @@ echo DynaGrid::widget([
                         ['/office/debt-details/create', 'id' => $model->id],
                         [
                             'class' => 'btn btn-success',
-                            'title'=>Yii::t('app', 'Добавить задолженность'),
+                            'title' => Yii::t('app', 'Добавить задолженность'),
                             //'href' => Url::to(['/office/debt-details/create', 'id' => $model->id]),
                         ]
                     ) .
