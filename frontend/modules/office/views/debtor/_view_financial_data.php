@@ -146,31 +146,31 @@ echo DynaGrid::widget([
             'before' => '{dynagrid}',
         ],
         'options' => ['id' => 'dynagrid-debtors-options'],
-        /*'toolbar' => [
+        'toolbar' => [
             [
                 'content' =>
                     Html::button('<i class="glyphicon glyphicon-plus"></i>',
                         [
                             'type' => 'button',
-                            'title' => Yii::t('app', 'Добавить должника'),
+                            'title' => Yii::t('app', 'Добавить долг'),
                             'class' => 'btn btn-success',
                             'href' => Url::to('/office/debtor/create'),
                         ]
-                    ) . ' ' .
-                    Html::a('<i class="glyphicon glyphicon-repeat"></i>',
-                        ['dynagrid-demo'],
-                        [
-                            'data-pjax' => 0,
-                            'class' => 'btn btn-default',
-                            'title' => Yii::t('app', 'Сбросить'),
-                        ]
-                    ),
+                    )/* . ' ' .
+                        Html::a('<i class="glyphicon glyphicon-repeat"></i>',
+                            ['dynagrid-demo'],
+                            [
+                                'data-pjax' => 0,
+                                'class' => 'btn btn-default',
+                                'title' => Yii::t('app', 'Сбросить'),
+                            ]
+                        )*/,
             ],
-            [
+            /*[
                 'content' => '{dynagridFilter}{dynagridSort}{dynagrid}'
-            ],
+            ],*/
             '{export}',
-        ],*/
+        ],
     ],
     'options' => ['id' => 'dynagrid-debtors'] // a unique identifier is important
 ]);
