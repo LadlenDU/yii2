@@ -114,23 +114,32 @@ $dataProvider = $searchModel->search(['debtor_id' => $model->id]);
 ?>
 
     <div class="row">
-        <div class="col-sm-3"><?= Yii::t('app', 'Начислено') ?></div>
-        <div class="col-sm-3"><?= Yii::t('app', 'Оплачено') ?></div>
-        <div class="col-sm-3"><?= Yii::t('app', 'Задолженность') ?></div>
-        <div class="col-sm-3"><?= Yii::t('app', 'Пеня') ?></div>
+        <div class="col-sm-3">
+            <?= Yii::t('app', 'Начислено') ?>
+        </div>
+        <div class="col-sm-3">
+            <?= Yii::t('app', 'Оплачено') ?>
+        </div>
+        <div class="col-sm-3">
+            <?= Yii::t('app', 'Задолженность') ?>
+        </div>
+        <div class="col-sm-3">
+            <?= Yii::t('app', 'Пеня') ?>
+        </div>
     </div>
-
+<br>
 <?php
 
-/*echo Html::radioButtonGroup('fin_data', '1',
+echo '<div style="text-align: center">' . Html::radioButtonGroup('fin_data', '1',
     [
+        0 => Yii::t('app', 'Общая информация'),
         1 => Yii::t('app', 'Начислено'),
         2 => Yii::t('app', 'Оплачено'),
         3 => Yii::t('app', 'Пеня')
     ]
-);*/
+) . '</div>';
 
-$tabItems = [
+/*$tabItems = [
     [
         'label' => '<i class="glyphicon glyphicon-list-alt"></i>' . Yii::t('app', 'Начислено'),
         //'content' => $this->render('_form_common_data', ['form' => $form, 'model' => $model]),
@@ -152,7 +161,7 @@ echo TabsX::widget([
     'items' => $tabItems,
     'position' => TabsX::POS_RIGHT,
     'encodeLabels' => false,
-]);
+]);*/
 
 DynaGrid::widget([
     'columns' => $columns,
