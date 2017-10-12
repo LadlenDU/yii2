@@ -4,11 +4,16 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 use kartik\dynagrid\DynaGrid;
 use yii\helpers\Url;
+use \common\models\DebtDetails;
+use \common\models\DebtDetailsSearch;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Debtor */
 
-$modelDebtDetails = \common\models\DebtDetails::find()->where(['debtor_id' => $model->id])->all();
+$modelDebtDetails = DebtDetails::find()->where(['debtor_id' => $model->id])->all();
+
+#$searchModel = new DebtDetailsSearch();
+#$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
 //$searchModel = new DebtorSearch();
 //$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -21,7 +26,7 @@ $modelDebtDetails = \common\models\DebtDetails::find()->where(['debtor_id' => $m
     ],
 ]);*/
 
-foreach ($model->debtDetails as $detail) {
+/*foreach ($model->debtDetails as $detail) {
     echo DetailView::widget([
         'model' => $detail,
         'attributes' => [
@@ -41,16 +46,24 @@ foreach ($model->debtDetails as $detail) {
             'outgoing_balance_debit',
             'outgoing_balance_credit',
             'overdue_debts',
+            [
+                'attribute' => Yii::t('app', 'Пеня'),
+                'value' => function (\common\models\Debtor $model, $key, $index) {
+                    return $model->calcFine();
+                },
+                'format' => ['decimal', 2],
+                'hAlign' => 'right',
+            ],
         ],
     ]) . '<hr><br>';
-}
+}*/
 
 $columns = [
     [
         'class' => 'kartik\grid\CheckboxColumn',
         'order' => DynaGrid::ORDER_FIX_LEFT,
     ],
-    [
+/*    [
         'class' => 'yii\grid\ActionColumn',
         'buttons' => [
             'view' => function ($url, $model) {
@@ -60,9 +73,32 @@ $columns = [
                 return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, ['class' => 'view', 'data-pjax' => '0']);
             },
         ],
-    ],
-    ['attribute' => 'phone'],
-    ['attribute' => 'LS_EIRC'],
+    ],*/
+    ['attribute' => 'amount'],
+    ['attribute' => 'amount_additional_services'],
+    ['attribute' => 'date'],
+    ['attribute' => 'payment_date'],
+    ['attribute' => 'public_service_id'],
+    ['attribute' => 'incoming_balance_debit'],
+    ['attribute' => 'incoming_balance_credit'],
+    ['attribute' => 'charges_permanent'],
+    ['attribute' => 'accrued_subsidies'],
+    ['attribute' => 'one_time_charges'],
+    ['attribute' => 'paid'],
+    ['attribute' => 'paid_insurance'],
+    ['attribute' => 'grants_paid'],
+    ['attribute' => 'outgoing_balance_debit'],
+    ['attribute' => 'outgoing_balance_credit'],
+    ['attribute' => 'overdue_debts'],
+   /* [
+        'attribute' => Yii::t('app', 'Пеня'),
+        'value' => function (\common\models\Debtor $model, $key, $index) {
+            return $model->calcFine();
+        },
+        'format' => ['decimal', 2],
+        'hAlign' => 'right',
+    ],*/
+    /*['attribute' => 'LS_EIRC'],
     ['attribute' => 'LS_IKU_provider'],
     ['attribute' => 'IKU'],
     ['attribute' => 'location.region'],
@@ -72,7 +108,7 @@ $columns = [
         'attribute' => 'debt_total',
         'format' => ['decimal', 2],
         'hAlign' => 'right',
-    ],
+    ],*/
     /*[
         'attribute' => Yii::t('app', 'Пошлина'),
         'value' => function (\common\models\DebtDetails $model, $key, $index) {
@@ -83,22 +119,25 @@ $columns = [
     ],*/
     [
         'attribute' => Yii::t('app', 'Пеня'),
-        'value' => function (\common\models\Debtor $model, $key, $index) {
-            return $model->calcFine();
+        'value' => function (\common\models\DebtDetails $model, $key, $index) {
+            //return $model->calcFine();
         },
         'format' => ['decimal', 2],
         'hAlign' => 'right',
     ],
 ];
 
-/*DynaGrid::widget([
+$searchModel = new DebtDetailsSearch();
+$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+echo DynaGrid::widget([
     'columns' => $columns,
     'storage' => DynaGrid::TYPE_COOKIE,
     'theme' => 'simple-striped',
     'gridOptions' => [
-        //'dataProvider' => $dataProvider,
-        'dataProvider' => $modelDebtDetails,
-        //'filterModel' => $searchModel,
+        'dataProvider' => $dataProvider,
+        //'dataProvider' => $modelDebtDetails,
+        'filterModel' => $searchModel,
         'pjax' => true,
         'panel' => [
             'heading' => '<h3 class="panel-title">' . Yii::t('app', 'Список должников') . '</h3>',
@@ -132,4 +171,4 @@ $columns = [
         ],
     ],
     'options' => ['id' => 'dynagrid-debtors'] // a unique identifier is important
-]);*/
+]);

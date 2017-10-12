@@ -30,6 +30,7 @@ $attributes = [
                 'labelColOptions' => ['style' => 'width:10.3%;text-align:right'],
                 'valueColOptions' => ['style' => 'width:23%'],
                 'displayOnly' => true,
+                'format' => 'raw',
             ],
             [
                 'attribute' => 'name_id',
@@ -38,7 +39,7 @@ $attributes = [
                 'labelColOptions' => ['style' => 'width:10.3%;text-align:right'],
                 'valueColOptions' => ['style' => 'width:23%'],
                 'displayOnly' => true,
-                //'format' => 'raw',
+                'format' => 'raw',
             ],
             [
                 'attribute' => 'name_id',
@@ -47,7 +48,7 @@ $attributes = [
                 'labelColOptions' => ['style' => 'width:10.3%;text-align:right'],
                 'valueColOptions' => ['style' => 'width:23%'],
                 'displayOnly' => true,
-                //'format' => 'raw',
+                'format' => 'raw',
             ],
         ],
     ],

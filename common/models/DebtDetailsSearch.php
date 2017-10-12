@@ -30,8 +30,10 @@ class DebtDetailsSearch extends DebtDetails
     public function rules()
     {
         return [
-            [['LS_EIRC', 'LS_IKU_provider', 'IKU', 'name_mixed', 'city', 'street', 'building', 'appartment', 'phone'], 'safe'],
-            [['id', 'ownership_type_id', 'debtor_id', 'public_service_id'], 'integer'],
+            //[['LS_EIRC', 'LS_IKU_provider', 'IKU', 'name_mixed', 'city', 'street', 'building', 'appartment', 'phone'], 'safe'],
+            //[['id', 'ownership_type_id', 'debtor_id', 'public_service_id'], 'integer'],
+            [['LS_EIRC', 'LS_IKU_provider', 'IKU', 'name_mixed', 'city', 'street', 'building', 'appartment'], 'safe'],
+            [['id', 'debtor_id', 'public_service_id'], 'integer'],
             [['amount', 'amount_additional_services'], 'number'],
             [['date', 'payment_date'], 'safe'],
         ];
@@ -100,10 +102,10 @@ class DebtDetailsSearch extends DebtDetails
             'asc' => ['debtor.privatized' => SORT_ASC],
             'desc' => ['debtor.privatized' => SORT_DESC],
         ];*/
-        $dataProvider->sort->attributes['phone'] = [
+        /*$dataProvider->sort->attributes['phone'] = [
             'asc' => ['debtor.phone' => SORT_ASC],
             'desc' => ['debtor.phone' => SORT_DESC],
-        ];
+        ];*/
 
         $this->load($params);
 
