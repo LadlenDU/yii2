@@ -24,12 +24,14 @@ use common\models\Fine;
  * @property string $additional_adjustment
  * @property string $subsidies
  *
+ * @property Accrual[] $accruals
  * @property DebtDetails[] $debtDetails
  * @property Location $location
  * @property Name $name
  * @property OwnershipType $ownershipType
  * @property DebtorPublicService[] $debtorPublicServices
  * @property PublicService[] $publicServices
+ * @property Payment[] $payments
  */
 class Debtor extends \yii\db\ActiveRecord
 {
@@ -86,6 +88,14 @@ class Debtor extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getAccruals()
+    {
+        return $this->hasMany(Accrual::className(), ['debtor_id' => 'id'])->inverseOf('debtor');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getDebtDetails()
     {
         return $this->hasMany(DebtDetails::className(), ['debtor_id' => 'id'])->inverseOf('debtor');
@@ -129,6 +139,14 @@ class Debtor extends \yii\db\ActiveRecord
     public function getPublicServices()
     {
         return $this->hasMany(PublicService::className(), ['id' => 'public_service_id'])->viaTable('debtor_public_service', ['debtor_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPayments()
+    {
+        return $this->hasMany(Payment::className(), ['debtor_id' => 'id'])->inverseOf('debtor');
     }
 
     /**
