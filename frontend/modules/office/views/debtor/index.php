@@ -35,6 +35,7 @@ $columns = [
             },
         ],
     ],
+    ['attribute' => 'id'],
     ['attribute' => 'phone'],
     ['attribute' => 'LS_EIRC'],
     ['attribute' => 'LS_IKU_provider'],

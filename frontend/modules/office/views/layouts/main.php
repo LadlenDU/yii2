@@ -53,10 +53,12 @@ if (Yii::$app->controller->action->id === 'login') {
                 font-size: 1.2em !important;
             }
 
-            .main-header .logo,
+            .main-header .logo {
+                font-size: 1.5em !important;
+            }
             .sidebar-mini.sidebar-collapse .main-header .logo > .logo-mini
             {
-                font-size: 1.5em !important;
+                font-size: 1.1em !important;
             }
 
             .sidebar-menu li.header {

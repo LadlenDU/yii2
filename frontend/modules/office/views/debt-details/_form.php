@@ -6,13 +6,17 @@ use yii\widgets\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $model common\models\DebtDetails */
 /* @var $form yii\widgets\ActiveForm */
+/* @var $debtor_id int */
 ?>
 
 <div class="debt-details-form">
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'debtor_id')->textInput() ?>
+    <?= $form->field($model, 'debtor_id')->textInput($debtor_id) ?>
+
+    Детали задолженности для пользователя #<?= Html::encode($debtor_id) ?>
+    <br>
 
     <?= $form->field($model, 'amount')->textInput(['maxlength' => true]) ?>
 
@@ -47,7 +51,7 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'overdue_debts')->textInput(['maxlength' => true]) ?>
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Создать') : Yii::t('app', 'Обновить'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

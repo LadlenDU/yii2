@@ -63,17 +63,17 @@ $columns = [
         'class' => 'kartik\grid\CheckboxColumn',
         'order' => DynaGrid::ORDER_FIX_LEFT,
     ],
-/*    [
+    [
         'class' => 'yii\grid\ActionColumn',
-        'buttons' => [
+        /*'buttons' => [
             'view' => function ($url, $model) {
                 return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, ['class' => 'view', 'data-pjax' => '0']);
             },
             'update' => function ($url, $model) {
                 return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, ['class' => 'view', 'data-pjax' => '0']);
             },
-        ],
-    ],*/
+        ],*/
+    ],
     ['attribute' => 'amount'],
     ['attribute' => 'amount_additional_services'],
     ['attribute' => 'date'],
@@ -149,12 +149,20 @@ echo DynaGrid::widget([
         'toolbar' => [
             [
                 'content' =>
+                    Html::a('<i class="glyphicon glyphicon-repeat"></i>',
+                        ['/office/debt-details/create', 'id' => $model->id],
+                        [
+                            'class' => 'btn btn-success',
+                            'title'=>Yii::t('app', 'Добавить задолженность'),
+                            //'href' => Url::to(['/office/debt-details/create', 'id' => $model->id]),
+                        ]
+                    ) .
                     Html::button('<i class="glyphicon glyphicon-plus"></i>',
                         [
                             'type' => 'button',
                             'title' => Yii::t('app', 'Добавить долг'),
                             'class' => 'btn btn-success',
-                            'href' => Url::to('/office/debtor/create'),
+                            'href' => Url::to(['/office/debt-details/create', 'id' => $model->id]),
                         ]
                     )/* . ' ' .
                         Html::a('<i class="glyphicon glyphicon-repeat"></i>',

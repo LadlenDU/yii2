@@ -155,7 +155,7 @@ $attributes = [
                 'value' => '<kbd>' . $fm->asText($model->LS_EIRC) . '</kbd>',
                 'labelColOptions' => ['style' => 'width:20%;text-align:right'],
                 'valueColOptions' => ['style' => 'width:30%'],
-                //'displayOnly' => true,
+                'displayOnly' => true,
                 'format' => 'raw',
             ],
             /*[
@@ -171,8 +171,31 @@ $attributes = [
                 'value' => '<kbd>' . $fm->asText($model->IKU) . '</kbd>',
                 'labelColOptions' => ['style' => 'width:20%;text-align:right'],
                 'valueColOptions' => ['style' => 'width:30%'],
-                //'displayOnly' => true,
+                'displayOnly' => true,
                 'format' => 'raw',
+            ],
+        ],
+    ],
+    [
+        'columns' => [
+            [
+                'attribute' => 'single',
+                'labelColOptions' => ['style' => 'width:10.3%;text-align:right'],
+                'valueColOptions' => ['style' => 'width:23%'],
+                'displayOnly' => true,
+            ],
+            [
+                'attribute' => 'additional_adjustment',
+                //'label' => 'Доп. коррек-ка',
+                'labelColOptions' => ['style' => 'width:10.3%;text-align:right'],
+                'valueColOptions' => ['style' => 'width:23%'],
+                'displayOnly' => true,
+            ],
+            [
+                'attribute' => 'subsidies',
+                'labelColOptions' => ['style' => 'width:10.3%;text-align:right'],
+                'valueColOptions' => ['style' => 'width:23%'],
+                'displayOnly' => true,
             ],
         ],
     ],
@@ -182,13 +205,13 @@ $attributes = [
                 'attribute' => 'phone',
                 'labelColOptions' => ['style' => 'width:10.3%;text-align:right'],
                 'valueColOptions' => ['style' => 'width:23%'],
-                //'displayOnly' => true,
+                'displayOnly' => true,
             ],
             [
                 'attribute' => 'space_common',
                 'labelColOptions' => ['style' => 'width:10.3%;text-align:right'],
                 'valueColOptions' => ['style' => 'width:23%'],
-                //'displayOnly' => true,
+                'displayOnly' => true,
             ],
             /*[
                 'attribute' => 'space_living',

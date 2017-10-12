@@ -6,8 +6,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model common\models\DebtDetails */
 
-$this->title = Yii::t('app', 'Create Debt Details');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Debt Details'), 'url' => ['index']];
+$this->title = Yii::t('app', 'Создать детали долга');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Детали долга'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="debt-details-create">

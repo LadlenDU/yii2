@@ -20,6 +20,9 @@ use common\models\Fine;
  * @property integer $name_id
  * @property string $expiration_start
  * @property string $debt_total
+ * @property string $single
+ * @property string $additional_adjustment
+ * @property string $subsidies
  *
  * @property DebtDetails[] $debtDetails
  * @property Location $location
@@ -47,7 +50,7 @@ class Debtor extends \yii\db\ActiveRecord
             [['space_common', 'space_living', 'debt_total'], 'number'],
             [['ownership_type_id', 'location_id', 'name_id'], 'integer'],
             [['expiration_start'], 'safe'],
-            [['phone', 'LS_EIRC', 'LS_IKU_provider', 'IKU'], 'string', 'max' => 255],
+            [['phone', 'LS_EIRC', 'LS_IKU_provider', 'IKU', 'single', 'additional_adjustment', 'subsidies'], 'string', 'max' => 255],
             [['location_id'], 'exist', 'skipOnError' => true, 'targetClass' => Location::className(), 'targetAttribute' => ['location_id' => 'id']],
             [['name_id'], 'exist', 'skipOnError' => true, 'targetClass' => Name::className(), 'targetAttribute' => ['name_id' => 'id']],
             [['ownership_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => OwnershipType::className(), 'targetAttribute' => ['ownership_type_id' => 'id']],
@@ -74,6 +77,9 @@ class Debtor extends \yii\db\ActiveRecord
             'name_id' => Yii::t('app', 'Name ID'),
             'expiration_start' => Yii::t('app', 'Начало просрочки'),
             'debt_total' => Yii::t('app', 'Сумма долга'),
+            'single' => Yii::t('app', 'Разовые'),
+            'additional_adjustment' => Yii::t('app', 'Доп. корректировка'),
+            'subsidies' => Yii::t('app', 'Субсидии'),
         ];
     }
 
