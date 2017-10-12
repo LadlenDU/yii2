@@ -25,6 +25,8 @@ use Yii;
  * @property string $outgoing_balance_debit
  * @property string $outgoing_balance_credit
  * @property string $overdue_debts
+ * @property string $сharged
+ * @property string $debt
  *
  * @property Debtor $debtor
  * @property PublicService $publicService
@@ -49,7 +51,7 @@ class DebtDetails extends \yii\db\ActiveRecord
     {
         return [
             [['debtor_id', 'public_service_id'], 'integer'],
-            [['amount', 'amount_additional_services', 'incoming_balance_debit', 'incoming_balance_credit', 'charges_permanent', 'accrued_subsidies', 'one_time_charges', 'paid', 'paid_insurance', 'grants_paid', 'outgoing_balance_debit', 'outgoing_balance_credit', 'overdue_debts'], 'number'],
+            [['amount', 'amount_additional_services', 'incoming_balance_debit', 'incoming_balance_credit', 'charges_permanent', 'accrued_subsidies', 'one_time_charges', 'paid', 'paid_insurance', 'grants_paid', 'outgoing_balance_debit', 'outgoing_balance_credit', 'overdue_debts', 'сharged', 'debt'], 'number'],
             [['date', 'payment_date'], 'safe'],
             [['debtor_id'], 'exist', 'skipOnError' => true, 'targetClass' => Debtor::className(), 'targetAttribute' => ['debtor_id' => 'id']],
             [['public_service_id'], 'exist', 'skipOnError' => true, 'targetClass' => PublicService::className(), 'targetAttribute' => ['public_service_id' => 'id']],
@@ -80,6 +82,8 @@ class DebtDetails extends \yii\db\ActiveRecord
             'outgoing_balance_debit' => Yii::t('app', 'Исходящее сальдо (дебет)'),
             'outgoing_balance_credit' => Yii::t('app', 'Исходящее сальдо (кредит)'),
             'overdue_debts' => Yii::t('app', 'Просроченная задолженность'),
+            'сharged' => Yii::t('app', 'Начислено'),
+            'debt' => Yii::t('app', 'Задолженность'),
         ];
     }
 

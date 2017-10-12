@@ -65,16 +65,11 @@ $columns = [
     ],
     [
         'class' => 'yii\grid\ActionColumn',
-        /*'buttons' => [
-            'view' => function ($url, $model) {
-                return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, ['class' => 'view', 'data-pjax' => '0']);
-            },
-            'update' => function ($url, $model) {
-                return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, ['class' => 'view', 'data-pjax' => '0']);
-            },
-        ],*/
     ],
-    ['attribute' => 'amount'],
+    ['attribute' => 'сharged'],
+    ['attribute' => 'paid'],
+    ['attribute' => 'debt'],
+    /*['attribute' => 'amount'],
     ['attribute' => 'amount_additional_services'],
     ['attribute' => 'date'],
     ['attribute' => 'payment_date'],
@@ -89,26 +84,7 @@ $columns = [
     ['attribute' => 'grants_paid'],
     ['attribute' => 'outgoing_balance_debit'],
     ['attribute' => 'outgoing_balance_credit'],
-    ['attribute' => 'overdue_debts'],
-   /* [
-        'attribute' => Yii::t('app', 'Пеня'),
-        'value' => function (\common\models\Debtor $model, $key, $index) {
-            return $model->calcFine();
-        },
-        'format' => ['decimal', 2],
-        'hAlign' => 'right',
-    ],*/
-    /*['attribute' => 'LS_EIRC'],
-    ['attribute' => 'LS_IKU_provider'],
-    ['attribute' => 'IKU'],
-    ['attribute' => 'location.region'],
-    ['attribute' => 'name.first_name'],
-    ['attribute' => 'expiration_start'],
-    [
-        'attribute' => 'debt_total',
-        'format' => ['decimal', 2],
-        'hAlign' => 'right',
-    ],*/
+    ['attribute' => 'overdue_debts'],*/
     [
         'attribute' => Yii::t('app', 'Пошлина'),
         'value' => function (DebtDetails $model, $key, $index) {
