@@ -41,21 +41,21 @@
                         'icon' => 'users',
                         'url' => ['/office/debtor'],
                     ],
-                    [
+                    /*[
                         'label' => 'Задолженности',
                         'icon' => 'list-alt',
                         'url' => ['/office/debtors/debt-verification'],
-                        /*'url' => ['#'],
-                        'items' => [
-                            ['label' => 'Работа с Должниками', 'icon' => 'file-code-o', 'url' => ['/office/debtors/debt-verification'],],
-                            ['label' => 'Список Должников', 'icon' => 'dashboard', 'url' => ['/debtor'],],
-                        ],*/
-                        /*'items' => [
-                            ['label' => 'Досудебная работа', 'icon' => 'file-code-o', 'url' => ['/office/debtors/verify-registration'],],
-                            ['label' => 'Судебная работа', 'icon' => 'dashboard', 'url' => ['/office/debtors/debt-verification'],],
-                            ['label' => 'Работа с приставами', 'icon' => 'dashboard', 'url' => ['/office/debtors/calculation-of-duty'],],
-                        ],*/
-                    ],
+//                        'url' => ['#'],
+//                        'items' => [
+//                            ['label' => 'Работа с Должниками', 'icon' => 'file-code-o', 'url' => ['/office/debtors/debt-verification'],],
+//                            ['label' => 'Список Должников', 'icon' => 'dashboard', 'url' => ['/debtor'],],
+//                        ],
+//                        'items' => [
+//                            ['label' => 'Досудебная работа', 'icon' => 'file-code-o', 'url' => ['/office/debtors/verify-registration'],],
+//                            ['label' => 'Судебная работа', 'icon' => 'dashboard', 'url' => ['/office/debtors/debt-verification'],],
+//                            ['label' => 'Работа с приставами', 'icon' => 'dashboard', 'url' => ['/office/debtors/calculation-of-duty'],],
+//                        ],
+                    ],*/
                     ['label' => 'Справочник судов', 'icon' => 'bank', 'url' => ['/court']],
                     //['label' => 'Компании', 'icon' => 'handshake-o', 'url' => ['/office/company']],
                     /*[
