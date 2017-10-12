@@ -22,6 +22,7 @@ class DebtDetailsSearch extends DebtDetails
     public $appartment;
     //public $privatized;
     public $phone;
+    public $debtor_id;
 
 
     /**
@@ -118,7 +119,7 @@ class DebtDetailsSearch extends DebtDetails
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'debtor_id' => $this->debtor_id,
+            'debtor_id' => $params['debtor_id'] ?: $this->debtor_id,    //TODO: не костыль, а костылище - исправить !!!!
             'amount' => $this->amount,
             'amount_additional_services' => $this->amount_additional_services,
             'date' => $this->date,

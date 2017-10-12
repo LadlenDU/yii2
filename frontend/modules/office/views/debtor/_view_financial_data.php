@@ -128,7 +128,10 @@ $columns = [
 ];
 
 $searchModel = new DebtDetailsSearch();
-$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+//$searchModel = $searchModel::find()->where(['debtor_id' => $model->id]);
+//$dataProvider = $searchModel::find()->where(['debtor_id' => $model->id])->search(Yii::$app->request->queryParams);
+//$dataProvider = $searchModel->search(['debtor_id' => $model->id] + Yii::$app->request->queryParams);
+$dataProvider = $searchModel->search(['debtor_id' => $model->id]);
 
 echo DynaGrid::widget([
     'columns' => $columns,
@@ -144,7 +147,7 @@ echo DynaGrid::widget([
             'before' => '{dynagrid}',
         ],
         'options' => ['id' => 'dynagrid-debtors-options'],
-        'toolbar' => [
+        /*'toolbar' => [
             [
                 'content' =>
                     Html::button('<i class="glyphicon glyphicon-plus"></i>',
@@ -168,7 +171,7 @@ echo DynaGrid::widget([
                 'content' => '{dynagridFilter}{dynagridSort}{dynagrid}'
             ],
             '{export}',
-        ],
+        ],*/
     ],
     'options' => ['id' => 'dynagrid-debtors'] // a unique identifier is important
 ]);
