@@ -150,4 +150,27 @@ class DebtDetails extends \yii\db\ActiveRecord
         return $fee;
     }
 
+    public function calcFine()
+    {
+        if ($this->date && $this->overdue_debts) {
+            $dateStart = strtotime($this->date);
+            $dateFinish = time() - 60 * 60 * 24;
+
+            $fine = new Fine();
+            $res = $fine->fineCalculator($this->overdue_debts, $dateStart, $dateFinish);
+
+            $sum = 0;
+
+            if (!empty($res[0]['data'])) {
+                foreach ($res[0]['data'] as $r) {
+                    $sum += (int)$r['data']['cost'];
+                }
+            }
+
+            return $sum;
+        }
+
+        return 0;
+    }
+
 }

@@ -10,7 +10,7 @@ use \common\models\DebtDetailsSearch;
 /* @var $this yii\web\View */
 /* @var $model common\models\Debtor */
 
-$modelDebtDetails = DebtDetails::find()->where(['debtor_id' => $model->id])->all();
+//$modelDebtDetails = DebtDetails::find()->where(['debtor_id' => $model->id])->all();
 
 #$searchModel = new DebtDetailsSearch();
 #$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -109,18 +109,18 @@ $columns = [
         'format' => ['decimal', 2],
         'hAlign' => 'right',
     ],*/
-    /*[
+    [
         'attribute' => Yii::t('app', 'Пошлина'),
-        'value' => function (\common\models\DebtDetails $model, $key, $index) {
+        'value' => function (DebtDetails $model, $key, $index) {
             return $model->calculateStateFee2();
         },
         'format' => ['decimal', 2],
         'hAlign' => 'right',
-    ],*/
+    ],
     [
         'attribute' => Yii::t('app', 'Пеня'),
-        'value' => function (\common\models\DebtDetails $model, $key, $index) {
-            //return $model->calcFine();
+        'value' => function (DebtDetails $model, $key, $index) {
+            return $model->calcFine();
         },
         'format' => ['decimal', 2],
         'hAlign' => 'right',
@@ -139,11 +139,10 @@ echo DynaGrid::widget([
     'theme' => 'simple-striped',
     'gridOptions' => [
         'dataProvider' => $dataProvider,
-        //'dataProvider' => $modelDebtDetails,
         'filterModel' => $searchModel,
         'pjax' => true,
         'panel' => [
-            'heading' => '<h3 class="panel-title">' . Yii::t('app', 'Список должников') . '</h3>',
+            'heading' => '<h3 class="panel-title">' . Yii::t('app', 'Список задолженностей') . '</h3>',
             'before' => '{dynagrid}',
         ],
         'options' => ['id' => 'dynagrid-debtors-options'],
