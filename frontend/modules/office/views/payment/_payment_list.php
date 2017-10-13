@@ -28,7 +28,7 @@ $gridColumns = [
 ];
 
 echo GridView::widget([
-    'id' => 'accrual-list-grid',
+    'id' => 'payment-list-grid',
     'dataProvider' => $dataProvider,
     'filterModel' => $searchModel,
     'columns' => $gridColumns,
@@ -40,11 +40,11 @@ echo GridView::widget([
         [
             'content' =>
                 Html::a('<i class="glyphicon glyphicon-plus"></i>',
-                    ['/office/accrual/create', 'debtor_id' => $debtor_id],
+                    ['/office/payment/create', 'debtor_id' => $debtor_id],
                     [
                         'data-pjax' => 0,
                         'class' => 'btn btn-default',
-                        'title' => Yii::t('app', 'Добавить начисление'),
+                        'title' => Yii::t('app', 'Добавить оплату'),
                         'target' => '_blank',
                     ]
                 )
@@ -52,7 +52,7 @@ echo GridView::widget([
     ],
     'panel' => [
         'type' => GridView::TYPE_PRIMARY,
-        'heading' => Yii::t('app', 'Начислено'),
+        'heading' => Yii::t('app', 'Оплачено'),
     ],
     'bordered' => true,
     'striped' => true,

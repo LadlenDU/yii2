@@ -12,8 +12,6 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?/*= $form->field($model, 'debtor_id')->textInput() */?>
-
     <?= $form->field($model, 'debtor_id')->textInput(['readonly' => true]) ?>
 
     <?= $form->field($model, 'accrual_date')->textInput() ?>

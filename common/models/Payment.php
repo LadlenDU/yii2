@@ -44,7 +44,7 @@ class Payment extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'debtor_id' => Yii::t('app', 'Debtor ID'),
+            'debtor_id' => Yii::t('app', 'ID должника'),
             'payment_date' => Yii::t('app', 'Дата оплаты'),
             'amount' => Yii::t('app', 'Сумма оплаты'),
         ];
