@@ -65,7 +65,7 @@ $gridColumns = [
 echo GridView::widget([
     'id' => 'accrual-list-grid',
     'dataProvider' => $dataProvider,
-    'filterModel' => $searchModel,
+    //'filterModel' => $searchModel,
     'columns' => $gridColumns,
     'containerOptions' => ['style' => 'overflow: auto'], // only set when $responsive = false
     'headerRowOptions' => ['class' => 'kartik-sheet-style'],
