@@ -3,16 +3,16 @@
 namespace frontend\modules\office\controllers;
 
 use Yii;
-use common\models\Accrual;
-use common\models\AccrualSearch;
+use common\models\Payment;
+use common\models\PaymentSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * AccrualController implements the CRUD actions for Accrual model.
+ * PaymentController implements the CRUD actions for Payment model.
  */
-class AccrualController extends Controller
+class PaymentController extends Controller
 {
     /**
      * @inheritdoc
@@ -30,12 +30,12 @@ class AccrualController extends Controller
     }
 
     /**
-     * Lists all Accrual models.
+     * Lists all Payment models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new AccrualSearch();
+        $searchModel = new PaymentSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -45,7 +45,7 @@ class AccrualController extends Controller
     }
 
     /**
-     * Displays a single Accrual model.
+     * Displays a single Payment model.
      * @param integer $id
      * @return mixed
      */
@@ -57,13 +57,13 @@ class AccrualController extends Controller
     }
 
     /**
-     * Creates a new Accrual model.
+     * Creates a new Payment model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate($debtor_id = false)
     {
-        $model = new Accrual();
+        $model = new Payment();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -76,7 +76,7 @@ class AccrualController extends Controller
     }
 
     /**
-     * Updates an existing Accrual model.
+     * Updates an existing Payment model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -95,7 +95,7 @@ class AccrualController extends Controller
     }
 
     /**
-     * Deletes an existing Accrual model.
+     * Deletes an existing Payment model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -108,15 +108,15 @@ class AccrualController extends Controller
     }
 
     /**
-     * Finds the Accrual model based on its primary key value.
+     * Finds the Payment model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Accrual the loaded model
+     * @return Payment the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Accrual::findOne($id)) !== null) {
+        if (($model = Payment::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
@@ -125,7 +125,7 @@ class AccrualController extends Controller
 
     public function actionInfoForDebtor($debtor_id)
     {
-        $searchModel = new AccrualSearch();
+        $searchModel = new PaymentSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         $data = [
@@ -136,9 +136,9 @@ class AccrualController extends Controller
         ];
 
         if (Yii::$app->request->isAjax) {
-            return $this->renderAjax('_accrual_list', $data);
+            return $this->renderAjax('_payment_list', $data);
         } else {
-            return $this->render('_accrual_list', $data);
+            return $this->render('_payment_list', $data);
         }
     }
 }

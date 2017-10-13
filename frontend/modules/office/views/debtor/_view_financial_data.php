@@ -176,6 +176,7 @@ echo '<div style="text-align: center">' . Html::radioButtonGroup('fin_data', 'co
 
 $commonUrl = json_encode(Url::to(['/office/debt-details/common-info', 'debtor_id' => $model->id]));
 $accrualUrl = json_encode(Url::to(['/office/accrual/info-for-debtor', 'debtor_id' => $model->id]));
+$paymentUrl = json_encode(Url::to(['/office/payment/info-for-debtor', 'debtor_id' => $model->id]));
 $loaderImg = json_encode('<div style="text-align: center">' . Html::img(Url::to(['/img/ajax-loader.gif'])) . '</div>');
 
 $this->registerJs(<<<JS
@@ -187,18 +188,6 @@ fin_data_events.loadData = function(url) {
         fin_data_events.container.html(html);
     }, 'html');
 };
-/*fin_data_events.commonInfo = function() {
-    //fin_data_events.container.html('');
-    $.get('$commonUrl', null, function(html) {
-        fin_data_events.container.html(html);
-    }, 'html');
-};
-fin_data_events.accruals = function() {
-    $.get('$accrualUrl', null, function(html) {
-        fin_data_events.container.html(html);
-    }, 'html');
-};
-fin_data_events.commonInfo();*/
 fin_data_events.loadData($commonUrl);
 
 $('[name=fin_data]').change(function() {
@@ -218,7 +207,7 @@ $('[name=fin_data]').change(function() {
             }
         case 'payed':
             {
-                fin_data_events.payed();
+                fin_data_events.loadData($paymentUrl);
                 break;
             }
         default:

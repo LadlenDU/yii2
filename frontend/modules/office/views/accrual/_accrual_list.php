@@ -18,7 +18,6 @@ $gridColumns = [
         'xlFormat' => "mmm\\-dd\\, \\-yyyy",
         'headerOptions' => ['class' => 'kv-sticky-column'],
         'contentOptions' => ['class' => 'kv-sticky-column'],
-        //'filterType' => GridView::INPUT_DATE,
         'filterType' => GridView::FILTER_DATE,
         /*'editableOptions' => [
             //'header' => 'Publish Date',
