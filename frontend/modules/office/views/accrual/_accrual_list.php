@@ -5,9 +5,14 @@
 
 //use yii\widgets\ListView;
 use kartik\grid\GridView;
+use yii\helpers\Html;
 
 $gridColumns = [
+    ['attribute' => 'accrual_date'],
     ['attribute' => 'accrual'],
+    ['attribute' => 'single'],
+    ['attribute' => 'additional_adjustment'],
+    ['attribute' => 'subsidies'],
 ];
 
 echo GridView::widget([
@@ -16,9 +21,32 @@ echo GridView::widget([
     'filterModel' => $searchModel,
     'columns' => $gridColumns,
     'containerOptions' => ['style' => 'overflow: auto'], // only set when $responsive = false
-    //'headerRowOptions'=>['class'=>'kartik-sheet-style'],
-    //'filterRowOptions'=>['class'=>'kartik-sheet-style'],
-    'pjax' => true, // pjax is set to always true for this demo
+    'headerRowOptions' => ['class' => 'kartik-sheet-style'],
+    'filterRowOptions' => ['class' => 'kartik-sheet-style'],
+    'pjax' => true,
+    'toolbar' => [
+        [
+            'content' =>
+                Html::button('<i class="glyphicon glyphicon-plus"></i>',
+                    [
+                        'type' => 'button',
+                        'title' => Yii::t('app', 'Добавить начисление'),
+                        'class' => 'btn btn-success',
+                    ]
+                )
+        ],
+        //'{export}',
+        //'{toggleData}',
+    ],
+    'panel' => [
+        'type' => GridView::TYPE_PRIMARY,
+        //'heading' => $heading,
+    ],
+    'bordered' => true,
+    'striped' => true,
+    'condensed' => true,
+    'responsive' => true,
+    'hover' => true,
     // set your toolbar
     /*'toolbar' => [
         ['content' =>
