@@ -36,7 +36,7 @@ if (Yii::$app->controller->action->id === 'login') {
         <title><?= Html::encode($this->title) ?></title>
         <?php $this->head() ?>
         <style>
-            .hu-pane .glyphicon {
+            .hu-pane .tabs-krajee .nav-tabs .glyphicon {
                 margin-right: .5em;
             }
 
