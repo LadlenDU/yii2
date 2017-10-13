@@ -47,7 +47,7 @@ class Accrual extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'debtor_id' => Yii::t('app', 'Debtor ID'),
+            'debtor_id' => Yii::t('app', 'ID должника'),
             'accrual_date' => Yii::t('app', 'Дата начисления'),
             'accrual' => Yii::t('app', 'Начислено'),
             'single' => Yii::t('app', 'Разовые'),

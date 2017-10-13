@@ -2,17 +2,62 @@
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Debtor */
+/* @var $debtor_id int */
 
 //use yii\widgets\ListView;
 use kartik\grid\GridView;
 use yii\helpers\Html;
 
 $gridColumns = [
-    ['attribute' => 'accrual_date'],
-    ['attribute' => 'accrual'],
-    ['attribute' => 'single'],
-    ['attribute' => 'additional_adjustment'],
-    ['attribute' => 'subsidies'],
+    [
+        'attribute' => 'accrual_date',
+        'hAlign'=>'center',
+        'vAlign'=>'middle',
+        'format'=>'date',
+        'xlFormat'=>"mmm\\-dd\\, \\-yyyy",
+        'headerOptions'=>['class'=>'kv-sticky-column'],
+        'contentOptions'=>['class'=>'kv-sticky-column'],
+        /*'editableOptions'=>[
+            'header'=>'Publish Date',
+            'size'=>'md',
+            'inputType'=>\kartik\editable\Editable::INPUT_WIDGET,
+            'widgetClass'=> 'kartik\datecontrol\DateControl',
+            'options'=>[
+                'type'=>\kartik\datecontrol\DateControl::FORMAT_DATE,
+                'displayFormat'=>'dd.MM.yyyy',
+                'saveFormat'=>'php:Y-m-d',
+                'options'=>[
+                    'pluginOptions'=>[
+                        'autoclose'=>true
+                    ]
+                ]
+            ]
+        ],*/
+    ],
+    [
+        'attribute' => 'accrual',
+        'vAlign' => 'middle',
+        'hAlign' => 'right',
+        'format' => ['decimal', 2],
+    ],
+    [
+        'attribute' => 'single',
+        'vAlign' => 'middle',
+        'hAlign' => 'right',
+        'format' => ['decimal', 2],
+    ],
+    [
+        'attribute' => 'additional_adjustment',
+        'vAlign' => 'middle',
+        'hAlign' => 'right',
+        'format' => ['decimal', 2],
+    ],
+    [
+        'attribute' => 'subsidies',
+        'vAlign' => 'middle',
+        'hAlign' => 'right',
+        'format' => ['decimal', 2],
+    ],
 ];
 
 echo GridView::widget([
@@ -27,11 +72,20 @@ echo GridView::widget([
     'toolbar' => [
         [
             'content' =>
-                Html::button('<i class="glyphicon glyphicon-plus"></i>',
+            /*Html::a('<i class="glyphicon glyphicon-plus"></i>',
+                [
+                    'type' => 'button',
+                    'title' => Yii::t('app', 'Добавить начисление'),
+                    'class' => 'btn btn-success',
+                ]
+            )*/
+                Html::a('<i class="glyphicon glyphicon-plus"></i>',
+                    ['/office/accrual/create', 'debtor_id' => $debtor_id],
                     [
-                        'type' => 'button',
+                        'data-pjax' => 0,
+                        'class' => 'btn btn-default',
                         'title' => Yii::t('app', 'Добавить начисление'),
-                        'class' => 'btn btn-success',
+                        'target' => '_blank',
                     ]
                 )
         ],
@@ -40,7 +94,7 @@ echo GridView::widget([
     ],
     'panel' => [
         'type' => GridView::TYPE_PRIMARY,
-        //'heading' => $heading,
+        'heading' => Yii::t('app', 'Начислено'),
     ],
     'bordered' => true,
     'striped' => true,

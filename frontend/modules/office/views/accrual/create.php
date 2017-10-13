@@ -6,8 +6,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model common\models\Accrual */
 
-$this->title = Yii::t('app', 'Create Accrual');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Accruals'), 'url' => ['index']];
+$this->title = Yii::t('app', 'Создать начисление');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Начисления'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="accrual-create">

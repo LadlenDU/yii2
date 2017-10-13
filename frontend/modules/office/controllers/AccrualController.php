@@ -61,13 +61,14 @@ class AccrualController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($debtor_id = false)
     {
         $model = new Accrual();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
+            $model->debtor_id = $debtor_id;
             return $this->render('create', [
                 'model' => $model,
             ]);
@@ -133,6 +134,7 @@ class AccrualController extends Controller
             //'model' => $this->findModel($id),
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
+            'debtor_id' => $debtor_id,
         ];
 
         if (Yii::$app->request->isAjax) {
