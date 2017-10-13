@@ -7,7 +7,7 @@ use kartik\helpers\Html;
 use yii\helpers\Url;
 use \common\models\DebtDetails;
 use \common\models\DebtDetailsSearch;
-use kartik\tabs\TabsX;
+//use kartik\tabs\TabsX;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Debtor */
@@ -122,7 +122,7 @@ $dataProvider = $searchModel->search(['debtor_id' => $model->id]);
         </div>
         <div class="row">
             <div class="col-sm-12 text-center">
-                <?= 'test123' ?>
+                <?= $model->getAccrualSum() ?>
             </div>
         </div>
     </div>
@@ -134,7 +134,7 @@ $dataProvider = $searchModel->search(['debtor_id' => $model->id]);
         </div>
         <div class="row">
             <div class="col-sm-12 text-center">
-                <?= 'test123' ?>
+                <?= $model->getPaymentSum() ?>
             </div>
         </div>
     </div>

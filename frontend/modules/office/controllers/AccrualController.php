@@ -126,6 +126,7 @@ class AccrualController extends Controller
     public function actionInfoForDebtor($debtor_id)
     {
         $searchModel = new AccrualSearch();
+        $searchModel->debtor_id = $debtor_id;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         $data = [

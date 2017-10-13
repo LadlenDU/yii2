@@ -180,4 +180,17 @@ class Debtor extends \yii\db\ActiveRecord
 
         return 0;
     }
+
+    public function getAccrualSum()
+    {
+        //$this::find()->sum('amount');
+        //$this->accruals::find()->sum('accrual');
+        //TODO: может, оптимизировать?
+        return $this->find()->from('accrual')->where(['debtor_id' => $this->id])->sum('accrual') ?: 0;
+    }
+
+    public function getPaymentSum()
+    {
+        return $this->find()->from('payment')->where(['debtor_id' => $this->id])->sum('amount') ?: 0;
+    }
 }
