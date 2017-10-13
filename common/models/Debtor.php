@@ -193,4 +193,23 @@ class Debtor extends \yii\db\ActiveRecord
     {
         return $this->find()->from('payment')->where(['debtor_id' => $this->id])->sum('amount') ?: 0;
     }
+
+    /**
+     * Вернуть общую задолженность.
+     *
+     */
+    public function getDebtTotal()
+    {
+        return 'getDebtTotal';
+        //return $this->find()->from('payment')->where(['debtor_id' => $this->id])->sum('amount') ?: 0;
+    }
+
+    /**
+     * Вернуть общую пеню.
+     *
+     */
+    public function getFeeTotal()
+    {
+        return 'getFeeTotal';
+    }
 }

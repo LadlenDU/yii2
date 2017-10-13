@@ -146,7 +146,7 @@ $dataProvider = $searchModel->search(['debtor_id' => $model->id]);
         </div>
         <div class="row">
             <div class="col-sm-12 text-center">
-                <?= 'test123' ?>
+                <?= $model->getDebtTotal() ?>
             </div>
         </div>
     </div>
@@ -158,7 +158,7 @@ $dataProvider = $searchModel->search(['debtor_id' => $model->id]);
         </div>
         <div class="row">
             <div class="col-sm-12 text-center">
-                <?= 'test123' ?>
+                <?= $model->getFeeTotal() ?>
             </div>
         </div>
     </div>
