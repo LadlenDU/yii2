@@ -45,6 +45,15 @@ if (Yii::$app->controller->action->id === 'login') {
                 padding-bottom: .5em;
             }
 
+            .tbl-debtor-fin-info {
+                margin-bottom: 2em;
+            }
+
+            #fin_data_container {
+                margin-top: 2em;
+                text-align: center;
+            }
+
             /*TODO: попытка уменьшения размера*/
             body {
                 font-size: 1.1em !important;
@@ -61,8 +70,8 @@ if (Yii::$app->controller->action->id === 'login') {
             .main-header .logo {
                 font-size: 1.5em !important;
             }
-            .sidebar-mini.sidebar-collapse .main-header .logo > .logo-mini
-            {
+
+            .sidebar-mini.sidebar-collapse .main-header .logo > .logo-mini {
                 font-size: 1.1em !important;
             }
 

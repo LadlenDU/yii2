@@ -163,7 +163,6 @@ $dataProvider = $searchModel->search(['debtor_id' => $model->id]);
         </div>
     </div>
 </div>
-<br>
 <?php
 
 echo '<div style="text-align: center">' . Html::radioButtonGroup('fin_data', 'common_info',
