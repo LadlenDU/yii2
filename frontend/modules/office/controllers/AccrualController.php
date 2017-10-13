@@ -124,7 +124,7 @@ class AccrualController extends Controller
 
     public function actionInfoForDebtor($debtor_id)
     {
-        return 'debtor info';
+        return 'debtor info sdfsdf';
         if (Yii::$app->request->isAjax) {
             return $this->renderAjax('view', [
                 'model' => $this->findModel($id),

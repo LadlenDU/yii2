@@ -166,12 +166,12 @@ $dataProvider = $searchModel->search(['debtor_id' => $model->id]);
 <br>
 <?php
 
-echo '<div style="text-align: center">' . Html::radioButtonGroup('fin_data', '1',
+echo '<div style="text-align: center">' . Html::radioButtonGroup('fin_data', 'common_info',
         [
-            0 => Yii::t('app', 'Общая информация'),
-            1 => Yii::t('app', 'Начислено'),
-            2 => Yii::t('app', 'Оплачено'),
-            3 => Yii::t('app', 'Пеня')
+            'common_info' => Yii::t('app', 'Общая информация'),
+            'accrual' => Yii::t('app', 'Начислено'),
+            'payed' => Yii::t('app', 'Оплачено'),
+            'fine' => Yii::t('app', 'Пеня')
         ]
     ) . '</div>';
 
@@ -182,96 +182,38 @@ $this->registerJs(<<<JS
 var fin_data_events = {};
 fin_data_events.container = $("#fin_data_container");
 fin_data_events.commonInfo = function() {
-    $.get($commonUrl, null, function(html) {
-        container.html(html);
+    $.get('$commonUrl', null, function(html) {
+        fin_data_events.container.html(html);
     }, 'html');
 };
-fin_data_events.commonInfo = function() {
-    $.get($accrualUrl, null, function(html) {
-        container.html(html);
+fin_data_events.accruals = function() {
+    $.get('$accrualUrl', null, function(html) {
+        fin_data_events.container.html(html);
     }, 'html');
 };
 fin_data_events.commonInfo();
 
-$('[name=fin_data]').click(function(){
-    
+$('[name=fin_data]').change(function() {
+    switch ($(this).val())
+    {
+        case 'common_info':
+            {
+                fin_data_events.commonInfo();
+                break;
+            }
+        case 'accrual':
+            {
+                fin_data_events.accruals();
+                break;
+            }
+        default:
+            {
+                break;
+            }
+    }
 });
 JS
 );
-
-/*$tabItems = [
-    [
-        'label' => '<i class="glyphicon glyphicon-list-alt"></i>' . Yii::t('app', 'Начислено'),
-        //'content' => $this->render('_form_common_data', ['form' => $form, 'model' => $model]),
-        'content' => 'sdfdsf',
-        'active' => true,
-    ],
-    [
-        'label' => '<i class="glyphicon glyphicon-folder-open"></i>' . Yii::t('app', 'Оплачено'),
-        'content' => 'empty',
-    ],
-    [
-        'label' => '<i class="glyphicon glyphicon-usd"></i>' . Yii::t('app', 'Пеня'),
-        //'content' => $this->render('_form_financial_data', ['form' => $form, 'model' => $model]),
-        'content' => 'sdfdsfssss',
-    ],
-];
-
-echo TabsX::widget([
-    'items' => $tabItems,
-    'position' => TabsX::POS_RIGHT,
-    'encodeLabels' => false,
-]);*/
-
-DynaGrid::widget([
-    'columns' => $columns,
-    'storage' => DynaGrid::TYPE_COOKIE,
-    'theme' => 'simple-striped',
-    'gridOptions' => [
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'pjax' => true,
-        'panel' => [
-            'heading' => '<h3 class="panel-title">' . Yii::t('app', 'Список задолженностей') . '</h3>',
-            'before' => '{dynagrid}',
-        ],
-        'options' => ['id' => 'dynagrid-debts-options'],
-        'toolbar' => [
-            [
-                'content' =>
-                    Html::a('<i class="glyphicon glyphicon-repeat"></i>',
-                        ['/office/debt-details/create', 'id' => $model->id],
-                        [
-                            'class' => 'btn btn-success',
-                            'title' => Yii::t('app', 'Добавить задолженность'),
-                            //'href' => Url::to(['/office/debt-details/create', 'id' => $model->id]),
-                        ]
-                    ) .
-                    Html::button('<i class="glyphicon glyphicon-plus"></i>',
-                        [
-                            'type' => 'button',
-                            'title' => Yii::t('app', 'Добавить долг'),
-                            'class' => 'btn btn-success',
-                            'href' => Url::to(['/office/debt-details/create', 'id' => $model->id]),
-                        ]
-                    )/* . ' ' .
-                        Html::a('<i class="glyphicon glyphicon-repeat"></i>',
-                            ['dynagrid-demo'],
-                            [
-                                'data-pjax' => 0,
-                                'class' => 'btn btn-default',
-                                'title' => Yii::t('app', 'Сбросить'),
-                            ]
-                        )*/,
-            ],
-            /*[
-                'content' => '{dynagridFilter}{dynagridSort}{dynagrid}'
-            ],*/
-            '{export}',
-        ],
-    ],
-    'options' => ['id' => 'dynagrid-debts'] // a unique identifier is important
-]);
 ?>
 
 <div id="fin_data_container"></div>
