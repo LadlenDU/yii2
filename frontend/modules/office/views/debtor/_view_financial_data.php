@@ -176,7 +176,7 @@ echo '<div style="text-align: center">' . Html::radioButtonGroup('fin_data', 'co
 
 $commonUrl = json_encode(Url::to(['/office/debt-details/common-info', 'debtor_id' => $model->id]));
 $accrualUrl = json_encode(Url::to(['/office/accrual/info-for-debtor', 'debtor_id' => $model->id]));
-$loaderImg = json_encode(Html::img(Url::to(['/img/ajax-loader.gif'])));
+$loaderImg = json_encode('<div style="text-align: center">' . Html::img(Url::to(['/img/ajax-loader.gif'])) . '</div>');
 
 $this->registerJs(<<<JS
 var fin_data_events = {};

@@ -10,25 +10,28 @@ use yii\helpers\Html;
 
 $gridColumns = [
     [
+        //'class'=>'kartik\grid\EditableColumn',
         'attribute' => 'accrual_date',
-        'hAlign'=>'center',
-        'vAlign'=>'middle',
-        'format'=>'date',
-        'xlFormat'=>"mmm\\-dd\\, \\-yyyy",
-        'headerOptions'=>['class'=>'kv-sticky-column'],
-        'contentOptions'=>['class'=>'kv-sticky-column'],
-        /*'editableOptions'=>[
-            'header'=>'Publish Date',
-            'size'=>'md',
-            'inputType'=>\kartik\editable\Editable::INPUT_WIDGET,
-            'widgetClass'=> 'kartik\datecontrol\DateControl',
-            'options'=>[
-                'type'=>\kartik\datecontrol\DateControl::FORMAT_DATE,
-                'displayFormat'=>'dd.MM.yyyy',
-                'saveFormat'=>'php:Y-m-d',
-                'options'=>[
-                    'pluginOptions'=>[
-                        'autoclose'=>true
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'format' => 'date',
+        'xlFormat' => "mmm\\-dd\\, \\-yyyy",
+        'headerOptions' => ['class' => 'kv-sticky-column'],
+        'contentOptions' => ['class' => 'kv-sticky-column'],
+        //'filterType' => GridView::INPUT_DATE,
+        'filterType' => GridView::FILTER_DATE,
+        /*'editableOptions' => [
+            //'header' => 'Publish Date',
+            'size' => 'md',
+            'inputType' => \kartik\editable\Editable::INPUT_WIDGET,
+            'widgetClass' => 'kartik\datecontrol\DateControl',
+            'options' => [
+                'type' => \kartik\datecontrol\DateControl::FORMAT_DATE,
+                'displayFormat' => 'dd.MM.yyyy',
+                'saveFormat' => 'php:Y-m-d',
+                'options' => [
+                    'pluginOptions' => [
+                        'autoclose' => true
                     ]
                 ]
             ]

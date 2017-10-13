@@ -51,7 +51,7 @@ if (Yii::$app->controller->action->id === 'login') {
 
             #fin_data_container {
                 margin-top: 2em;
-                text-align: center;
+                /*text-align: center;*/
             }
 
             /*TODO: попытка уменьшения размера*/
