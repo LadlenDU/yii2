@@ -1,51 +1,49 @@
 <?php
 
-DynaGrid::widget([
-    'columns' => $columns,
-    'storage' => DynaGrid::TYPE_COOKIE,
-    'theme' => 'simple-striped',
-    'gridOptions' => [
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'pjax' => true,
-        'panel' => [
-            'heading' => '<h3 class="panel-title">' . Yii::t('app', 'Список задолженностей') . '</h3>',
-            'before' => '{dynagrid}',
+/* @var $this yii\web\View */
+/* @var $model common\models\Debtor */
+
+//use yii\widgets\ListView;
+use kartik\grid\GridView;
+
+$gridColumns = [
+    ['attribute' => 'accrual'],
+];
+
+echo GridView::widget([
+    'id' => 'accrual-list-grid',
+    'dataProvider' => $dataProvider,
+    'filterModel' => $searchModel,
+    'columns' => $gridColumns,
+    'containerOptions' => ['style' => 'overflow: auto'], // only set when $responsive = false
+    //'headerRowOptions'=>['class'=>'kartik-sheet-style'],
+    //'filterRowOptions'=>['class'=>'kartik-sheet-style'],
+    'pjax' => true, // pjax is set to always true for this demo
+    // set your toolbar
+    /*'toolbar' => [
+        ['content' =>
+            Html::button('<i class="glyphicon glyphicon-plus"></i>', ['type' => 'button', 'title' => Yii::t('kvgrid', 'Add Book'), 'class' => 'btn btn-success', 'onclick' => 'alert("This will launch the book creation form.\n\nDisabled for this demo!");']) . ' ' .
+            Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['grid-demo'], ['data-pjax' => 0, 'class' => 'btn btn-default', 'title' => Yii::t('kvgrid', 'Reset Grid')])
         ],
-        'options' => ['id' => 'dynagrid-debts-options'],
-        'toolbar' => [
-            [
-                'content' =>
-                    Html::a('<i class="glyphicon glyphicon-repeat"></i>',
-                        ['/office/debt-details/create', 'id' => $model->id],
-                        [
-                            'class' => 'btn btn-success',
-                            'title' => Yii::t('app', 'Добавить задолженность'),
-//'href' => Url::to(['/office/debt-details/create', 'id' => $model->id]),
-                        ]
-                    ) .
-                    Html::button('<i class="glyphicon glyphicon-plus"></i>',
-                        [
-                            'type' => 'button',
-                            'title' => Yii::t('app', 'Добавить долг'),
-                            'class' => 'btn btn-success',
-                            'href' => Url::to(['/office/debt-details/create', 'id' => $model->id]),
-                        ]
-                    )/* . ' ' .
-Html::a('<i class="glyphicon glyphicon-repeat"></i>',
-['dynagrid-demo'],
-[
-'data-pjax' => 0,
-'class' => 'btn btn-default',
-'title' => Yii::t('app', 'Сбросить'),
-]
-)*/,
-            ],
-            /*[
-            'content' => '{dynagridFilter}{dynagridSort}{dynagrid}'
-            ],*/
-            '{export}',
-        ],
+        '{export}',
+        '{toggleData}',
     ],
-    'options' => ['id' => 'dynagrid-debts'] // a unique identifier is important
+    // set export properties
+    'export' => [
+        'fontAwesome' => true
+    ],
+    // parameters from the demo form
+    'bordered' => $bordered,
+    'striped' => $striped,
+    'condensed' => $condensed,
+    'responsive' => $responsive,
+    'hover' => $hover,
+    'showPageSummary' => $pageSummary,
+    'panel' => [
+        'type' => GridView::TYPE_PRIMARY,
+        'heading' => $heading,
+    ],
+    'persistResize' => false,
+    'toggleDataOptions' => ['minCount' => 10]
+    'exportConfig'=>$exportConfig,*/
 ]);

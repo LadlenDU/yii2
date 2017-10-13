@@ -175,13 +175,21 @@ echo '<div style="text-align: center">' . Html::radioButtonGroup('fin_data', 'co
         ]
     ) . '</div>';
 
-$commonUrl = Url::to(['/office/debt-details/common-info', 'debtor_id' => $model->id]);
-$accrualUrl = Url::to(['/office/accrual/info-for-debtor', 'debtor_id' => $model->id]);
+$commonUrl = json_encode(Url::to(['/office/debt-details/common-info', 'debtor_id' => $model->id]));
+$accrualUrl = json_encode(Url::to(['/office/accrual/info-for-debtor', 'debtor_id' => $model->id]));
+$loaderImg = json_encode(Html::img(Url::to(['/img/ajax-loader.gif'])));
 
 $this->registerJs(<<<JS
 var fin_data_events = {};
 fin_data_events.container = $("#fin_data_container");
-fin_data_events.commonInfo = function() {
+fin_data_events.loadData = function(url) {
+    fin_data_events.container.html($loaderImg);
+    $.get(url, null, function(html) {
+        fin_data_events.container.html(html);
+    }, 'html');
+};
+/*fin_data_events.commonInfo = function() {
+    //fin_data_events.container.html('');
     $.get('$commonUrl', null, function(html) {
         fin_data_events.container.html(html);
     }, 'html');
@@ -191,19 +199,27 @@ fin_data_events.accruals = function() {
         fin_data_events.container.html(html);
     }, 'html');
 };
-fin_data_events.commonInfo();
+fin_data_events.commonInfo();*/
+fin_data_events.loadData($commonUrl);
 
 $('[name=fin_data]').change(function() {
     switch ($(this).val())
     {
         case 'common_info':
             {
-                fin_data_events.commonInfo();
+                //fin_data_events.commonInfo();
+                fin_data_events.loadData($commonUrl);
                 break;
             }
         case 'accrual':
             {
-                fin_data_events.accruals();
+                //fin_data_events.accruals();
+                fin_data_events.loadData($accrualUrl);
+                break;
+            }
+        case 'payed':
+            {
+                fin_data_events.payed();
                 break;
             }
         default:
