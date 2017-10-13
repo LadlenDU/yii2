@@ -40,6 +40,11 @@ if (Yii::$app->controller->action->id === 'login') {
                 margin-right: .5em;
             }
 
+            .tbl-debtor-fin-info [class^="col-"] {
+                padding-top: .5em;
+                padding-bottom: .5em;
+            }
+
             /*TODO: попытка уменьшения размера*/
             body {
                 font-size: 1.1em !important;

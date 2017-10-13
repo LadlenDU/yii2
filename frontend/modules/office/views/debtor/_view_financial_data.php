@@ -113,31 +113,91 @@ $dataProvider = $searchModel->search(['debtor_id' => $model->id]);
 
 ?>
 
-    <div class="row">
-        <div class="col-sm-3">
-            <?= Yii::t('app', 'Начислено') ?>
+<div class="row tbl-debtor-fin-info">
+    <div class="col-sm-3">
+        <div class="row">
+            <div class="col-sm-12 text-center bg-primary">
+                <?= Yii::t('app', 'Начислено') ?>
+            </div>
         </div>
-        <div class="col-sm-3">
-            <?= Yii::t('app', 'Оплачено') ?>
-        </div>
-        <div class="col-sm-3">
-            <?= Yii::t('app', 'Задолженность') ?>
-        </div>
-        <div class="col-sm-3">
-            <?= Yii::t('app', 'Пеня') ?>
+        <div class="row">
+            <div class="col-sm-12 text-center">
+                <?= 'test123' ?>
+            </div>
         </div>
     </div>
+    <div class="col-sm-3">
+        <div class="row">
+            <div class="col-sm-12 text-center bg-primary">
+                <?= Yii::t('app', 'Оплачено') ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 text-center">
+                <?= 'test123' ?>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div class="row">
+            <div class="col-sm-12 text-center bg-primary">
+                <?= Yii::t('app', 'Задолженность') ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 text-center">
+                <?= 'test123' ?>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div class="row">
+            <div class="col-sm-12 text-center bg-primary">
+                <?= Yii::t('app', 'Пеня') ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 text-center">
+                <?= 'test123' ?>
+            </div>
+        </div>
+    </div>
+</div>
 <br>
 <?php
 
 echo '<div style="text-align: center">' . Html::radioButtonGroup('fin_data', '1',
-    [
-        0 => Yii::t('app', 'Общая информация'),
-        1 => Yii::t('app', 'Начислено'),
-        2 => Yii::t('app', 'Оплачено'),
-        3 => Yii::t('app', 'Пеня')
-    ]
-) . '</div>';
+        [
+            0 => Yii::t('app', 'Общая информация'),
+            1 => Yii::t('app', 'Начислено'),
+            2 => Yii::t('app', 'Оплачено'),
+            3 => Yii::t('app', 'Пеня')
+        ]
+    ) . '</div>';
+
+$commonUrl = Url::to(['/office/debt-details/common-info', 'debtor_id' => $model->id]);
+$accrualUrl = Url::to(['/office/accrual/info-for-debtor', 'debtor_id' => $model->id]);
+
+$this->registerJs(<<<JS
+var fin_data_events = {};
+fin_data_events.container = $("#fin_data_container");
+fin_data_events.commonInfo = function() {
+    $.get($commonUrl, null, function(html) {
+        container.html(html);
+    }, 'html');
+};
+fin_data_events.commonInfo = function() {
+    $.get($accrualUrl, null, function(html) {
+        container.html(html);
+    }, 'html');
+};
+fin_data_events.commonInfo();
+
+$('[name=fin_data]').click(function(){
+    
+});
+JS
+);
 
 /*$tabItems = [
     [
@@ -212,3 +272,6 @@ DynaGrid::widget([
     ],
     'options' => ['id' => 'dynagrid-debts'] // a unique identifier is important
 ]);
+?>
+
+<div id="fin_data_container"></div>

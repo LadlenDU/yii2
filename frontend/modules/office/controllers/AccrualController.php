@@ -3,16 +3,16 @@
 namespace frontend\modules\office\controllers;
 
 use Yii;
-use common\models\DebtDetails;
-use yii\data\ActiveDataProvider;
+use common\models\Accrual;
+use common\models\AccrualSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * DebtDetailsController implements the CRUD actions for DebtDetails model.
+ * AccrualController implements the CRUD actions for Accrual model.
  */
-class DebtDetailsController extends Controller
+class AccrualController extends Controller
 {
     /**
      * @inheritdoc
@@ -30,22 +30,22 @@ class DebtDetailsController extends Controller
     }
 
     /**
-     * Lists all DebtDetails models.
+     * Lists all Accrual models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $dataProvider = new ActiveDataProvider([
-            'query' => DebtDetails::find(),
-        ]);
+        $searchModel = new AccrualSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
+            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }
 
     /**
-     * Displays a single DebtDetails model.
+     * Displays a single Accrual model.
      * @param integer $id
      * @return mixed
      */
@@ -57,26 +57,25 @@ class DebtDetailsController extends Controller
     }
 
     /**
-     * Creates a new DebtDetails model.
+     * Creates a new Accrual model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate($id)
+    public function actionCreate()
     {
-        $model = new DebtDetails();
+        $model = new Accrual();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
-                'debtor_id' => $id,
             ]);
         }
     }
 
     /**
-     * Updates an existing DebtDetails model.
+     * Updates an existing Accrual model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -95,7 +94,7 @@ class DebtDetailsController extends Controller
     }
 
     /**
-     * Deletes an existing DebtDetails model.
+     * Deletes an existing Accrual model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -108,27 +107,32 @@ class DebtDetailsController extends Controller
     }
 
     /**
-     * Finds the DebtDetails model based on its primary key value.
+     * Finds the Accrual model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return DebtDetails the loaded model
+     * @return Accrual the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = DebtDetails::findOne($id)) !== null) {
+        if (($model = Accrual::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
 
-    public function actionCommonInfo($debtor_id)
+    public function actionInfoForDebtor($debtor_id)
     {
+        return 'debtor info';
         if (Yii::$app->request->isAjax) {
-            return 'common info';
+            return $this->renderAjax('view', [
+                'model' => $this->findModel($id),
+            ]);
         } else {
-            return 'common info';
+            return $this->render('view', [
+                'model' => $this->findModel($id),
+            ]);
         }
     }
 }
