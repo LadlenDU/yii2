@@ -11,6 +11,10 @@ use common\models\Name;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use common\models\Fine;
+use common\models\Accrual;
+use common\models\Payment;
+use yii\data\ArrayDataProvider;
 
 /**
  * DebtorController implements the CRUD actions for Debtor model.
@@ -171,27 +175,30 @@ class DebtorController extends Controller
     {
         $elements = [];
 
-        $accruals = \common\models\Accrual::find()->all();
+        $fine = new Fine();
+
+        $accruals = Accrual::find()->where(['debtor_id' => $debtor_id])->all();
         foreach ($accruals as $acc) {
-            $elem['debt'] = Debtor::getDebt(strtotime($acc->accrual_date));
+            $dateStart = strtotime($acc->accrual_date);
+
+            $debt = Debtor::getDebt($dateStart);
+
+
+            $dateFinish = time() - 60 * 60 * 24;
+
+            $fine->fineCalculator($debt, $dateStart, $dateFinish);
+
             $elem['date'] = $acc->accrual_date;
+
             $elements[] = $elem;
         }
-        #$searchModel = new \common\models\AccrualSearch();
-        #$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        $dataProvider = new \yii\data\ArrayDataProvider([
+        $dataProvider = new ArrayDataProvider([
             'allModels' => $elements,
-            'sort' => [
-                'attributes' => ['date'],
-            ],
-            'pagination' => [
+            /*'pagination' => [
                 'pageSize' => 100,
-            ],
+            ],*/
         ]);
-        /*$dataProvider = new \yii\data\ActiveDataProvider([
-            'query' => $elements,
-        ]);*/
 
         $data = [
             'dataProvider' => $dataProvider,
@@ -204,25 +211,78 @@ class DebtorController extends Controller
         }
     }
 
-    public function actionInfoForDebt($debtor_id)
+    public function actionInfoForDebtOld($debtor_id)
     {
         $elements = [];
 
-        $accruals = \common\models\Accrual::find()->all();
+        $accruals = Accrual::find()->where(['debtor_id' => $debtor_id])->all();
         foreach ($accruals as $acc) {
             $elem['debt'] = Debtor::getDebt(strtotime($acc->accrual_date));
             $elem['date'] = $acc->accrual_date;
             $elements[] = $elem;
         }
 
-        $dataProvider = new \yii\data\ArrayDataProvider([
+        $dataProvider = new ArrayDataProvider([
             'allModels' => $elements,
             /*'sort' => [
                 'attributes' => ['date'],
             ],*/
-            'pagination' => [
+            /*'pagination' => [
                 'pageSize' => 100,
-            ],
+            ],*/
+        ]);
+
+        $data = [
+            'dataProvider' => $dataProvider,
+        ];
+
+        if (Yii::$app->request->isAjax) {
+            return $this->renderAjax('_debt_list', $data);
+        } else {
+            return $this->render('_debt_list', $data);
+        }
+    }
+
+    public function actionInfoForDebt($debtor_id)
+    {
+        $loans = [];
+        $payments = [];
+
+        $fine = new Fine();
+
+        $accruals = Accrual::find()->where(['debtor_id' => $debtor_id])->all();
+        foreach ($accruals as $acc) {
+            $date = strtotime($acc->accrual_date);
+            $loans[] = [
+                'sum' => Debtor::getDebt($date),
+                'date' => $date,
+            ];
+        }
+
+        $payments = Payment::find()->where(['debtor_id' => $debtor_id])->all();
+        foreach ($payments as $pm) {
+            $date = strtotime($pm->payment_date);
+            $loans[] = [
+                'date' => $date,
+                'payFor' => null,
+                'sum' => Debtor::getDebt($date),
+            ];
+        }
+
+        $dateFinish = time() - 60 * 60 * 24;
+
+        $fineRes = $fine->fineCalculator($dateFinish, $loans, $payments);
+
+        $elements = [];
+
+        $dataProvider = new ArrayDataProvider([
+            'allModels' => $elements,
+            /*'sort' => [
+                'attributes' => ['date'],
+            ],*/
+            /*'pagination' => [
+                'pageSize' => 100,
+            ],*/
         ]);
 
         $data = [
