@@ -66,4 +66,13 @@ class Payment extends \yii\db\ActiveRecord
     {
         return new PaymentQuery(get_called_class());
     }
+
+    public function save($runValidation = true, $attributeNames = NULL)
+    {
+        if ($this->payment_date) {
+            $this->payment_date .= '-01 00:00:00';
+        }
+
+        parent::save($runValidation, $attributeNames);
+    }
 }
