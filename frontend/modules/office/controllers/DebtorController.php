@@ -173,6 +173,8 @@ class DebtorController extends Controller
 
     public function actionInfoForFine($debtor_id)
     {
+        //TODO: вынести в модель
+
         $elements = [];
 
         $fine = new Fine();
@@ -245,6 +247,8 @@ class DebtorController extends Controller
 
     public function actionInfoForDebt($debtor_id)
     {
+        //TODO: вынести в модель
+
         $loans = [];
         $payments = [];
 
@@ -254,18 +258,18 @@ class DebtorController extends Controller
         foreach ($accruals as $acc) {
             $date = strtotime($acc->accrual_date);
             $loans[] = [
-                'sum' => Debtor::getDebt($date),
+                'sum' => $acc->accrual,
                 'date' => $date,
             ];
         }
 
-        $payments = Payment::find()->where(['debtor_id' => $debtor_id])->all();
-        foreach ($payments as $pm) {
+        $paymentsRes = Payment::find()->where(['debtor_id' => $debtor_id])->all();
+        foreach ($paymentsRes as $pm) {
             $date = strtotime($pm->payment_date);
-            $loans[] = [
+            $payments[] = [
                 'date' => $date,
                 'payFor' => null,
-                'sum' => Debtor::getDebt($date),
+                'sum' => $pm->amount,
             ];
         }
 
