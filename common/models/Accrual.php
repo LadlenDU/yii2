@@ -72,4 +72,17 @@ class Accrual extends \yii\db\ActiveRecord
     {
         return new AccrualQuery(get_called_class());
     }
+
+    public function save($runValidation = true, $attributeNames = NULL)
+    {
+        if ($this->accrual_date) {
+            $this->accrual_date .= '-01 00:00:00';
+            /*$parts = explode('-', $this->accrual_date);
+            if (!empty($parts[0]) && !empty($parts[1])) {
+                $this->accrual_date = $this->accrual_date;
+            }*/
+        }
+
+        parent::save($runValidation, $attributeNames);
+    }
 }
