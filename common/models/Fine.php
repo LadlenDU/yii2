@@ -542,14 +542,16 @@ class Fine
             $res[$i] = [];
             $c = $loans[$i];
             //$loans[$i] = ['sum' => $c['sum'], 'date' => $c['date'], 'month' => $c['date'].getFullYear()*12 + c.date.getMonth(), order: c.order];
-            $loans[$i] = ['sum' => $c['sum'], 'date' => $c['date'], 'month' => date('Y', $c['date']) * 12 + date('n', $c['date']) - 1, 'order' => $c['order']];
+            //$loans[$i] = ['sum' => $c['sum'], 'date' => $c['date'], 'month' => date('Y', $c['date']) * 12 + date('n', $c['date']) - 1, 'order' => $c['order']];
+            $loans[$i] = ['sum' => $c['sum'], 'date' => $c['date'], 'month' => date('Y', $c['date']) * 12 + date('n', $c['date']), 'order' => (isset($c['order']) ? $c['order'] : null)];
         }
 
         for ($i = 0; $i < count($payments); $i++) { //TODO: get rid of count()
             $payment = $payments[$i];
             if ($payment['payFor']) {
                 //$curMonth = payment.payFor.getFullYear()*12 + payment.payFor.getMonth() + 1;
-                $curMonth = date('Y', $payment['payFor']) * 12 + date('n', $payment['payFor']);
+                //$curMonth = date('Y', $payment['payFor']) * 12 + date('n', $payment['payFor']);
+                $curMonth = date('Y', $payment['payFor']) * 12 + date('n', $payment['payFor']) + 1;
                 // ищем текущий месяц
                 for ($j = 0; $j < count($loans); $j++) {
                     if ($loans[$j]['month'] == $curMonth) {
