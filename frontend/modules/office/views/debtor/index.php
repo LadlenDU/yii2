@@ -35,22 +35,39 @@ $columns = [
             },
         ],
     ],
-    ['attribute' => 'id'],
-    ['attribute' => 'phone'],
-    ['attribute' => 'LS_EIRC'],
+    //['attribute' => 'id'],
     ['attribute' => 'LS_IKU_provider'],
-    ['attribute' => 'IKU'],
-    /*['attribute' => 'space_common'],
-    ['attribute' => 'space_living'],
-    ['attribute' => 'privatized'],*/
-    ['attribute' => 'location.region'],
-    ['attribute' => 'name.first_name'],
-    ['attribute' => 'expiration_start'],
+    ['attribute' => 'name.full_name'],
+    ['attribute' => 'location.city'],
+    ['attribute' => 'location.address'],
+    ['attribute' => 'accrualSum'],
+    ['attribute' => 'paymentSum'],
+    ['attribute' => 'debtTotal'],
+    ['attribute' => 'feeTotal'],
     [
-        'attribute' => 'debt_total',
+        'attribute' => Yii::t('app', 'Пошлина'),
+        //'value' => function (\common\models\DebtDetails $model, $key, $index) {
+        'value' => function (\common\models\Debtor $model, $key, $index) {
+            return $model->calculateStateFee2();
+        },
         'format' => ['decimal', 2],
         'hAlign' => 'right',
     ],
+
+    //['attribute' => 'phone'],
+//    ['attribute' => 'LS_EIRC'],
+//    ['attribute' => 'IKU'],
+    /*['attribute' => 'space_common'],
+    ['attribute' => 'space_living'],
+    ['attribute' => 'privatized'],*/
+//    ['attribute' => 'location.region'],
+//    ['attribute' => 'name.first_name'],
+//    ['attribute' => 'expiration_start'],
+//    [
+//        'attribute' => 'debt_total',
+//        'format' => ['decimal', 2],
+//        'hAlign' => 'right',
+//    ],
     /*[
         'attribute' => Yii::t('app', 'Пошлина'),
         'value' => function (\common\models\DebtDetails $model, $key, $index) {
