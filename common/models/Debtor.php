@@ -225,22 +225,32 @@ class Debtor extends \yii\db\ActiveRecord
      */
     public static function getDebt($date)
     {
+        $debt = 0;
+
+        //Mymodel::find()->select('sorting_value')->where('sorting_val‌​ue' > ':sort1', [':sort1' => $sort1])->min('sorting_value');
+
         $year = date('Y', $date);
         $month = date('n', $date);
 
         //accrual_date
         $accrual = \common\models\Accrual::find()
-            ->select('year(accrual_date) AS year', 'month(accrual_date) AS month')//TODO: универсализировать "AS"
-            ->where(['=', 'year', $year])
-            ->andWhere(['=', 'month', $month])
+            //->select(['year(accrual_date) AS year', 'month(accrual_date) AS month'])//TODO: универсализировать "AS"
+            ->where(['=', 'YEAR(accrual_date)', $year])
+            ->andWhere(['=', 'MONTH(accrual_date)', $month])
             ->one();
         $payment = \common\models\Payment::find()
-            ->select('year(payment_date) AS year', 'month(payment_date) AS month')//TODO: универсализировать "AS"
-            ->where(['=', 'year', $year])
-            ->andWhere(['=', 'month', $month])
+            //->select('year(payment_date) AS year', 'month(payment_date) AS month')//TODO: универсализировать "AS"
+            ->where(['=', 'YEAR(payment_date)', $year])
+            ->andWhere(['=', 'MONTH(payment_date)', $month])
             ->one();
 
-        $debt = $payment->amount - $accrual->accrual;
+        if ($accrual) {
+            $debt = (int)$accrual->accrual;
+        }
+        if ($payment) {
+            $debt -= $payment->amount;
+        }
+        //$debt = $accrual->accrual - $payment->amount;
 
         return $debt;
         //$searchModel->debtor_id = $debtor_id;

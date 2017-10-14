@@ -6,11 +6,12 @@
 
 //use yii\widgets\ListView;
 use kartik\grid\GridView;
-use yii\helpers\Html;
+//use yii\helpers\Html;
 
 $gridColumns = [
     [
-        'attribute' => 'payment_date',
+        //'attribute' => 'payment_date',
+        'attribute' => 'date',
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'format' => 'date',
@@ -20,7 +21,7 @@ $gridColumns = [
         'filterType' => GridView::FILTER_DATE,
     ],
     [
-        'attribute' => 'amount',
+        'attribute' => 'debt',
         'vAlign' => 'middle',
         'hAlign' => 'right',
         'format' => ['decimal', 2],
@@ -36,23 +37,10 @@ echo GridView::widget([
     'headerRowOptions' => ['class' => 'kartik-sheet-style'],
     'filterRowOptions' => ['class' => 'kartik-sheet-style'],
     'pjax' => true,
-    'toolbar' => [
-        [
-            'content' =>
-                Html::a('<i class="glyphicon glyphicon-plus"></i>',
-                    ['/office/payment/create', 'debtor_id' => $debtor_id],
-                    [
-                        'data-pjax' => 0,
-                        'class' => 'btn btn-default',
-                        'title' => Yii::t('app', 'Добавить оплату'),
-                        'target' => '_blank',
-                    ]
-                )
-        ],
-    ],
+    'toolbar' => false,
     'panel' => [
         'type' => GridView::TYPE_PRIMARY,
-        'heading' => Yii::t('app', 'Оплачено'),
+        'heading' => Yii::t('app', 'Задолженность'),
     ],
     'bordered' => true,
     'striped' => true,

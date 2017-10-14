@@ -169,21 +169,38 @@ class DebtorController extends Controller
 
     public function actionInfoForFine($debtor_id)
     {
-        $searchModel = new \common\models\AccrualSearch();
-        $searchModel->debtor_id = $debtor_id;
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $elements = [];
+
+        $accruals = \common\models\Accrual::find()->all();
+        foreach ($accruals as $acc) {
+            $elem['debt'] = Debtor::getDebt(strtotime($acc->accrual_date));
+            $elem['date'] = $acc->accrual_date;
+            $elements[] = $elem;
+        }
+        #$searchModel = new \common\models\AccrualSearch();
+        #$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $elements,
+            'sort' => [
+                'attributes' => ['date'],
+            ],
+            'pagination' => [
+                'pageSize' => 100,
+            ],
+        ]);
+        /*$dataProvider = new \yii\data\ActiveDataProvider([
+            'query' => $elements,
+        ]);*/
 
         $data = [
-            //'model' => $this->findModel($id),
             'dataProvider' => $dataProvider,
-            'searchModel' => $searchModel,
-            'debtor_id' => $debtor_id,
         ];
 
         if (Yii::$app->request->isAjax) {
-            return $this->renderAjax('_payment_list', $data);
+            return $this->renderAjax('_fine_list', $data);
         } else {
-            return $this->render('_payment_list', $data);
+            return $this->render('_fine_list', $data);
         }
     }
 }
