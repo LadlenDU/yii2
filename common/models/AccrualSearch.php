@@ -42,7 +42,8 @@ class AccrualSearch extends Accrual
      */
     public function search($params)
     {
-        $query = Accrual::find();
+        //TODO: костыль и возможно не работает
+        $query = Accrual::find()->orderBy('accrual_date');
 
         // add conditions that should always apply here
 

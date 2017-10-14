@@ -42,7 +42,8 @@ class PaymentSearch extends Payment
      */
     public function search($params)
     {
-        $query = Payment::find();
+        //TODO: костыль и возможно не работает
+        $query = Payment::find()->orderBy('payment_date');
 
         // add conditions that should always apply here
 
