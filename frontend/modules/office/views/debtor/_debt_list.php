@@ -19,7 +19,7 @@ $gridColumns = [
     ],
     [
         'attribute' => 'debt',
-        'label' => Yii::t('app', 'Пеня'),
+        'label' => Yii::t('app', 'Задолженность'),
         'vAlign' => 'middle',
         'hAlign' => 'right',
         'format' => ['decimal', 2],
@@ -38,7 +38,7 @@ echo GridView::widget([
     'toolbar' => false,
     'panel' => [
         'type' => GridView::TYPE_PRIMARY,
-        'heading' => Yii::t('app', 'Пеня'),
+        'heading' => Yii::t('app', 'Задолженность'),
     ],
     'bordered' => true,
     'striped' => true,

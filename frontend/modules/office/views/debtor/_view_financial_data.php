@@ -171,6 +171,7 @@ echo '<div style="text-align: center">' . Html::radioButtonGroup('fin_data', 'co
             'common_info' => Yii::t('app', 'Общая информация'),
             'accrual' => Yii::t('app', 'Начислено'),
             'payed' => Yii::t('app', 'Оплачено'),
+            'debt' => Yii::t('app', 'Задолженность'),
             'fine' => Yii::t('app', 'Пеня')
         ]
     ) . '</div>';
@@ -178,6 +179,7 @@ echo '<div style="text-align: center">' . Html::radioButtonGroup('fin_data', 'co
 $commonUrl = json_encode(Url::to(['/office/debt-details/common-info', 'debtor_id' => $model->id]));
 $accrualUrl = json_encode(Url::to(['/office/accrual/info-for-debtor', 'debtor_id' => $model->id]));
 $paymentUrl = json_encode(Url::to(['/office/payment/info-for-debtor', 'debtor_id' => $model->id]));
+$debtUrl = json_encode(Url::to(['/office/debtor/info-for-debt', 'debtor_id' => $model->id]));
 $fineUrl = json_encode(Url::to(['/office/debtor/info-for-fine', 'debtor_id' => $model->id]));
 $loaderImg = json_encode('<div style="text-align: center">' . Html::img(Url::to(['/img/ajax-loader.gif'])) . '</div>');
 
@@ -210,6 +212,11 @@ $('[name=fin_data]').change(function() {
         case 'payed':
             {
                 fin_data_events.loadData($paymentUrl);
+                break;
+            }
+        case 'debt':
+            {
+                fin_data_events.loadData($debtUrl);
                 break;
             }
         case 'fine':

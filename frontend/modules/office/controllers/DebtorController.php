@@ -203,4 +203,36 @@ class DebtorController extends Controller
             return $this->render('_fine_list', $data);
         }
     }
+
+    public function actionInfoForDebt($debtor_id)
+    {
+        $elements = [];
+
+        $accruals = \common\models\Accrual::find()->all();
+        foreach ($accruals as $acc) {
+            $elem['debt'] = Debtor::getDebt(strtotime($acc->accrual_date));
+            $elem['date'] = $acc->accrual_date;
+            $elements[] = $elem;
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $elements,
+            /*'sort' => [
+                'attributes' => ['date'],
+            ],*/
+            'pagination' => [
+                'pageSize' => 100,
+            ],
+        ]);
+
+        $data = [
+            'dataProvider' => $dataProvider,
+        ];
+
+        if (Yii::$app->request->isAjax) {
+            return $this->renderAjax('_debt_list', $data);
+        } else {
+            return $this->render('_debt_list', $data);
+        }
+    }
 }
