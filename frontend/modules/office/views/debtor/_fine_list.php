@@ -7,8 +7,8 @@ use kartik\grid\GridView;
 
 $gridColumns = [
     [
-        'attribute' => 'date',
-        'label' => Yii::t('app', 'Дата'),
+        'attribute' => 'dateStart',
+        'label' => Yii::t('app', 'Начало просрочки'),
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'format' => 'date',
@@ -18,8 +18,26 @@ $gridColumns = [
         'filterType' => GridView::FILTER_DATE,
     ],
     [
-        'attribute' => 'debt',
+        'attribute' => 'dateFinish',
+        'label' => Yii::t('app', 'Конец просрочки'),
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'format' => 'date',
+        'xlFormat' => "mmm\\-dd\\, \\-yyyy",
+        'headerOptions' => ['class' => 'kv-sticky-column'],
+        'contentOptions' => ['class' => 'kv-sticky-column'],
+        'filterType' => GridView::FILTER_DATE,
+    ],
+    [
+        'attribute' => 'fine',
         'label' => Yii::t('app', 'Пеня'),
+        'vAlign' => 'middle',
+        'hAlign' => 'right',
+        'format' => ['decimal', 2],
+    ],
+    [
+        'attribute' => 'cost',
+        //'label' => Yii::t('app', 'Пеня'),
         'vAlign' => 'middle',
         'hAlign' => 'right',
         'format' => ['decimal', 2],

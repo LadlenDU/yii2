@@ -175,28 +175,58 @@ class DebtorController extends Controller
     {
         //TODO: вынести в модель
 
-        $elements = [];
+        $loans = [];
+        $payments = [];
 
         $fine = new Fine();
 
         $accruals = Accrual::find()->where(['debtor_id' => $debtor_id])->all();
         foreach ($accruals as $acc) {
-            $dateStart = strtotime($acc->accrual_date);
+            $date = strtotime($acc->accrual_date);
+            $loans[] = [
+                'sum' => $acc->accrual,
+                'date' => $date,
+            ];
+        }
 
-            $debt = Debtor::getDebt($dateStart);
+        $paymentsRes = Payment::find()->where(['debtor_id' => $debtor_id])->all();
+        foreach ($paymentsRes as $pm) {
+            $date = strtotime($pm->payment_date);
+            $payments[] = [
+                'date' => $date,
+                'payFor' => null,
+                'sum' => $pm->amount,
+            ];
+        }
 
+        $dateFinish = time() - 60 * 60 * 24;
 
-            $dateFinish = time() - 60 * 60 * 24;
+        $fineRes = $fine->fineCalculator($dateFinish, $loans, $payments);
 
-            $fine->fineCalculator($debt, $dateStart, $dateFinish);
+        $elements = [];
 
-            $elem['date'] = $acc->accrual_date;
-
-            $elements[] = $elem;
+        foreach ($fineRes as $res) {
+            if (!empty($res['data'])) {
+                foreach ($res['data'] as $data) {
+                    if ($data['type'] == 1) {
+                        $elements[] = [
+                            'fine' => $data['data']['cost'],
+                            'cost' => $data['data']['sum'],
+                            //'dateStart' => date('Y-m-d H:i:s', $data['data']['dateStart']),
+                            //'dateFinish' => date('Y-m-d H:i:s', $data['data']['dateFinish']),
+                            'dateStart' => $data['data']['dateStart'],
+                            'dateFinish' => $data['data']['dateFinish'],
+                        ];
+                    }
+                }
+            }
         }
 
         $dataProvider = new ArrayDataProvider([
             'allModels' => $elements,
+            /*'sort' => [
+                'attributes' => ['date'],
+            ],*/
             /*'pagination' => [
                 'pageSize' => 100,
             ],*/
@@ -278,6 +308,19 @@ class DebtorController extends Controller
         $fineRes = $fine->fineCalculator($dateFinish, $loans, $payments);
 
         $elements = [];
+
+        foreach ($fineRes as $res) {
+            if (!empty($res['data'])) {
+                foreach ($res['data'] as $data) {
+                    if ($data['type'] == 2) {
+                        $elements[] = [
+                            'debt' => $data['data']['sum'],
+                            'date' => date('Y-m-d H:i:s', $data['data']['date']),
+                        ];
+                    }
+                }
+            }
+        }
 
         $dataProvider = new ArrayDataProvider([
             'allModels' => $elements,
