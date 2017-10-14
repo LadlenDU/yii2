@@ -133,12 +133,15 @@ class Fine
     protected $back;
     protected $resultView;
 
-    protected $payDates = [];
+    /*protected $payDates = [];
     protected $paySums = [];
-    protected $payFor = [];
+    protected $payFor = []; // за месяц
 
     protected $loanDates = [];
-    protected $loanSums = [];
+    protected $loanSums = [];*/
+
+    protected $loans = [];
+    protected $payments = [];
 
     protected $rateTypes = [
         1 => 'на конец периода',
@@ -190,30 +193,65 @@ class Fine
      * @param bool $back Применять обратную силу закона (не рекомендуется)
      * @param array $payDates Частичная оплата задолженности
      */
-    public function fineCalculator($loanAmount,
-                                   $dateStart,
-                                   $dateFinish,
-                                   $rateType = 4,
-                                   $back = false,
-                                   $resultView = 0,
-                                   $payDates = [],
-                                   $paySums = [],
-                                   $payFor = [],
-                                   $loanDates = [],
-                                   $loanSums = []
+    public function fineCalculator(
+        //$loanAmount,
+        //$dateStart,
+        $dateFinish,
+        $loans = [],     // ['sum' => $loanAmount, 'date' => $dateStart]
+        $payments = [],  // ['date' => $loanAmount, 'payFor' => null, 'sum'] 'payFor' - оплата за месяц
+        $rateType = 4,
+        $back = false,
+        $resultView = 0
+        /*$payDates = [],
+        $paySums = [],
+        $payFor = [],
+        $loanDates = [],
+        $loanSums = []*/
     )
     {
+        if (!$loans) {
+            return false;
+        }
+
+        $loanAmount = 0;
+        $dateStart = 0;
+
+        $loansMod = [];
+        foreach ($loans as $key => $l) {
+            if ($key) {
+                $modLoan['date'] = $l['date'];
+                $modLoan['datePlus'] = $l['date'] + $this->ONE_DAY;
+                $modLoan['sum'] = $l['sum'];
+                $loansMod[] = $modLoan;
+            } else {
+                //$loansMod[] = $l;
+                $loanAmount = $l['sum'];
+                $dateStart = $l['date'];
+            }
+        }
+
+        $paymentsMod = [];
+        foreach ($payments as $key => $p) {
+            $modPayment['date'] = $p['date'];
+            $modPayment['datePlus'] = $p['date'] + $this->ONE_DAY;
+            $modPayment['payFor'] = isset($p['payFor']) ? $p['payFor'] : null;
+            $modPayment['sum'] = $p['sum'];
+            $paymentsMod[] = $modPayment;
+        }
+
         $this->loanAmount = $loanAmount;
         $this->dateStart = $dateStart;
         $this->dateFinish = $dateFinish;
+        $this->loans = $loansMod;
+        $this->payments = $paymentsMod;
         $this->rateType = $rateType;
         $this->back = $back;
         $this->resultView = $resultView;
-        $this->payDates = $payDates;
+        /*$this->payDates = $payDates;
         $this->paySums = $paySums;
         $this->payFor = $payFor;
         $this->loanDates = $loanDates;
-        $this->loanSums = $loanSums;
+        $this->loanSums = $loanSums;*/
 
         return $this->updateData(true);
     }
@@ -297,6 +335,7 @@ class Fine
 
     protected function collectPayments()
     {
+        return $this->payments;
         return [];  //TODO: fix
         $res = [];
         $payDates = $this->payDates;
@@ -331,6 +370,7 @@ class Fine
 
     protected function collectLoans()
     {
+        return $this->loans;
         $res = [];
         $payDates = $this->loanDates;
         if (!$payDates) {
@@ -897,16 +937,14 @@ class Fine
         $errors = [];
 
         $loanAmount = $hash['loanAmount'] = $this->loanAmount;
-        /*if (!loanAmount) {
-            wrongData('loanAmount');
-            errors . push('Введите сумму задолженности');
+        if (!$loanAmount) {
+            throw new \Exception(Yii::t('app', 'Не введена сумма задолженности'));
         } else {
-            loanAmount = normalizeLoan(loanAmount);
-            if (!loanAmount) {
-                wrongData('loanAmount');
-                errors . push('Вы ввели неправильную сумму задолженности');
+            $loanAmount = $this->normalizeLoan($loanAmount);
+            if (!$loanAmount) {
+                throw new \Exception(Yii::t('app', 'Сумма задолженности не верна'));
             }
-        }*/
+        }
 
         //$dateStart = dateParse(hash['dateStart'] = ggg('dateStart'));
         $dateStart = $hash['dateStart'] = $this->dateStart;
@@ -945,8 +983,10 @@ class Fine
             throw new \Exception(Yii::t('app', 'Ошибка заполнения полей новых задолженностей'));
         }
 
-        $hash['payments'] = $this->preparePayments($payments);
-        $hash['loans'] = $this->prepareLoans($loans);
+        // Похоже, не задействовано?
+        #$hash['payments'] = $this->preparePayments($payments);
+        #$hash['loans'] = $this->prepareLoans($loans);
+
         $this->updateHash($hash);
         $this->checkVacationInput('lfWarn', 'dateStart', true);
 
