@@ -68,6 +68,7 @@ class Location extends \yii\db\ActiveRecord
             'appartment' => Yii::t('app', 'Квартира'),
             'zip_code' => Yii::t('app', 'Почтовый индекс'),
             'full_address' => Yii::t('app', 'Произвольная строка адреса'),
+            'address' => Yii::t('app', 'Адрес'),
         ];
     }
 
@@ -110,5 +111,10 @@ class Location extends \yii\db\ActiveRecord
     public static function find()
     {
         return new LocationQuery(get_called_class());
+    }
+
+    public function getAddress()
+    {
+        return $this->street . ' ' . $this->building . ' ' . $this->appartment;
     }
 }
