@@ -543,7 +543,7 @@ class Fine
             $c = $loans[$i];
             //$loans[$i] = ['sum' => $c['sum'], 'date' => $c['date'], 'month' => $c['date'].getFullYear()*12 + c.date.getMonth(), order: c.order];
             //$loans[$i] = ['sum' => $c['sum'], 'date' => $c['date'], 'month' => date('Y', $c['date']) * 12 + date('n', $c['date']) - 1, 'order' => $c['order']];
-            $loans[$i] = ['sum' => $c['sum'], 'date' => $c['date'], 'month' => date('Y', $c['date']) * 12 + date('n', $c['date']), 'order' => (isset($c['order']) ? $c['order'] : null)];
+            $loans[$i] = ['sum' => $c['sum'], 'date' => $c['date'], 'month' => date('Y', $c['date']) * 12 + date('n', $c['date']), 'order' => (isset($c['order']) ? $c['order'] : '')];
         }
 
         for ($i = 0; $i < count($payments); $i++) { //TODO: get rid of count()
@@ -853,7 +853,7 @@ class Fine
                 $sum = 0;
             }
 
-            $resData[] = ['type' => $this->DATA_TYPE_PAYED, 'data' => ['sum' => $toCut, 'date' => $payment['date'], 'order' => $payment['order']]];
+            $resData[] = ['type' => $this->DATA_TYPE_PAYED, 'data' => ['sum' => $toCut, 'date' => $payment['date'], 'order' => (isset($payment['order']) ? $payment['order'] : '')]];
         }
         $startJ = $j;
 
