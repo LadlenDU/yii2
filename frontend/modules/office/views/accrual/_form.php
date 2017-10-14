@@ -26,8 +26,8 @@ use kartik\date\DatePicker;
             'options' => ['placeholder' => Yii::t('app', 'Введите дату операции ...')],
             'pluginOptions' => [
                 'autoclose' => true,
-                'startView'=>'year',
-                'minViewMode'=>'months',
+                'startView' => 'year',
+                'minViewMode' => 'months',
                 'format' => 'yyyy-mm',
             ]
         ]);
