@@ -2,6 +2,7 @@
 
 namespace frontend\modules\office\controllers;
 
+use common\models\AccrualSearch;
 use Yii;
 use common\models\Debtor;
 use common\models\DebtorSearch;
@@ -163,6 +164,26 @@ class DebtorController extends Controller
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+
+    public function actionInfoForFine($debtor_id)
+    {
+        $searchModel = new \common\models\AccrualSearch();
+        $searchModel->debtor_id = $debtor_id;
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        $data = [
+            //'model' => $this->findModel($id),
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+            'debtor_id' => $debtor_id,
+        ];
+
+        if (Yii::$app->request->isAjax) {
+            return $this->renderAjax('_payment_list', $data);
+        } else {
+            return $this->render('_payment_list', $data);
         }
     }
 }

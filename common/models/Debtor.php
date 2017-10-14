@@ -218,6 +218,38 @@ class Debtor extends \yii\db\ActiveRecord
     }
 
     /**
+     * Вернуть задолженность по дате.
+     *
+     * @param int $date Дата задолженности - unix timestamp
+     * @return float
+     */
+    public static function getDebt($date)
+    {
+        $year = date('Y', $date);
+        $month = date('n', $date);
+
+        //accrual_date
+        $accrual = \common\models\Accrual::find()
+            ->select('year(accrual_date) AS year', 'month(accrual_date) AS month')//TODO: универсализировать "AS"
+            ->where(['=', 'year', $year])
+            ->andWhere(['=', 'month', $month])
+            ->one();
+        $payment = \common\models\Payment::find()
+            ->select('year(payment_date) AS year', 'month(payment_date) AS month')//TODO: универсализировать "AS"
+            ->where(['=', 'year', $year])
+            ->andWhere(['=', 'month', $month])
+            ->one();
+
+        $debt = $payment->amount - $accrual->accrual;
+
+        return $debt;
+        //$searchModel->debtor_id = $debtor_id;
+        #$searchModel = new \common\models\AccrualSearch();
+        #$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        //return $this->find()->from('payment')->where(['debtor_id' => $this->id])->sum('amount') ?: 0;
+    }
+
+    /**
      * Расчет пошлины - новая редакция (действует на Oct.01.2017).
      *
      * @return float|int
@@ -225,7 +257,7 @@ class Debtor extends \yii\db\ActiveRecord
     public function calculateStateFee2()
     {
         $amount = $this->getDebtTotal();
-            
+
         if ($amount <= 10000) {
             // до 10 000 рублей - 2 процента цены иска, но не менее 200 рублей;
             $fee = $amount / 100 * 2;

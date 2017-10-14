@@ -7,6 +7,7 @@ use kartik\helpers\Html;
 use yii\helpers\Url;
 use \common\models\DebtDetails;
 use \common\models\DebtDetailsSearch;
+
 //use kartik\tabs\TabsX;
 
 /* @var $this yii\web\View */
@@ -177,6 +178,7 @@ echo '<div style="text-align: center">' . Html::radioButtonGroup('fin_data', 'co
 $commonUrl = json_encode(Url::to(['/office/debt-details/common-info', 'debtor_id' => $model->id]));
 $accrualUrl = json_encode(Url::to(['/office/accrual/info-for-debtor', 'debtor_id' => $model->id]));
 $paymentUrl = json_encode(Url::to(['/office/payment/info-for-debtor', 'debtor_id' => $model->id]));
+$fineUrl = json_encode(Url::to(['/office/debtor/info-for-fine', 'debtor_id' => $model->id]));
 $loaderImg = json_encode('<div style="text-align: center">' . Html::img(Url::to(['/img/ajax-loader.gif'])) . '</div>');
 
 $this->registerJs(<<<JS
@@ -208,6 +210,11 @@ $('[name=fin_data]').change(function() {
         case 'payed':
             {
                 fin_data_events.loadData($paymentUrl);
+                break;
+            }
+        case 'fine':
+            {
+                fin_data_events.loadData($fineUrl);
                 break;
             }
         default:
