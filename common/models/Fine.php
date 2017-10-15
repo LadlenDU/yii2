@@ -221,11 +221,11 @@ class Fine
             if ($key) {
                 $modLoan['date'] = $l['date'];
                 $modLoan['datePlus'] = $l['date'] + $this->ONE_DAY;
-                $modLoan['sum'] = $l['sum'];
+                $modLoan['sum'] = (float)$l['sum'];
                 $loansMod[] = $modLoan;
             } else {
                 //$loansMod[] = $l;
-                $loanAmount = $l['sum'];
+                $loanAmount = (float)$l['sum'];
                 $dateStart = $l['date'];
             }
         }
@@ -235,7 +235,7 @@ class Fine
             $modPayment['date'] = $p['date'];
             $modPayment['datePlus'] = $p['date'] + $this->ONE_DAY;
             $modPayment['payFor'] = isset($p['payFor']) ? $p['payFor'] : null;
-            $modPayment['sum'] = $p['sum'];
+            $modPayment['sum'] = (float)$p['sum'];
             $paymentsMod[] = $modPayment;
         }
 
