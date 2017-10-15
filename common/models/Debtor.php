@@ -4,6 +4,8 @@ namespace common\models;
 
 use Yii;
 use common\models\Fine;
+use yii\web\UploadedFile;
+use common\models\DebtorParse;
 
 /**
  * This is the model class for table "debtor".
@@ -292,5 +294,54 @@ class Debtor extends \yii\db\ActiveRecord
         }
 
         return $fee;
+    }
+
+    public static function handleDebtorsExcelFile(UploadForm $uploadModel)
+    {
+        $uploadModel->excelFile = UploadedFile::getInstance($uploadModel, 'excelFile');
+        if ($fileName = $uploadModel->uploadExcel()) {
+            // file is uploaded successfully
+            $objPHPExcel = \PHPExcel_IOFactory::load($fileName);
+            $sheetData = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
+            self::addDebtors($sheetData);
+        }
+    }
+
+    public static function handleDebtorsCsvFile(UploadForm $uploadModel)
+    {
+        $uploadModel->csvFile = UploadedFile::getInstance($uploadModel, 'csvFile');
+        if ($fileName = $uploadModel->uploadCsv()) {
+            if ($handle = fopen($fileName, 'r')) {
+                $sheetDataRaw = [];
+                $count = 0;
+                while (($data = fgetcsv($handle, 0, ';')) !== false) {
+                    $sheetDataRaw[] = $data;
+                }
+                fclose($handle);
+
+                $sheetData = DebtorParse::format_1($sheetDataRaw);
+                self::addDebtors($sheetData);
+
+            } else {
+                //TODO: логирование
+                Yii::$app->getSession()->setFlash('error', Yii::t('app', 'Не удался импорт из-за внутренней ошибки.'));
+            }
+        }
+    }
+
+    public static function addDebtors($sheetData)
+    {
+        try {
+            $info = DebtorParse::scrapeDebtorsFromArray($sheetData);
+            $saveResult = DebtorParse::saveDebtors($info);
+            $msg = Yii::t('app', 'Успешно прошла операция добавления в БД.') . "\n";
+            $addedNumber = empty($saveResult['added']) ? 0 : $saveResult['added'];
+            $updatedNumber = empty($saveResult['updated']) ? 0 : $saveResult['updated'];
+            $msg .= "Должников добавлено: $addedNumber\n"
+                . "Должников обновлено: $updatedNumber\n";
+            Yii::$app->getSession()->setFlash('success', $msg);
+        } catch (\Exception $e) {
+            Yii::$app->getSession()->setFlash('error', $e->getMessage());
+        }
     }
 }
