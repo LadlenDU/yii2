@@ -25,7 +25,7 @@ class DebtorParse extends Model
     ];
 
     protected static $FIELDS_DEBTOR = [
-        'first_name' => [
+        /*'first_name' => [
             'имя',
         ],
         'second_name' => [
@@ -39,8 +39,8 @@ class DebtorParse extends Model
             'фамилия,имя,отчество',
             'фамилия, имя, отчество',
             'ФИО квартиросъемщика',
-        ],
-        'address' => [
+        ],*/
+        /*'address' => [
             'адрес',
         ],
         'city' => [
@@ -56,7 +56,7 @@ class DebtorParse extends Model
             'кв.',
             'квартира',
             '№ кв.',
-        ],
+        ],*/
         'phone' => [
             'телефон',
         ],
@@ -93,6 +93,63 @@ class DebtorParse extends Model
 
         }
     ];*/
+
+    protected static $FIELDS_NAME = [
+        'first_name' => [
+            'имя',
+        ],
+        'second_name' => [
+            'фамилия',
+        ],
+        'patronymic' => [
+            'отчество',
+        ],
+        'full_name' => [
+            'ФИО квартиросъемщика',
+        ],
+    ];
+
+    protected static $FIELDS_LOCATION = [
+        'city' => [
+            'населённый пункт',
+        ],
+        'street' => [
+            'улица',
+        ],
+        'building' => [
+            'дом',
+        ],
+        'appartment' => [
+            '№ кв.',
+        ],
+    ];
+
+    protected static $FIELDS_PAYMENT = [
+        'payment_date' => [
+            'Месяц последней оплаты',   //TODO: После модификации должен содержать полну дату - сделать с этим что-то
+        ],
+        'amount' => [
+            'Оплачено',
+        ],
+    ];
+
+    protected static $FIELDS_ACCRUAL = [
+        'accrual_date' => [
+            'Дата начисления',  // Искусственная колонка
+        ],
+        'accrual' => [
+            'Исходящее сальдо',
+        ],
+        'single' => [
+            'Начисления разовые',
+        ],
+        'additional_adjustment' => [
+            'Начисления постоянные',    //TODO: рассмотреть "Начисления разовые" и пр.
+        ],
+        'subsidies' => [
+            'Начисленные субсидии', //TODO: "Оплачено субсидий" - рассмотреть
+        ],
+    ];
 
     protected static $FIELDS_DEBT_DETAILS = [
         'amount' => [
@@ -189,7 +246,15 @@ class DebtorParse extends Model
                     if ($debtorColName = self::findColumName(self::$FIELDS_DEBTOR, $col)) {
                         $headers[$key] = ['debtor', $debtorColName, $col];
                     } else {
-                        if ($debtDetailsColName = self::findColumName(self::$FIELDS_DEBT_DETAILS, $col)) {
+                        if ($accrualColName = self::findColumName(self::$FIELDS_ACCRUAL, $col)) {
+                            $headers[$key] = ['accrual', $accrualColName, $col];
+                        } elseif ($nameColName = self::findColumName(self::$FIELDS_NAME, $col)) {
+                            $headers[$key] = ['name', $nameColName, $col];
+                        } elseif ($locationColName = self::findColumName(self::$FIELDS_LOCATION, $col)) {
+                            $headers[$key] = ['location', $locationColName, $col];
+                        } elseif ($paymentColName = self::findColumName(self::$FIELDS_PAYMENT, $col)) {
+                            $headers[$key] = ['payment', $paymentColName, $col];
+                        } elseif ($debtDetailsColName = self::findColumName(self::$FIELDS_DEBT_DETAILS, $col)) {
                             $headers[$key] = ['debt_details', $debtDetailsColName, $col];
                         } else {
                             $exception = new ColumnNotFoundException(Yii::t('app', "Колонка '$col' не найдена."));
@@ -213,7 +278,7 @@ class DebtorParse extends Model
                             } else {
                                 $col = str_replace([' ', ','], ['', '.'], $colPrepared);
                             }
-                        //} elseif ($headers[$key][1] == 'privatized') {
+                            //} elseif ($headers[$key][1] == 'privatized') {
                         } elseif ($headers[$key][1] == 'ownership_type_id') {
                             $col = ($colPrepared == 'приватизированное') ? 1 : 0;
                         } elseif ($headers[$key][1] == 'date' || $headers[$key][1] == 'payment_date') {
@@ -318,7 +383,7 @@ class DebtorParse extends Model
      *
      * @param array $sheetDataRaw
      */
-    public function format_1(array $sheetDataRaw)
+    public static function format_1(array $sheetDataRaw)
     {
         //TODO: ужасный костыль - исправить
         ini_set('memory_limit', '-1');
@@ -346,6 +411,8 @@ class DebtorParse extends Model
                 // Отсутствующие поля
                 $sheetData[9][15] = 'Улица';
                 $sheetData[9][16] = 'Дом';
+                $sheetData[9][17] = 'Дата начисления';
+                //$sheetData[9][18] = 'Дата оплаты';
                 continue;
             }
 
@@ -392,6 +459,8 @@ class DebtorParse extends Model
 
             $sheetData[$key][15] = $street;
             $sheetData[$key][16] = $building;
+            $sheetData[$key][17] = '29.08.2017';    //TODO: тупо ввод вручную
+            //$sheetData[$key][18] = '';
         }
 
         return $sheetData;
