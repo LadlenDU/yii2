@@ -507,30 +507,32 @@ class Fine
 
     protected function sortLoans($arr)
     {
+        //return $arr;
+        $arrLength = count($arr);
+        for ($i = 0; $i + 1 < $arrLength; $i++)
+            for ($j = $i + 1; $j < $arrLength; $j++)
+                if ($arr[$i]['date'] > $arr[$j]['date']) {
+                    $tmp = $arr[$i];
+                    $arr[$i] = $arr[$j];
+                    $arr[$j] = $tmp;
+                }
         return $arr;
-        /*for ($i = 0; i + 1 < arr.length; i++)
-        for ($j = i + 1; j < arr.length; j++)
-            if (arr[i].date > arr[j].date) {
-                $tmp = arr[i];
-                arr[i] = arr[j];
-                arr[j] = tmp;
-            }
-    return arr;*/
     }
 
     protected function sortPayments($arr)
     {
-        return $arr;
-        /*for ($i = 0; i + 1 < arr.length; i++) {
-            for ($j = i + 1; j < arr.length; j++) {
-                if (arr[i].date > arr[j].date) {
-                    $tmp = arr[i];
-                    arr[i] = arr[j];
-                    arr[j] = tmp;
+        //return $arr;
+        $arrLength = count($arr);
+        for ($i = 0; $i + 1 < $arrLength; $i++) {
+            for ($j = $i + 1; $j < $arrLength; $j++) {
+                if ($arr[$i]['date'] > $arr[$j]['date']) {
+                    $tmp = $arr[$i];
+                    $arr[$i] = $arr[$j];
+                    $arr[$j] = $tmp;
                 }
             }
         }
-        return arr;*/
+        return arr;
     }
 
     protected function splitPayments($payments, $loans, $loanAmount, $dateStart, $dateFinish)
