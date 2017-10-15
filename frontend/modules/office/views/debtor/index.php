@@ -36,14 +36,38 @@ $columns = [
         ],
     ],
     //['attribute' => 'id'],
-    ['attribute' => 'LS_IKU_provider'],
-    ['attribute' => 'name.full_name'],
-    ['attribute' => 'location.city'],
-    ['attribute' => 'location.address'],
-    ['attribute' => 'accrualSum'],
-    ['attribute' => 'paymentSum'],
-    ['attribute' => 'debtTotal'],
-    ['attribute' => 'feeTotal'],
+    [
+        'attribute' => 'LS_IKU_provider',
+        'hAlign' => 'center',
+    ],
+    [
+        'attribute' => 'name.full_name',
+        'hAlign' => 'center',
+    ],
+    [
+        'attribute' => 'location.city',
+        'hAlign' => 'center',
+    ],
+    [
+        'attribute' => 'location.address',
+        'hAlign' => 'center',
+    ],
+    [
+        'attribute' => 'accrualSum',
+        'hAlign' => 'right',
+    ],
+    [
+        'attribute' => 'paymentSum',
+        'hAlign' => 'right',
+    ],
+    [
+        'attribute' => 'debtTotal',
+        'hAlign' => 'right',
+    ],
+    [
+        'attribute' => 'feeTotal',
+        'hAlign' => 'right',
+    ],
     [
         'attribute' => Yii::t('app', 'Пошлина'),
         //'value' => function (\common\models\DebtDetails $model, $key, $index) {
