@@ -164,9 +164,9 @@ class Debtor extends \yii\db\ActiveRecord
         return new DebtorQuery(get_called_class());
     }
 
-    public function calcFine()
+    public function calcFines()
     {
-        if ($this->expiration_start && $this->debt_total) {
+        /*if ($this->expiration_start && $this->debt_total) {
             $dateStart = strtotime($this->expiration_start);
             $dateFinish = time() - 60 * 60 * 24;
 
@@ -184,7 +184,69 @@ class Debtor extends \yii\db\ActiveRecord
             return $sum;
         }
 
-        return 0;
+        return 0;*/
+    }
+
+    public function calcDebts()
+    {
+        $loans = [];
+        $payments = [];
+
+        $fine = new Fine();
+
+        $accruals = Accrual::find()->where(['debtor_id' => $this->id])->all();
+        foreach ($accruals as $acc) {
+            $date = strtotime($acc->accrual_date);
+            $loans[] = [
+                'sum' => $acc->accrual,
+                'date' => $date,
+            ];
+        }
+
+        $paymentsRes = Payment::find()->where(['debtor_id' => $this->id])->all();
+        foreach ($paymentsRes as $pm) {
+            $date = strtotime($pm->payment_date);
+            $payments[] = [
+                'date' => $date,
+                'payFor' => null,
+                'sum' => $pm->amount,
+            ];
+        }
+
+        $dateFinish = time() - 60 * 60 * 24;
+
+        try {
+            $fineRes = $fine->fineCalculator($dateFinish, $loans, $payments);
+        } catch (\Exception $e) {
+            //TODO: что-то с этим делать
+        }
+
+        $elements = [];
+
+        if (!empty($fineRes)) {
+            foreach ($fineRes as $res) {
+                if (!empty($res['data'])) {
+                    foreach ($res['data'] as $data) {
+                        /*if ($data['type'] == 2) {
+                            $elements[] = [
+                                'debt' => $data['data']['sum'],
+                                'date' => date('Y-m-d H:i:s', $data['data']['date']),
+                            ];
+                        }*/
+                        if ($data['type'] == 1) {
+                            $elements[] = [
+                                'debt' => $data['data']['sum'],
+                                //'date' => date('Y-m-d H:i:s', $data['data']['date']),
+                                'dateStart' => $data['data']['dateStart'],
+                                'dateFinish' => $data['data']['dateFinish'],
+                            ];
+                        }
+                    }
+                }
+            }
+        }
+
+        return $elements;
     }
 
     public function getAccrualSum()
@@ -206,8 +268,14 @@ class Debtor extends \yii\db\ActiveRecord
      */
     public function getDebtTotal()
     {
-        return 'getDebtTotal';
-        //return $this->find()->from('payment')->where(['debtor_id' => $this->id])->sum('amount') ?: 0;
+        $debt = 0;
+
+        $calcDebts = $this->calcDebts();
+        if ($calcDebts) {
+            $debt = $calcDebts[0]['debt'];
+        }
+
+        return $debt;
     }
 
     /**
