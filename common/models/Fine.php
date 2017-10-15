@@ -532,7 +532,7 @@ class Fine
                 }
             }
         }
-        return arr;
+        return $arr;
     }
 
     protected function splitPayments($payments, $loans, $loanAmount, $dateStart, $dateFinish)
