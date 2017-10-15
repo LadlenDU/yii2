@@ -115,6 +115,6 @@ class Location extends \yii\db\ActiveRecord
 
     public function getAddress()
     {
-        return $this->street . ' ' . $this->building . ' ' . $this->appartment;
+        return $this->street . ' д. ' . $this->building . ' кв. ' . $this->appartment;
     }
 }
