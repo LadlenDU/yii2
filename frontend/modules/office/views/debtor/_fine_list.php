@@ -35,13 +35,13 @@ $gridColumns = [
         'hAlign' => 'right',
         'format' => ['decimal', 2],
     ],
-    [
+    /*[
         'attribute' => 'cost',
         //'label' => Yii::t('app', 'Пеня'),
         'vAlign' => 'middle',
         'hAlign' => 'right',
         'format' => ['decimal', 2],
-    ],
+    ],*/
 ];
 
 echo GridView::widget([

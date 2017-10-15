@@ -6,9 +6,31 @@
 use kartik\grid\GridView;
 
 $gridColumns = [
-    [
+    /*[
         'attribute' => 'date',
         'label' => Yii::t('app', 'Дата'),
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'format' => 'date',
+        'xlFormat' => "mmm\\-dd\\, \\-yyyy",
+        'headerOptions' => ['class' => 'kv-sticky-column'],
+        'contentOptions' => ['class' => 'kv-sticky-column'],
+        'filterType' => GridView::FILTER_DATE,
+    ],*/
+    [
+        'attribute' => 'dateStart',
+        'label' => Yii::t('app', 'Начало просрочки'),
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'format' => 'date',
+        'xlFormat' => "mmm\\-dd\\, \\-yyyy",
+        'headerOptions' => ['class' => 'kv-sticky-column'],
+        'contentOptions' => ['class' => 'kv-sticky-column'],
+        'filterType' => GridView::FILTER_DATE,
+    ],
+    [
+        'attribute' => 'dateFinish',
+        'label' => Yii::t('app', 'Конец просрочки'),
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'format' => 'date',
