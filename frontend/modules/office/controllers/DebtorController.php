@@ -45,6 +45,22 @@ class DebtorController extends Controller
     {
         $uploadModel = new UploadForm();
 
+        if (Yii::$app->request->isPost) {
+            switch (Yii::$app->request->post('action')) {
+                case 'upload_debtors_excel': {
+                    Debtor::handleDebtorsExcelFile($uploadModel);
+                    break;
+                }
+                case 'upload_debtors_csv': {
+                    Debtor::handleDebtorsCsvFile($uploadModel);
+                    break;
+                }
+                default: {
+                    break;
+                }
+            }
+        }
+
         $searchModel = new DebtorSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
