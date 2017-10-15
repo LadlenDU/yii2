@@ -138,7 +138,7 @@ class DebtorParse extends Model
             'Дата начисления',  // Искусственная колонка
         ],
         'accrual' => [
-            'Исходящее сальдо',
+            'Исходящее сальдо (дебет)',
         ],
         'single' => [
             'Начисления разовые',
@@ -339,37 +339,35 @@ class DebtorParse extends Model
                     //TODO: косяк - должник может иметь несколько долгов (пока оставим)
                     if (isset($debtor->debtDetails[0])) {
                         $debtDetails = $debtor->debtDetails[0];
+                    } else {
+                        $debtDetails = new DebtDetails;
                     }
                     if (isset($debtor->name)) {
                         $name = $debtor->name;
+                    } else {
+                        $name = new Name;
                     }
                     if (isset($debtor->location)) {
+                        $location = $debtor->location;
+                    } else {
                         $location = $debtor->location;
                     }
                     if (isset($debtor->accruals[0])) {
                         $accrual = $debtor->accruals[0];    //TODO: косяк - должник может иметь несколько accruals (пока оставим)
+                    } else {
+                        $accrual = new Accrual;
                     }
                     if (isset($debtor->payments[0])) {
                         $payment = $debtor->payments[0];    //TODO: косяк - должник может иметь несколько payments (пока оставим)
+                    } else {
+                        $payment = new Payment;
                     }
-                }
-
-                if (empty($debtor)) {
+                } else {
                     $debtor = new DebtorExt;
-                }
-                if (empty($debtDetails)) {
                     $debtDetails = new DebtDetails;
-                }
-                if (empty($name)) {
                     $name = new Name;
-                }
-                if (empty($location)) {
                     $location = new Location;
-                }
-                if (empty($accrual)) {
                     $accrual = new Accrual;
-                }
-                if (empty($payment)) {
                     $payment = new Payment;
                 }
 
@@ -400,6 +398,13 @@ class DebtorParse extends Model
                 }
                 if ($debtor->validate()) {
                     $debtor->save();
+
+                    $debtDetails->save();
+                    $name->save();
+                    $location->save();
+                    $accrual->save();
+                    $payment->save();
+
                     $debtor->link('debtDetails', $debtDetails);
                     $debtor->link('name', $name);
                     $debtor->link('location', $location);
