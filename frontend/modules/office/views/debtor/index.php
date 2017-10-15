@@ -23,7 +23,7 @@ $columns = [
         'class' => 'yii\grid\ActionColumn',
         'buttons' => [
             'view' => function ($url, $model) {
-                return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, ['class' => 'view', 'data-pjax' => '0']);
+                return Html::a('<span class="glyphicon glyphicon-list-alt"></span>', $url, ['class' => 'view', 'data-pjax' => '0']);
             },
             'update' => function ($url, $model) {
                 return '';
