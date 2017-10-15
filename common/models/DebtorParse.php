@@ -338,9 +338,17 @@ class DebtorParse extends Model
                     $whetherUpdate = true;
                     //TODO: косяк - должник может иметь несколько долгов (пока оставим)
                     $debtDetails = $debtor->debtDetails[0];
+                    $name = $debtor->name;
+                    $location = $debtor->location;
+                    $accrual = $debtor->accruals[0];    //TODO: косяк - должник может иметь несколько accruals (пока оставим)
+                    $payment = $debtor->payments[0];    //TODO: косяк - должник может иметь несколько payments (пока оставим)
                 } else {
                     $debtor = new DebtorExt;
-                    $debtDetails = new DebtDetails();
+                    $debtDetails = new DebtDetails;
+                    $name = new Name;
+                    $location = new Location;
+                    $accrual = new Accrual;
+                    $payment = new Payment;
                 }
 
                 //$debtor = new DebtorExt;
@@ -349,7 +357,7 @@ class DebtorParse extends Model
                     if (!empty($info['headers'][$key])) {
                         if ($info['headers'][$key][0] == 'debtor') {
                             $debtor->{$info['headers'][$key][1]} = $colInfo;
-                        } else {    // $info['headers'][$key][0] == 'debt_details'
+                        } elseif ($info['headers'][$key][0] == 'debt_details') {
                             $debtDetails->{$info['headers'][$key][1]} = $colInfo;
                             //$debtDetails->save();
                             //$debtor->link('debtDetails', $debtDetails);
@@ -357,12 +365,24 @@ class DebtorParse extends Model
                             #$debtor->getDebtDetails()->{$info['headers'][$key][1]} = $colInfo;
                             #$debtDetails = $debtor->getDebtDetails();
                             #$debtDetails->{$info['headers'][$key][1]} = $colInfo;
+                        } elseif ($info['headers'][$key][0] == 'name') {
+                            $name->{$info['headers'][$key][1]} = $colInfo;
+                        }elseif ($info['headers'][$key][0] == 'location') {
+                            $location->{$info['headers'][$key][1]} = $colInfo;
+                        }elseif ($info['headers'][$key][0] == 'accrual') {
+                            $accrual->{$info['headers'][$key][1]} = $colInfo;
+                        }elseif ($info['headers'][$key][0] == 'payment') {
+                            $payment->{$info['headers'][$key][1]} = $colInfo;
                         }
                     }
                 }
                 if ($debtor->validate()) {
                     $debtor->save();
                     $debtor->link('debtDetails', $debtDetails);
+                    $debtor->link('name', $name);
+                    $debtor->link('location', $location);
+                    $debtor->link('accrual', $accrual);
+                    $debtor->link('payment', $payment);
 
                     $whetherUpdate ? ++$saveResult['updated'] : ++$saveResult['added'];
 
@@ -459,7 +479,7 @@ class DebtorParse extends Model
 
             $sheetData[$key][15] = $street;
             $sheetData[$key][16] = $building;
-            $sheetData[$key][17] = '29.08.2017';    //TODO: тупо ввод вручную
+            $sheetData[$key][17] = '2017-08-29 00:00:00';    //'29.08.2017';    //TODO: тупо ввод вручную
             //$sheetData[$key][18] = '';
         }
 
