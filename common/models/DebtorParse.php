@@ -337,17 +337,39 @@ class DebtorParse extends Model
                     // Обновляем
                     $whetherUpdate = true;
                     //TODO: косяк - должник может иметь несколько долгов (пока оставим)
-                    $debtDetails = $debtor->debtDetails[0];
-                    $name = $debtor->name;
-                    $location = $debtor->location;
-                    $accrual = $debtor->accruals[0];    //TODO: косяк - должник может иметь несколько accruals (пока оставим)
-                    $payment = $debtor->payments[0];    //TODO: косяк - должник может иметь несколько payments (пока оставим)
-                } else {
+                    if (isset($debtor->debtDetails[0])) {
+                        $debtDetails = $debtor->debtDetails[0];
+                    }
+                    if (isset($debtor->name)) {
+                        $name = $debtor->name;
+                    }
+                    if (isset($debtor->location)) {
+                        $location = $debtor->location;
+                    }
+                    if (isset($debtor->accruals[0])) {
+                        $accrual = $debtor->accruals[0];    //TODO: косяк - должник может иметь несколько accruals (пока оставим)
+                    }
+                    if (isset($debtor->payments[0])) {
+                        $payment = $debtor->payments[0];    //TODO: косяк - должник может иметь несколько payments (пока оставим)
+                    }
+                }
+
+                if (empty($debtor)) {
                     $debtor = new DebtorExt;
+                }
+                if (empty($debtDetails)) {
                     $debtDetails = new DebtDetails;
+                }
+                if (empty($name)) {
                     $name = new Name;
+                }
+                if (empty($location)) {
                     $location = new Location;
+                }
+                if (empty($accrual)) {
                     $accrual = new Accrual;
+                }
+                if (empty($payment)) {
                     $payment = new Payment;
                 }
 
@@ -381,8 +403,8 @@ class DebtorParse extends Model
                     $debtor->link('debtDetails', $debtDetails);
                     $debtor->link('name', $name);
                     $debtor->link('location', $location);
-                    $debtor->link('accrual', $accrual);
-                    $debtor->link('payment', $payment);
+                    $debtor->link('accruals', $accrual);
+                    $debtor->link('payments', $payment);
 
                     $whetherUpdate ? ++$saveResult['updated'] : ++$saveResult['added'];
 
