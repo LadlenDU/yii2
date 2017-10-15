@@ -62,10 +62,10 @@ use kartik\file\FileInput;
                 <i class="icon-search icon-white"></i><?= Yii::t('app', 'Распечатка заявлений') ?>
             </button>
 
-            <button class="btn-sm btn btn-primary" id="print_documents"
-                    title="<?= Yii::t('app', 'Распечатка документов выбранных должников') ?>">
-                <i class="icon-search icon-white"></i><?= Yii::t('app', 'Распечатка документов') ?>
-            </button>
+            <!--<button class="btn-sm btn btn-primary" id="print_documents"
+                    title="<?/*= Yii::t('app', 'Распечатка документов выбранных должников') */?>">
+                <i class="icon-search icon-white"></i><?/*= Yii::t('app', 'Распечатка документов') */?>
+            </button>-->
 
             <div class="clearfix"></div>
         </div>
@@ -84,13 +84,9 @@ use kartik\file\FileInput;
 <br>
 
 <div class="row collapse" id="load-debtors">
-    <div class="col-xs-12">
+    <!--<div class="col-xs-12">
         <?php
-        $form = ActiveForm::begin([
-            /*'action' => [
-                '/office/debtors/debt-verification',
-                'action' => 'upload_debtors_excel',
-            ],*/
+/*        $form = ActiveForm::begin([
             'options' => [
                 'enctype' => 'multipart/form-data',
             ],
@@ -99,8 +95,8 @@ use kartik\file\FileInput;
         echo Html::hiddenInput('action', 'upload_debtors_excel');
         echo $form->field($uploadModel, 'excelFile')->widget(FileInput::classname(), $uploadModel->fileUploadConfig('excel'));
         ActiveForm::end();
-        ?>
-    </div>
+        */?>
+    </div>-->
     <div class="col-xs-12">
         <?php
         $form = ActiveForm::begin([
