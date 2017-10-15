@@ -14,6 +14,7 @@ use yii\filters\VerbFilter;
 use common\models\Fine;
 use common\models\Accrual;
 use common\models\Payment;
+use common\models\UploadForm;
 use yii\data\ArrayDataProvider;
 
 /**
@@ -42,12 +43,15 @@ class DebtorController extends Controller
      */
     public function actionIndex()
     {
+        $uploadModel = new UploadForm();
+
         $searchModel = new DebtorSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'uploadModel' => $uploadModel,
         ]);
     }
 
@@ -350,4 +354,44 @@ class DebtorController extends Controller
             return $this->render('_debt_list', $data);
         }
     }
+
+    /*public function actionDebtVerification()
+    {
+        $uploadModel = new UploadForm();
+
+        //$sheetData = '';
+
+        if (Yii::$app->request->isPost) {
+            switch (Yii::$app->request->post('action')) {
+                case 'upload_debtors_excel': {
+                    $this->handleDebtorsExcelFile($uploadModel);
+                    break;
+                }
+                case 'upload_debtors_csv': {
+                    $this->handleDebtorsCsvFile($uploadModel);
+                    break;
+                }
+                default: {
+                    break;
+                }
+            }
+        }
+
+        //TODO: debtorDetails выбираются каждый раз - оптимизировать (также проверить pagination)
+        #$searchModel = new DebtorSearch();
+        #$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $searchModel = new DebtDetailsSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        //$userInfoModel = UserInfo::find()->where(['user_id' => Yii::$app->user->identity->getId()])->one();
+
+        return $this->render('debt-verification',
+            [
+                'uploadModel' => $uploadModel,
+                //'sheetData' => $sheetData,
+                'dataProvider' => $dataProvider,
+                'searchModel' => $searchModel,
+                //'userInfoModel' => $userInfoModel,
+            ]);
+    }*/
 }

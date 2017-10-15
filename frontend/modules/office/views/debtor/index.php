@@ -1,15 +1,16 @@
 <?php
 
+/* @var $this yii\web\View */
+/* @var $searchModel common\models\DebtorSearch */
+/* @var $dataProvider yii\data\ActiveDataProvider */
+/* @var $uploadModel common\models\UploadForm */
+
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 use kartik\dynagrid\DynaGrid;
 use yii\helpers\Url;
 use yii\bootstrap\Modal;
-
-/* @var $this yii\web\View */
-/* @var $searchModel common\models\DebtorSearch */
-/* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = Yii::t('app', 'Должники');
 $this->params['breadcrumbs'][] = $this->title;
@@ -211,6 +212,17 @@ $columns = [
 ];
 
 ?>
+
+<!--<div class="arrow-steps clearfix">
+    <div class="step"><span><?/*= Yii::t('app', 'Досудебная практика') */?></span></div>
+    <div class="step current"><span><?/*= Yii::t('app', 'Судебная практика') */?></span></div>
+    <div class="step"><span> <?/*= Yii::t('app', 'Исполнительное производство') */?></span></div>
+</div>-->
+
+<?php
+    echo $this->render('_extensions', ['uploadModel' => $uploadModel]);
+?>
+
 <div class="debtor-index">
 
     <!--    <h1><? /*= Html::encode($this->title) */ ?></h1>
