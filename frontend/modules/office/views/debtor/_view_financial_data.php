@@ -159,7 +159,7 @@ $dataProvider = $searchModel->search(['debtor_id' => $model->id]);
         </div>
         <div class="row">
             <div class="col-sm-12 text-center">
-                <?= $model->getFeeTotal() ?>
+                <?= $model->getFineTotal() ?>
             </div>
         </div>
     </div>

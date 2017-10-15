@@ -66,7 +66,7 @@ $columns = [
         'hAlign' => 'right',
     ],
     [
-        'attribute' => 'feeTotal',
+        'attribute' => 'fineTotal',
         'hAlign' => 'right',
     ],
     [
