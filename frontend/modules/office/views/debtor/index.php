@@ -51,6 +51,9 @@ $columns = [
     ],
     [
         'attribute' => 'location.address',
+        'value' => function (\common\models\Debtor $model, $key, $index) {
+            return $model->location->createFullAddress();
+        },
         'hAlign' => 'center',
     ],
     [
@@ -64,6 +67,7 @@ $columns = [
     [
         'attribute' => 'debtTotal',
         'hAlign' => 'right',
+        //'format' => ['decimal', 2],
     ],
     [
         'attribute' => 'fineTotal',
