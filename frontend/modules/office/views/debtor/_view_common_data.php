@@ -16,11 +16,11 @@ $modelOwnership = $model->ownershipType ?: (new OwnershipType);
 $fm = Yii::$app->formatter;
 
 $attributes = [
-    [
+    /*[
         'group' => true,
         'label' => Yii::t('app', 'ФИО'),
         'rowOptions' => ['class' => 'info']
-    ],
+    ],*/
     [
         'columns' => [
             [
@@ -73,11 +73,11 @@ $attributes = [
         ],
         'rowOptions' => ['class' => 'warning', 'style' => 'border-top: 5px double #dedede'],
     ],*/
-    [
+    /*[
         'group' => true,
         'label' => Yii::t('app', 'Адрес'),
         'rowOptions' => ['class' => 'info']
-    ],
+    ],*/
     /*[
         'columns' => [
             [
@@ -144,8 +144,8 @@ $attributes = [
         'columns' => [
             [
                 'attribute' => 'location_id',
-                'label' => Yii::t('app', 'Полный адрес'),
-                'value' => $fm->asText($modelLocation->full_address),
+                'label' => Yii::t('app', 'Адрес'),
+                'value' => $modelLocation->createFullAddress(),
                 'displayOnly' => true,
                 'format' => 'raw',
             ],

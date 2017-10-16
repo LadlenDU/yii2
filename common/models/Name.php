@@ -81,13 +81,8 @@ class Name extends \yii\db\ActiveRecord
         if ($this->full_name) {
             return $this->full_name;
         }
-
+        //TODO: see Location::createFullAddress()
         $name = implode(' ', [$this->second_name, $this->first_name, $this->patronymic]);
-
-        if (!$name) {
-            $name = yii::$app->formatter->nullDisplay;
-        }
-
-        return $name;
+        return $name ?: yii::$app->formatter->nullDisplay;
     }
 }

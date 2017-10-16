@@ -113,8 +113,37 @@ class Location extends \yii\db\ActiveRecord
         return new LocationQuery(get_called_class());
     }
 
-    public function getAddress()
+    /*public function getAddress()
     {
         return $this->street . ' д. ' . $this->building . ' кв. ' . $this->appartment;
+    }*/
+
+    public function createFullAddress()
+    {
+        if ($this->full_address) {
+            return $this->full_address;
+        }
+
+        $aP1 = [];
+        $this->zip_code ? ($aP1[] = $this->zip_code) : null;
+        $this->region ? ($aP1[] = $this->region) : null;
+        $this->district ? ($aP1[] = $this->district) : null;
+        $this->city ? ($aP1[] = $this->city) : null;
+
+        $aP2 = [];
+
+        //TODO: учитывать отсутствие элементов
+        $addressP1 = implode(', ', $aP1);
+        $addressP2 = $this->street
+            . Yii::t('app', ' д. ')
+            . $this->building . Yii::t('app',' кв. ')
+            . $this->appartment;
+
+        $addressP1 ? ($aP2[] = $addressP1) : null;
+        $addressP2 ? ($aP2[] = $addressP2) : null;
+
+        $address = implode(', ', $aP2);
+
+        return $address ?: yii::$app->formatter->nullDisplay;
     }
 }
