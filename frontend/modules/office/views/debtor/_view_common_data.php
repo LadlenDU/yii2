@@ -24,6 +24,15 @@ $attributes = [
     [
         'columns' => [
             [
+                'attribute' => 'full_name',
+                'label' => $modelName->getAttributeLabel('full_name'),
+                'value' => $modelName->createFullName(),
+                //'labelColOptions' => ['style' => 'width:10.3%;text-align:right'],
+                //'valueColOptions' => ['style' => 'width:23%'],
+                'displayOnly' => true,
+                'format' => 'raw',
+            ],
+            /*[
                 'attribute' => 'name',
                 'label' => $modelName->getAttributeLabel('second_name'),
                 'value' => $fm->asText($modelName->second_name),
@@ -49,7 +58,7 @@ $attributes = [
                 'valueColOptions' => ['style' => 'width:23%'],
                 'displayOnly' => true,
                 'format' => 'raw',
-            ],
+            ],*/
         ],
     ],
     /*[
@@ -245,11 +254,11 @@ echo DetailView::widget([
     //$'mode' => DetailView::MODE_VIEW,
     //'updateOptions' => '<span class="glyphicon glyphicon-pencil" onclick="alert(123)"></span>',
     //'updateOptions' => ['label' => '<span class="glyphicon glyphicon-pencil" onclick="alert(123)"></span>'],
-    'panel' => [
+    /*'panel' => [
         'heading' => '&nbsp;',
         'type' => DetailView::TYPE_INFO,
     ],
-    'buttons2' => '{save}',
+    'buttons2' => '{save}',*/
     //'buttons2' => '<button type="button" onclick="t.setMode(\'edit\')" class="kv-action-btn kv-btn-update" title="" data-toggle="tooltip" data-container="body" data-original-title="' . Yii::t('app', 'Модифицировать') . '"><i class="glyphicon glyphicon-pencil"></i></button>{delete}',
     //'buttons1' => '<button type="button" onclick="t.setMode(\'edit\')" class="kv-action-btn kv-btn-update" title="" data-toggle="tooltip" data-container="body" data-original-title="' . Yii::t('app', 'Модифицировать') . '"><i class="glyphicon glyphicon-pencil"></i></button>{delete}',
     /*'deleteOptions'=>[ // your ajax delete parameters

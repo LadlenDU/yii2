@@ -75,4 +75,19 @@ class Name extends \yii\db\ActiveRecord
     {
         return new NameQuery(get_called_class());
     }
+
+    public function createFullName()
+    {
+        if ($this->full_name) {
+            return $this->full_name;
+        }
+
+        $name = implode(' ', [$this->second_name, $this->first_name, $this->patronymic]);
+
+        if (!$name) {
+            $name = yii::$app->formatter->nullDisplay;
+        }
+
+        return $name;
+    }
 }
