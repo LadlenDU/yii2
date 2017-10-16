@@ -327,6 +327,7 @@ class Debtor extends \yii\db\ActiveRecord
 
         $calcDebts = $this->calcDebts();
         if ($calcDebts) {
+            //TODO: что делать если значений несколько?
             $debt = $calcDebts[0]['debt'];
         }
 
