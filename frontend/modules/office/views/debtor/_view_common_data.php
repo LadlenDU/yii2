@@ -157,7 +157,7 @@ $attributes = [
         'label' => Yii::t('app', 'Данные'),
         'rowOptions' => ['class' => 'info']
     ],
-    [
+    /*[
         'columns' => [
             [
                 'attribute' => 'LS_EIRC',
@@ -167,14 +167,6 @@ $attributes = [
                 'displayOnly' => true,
                 'format' => 'raw',
             ],
-            /*[
-                'attribute' => 'LS_IKU_provider',
-                'value' => '<kbd>' . $fm->asText($model->LS_IKU_provider) . '</kbd>',
-                'labelColOptions' => ['style' => 'width:10.3%;text-align:right'],
-                'valueColOptions' => ['style' => 'width:23%'],
-                'displayOnly' => true,
-                'format' => 'raw',
-            ],*/
             [
                 'attribute' => 'IKU',
                 'value' => '<kbd>' . $fm->asText($model->IKU) . '</kbd>',
@@ -207,7 +199,7 @@ $attributes = [
                 'displayOnly' => true,
             ],
         ],
-    ],
+    ],*/
     [
         'columns' => [
             [
