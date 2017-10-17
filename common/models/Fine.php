@@ -1151,6 +1151,10 @@ class Fine
     }
 
     function buhDate($date) {
+        //TODO: исправить костыль
+        if (is_string($date)) {
+            $date = strtotime($date);
+        }
         //var newMonth = (date.getMonth() + 11) % 12;
         $newMonth = (date('n', $date) - 1 + 11) % 12;
         $year = date('Y', $date) - (($newMonth == 11)? 1 : 0);
