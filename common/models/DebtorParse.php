@@ -210,8 +210,14 @@ class DebtorParse extends Model
         ],
     ];
 
+    // Должны быть в lowercase
     protected static $FIELDS_IGNORE = [
         'долг (мес.)',
+        'вх. сальдо',
+        'вх.сальдо',
+        'перерасчет',
+        'доп.корректировка',
+        'субсидии перерасчет',
     ];
 
     protected static function prepareStringToCompare($str)
