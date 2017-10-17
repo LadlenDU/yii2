@@ -431,7 +431,7 @@ class Debtor extends \yii\db\ActiveRecord
 
     public static function handleDebtorsExcelFileAUser(UploadForm $uploadModel)
     {
-        $uploadModel->excelFile = UploadedFile::getInstance($uploadModel, 'excelFile');
+        $uploadModel->excelFileForAUser = UploadedFile::getInstance($uploadModel, 'excelFileForAUser');
         if ($fileName = $uploadModel->uploadExcel('excelFileForAUser')) {
             // file is uploaded successfully
             $objPHPExcel = \PHPExcel_IOFactory::load($fileName);

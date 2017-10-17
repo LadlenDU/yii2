@@ -535,6 +535,11 @@ class DebtorParse extends Model
 
         $sheetData = [];
 
+        $sheetDataRaw = array_values($sheetDataRaw);
+        foreach ($sheetDataRaw as $key => $val) {
+            $sheetDataRaw[$key] = array_values($val);
+        }
+
         if (!isset($sheetDataRaw[0][0])) {
             throw new \Exception(Yii::t('app', 'Пустая таблица'));
         }
@@ -548,7 +553,7 @@ class DebtorParse extends Model
             }
 
             if ($key == 1) {
-                $sheetData[$key] = $row;
+                $sheetData[1] = $row;
                 $sheetData[1][9] = 'Исходящее сальдо (дебет)';
                 // Отсутствующие поля
                 $sheetData[1][10] = '№ ЛС';
@@ -558,9 +563,9 @@ class DebtorParse extends Model
             }
 
             // дата
-            $row[$key][0] = str_replace(',', '.', $row[$key][0]);
-            $row[$key][0] = preg_replace('/\s+/', '', $row[$key][0]);
-            if (!$row[$key][0]) {
+            $row[0] = str_replace(',', '.', $row[0]);
+            $row[0] = preg_replace('/\s+/', '', $row[0]);
+            if (!$row[0]) {
                 continue;
             }
 
