@@ -104,6 +104,8 @@ class Fine
         [20, '01.01.1992']
     ];
 
+    protected $MONTHS = ['янв', 'фев', 'мар', 'апр', 'май', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'];
+
     protected $datesBase = [];
     protected $percents = [];
 
@@ -1067,7 +1069,7 @@ class Fine
         $resData = $data['data'];
         if (count($resData) == 0) {
             return ['html' => '', 'totalPct' => 0, 'endSum' => 0];
-            }
+        }
         $dateStart = $data['dateStart'];
         $total = 0;
         $resultString = null;
@@ -1080,62 +1082,78 @@ class Fine
             }
         }
 
-	// TODO: нужно нормально подводить сумму начислений, а не костялять
-	$sum = $i == $resDataLength ? 0 : $r['data']['sum'];
-	for ($i--; $i >= 0; $i--) {
-        $d = $resData[$i];
-        $sum += $d['data']['sum'];
-    }
+        // TODO: нужно нормально подводить сумму начислений, а не костялять
+        $sum = $i == $resDataLength ? 0 : $r['data']['sum'];
+        for ($i--; $i >= 0; $i--) {
+            $d = $resData[$i];
+            $sum += $d['data']['sum'];
+        }
 
 
-	$r = $resData[0];
-	$resultString = '<tr class="jtb-first">' .
-        ($isFirst ? '<td rowspan="' . $resDataLength . '">сальдо на<br>' . $this->fd($dateStart) . '</td>'
-            : '<td rowspan="' . $resDataLength . '">' . $this->buhDate($dateStart) . '</td>'
-        )
-        . '<td rowspan="' . $resDataLength . '">' . $this->moneyFormat($sum) . '</td>';
-	if ($r['type'] == $this->DATA_TYPE_INFO) {
-        $resultString .= '<td>' . $this->moneyFormat($r['data']['sum']) . '</td>' .
-            '<td>' . $this->fd($r['data']['dateStart']) . '</td>' .
-            '<td>' . $this->fd($r['data']['dateFinish']) . '</td>' .
-            '<td>' . $r['data']['days'] . '</td>' .
-            '<td>' . $this->moneyFormat($r['data']['percent']) . ' %</td>' .
-            '<td>' . $r['data']['rate'] . '</td>' .
-            '<td>' . $this->moneyFormat($r['data']['sum']) . ' × ' . $r['data']['days'] . ' × ' . $r['data']['rate'] . ' × ' . $r['data']['percent'] . '% </td>' .
-            '<td>' . $this->moneyFormat($r['data']['cost']) . ' р.</td>' .
-            '</tr>';
-        $total += $r['data']['cost'];
-    } else {
-        $resultString .=
-            '<td class="jt-payed">-' . $this->moneyFormat($r['data']['sum']) . '</td>' .
-            '<td class="jt-payed">' . $this->fd($r['data']['date']) . '</td>' .
-            '<td class="jt-payed" colspan="6" style="text-align: left">Погашение части долга' . ($r['data']['order'] ? ' (' . $r['data']['order'] . ')' : '') . '</td></tr>';
-    }
-
-	for ($i = 1; $i < $resDataLength; $i++) {
-        $r = $resData[$i];
+        $r = $resData[0];
+        $resultString = '<tr class="jtb-first">' .
+            ($isFirst ? '<td rowspan="' . $resDataLength . '">сальдо на<br>' . $this->fd($dateStart) . '</td>'
+                : '<td rowspan="' . $resDataLength . '">' . $this->buhDate($dateStart) . '</td>'
+            )
+            . '<td rowspan="' . $resDataLength . '">' . $this->moneyFormat($sum) . '</td>';
         if ($r['type'] == $this->DATA_TYPE_INFO) {
-            resultString += '<tr>' +
-                '<td>' + moneyFormat(r . data . sum) + '</td>' +
-                '<td>' + fd(r . data . dateStart) + '</td>' +
-                '<td>' + fd(r . data . dateFinish) + '</td>' +
-                '<td>' + r . data . days + '</td>' +
-                '<td>' + moneyFormat(r . data . percent) + ' %</td>' +
-                '<td>' + r . data . rate + '</td>' +
-                '<td>' + moneyFormat(r . data . sum) + ' × ' + r . data . days + ' × ' + r . data . rate + ' × ' + r . data . percent + '% </td>' +
-                '<td>' + moneyFormat(r . data . cost) + ' р.</td>' +
+            $resultString .= '<td>' . $this->moneyFormat($r['data']['sum']) . '</td>' .
+                '<td>' . $this->fd($r['data']['dateStart']) . '</td>' .
+                '<td>' . $this->fd($r['data']['dateFinish']) . '</td>' .
+                '<td>' . $r['data']['days'] . '</td>' .
+                '<td>' . $this->moneyFormat($r['data']['percent']) . ' %</td>' .
+                '<td>' . $r['data']['rate'] . '</td>' .
+                '<td>' . $this->moneyFormat($r['data']['sum']) . ' × ' . $r['data']['days'] . ' × ' . $r['data']['rate'] . ' × ' . $r['data']['percent'] . '% </td>' .
+                '<td>' . $this->moneyFormat($r['data']['cost']) . ' р.</td>' .
                 '</tr>';
-            total += r . data . cost;
-        } else if (r . type == DATA_TYPE_PAYED) {
-            resultString += '<tr class="jt-payed">' +
-                '<td>-' + moneyFormat(r . data . sum) + '</td>' +
-                '<td>' + fd(r . data . date) + '</td>' +
-                '<td colspan="6" style="text-align: left">Погашение части долга' + (r . data . order ? ' (' + r . data . order + ')' : '') + '</td></tr>'
-		}
-    }
-	return {
-        html:
-        resultString, totalPct: total, endSum : data . endSum};
-}
+            $total += $r['data']['cost'];
+        } else {
+            $resultString .=
+                '<td class="jt-payed">-' . $this->moneyFormat($r['data']['sum']) . '</td>' .
+                '<td class="jt-payed">' . $this->fd($r['data']['date']) . '</td>' .
+                '<td class="jt-payed" colspan="6" style="text-align: left">Погашение части долга' . ($r['data']['order'] ? ' (' . $r['data']['order'] . ')' : '') . '</td></tr>';
+        }
 
+        for ($i = 1; $i < $resDataLength; $i++) {
+            $r = $resData[$i];
+            if ($r['type'] == $this->DATA_TYPE_INFO) {
+                $resultString .= '<tr>' .
+                    '<td>' . $this->moneyFormat($r['data']['sum']) . '</td>' .
+                    '<td>' . $this->fd($r['data']['dateStart']) . '</td>' .
+                    '<td>' . $this->fd($r['data']['dateFinish']) . '</td>' .
+                    '<td>' . $r['data']['days'] . '</td>' .
+                    '<td>' . $this->moneyFormat($r['data']['percent']) . ' %</td>' .
+                    '<td>' . $r['data']['rate'] . '</td>' .
+                    '<td>' . $this->moneyFormat($r['data']['sum']) . ' × ' . $r['data']['days'] . ' × ' . $r['data']['rate'] . ' × ' . $r['data']['percent'] . '% </td>' .
+                    '<td>' . $this->moneyFormat($r['data']['cost']) . ' р.</td>' .
+                    '</tr>';
+                $total += $r['data']['cost'];
+            } elseif ($r['type'] == $this->DATA_TYPE_PAYED) {
+                $resultString .= '<tr class="jt-payed">' .
+                    '<td>-' . $this->moneyFormat($r['data']['sum']) . '</td>' .
+                    '<td>' . $this->fd($r['data']['date']) . '</td>' .
+                    '<td colspan="6" style="text-align: left">Погашение части долга' . ($r['data']['order'] ? ' (' . $r['data']['order'] . ')' : '') . '</td></tr>';
+            }
+        }
+        return [
+            'html' => $resultString,
+            'totalPct' => $total,
+            'endSum' => $data['endSum']
+        ];
+
+    }
+
+    function moneyFormat($money)
+    {
+        //return $this->addCommas(parseFloat(money).toFixed(2)).replace(/\./g, ',');
+        $moneyParsed = number_format(floatval($money), 2, ',', ' ');
+        return $moneyParsed;
+    }
+
+    function buhDate($date) {
+        //var newMonth = (date.getMonth() + 11) % 12;
+        $newMonth = (date('n', $date) - 1 + 11) % 12;
+        $year = date('Y', $date) - (($newMonth == 11)? 1 : 0);
+        return $this->MONTHS[$newMonth] . '.' . $year;
+    }
 }
