@@ -374,8 +374,6 @@ class DebtorController extends Controller
 
     public function actionFullReportFineData($debtor_id)
     {
-        //$rf = '_full_report_fine_data';
-
         $loans = [];
         $payments = [];
 
@@ -409,6 +407,7 @@ class DebtorController extends Controller
             'debtorId' => $debtor_id,
         ];
 
+        $this->layout = 'print_fine';   //"@app/views/layouts/mainLayout";
         if (Yii::$app->request->isAjax) {
             return $this->renderAjax('_full_report_fine_data', $data);
         } else {
