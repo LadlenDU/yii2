@@ -105,6 +105,9 @@ class DebtorParse extends Model
             'отчество',
         ],
         'full_name' => [
+            'ФИО',
+            'фамилия,имя,отчество',
+            'фамилия, имя, отчество',
             'ФИО квартиросъемщика',
         ],
     ];
@@ -135,6 +138,7 @@ class DebtorParse extends Model
 
     protected static $FIELDS_ACCRUAL = [
         'accrual_date' => [
+            'Период учета',
             'Дата начисления',  // Искусственная колонка
         ],
         'accrual' => [
@@ -486,6 +490,68 @@ class DebtorParse extends Model
                 $street = trim($street);
                 $building = trim(str_replace('д.', '', $building));
                 $startPart = 2;
+                continue;
+            }
+
+            $sheetData[$key] = $row;
+
+            // дата
+            $sheetData[$key][14] = trim($sheetData[$key][14]);
+            if ($sheetData[$key][14]) {
+                list($month, $year) = explode('.', $sheetData[$key][14]);
+                $monthShortName = mb_substr(trim($month), 0, 3, 'UTF-8');
+                $year = '20' . trim($year);
+                $monthNumber = isset(self::$MONTHS[$monthShortName]) ? self::$MONTHS[$monthShortName] : 1;
+                if ($monthNumber < 10) {
+                    $monthNumber = '0' . $monthNumber;
+                }
+                $sheetData[$key][14] = "01/$monthNumber/$year";
+            }
+
+            $sheetData[$key][15] = $street;
+            $sheetData[$key][16] = $building;
+            $sheetData[$key][17] = '2017-08-29 00:00:00';    //'29.08.2017';    //TODO: тупо ввод вручную
+            //$sheetData[$key][18] = '';
+        }
+
+        return $sheetData;
+    }
+
+    /**
+     * Форматирование "сырого" формата (отсканированного) excel файла (3130428789 - Соколов Александр Геннадьевич )
+     *
+     * @param array $sheetDataRaw
+     */
+    public static function format_2(array $sheetDataRaw)
+    {
+        //TODO: ужасный костыль - исправить
+        ini_set('memory_limit', '-1');
+        ini_set('max_execution_time', 1000);
+
+        $sheetData = [];
+
+        #$startPart = 0;
+        #$street = '';
+        #$building = 0;
+
+        if (!isset($sheetDataRaw[0][0])) {
+            throw new \Exception(Yii::t('app', 'Пустая таблица'));
+        }
+
+        $LS_IKU_provider = trim($sheetDataRaw[0][0]);
+        $full_name = trim($sheetDataRaw[0][1]);
+
+        foreach ($sheetDataRaw as $key => $row) {
+            if ($key < 1) {
+                continue;
+            }
+
+            if ($key == 1) {
+                $sheetData[$key] = $row;
+                $sheetData[1][9] = 'Исходящее сальдо (дебет)';
+                // Отсутствующие поля
+                $sheetData[1][10] = '№ ЛС';
+                $sheetData[1][11] = 'ФИО';
                 continue;
             }
 
