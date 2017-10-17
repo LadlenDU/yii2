@@ -403,30 +403,26 @@ class Fine
         return $res;
     }
 
-    protected function preparePayments($payments)
+    /*protected function preparePayments($payments)
     {
         if (!$payments) {
             return '';
         }
         $res = '';
-        /*for ($i = 0; $i < count($payments); $i++) {
-            $p = $payments[$i];
-            $res .= ';' . fd($p['date']) . '_' . $p['sum'] . '_' . ($p['payFor'] ? (($p['payFor'].getMonth() < (10 - 1)? '0' : '') . ($p['payFor'].getMonth() + 1)) . '.' . $p['payFor'].getFullYear(): '');
-        }*/
+//        for ($i = 0; $i < count($payments); $i++) {
+//            $p = $payments[$i];
+//            $res .= ';' . fd($p['date']) . '_' . $p['sum'] . '_' . ($p['payFor'] ? (($p['payFor'].getMonth() < (10 - 1)? '0' : '') . ($p['payFor'].getMonth() + 1)) . '.' . $p['payFor'].getFullYear(): '');
+//        }
         return substr($res, 1);     //.substring(1);
-    }
+    }*/
 
     protected function fd($date)
     {
-        return '';
-        //$day = $date.getDate();
-        /*if (day < 10)
-            day = '0' + day;
-        $monthIndex = date.getMonth() + 1;
-        if (monthIndex < 10)
-            monthIndex = '0' + monthIndex;
-        $year = date.getFullYear();
-        return day + '.' + monthIndex + '.' + year;*/
+        //TODO: исправить костыль
+        if (is_string($date)) {
+            $date = strtotime($date);
+        }
+        return date('d.m.Y', $date);   //day + '.' + monthIndex + '.' + year;
     }
 
     protected function prepareLoans($payments)
@@ -1150,14 +1146,15 @@ class Fine
         return $moneyParsed;
     }
 
-    function buhDate($date) {
+    function buhDate($date)
+    {
         //TODO: исправить костыль
         if (is_string($date)) {
             $date = strtotime($date);
         }
         //var newMonth = (date.getMonth() + 11) % 12;
         $newMonth = (date('n', $date) - 1 + 11) % 12;
-        $year = date('Y', $date) - (($newMonth == 11)? 1 : 0);
+        $year = date('Y', $date) - (($newMonth == 11) ? 1 : 0);
         return $this->MONTHS[$newMonth] . '.' . $year;
     }
 }
