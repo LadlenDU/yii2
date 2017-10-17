@@ -4,6 +4,7 @@
 /* @var $dataProvider \yii\data\ArrayDataProvider */
 
 use kartik\grid\GridView;
+use yii\helpers\Html;
 
 $gridColumns = [
     [
@@ -53,7 +54,7 @@ echo GridView::widget([
     'headerRowOptions' => ['class' => 'kartik-sheet-style'],
     'filterRowOptions' => ['class' => 'kartik-sheet-style'],
     'pjax' => true,
-    'toolbar' => false,
+    //'toolbar' => false,
     'panel' => [
         'type' => GridView::TYPE_PRIMARY,
         'heading' => Yii::t('app', 'Пеня'),
@@ -63,4 +64,20 @@ echo GridView::widget([
     'condensed' => true,
     'responsive' => true,
     'hover' => true,
+    'toolbar' => [
+        ['content' =>
+        //Html::button('<i class="glyphicon glyphicon-plus"></i>', ['type'=>'button', 'title'=>Yii::t('kvgrid', 'Add Book'), 'class'=>'btn btn-success', 'onclick'=>'alert("This will launch the book creation form.\n\nDisabled for this demo!");']) . ' '.
+            Html::a('<i class="glyphicon glyphicon-print"></i>',
+                ['/office/debtor/full-report-fine-data'],
+                [
+                    'data-pjax' => 0,
+                    'class' => 'btn btn-default',
+                    'title' => Yii::t('app', 'Полный отчет'),
+                    'target' => '_blank',
+                ]
+            )
+        ],
+        '{export}',
+        '{toggleData}',
+    ]
 ]);

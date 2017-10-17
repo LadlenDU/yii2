@@ -371,6 +371,78 @@ class DebtorController extends Controller
         }
     }
 
+    public function actionFullReportFineData($debtor_id)
+    {
+        //$rf = '_full_report_fine_data';
+
+        $loans = [];
+        $payments = [];
+
+        $fine = new Fine();
+
+        $accruals = Accrual::find()->where(['debtor_id' => $debtor_id])->all();
+        foreach ($accruals as $acc) {
+            $date = strtotime($acc->accrual_date);
+            $loans[] = [
+                'sum' => $acc->accrual,
+                'date' => $date,
+            ];
+        }
+
+        $paymentsRes = Payment::find()->where(['debtor_id' => $debtor_id])->all();
+        foreach ($paymentsRes as $pm) {
+            $date = strtotime($pm->payment_date);
+            $payments[] = [
+                'date' => $date,
+                'payFor' => null,
+                'sum' => $pm->amount,
+            ];
+        }
+
+        $dateFinish = time() - 60 * 60 * 24;
+
+        $fineRes = $fine->fineCalculator($dateFinish, $loans, $payments);
+
+        $elements = [];
+
+        foreach ($fineRes as $res) {
+            if (!empty($res['data'])) {
+                foreach ($res['data'] as $data) {
+                    if ($data['type'] == 1) {
+                        $elements[] = [
+                            'fine' => $data['data']['cost'],
+                            //'cost' => $data['data']['sum'],
+                            //'dateStart' => date('Y-m-d H:i:s', $data['data']['dateStart']),
+                            //'dateFinish' => date('Y-m-d H:i:s', $data['data']['dateFinish']),
+                            'dateStart' => $data['data']['dateStart'],
+                            'dateFinish' => $data['data']['dateFinish'],
+                        ];
+                    }
+                }
+            }
+        }
+
+        $dataProvider = new ArrayDataProvider([
+            'allModels' => $elements,
+            /*'sort' => [
+                'attributes' => ['date'],
+            ],*/
+            /*'pagination' => [
+                'pageSize' => 100,
+            ],*/
+        ]);
+
+        $data = [
+            'dataProvider' => $dataProvider,
+        ];
+
+        if (Yii::$app->request->isAjax) {
+            return $this->renderAjax('_fine_list', $data);
+        } else {
+            return $this->render('_fine_list', $data);
+        }
+    }
+
     /*public function actionDebtVerification()
     {
         $uploadModel = new UploadForm();
