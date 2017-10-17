@@ -335,54 +335,81 @@ class DebtorParse extends Model
             //DebtDetails::deleteAll();
 
             // Найдем индекс, по которому искать уникальность пользователя
-            $uniqueIndex = '';
+            $uniqueIndex = false;
+            $accrualDateIndex = false;
             foreach ($info['headers'] as $key => $elem) {
-                if ($elem[1] == 'LS_IKU_provider') {
+                if ($elem[0] == 'debtor' && $elem[1] == 'LS_IKU_provider') {
                     $uniqueIndex = $key;
                     break;
                 }
+                if ($elem[0] == 'accrual' && $elem[1] == 'accrual_date') {
+                    $accrualDateIndex = $key;
+                    break;
+                }
+            }
+
+            if ($accrualDateIndex === false) {
+                throw new \Exception(Yii::t('app', 'Не найдено поле с датой начисления.'));
             }
 
             foreach ($info['colInfo'] as $rowInfo) {
 
                 $whetherUpdate = false;
 
+                $debtor = false;
+                $debtDetails = false;
+                $name = false;
+                $location = false;
+                $accrual = false;
+                $payment = false;
+
                 // Поиск уникального
-                if ($debtor = Debtor::find()->where(['LS_IKU_provider' => $rowInfo[$uniqueIndex]])->one()) {
+                if ($debtor = Debtor::find()->with(['name', 'location', 'debtDetails', 'accruals', 'payments'])
+                    ->where(['LS_IKU_provider' => $rowInfo[$uniqueIndex]])->one()
+                ) {
                     // Обновляем
                     $whetherUpdate = true;
                     //TODO: косяк - должник может иметь несколько долгов (пока оставим)
                     if (isset($debtor->debtDetails[0])) {
                         $debtDetails = $debtor->debtDetails[0];
-                    } else {
-                        $debtDetails = new DebtDetails;
                     }
                     if (isset($debtor->name)) {
                         $name = $debtor->name;
-                    } else {
-                        $name = new Name;
                     }
                     if (isset($debtor->location)) {
                         $location = $debtor->location;
-                    } else {
-                        $location = $debtor->location;
                     }
-                    if (isset($debtor->accruals[0])) {
-                        $accrual = $debtor->accruals[0];    //TODO: косяк - должник может иметь несколько accruals (пока оставим)
-                    } else {
-                        $accrual = new Accrual;
+                    if (isset($debtor->accruals)) {
+                        //TODO: косяк - должник может иметь несколько accruals (пока оставим)
+                        // Найдем на ту же дату
+                        foreach ($debtor->accruals as $key => $acc) {
+                            if ($acc['accrual_date'] == $rowInfo[$accrualDateIndex]) {
+                                $accrual = $acc;
+                            }
+                        }
                     }
                     if (isset($debtor->payments[0])) {
-                        $payment = $debtor->payments[0];    //TODO: косяк - должник может иметь несколько payments (пока оставим)
-                    } else {
-                        $payment = new Payment;
+                        //TODO: косяк - должник может иметь несколько payments (пока оставим)
+                        $payment = $debtor->payments[0];
                     }
-                } else {
+                }
+
+                if (empty($debtor)) {
                     $debtor = new DebtorExt;
+                }
+                if (empty($debtDetails)) {
                     $debtDetails = new DebtDetails;
+                }
+                if (empty($name)) {
                     $name = new Name;
+                }
+                if (empty($location)) {
                     $location = new Location;
+                }
+                if (empty($accrual)) {
                     $accrual = new Accrual;
+                }
+                if (empty($payment)) {
                     $payment = new Payment;
                 }
 
@@ -392,7 +419,7 @@ class DebtorParse extends Model
                     if (!empty($info['headers'][$key])) {
                         if ($info['headers'][$key][0] == 'debtor') {
                             $debtor->{$info['headers'][$key][1]} = $colInfo;
-                        } elseif ($info['headers'][$key][0] == 'debt_details') {
+                        } elseif ($info['headers'][$key][0] == 'debt_details') {    //TODO: get rid of debt_details or change it
                             $debtDetails->{$info['headers'][$key][1]} = $colInfo;
                             //$debtDetails->save();
                             //$debtor->link('debtDetails', $debtDetails);
