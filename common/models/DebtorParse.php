@@ -133,6 +133,7 @@ class DebtorParse extends Model
         ],
         'amount' => [
             'Оплачено',
+            'Оплаты',
         ],
     ];
 
@@ -146,12 +147,15 @@ class DebtorParse extends Model
         ],
         'single' => [
             'Начисления разовые',
+            'Разовые',
         ],
         'additional_adjustment' => [
             'Начисления постоянные',    //TODO: рассмотреть "Начисления разовые" и пр.
+            'Начисления',
         ],
         'subsidies' => [
             'Начисленные субсидии', //TODO: "Оплачено субсидий" - рассмотреть
+            'Субсидии',
         ],
     ];
 
@@ -187,6 +191,7 @@ class DebtorParse extends Model
         ],
         'paid' => [
             'Оплачено',
+            'Оплаты',
         ],
         'paid_insurance' => [
             'Оплачено страховки',
@@ -391,11 +396,11 @@ class DebtorParse extends Model
                             #$debtDetails->{$info['headers'][$key][1]} = $colInfo;
                         } elseif ($info['headers'][$key][0] == 'name') {
                             $name->{$info['headers'][$key][1]} = $colInfo;
-                        }elseif ($info['headers'][$key][0] == 'location') {
+                        } elseif ($info['headers'][$key][0] == 'location') {
                             $location->{$info['headers'][$key][1]} = $colInfo;
-                        }elseif ($info['headers'][$key][0] == 'accrual') {
+                        } elseif ($info['headers'][$key][0] == 'accrual') {
                             $accrual->{$info['headers'][$key][1]} = $colInfo;
-                        }elseif ($info['headers'][$key][0] == 'payment') {
+                        } elseif ($info['headers'][$key][0] == 'payment') {
                             $payment->{$info['headers'][$key][1]} = $colInfo;
                         }
                     }
@@ -530,10 +535,6 @@ class DebtorParse extends Model
 
         $sheetData = [];
 
-        #$startPart = 0;
-        #$street = '';
-        #$building = 0;
-
         if (!isset($sheetDataRaw[0][0])) {
             throw new \Exception(Yii::t('app', 'Пустая таблица'));
         }
@@ -552,28 +553,29 @@ class DebtorParse extends Model
                 // Отсутствующие поля
                 $sheetData[1][10] = '№ ЛС';
                 $sheetData[1][11] = 'ФИО';
+                $sheetData[1][12] = 'Месяц последней оплаты';
+                continue;
+            }
+
+            // дата
+            $row[$key][0] = str_replace(',', '.', $row[$key][0]);
+            $row[$key][0] = preg_replace('/\s+/', '', $row[$key][0]);
+            if (!$row[$key][0]) {
                 continue;
             }
 
             $sheetData[$key] = $row;
 
-            // дата
-            $sheetData[$key][14] = trim($sheetData[$key][14]);
-            if ($sheetData[$key][14]) {
-                list($month, $year) = explode('.', $sheetData[$key][14]);
-                $monthShortName = mb_substr(trim($month), 0, 3, 'UTF-8');
-                $year = '20' . trim($year);
-                $monthNumber = isset(self::$MONTHS[$monthShortName]) ? self::$MONTHS[$monthShortName] : 1;
-                if ($monthNumber < 10) {
-                    $monthNumber = '0' . $monthNumber;
-                }
-                $sheetData[$key][14] = "01/$monthNumber/$year";
+            list($monthNumber, $year) = explode('.', $sheetData[$key][0]);
+            $monthNumber = (int)$monthNumber;
+            if ($monthNumber < 10) {
+                $monthNumber = '0' . $monthNumber;
             }
+            $sheetData[$key][0] = "01/$monthNumber/$year";
 
-            $sheetData[$key][15] = $street;
-            $sheetData[$key][16] = $building;
-            $sheetData[$key][17] = '2017-08-29 00:00:00';    //'29.08.2017';    //TODO: тупо ввод вручную
-            //$sheetData[$key][18] = '';
+            $sheetData[$key][10] = $LS_IKU_provider;
+            $sheetData[$key][11] = $full_name;
+            $sheetData[$key][12] = $sheetData[$key][0];
         }
 
         return $sheetData;

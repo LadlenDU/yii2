@@ -27,14 +27,14 @@ class UploadForm extends Model
         ];
     }
 
-    public function uploadExcel()
+    public function uploadExcel($type = 'excelFile')
     {
         if ($this->validate()) {
             //if ($this->excelFile) {
             //$this->imageFile->saveAs('uploads/' . $this->imageFile->baseName . '.' . $this->imageFile->extension);
-            $fileName = tempnam(Yii::getAlias('@common') . '/uploads/debtors', 'excel_');
+            $fileName = tempnam(Yii::getAlias('@common') . '/uploads/debtors', $type . '_');
             //$fileName .= '.' . $this->excelFile->extension;
-            $this->excelFile->saveAs($fileName);
+            $this->$type->saveAs($fileName);
             return $fileName;
         }
 
@@ -62,9 +62,9 @@ class UploadForm extends Model
     public function attributeLabels()
     {
         $labels = parent::attributeLabels();
-        $labels['excelFile'] = Yii::t('app', 'Файл Excel (много ползователей)');
+        $labels['excelFile'] = Yii::t('app', 'Файл Excel (много пользователей)');
         $labels['excelFileForAUser'] = Yii::t('app', 'Файл Excel (один пользователь)');
-        $labels['csvFile'] = Yii::t('app', 'Файл СSV (много ползователей)');
+        $labels['csvFile'] = Yii::t('app', 'Файл СSV (много пользователей)');
 
         return $labels;
     }

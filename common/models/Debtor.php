@@ -432,7 +432,7 @@ class Debtor extends \yii\db\ActiveRecord
     public static function handleDebtorsExcelFileAUser(UploadForm $uploadModel)
     {
         $uploadModel->excelFile = UploadedFile::getInstance($uploadModel, 'excelFile');
-        if ($fileName = $uploadModel->uploadExcel()) {
+        if ($fileName = $uploadModel->uploadExcel('excelFileForAUser')) {
             // file is uploaded successfully
             $objPHPExcel = \PHPExcel_IOFactory::load($fileName);
             $sheetData = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
@@ -492,19 +492,15 @@ class Debtor extends \yii\db\ActiveRecord
     public static function addDebtsForAUser(array $sheetDataRaw)
     {
         try {
-            if (isset($sheetData[0][0])) {
-                DebtorParse::format_2($sheetDataRaw);
-                //$info = DebtorParse::scrapeDebtsForAUserFromArray($sheetData, $sheetData[0][0]);
-                $saveResult = DebtorParse::saveDebtors($info);
-                $msg = Yii::t('app', 'Успешно прошла операция добавления в БД.') . "\n";
-                $addedNumber = empty($saveResult['added']) ? 0 : $saveResult['added'];
-                $updatedNumber = empty($saveResult['updated']) ? 0 : $saveResult['updated'];
-                $msg .= "Записей добавлено: $addedNumber\n"
-                    . "Записей обновлено: $updatedNumber\n";
-                Yii::$app->getSession()->setFlash('success', $msg);
-            } else {
-                throw new \Exception(Yii::t('app', 'Пустая таблица'));
-            }
+            $info = DebtorParse::format_2($sheetDataRaw);
+            //$info = DebtorParse::scrapeDebtsForAUserFromArray($sheetData, $sheetData[0][0]);
+            $saveResult = DebtorParse::saveDebtors($info);
+            $msg = Yii::t('app', 'Успешно прошла операция добавления в БД.') . "\n";
+            $addedNumber = empty($saveResult['added']) ? 0 : $saveResult['added'];
+            $updatedNumber = empty($saveResult['updated']) ? 0 : $saveResult['updated'];
+            $msg .= "Записей добавлено: $addedNumber\n"
+                . "Записей обновлено: $updatedNumber\n";
+            Yii::$app->getSession()->setFlash('success', $msg);
         } catch (\Exception $e) {
             Yii::$app->getSession()->setFlash('error', $e->getMessage());
         }

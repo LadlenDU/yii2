@@ -51,6 +51,10 @@ class DebtorController extends Controller
                     Debtor::handleDebtorsExcelFile($uploadModel);
                     break;
                 }
+                case 'upload_debtors_excel_a_user': {
+                    Debtor::handleDebtorsExcelFileAUser($uploadModel);
+                    break;
+                }
                 case 'upload_debtors_csv': {
                     Debtor::handleDebtorsCsvFile($uploadModel);
                     break;
@@ -411,7 +415,9 @@ class DebtorController extends Controller
         if (Yii::$app->request->isAjax) {
             return $this->renderAjax('_full_report_fine_data', $data);
         } else {
-            return $this->render('_full_report_fine_data', $data);
+            Yii::$app->html2pdf
+                ->render('_full_report_fine_data', $data)
+                ->saveAs('/path/to/output.pdf');
         }
     }
 
