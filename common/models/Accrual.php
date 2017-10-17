@@ -76,11 +76,13 @@ class Accrual extends \yii\db\ActiveRecord
     public function save($runValidation = true, $attributeNames = NULL)
     {
         if ($this->accrual_date) {
-            $this->accrual_date .= '-01 00:00:00';
+            //$this->accrual_date .= '-01 00:00:00';
             /*$parts = explode('-', $this->accrual_date);
             if (!empty($parts[0]) && !empty($parts[1])) {
                 $this->accrual_date = $this->accrual_date;
             }*/
+            $this->accrual_date = strtotime($this->accrual_date);
+            $this->accrual_date = date('Y-m-d G:i:s', $this->accrual_date);
         }
 
         parent::save($runValidation, $attributeNames);
