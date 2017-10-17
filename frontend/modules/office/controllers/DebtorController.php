@@ -254,6 +254,7 @@ class DebtorController extends Controller
 
         $data = [
             'dataProvider' => $dataProvider,
+            'debtorId' => $debtor_id,
         ];
 
         if (Yii::$app->request->isAjax) {
@@ -400,46 +401,18 @@ class DebtorController extends Controller
         }
 
         $dateFinish = time() - 60 * 60 * 24;
-
-        $fineRes = $fine->fineCalculator($dateFinish, $loans, $payments);
-
-        $elements = [];
-
-        foreach ($fineRes as $res) {
-            if (!empty($res['data'])) {
-                foreach ($res['data'] as $data) {
-                    if ($data['type'] == 1) {
-                        $elements[] = [
-                            'fine' => $data['data']['cost'],
-                            //'cost' => $data['data']['sum'],
-                            //'dateStart' => date('Y-m-d H:i:s', $data['data']['dateStart']),
-                            //'dateFinish' => date('Y-m-d H:i:s', $data['data']['dateFinish']),
-                            'dateStart' => $data['data']['dateStart'],
-                            'dateFinish' => $data['data']['dateFinish'],
-                        ];
-                    }
-                }
-            }
-        }
-
-        $dataProvider = new ArrayDataProvider([
-            'allModels' => $elements,
-            /*'sort' => [
-                'attributes' => ['date'],
-            ],*/
-            /*'pagination' => [
-                'pageSize' => 100,
-            ],*/
-        ]);
+        $periods = $fine->fineCalculator($dateFinish, $loans, $payments);
+        $html = $fine->getBuhHtml($periods);
 
         $data = [
-            'dataProvider' => $dataProvider,
+            'html' => $html,
+            'debtorId' => $debtor_id,
         ];
 
         if (Yii::$app->request->isAjax) {
-            return $this->renderAjax('_fine_list', $data);
+            return $this->renderAjax('_full_report_fine_data', $data);
         } else {
-            return $this->render('_fine_list', $data);
+            return $this->render('_full_report_fine_data', $data);
         }
     }
 
