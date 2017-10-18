@@ -179,7 +179,7 @@ class Debtor extends \yii\db\ActiveRecord
         foreach ($accruals as $acc) {
             $date = strtotime($acc->accrual_date);
             $loans[] = [
-                'sum' => $acc->accrual,
+                'sum' => (float)$acc->accrual + (float)$acc->subsidies + (float)$acc->single + (float)$acc->additional_adjustment,
                 'date' => $date,
             ];
         }
@@ -251,7 +251,7 @@ class Debtor extends \yii\db\ActiveRecord
         return 0;*/
     }
 
-    public function calcDebts()
+    public function calcDebts($sortParams = false)
     {
         $loans = [];
         $payments = [];
@@ -308,6 +308,10 @@ class Debtor extends \yii\db\ActiveRecord
                     }
                 }
             }
+        }
+
+        if ($sortParams) {
+
         }
 
         return $elements;
@@ -444,7 +448,7 @@ class Debtor extends \yii\db\ActiveRecord
         if ($fileName = $uploadModel->uploadExcel('excelFileForAUser')) {
             // file is uploaded successfully
             $objPHPExcel = \PHPExcel_IOFactory::load($fileName);
-            $sheetData = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
+            $sheetData = $objPHPExcel->getActiveSheet()->toArray(null, false, false, false);
             self::addDebtsForAUser($sheetData);
         }
     }
@@ -455,7 +459,7 @@ class Debtor extends \yii\db\ActiveRecord
         if ($fileName = $uploadModel->uploadExcel()) {
             // file is uploaded successfully
             $objPHPExcel = \PHPExcel_IOFactory::load($fileName);
-            $sheetData = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
+            $sheetData = $objPHPExcel->getActiveSheet()->toArray(null, false, false, false);
             self::addDebtors($sheetData);
         }
     }

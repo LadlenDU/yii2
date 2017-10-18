@@ -158,7 +158,8 @@ class DebtorParse extends Model
             'Дата начисления',  // Искусственная колонка
         ],
         'accrual' => [
-            'Исходящее сальдо (дебет)',
+            //'Исходящее сальдо (дебет)',
+            'Начисления',
         ],
         'single' => [
             'Начисления разовые',
@@ -232,9 +233,11 @@ class DebtorParse extends Model
         'вх. сальдо',
         'вх.сальдо',
         'перерасчет',
-        'доп.корректировка',
+        'исх.сальдо',
+        'исх. сальдо',
+        //'доп.корректировка',
         'субсидии перерасчет',
-        'начисления',
+        //'начисления',
     ];
 
     protected static function prepareStringToCompare($str)
@@ -653,7 +656,7 @@ class DebtorParse extends Model
 
             if ($key == 1) {
                 $sheetData[1] = $row;
-                $sheetData[1][9] = 'Исходящее сальдо (дебет)';
+                //$sheetData[1][9] = 'Исходящее сальдо (дебет)';
                 // Отсутствующие поля
                 $sheetData[1][10] = '№ ЛС';
                 $sheetData[1][11] = 'ФИО';
@@ -673,6 +676,9 @@ class DebtorParse extends Model
             }
 
             $sheetData[$key] = $row;
+
+            // Вычитаем перерасчет
+            $sheetData[$key][2] += $sheetData[$key][3];
 
             list($monthNumber, $year) = explode('.', $sheetData[$key][0]);
             $monthNumber = (int)$monthNumber;

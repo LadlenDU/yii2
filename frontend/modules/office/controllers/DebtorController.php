@@ -262,7 +262,7 @@ class DebtorController extends Controller
         $elements = [];
 
         if ($debtor = Debtor::findOne($debtor_id)) {
-            $elements = $debtor->calcDebts();
+            $elements = $debtor->calcDebts(['order' => 'dateStart', 'direction' => 'asc']);
         }
 
         $dataProvider = new ArrayDataProvider([
