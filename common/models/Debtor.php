@@ -56,6 +56,7 @@ class Debtor extends \yii\db\ActiveRecord
             [['expiration_start'], 'safe'],
             [['phone', 'LS_EIRC', 'LS_IKU_provider', 'IKU', 'single', 'additional_adjustment', 'subsidies'], 'string', 'max' => 255],
             [['LS_IKU_provider'], 'unique'],
+            [['name_id'], 'unique'],
             [['location_id'], 'exist', 'skipOnError' => true, 'targetClass' => Location::className(), 'targetAttribute' => ['location_id' => 'id']],
             [['name_id'], 'exist', 'skipOnError' => true, 'targetClass' => Name::className(), 'targetAttribute' => ['name_id' => 'id']],
             [['ownership_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => OwnershipType::className(), 'targetAttribute' => ['ownership_type_id' => 'id']],
@@ -121,7 +122,7 @@ class Debtor extends \yii\db\ActiveRecord
      */
     public function getName()
     {
-        return $this->hasOne(Name::className(), ['id' => 'name_id'])->inverseOf('debtors');
+        return $this->hasOne(Name::className(), ['id' => 'name_id'])->inverseOf('debtor');
     }
 
     /**
