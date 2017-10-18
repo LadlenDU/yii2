@@ -225,22 +225,22 @@ class DebtorController extends Controller
 
         $dateFinish = time() - 60 * 60 * 24;
 
-        $fineRes = $fine->fineCalculator($dateFinish, $loans, $payments);
-
         $elements = [];
 
-        foreach ($fineRes as $res) {
-            if (!empty($res['data'])) {
-                foreach ($res['data'] as $data) {
-                    if ($data['type'] == 1) {
-                        $elements[] = [
-                            'fine' => $data['data']['cost'],
-                            //'cost' => $data['data']['sum'],
-                            //'dateStart' => date('Y-m-d H:i:s', $data['data']['dateStart']),
-                            //'dateFinish' => date('Y-m-d H:i:s', $data['data']['dateFinish']),
-                            'dateStart' => $data['data']['dateStart'],
-                            'dateFinish' => $data['data']['dateFinish'],
-                        ];
+        if ($fineRes = $fine->fineCalculator($dateFinish, $loans, $payments)) {
+            foreach ($fineRes as $res) {
+                if (!empty($res['data'])) {
+                    foreach ($res['data'] as $data) {
+                        if ($data['type'] == 1) {
+                            $elements[] = [
+                                'fine' => $data['data']['cost'],
+                                //'cost' => $data['data']['sum'],
+                                //'dateStart' => date('Y-m-d H:i:s', $data['data']['dateStart']),
+                                //'dateFinish' => date('Y-m-d H:i:s', $data['data']['dateFinish']),
+                                'dateStart' => $data['data']['dateStart'],
+                                'dateFinish' => $data['data']['dateFinish'],
+                            ];
+                        }
                     }
                 }
             }
@@ -330,26 +330,26 @@ class DebtorController extends Controller
 
         $dateFinish = time() - 60 * 60 * 24;
 
-        $fineRes = $fine->fineCalculator($dateFinish, $loans, $payments);
-
         $elements = [];
 
-        foreach ($fineRes as $res) {
-            if (!empty($res['data'])) {
-                foreach ($res['data'] as $data) {
-                    /*if ($data['type'] == 2) {
-                        $elements[] = [
-                            'debt' => $data['data']['sum'],
-                            'date' => date('Y-m-d H:i:s', $data['data']['date']),
-                        ];
-                    }*/
-                    if ($data['type'] == 1) {
-                        $elements[] = [
-                            'debt' => $data['data']['sum'],
-                            //'date' => date('Y-m-d H:i:s', $data['data']['date']),
-                            'dateStart' => $data['data']['dateStart'],
-                            'dateFinish' => $data['data']['dateFinish'],
-                        ];
+        if ($fineRes = $fine->fineCalculator($dateFinish, $loans, $payments)) {
+            foreach ($fineRes as $res) {
+                if (!empty($res['data'])) {
+                    foreach ($res['data'] as $data) {
+                        /*if ($data['type'] == 2) {
+                            $elements[] = [
+                                'debt' => $data['data']['sum'],
+                                'date' => date('Y-m-d H:i:s', $data['data']['date']),
+                            ];
+                        }*/
+                        if ($data['type'] == 1) {
+                            $elements[] = [
+                                'debt' => $data['data']['sum'],
+                                //'date' => date('Y-m-d H:i:s', $data['data']['date']),
+                                'dateStart' => $data['data']['dateStart'],
+                                'dateFinish' => $data['data']['dateFinish'],
+                            ];
+                        }
                     }
                 }
             }
