@@ -24,6 +24,21 @@ class DebtorParse extends Model
         'дек' => 12,
     ];
 
+    protected static $resultInfo = [
+        'debtors' => [
+            'added' => 0,
+            'updated' => 0,
+        ],
+        'payments' => [
+            'added' => 0,
+            'updated' => 0,
+        ],
+        'accruals' => [
+            'added' => 0,
+            'updated' => 0,
+        ],
+    ];
+
     protected static $FIELDS_DEBTOR = [
         /*'first_name' => [
             'имя',
@@ -151,7 +166,8 @@ class DebtorParse extends Model
         ],
         'additional_adjustment' => [
             'Начисления постоянные',    //TODO: рассмотреть "Начисления разовые" и пр.
-            'Начисления',
+            'Доп.корректировка',
+            'Доп. корректировка',
         ],
         'subsidies' => [
             'Начисленные субсидии', //TODO: "Оплачено субсидий" - рассмотреть
@@ -321,12 +337,21 @@ class DebtorParse extends Model
         return ['headers' => $headers, 'colInfo' => $colInfo];
     }
 
+    /*public static function mergeResultInfo(array $info1, array $info2)
+    {
+        $result = $info1;
+        foreach ($info1 as $key => $val) {
+            foreach ($val as $key2 => $val2) {
+                $result[$key][$key2] += $info2[$key][$key2];
+            }
+        }
+
+        return $result;
+    }*/
+
     public static function saveDebtors(array $info)
     {
-        $saveResult = [
-            'added' => 0,
-            'updated' => 0,
-        ];
+        $saveResult = self::$resultInfo;
 
         if ($info['headers']) {
             //TODO: костыль - сделать сравнение пользователей
@@ -358,6 +383,8 @@ class DebtorParse extends Model
 
             foreach ($info['colInfo'] as $rowInfo) {
 
+                $tmpResultInfo = self::$resultInfo;
+
                 $whetherUpdate = false;
 
                 $debtor = false;
@@ -371,6 +398,8 @@ class DebtorParse extends Model
                 if ($debtor = Debtor::find()->with(['name', 'location', 'debtDetails', 'accruals', 'payments'])
                     ->where(['LS_IKU_provider' => $rowInfo[$uniqueIndex]])->one()
                 ) {
+                    ++$tmpResultInfo['debtors']['updated'];
+
                     // Обновляем
                     $whetherUpdate = true;
                     //TODO: косяк - должник может иметь несколько долгов (пока оставим)
@@ -384,22 +413,27 @@ class DebtorParse extends Model
                         $location = $debtor->location;
                     }
                     if (isset($debtor->accruals)) {
-                        //TODO: косяк - должник может иметь несколько accruals (пока оставим)
                         // Найдем на ту же дату
                         foreach ($debtor->accruals as $key => $acc) {
                             if ($acc['accrual_date'] == $rowInfo[$accrualDateIndex]) {
                                 $accrual = $acc;
+                                $tmpResultInfo['accruals']['updated'];
                             }
                         }
                     }
-                    if (isset($debtor->payments[0])) {
-                        //TODO: косяк - должник может иметь несколько payments (пока оставим)
-                        $payment = $debtor->payments[0];
+                    if (isset($debtor->payments)) {
+                        foreach ($debtor->payments as $key => $acc) {
+                            if ($acc['accrual_date'] == $rowInfo[$accrualDateIndex]) {
+                                $accrual = $acc;
+                                $tmpResultInfo['payments']['updated'];
+                            }
+                        }
                     }
                 }
 
                 if (empty($debtor)) {
                     $debtor = new DebtorExt;
+                    ++$tmpResultInfo['debtors']['added'];
                 }
                 if (empty($debtDetails)) {
                     $debtDetails = new DebtDetails;
@@ -412,9 +446,11 @@ class DebtorParse extends Model
                 }
                 if (empty($accrual)) {
                     $accrual = new Accrual;
+                    ++$tmpResultInfo['accruals']['added'];
                 }
                 if (empty($payment)) {
                     $payment = new Payment;
+                    ++$tmpResultInfo['payments']['added'];
                 }
 
                 //$debtor = new DebtorExt;
@@ -463,7 +499,11 @@ class DebtorParse extends Model
                     $accrual->link('debtor', $debtor);
                     $payment->link('debtor', $debtor);
 
-                    $whetherUpdate ? ++$saveResult['updated'] : ++$saveResult['added'];
+                    //$whetherUpdate ? ++$saveResult['updated'] : ++$saveResult['added'];
+                    array_walk_recursive($tmpResultInfo, function($item, $key) use (&$saveResult){
+                        $saveResult[$key] = isset($saveResult[$key]) ?  $item + $saveResult[$key] : $item;
+                    });
+
 
                 } else {
                     $err = print_r($debtor->getErrors(), true);
@@ -553,7 +593,7 @@ class DebtorParse extends Model
                 if ($monthNumber < 10) {
                     $monthNumber = '0' . $monthNumber;
                 }
-                $sheetData[$key][14] = "01/$monthNumber/$year";
+                $sheetData[$key][14] = "01.$monthNumber.$year";
             }
 
             $sheetData[$key][15] = $street;
@@ -619,7 +659,7 @@ class DebtorParse extends Model
             if ($monthNumber < 10) {
                 $monthNumber = '0' . $monthNumber;
             }
-            $sheetData[$key][0] = "01/$monthNumber/$year";
+            $sheetData[$key][0] = "01.$monthNumber.$year";
 
             $sheetData[$key][10] = $LS_IKU_provider;
             $sheetData[$key][11] = $full_name;

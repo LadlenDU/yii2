@@ -480,12 +480,24 @@ class Debtor extends \yii\db\ActiveRecord
         try {
             $info = DebtorParse::scrapeDebtorsFromArray($sheetData);
             $saveResult = DebtorParse::saveDebtors($info);
-            $msg = Yii::t('app', 'Успешно прошла операция добавления в БД.') . "\n";
-            $addedNumber = empty($saveResult['added']) ? 0 : $saveResult['added'];
-            $updatedNumber = empty($saveResult['updated']) ? 0 : $saveResult['updated'];
-            //TODO: модифицировать - будут добавляться не только должники но и данные
-            $msg .= "Должников добавлено: $addedNumber\n"
-                . "Должников обновлено: $updatedNumber\n";
+
+            $msg = Yii::t('app', 'Успешно прошла операция добавления в БД.') . '<br><br>';
+
+            $addedNumber = empty($saveResult['debtors']['added']) ? 0 : $saveResult['debtors']['added'];
+            $updatedNumber = empty($saveResult['debtors']['updated']) ? 0 : $saveResult['debtors']['updated'];
+            $msg .= "Должников добавлено: $addedNumber<br>"
+                . "Должников обновлено: $updatedNumber<br><br>";
+
+            $addedNumber = empty($saveResult['accruals']['added']) ? 0 : $saveResult['accruals']['added'];
+            $updatedNumber = empty($saveResult['accruals']['updated']) ? 0 : $saveResult['accruals']['updated'];
+            $msg .= "Начислений добавлено: $addedNumber<br>"
+                . "Начислений обновлено: $updatedNumber<br><br>";
+
+            $addedNumber = empty($saveResult['payments']['added']) ? 0 : $saveResult['payments']['added'];
+            $updatedNumber = empty($saveResult['payments']['updated']) ? 0 : $saveResult['payments']['updated'];
+            $msg .= "Оплат добавлено: $addedNumber<br>"
+                . "Оплат обновлено: $updatedNumber";
+
             Yii::$app->getSession()->setFlash('success', $msg);
         } catch (\Exception $e) {
             Yii::$app->getSession()->setFlash('error', $e->getMessage());
@@ -496,14 +508,7 @@ class Debtor extends \yii\db\ActiveRecord
     {
         try {
             $sheetData = DebtorParse::format_2($sheetDataRaw);
-            //$info = DebtorParse::scrapeDebtsForAUserFromArray($sheetData, $sheetData[0][0]);
             self::addDebtors($sheetData);
-            /* $msg = Yii::t('app', 'Успешно прошла операция добавления в БД.') . "\n";
-             $addedNumber = empty($saveResult['added']) ? 0 : $saveResult['added'];
-             $updatedNumber = empty($saveResult['updated']) ? 0 : $saveResult['updated'];
-             $msg .= "Записей добавлено: $addedNumber\n"
-                 . "Записей обновлено: $updatedNumber\n";
-             Yii::$app->getSession()->setFlash('success', $msg);*/
         } catch (\Exception $e) {
             Yii::$app->getSession()->setFlash('error', $e->getMessage());
         }
