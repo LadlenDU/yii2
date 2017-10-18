@@ -454,6 +454,8 @@ class DebtorParse extends Model
                     ++$tmpResultInfo['payments']['added'];
                 }
 
+                $savePayment = true;
+
                 //$debtor = new DebtorExt;
                 //$debtDetails = new DebtDetails();
                 foreach ($rowInfo as $key => $colInfo) {
@@ -475,6 +477,11 @@ class DebtorParse extends Model
                         } elseif ($info['headers'][$key][0] == 'accrual') {
                             $accrual->{$info['headers'][$key][1]} = $colInfo;
                         } elseif ($info['headers'][$key][0] == 'payment') {
+                            // Оплата не велась - не сохраняем
+                            if ($info['headers'][$key][1] == 'amount' && !$colInfo) {
+                                $savePayment = false;
+                                --$tmpResultInfo['payments']['added'];
+                            }
                             $payment->{$info['headers'][$key][1]} = $colInfo;
                         }
                     }
@@ -484,21 +491,27 @@ class DebtorParse extends Model
 
                     //TODO: можно оптимизировать? (двойные запросы при перезаписи не будут??)
                     $debtDetails->save();
+                    $debtDetails->link('debtor', $debtor);
+
                     $name->save();
+                    $name->link('debtor', $debtor);
+
                     $location->save();
+                    $location->link('debtors', $debtor);
+
                     $accrual->save();
-                    $payment->save();
+                    $accrual->link('debtor', $debtor);
+
+                    if ($savePayment) {
+                        $payment->save();
+                        $payment->link('debtor', $debtor);
+                    }
 
                     /*$debtor->link('debtDetails', $debtDetails);
                     $debtor->link('name', $name);
                     $debtor->link('location', $location);
                     $debtor->link('accruals', $accrual);
                     $debtor->link('payments', $payment);*/
-                    $debtDetails->link('debtor', $debtor);
-                    $name->link('debtor', $debtor);
-                    $location->link('debtors', $debtor);
-                    $accrual->link('debtor', $debtor);
-                    $payment->link('debtor', $debtor);
 
                     //$whetherUpdate ? ++$saveResult['updated'] : ++$saveResult['added'];
                     /*array_walk_recursive($tmpResultInfo, function($item, $key) use (&$saveResult){
