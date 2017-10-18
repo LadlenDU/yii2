@@ -166,8 +166,10 @@ class Debtor extends \yii\db\ActiveRecord
         return new DebtorQuery(get_called_class());
     }
 
-    public function calcFines()
+    public function getFineCalculatorResult()
     {
+        $fineRes = false;
+
         $loans = [];
         $payments = [];
 
@@ -200,9 +202,14 @@ class Debtor extends \yii\db\ActiveRecord
             //TODO: что-то с этим делать
         }
 
+        return $fineRes;
+    }
+
+    public function calcFines()
+    {
         $elements = [];
 
-        if (!empty($fineRes)) {
+        if ($fineRes = $this->getFineCalculatorResult()) {
             foreach ($fineRes as $res) {
                 if (!empty($res['data'])) {
                     foreach ($res['data'] as $data) {
@@ -485,8 +492,9 @@ class Debtor extends \yii\db\ActiveRecord
 
             $addedNumber = empty($saveResult['debtors']['added']) ? 0 : $saveResult['debtors']['added'];
             $updatedNumber = empty($saveResult['debtors']['updated']) ? 0 : $saveResult['debtors']['updated'];
-            $msg .= "Должников добавлено: $addedNumber<br>"
-                . "Должников обновлено: $updatedNumber<br><br>";
+            $msg .= "Должников добавлено: $addedNumber<br><br>";
+            //TODO: рассмотреть возможность установить
+            //. "Должников обновлено: $updatedNumber<br><br>";
 
             $addedNumber = empty($saveResult['accruals']['added']) ? 0 : $saveResult['accruals']['added'];
             $updatedNumber = empty($saveResult['accruals']['updated']) ? 0 : $saveResult['accruals']['updated'];
