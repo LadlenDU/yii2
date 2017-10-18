@@ -679,6 +679,7 @@ class DebtorParse extends Model
             if ($monthNumber < 10) {
                 $monthNumber = '0' . $monthNumber;
             }
+            $year = self::fixYearBug($year);
             //$sheetData[$key][0] = "01.$monthNumber.$year";
             $sheetData[$key][0] = "$year-$monthNumber-01 00:00:00";
 
@@ -688,5 +689,18 @@ class DebtorParse extends Model
         }
 
         return $sheetData;
+    }
+
+    /**
+     * TODO: костыль, исправляет ошибку когда их Excel файла берутся значения вроде 9.200799999999999 вместо 9.2008
+     * @param string $year - год типа 200799999999999
+     */
+    protected static function fixYearBug($year)
+    {
+        if (strlen($year) > 4 && $year[4] == '9') {
+            $year = substr($year, 0, 4);
+            $year += 1;
+        }
+        return $year;
     }
 }
