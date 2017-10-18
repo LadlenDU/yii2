@@ -179,7 +179,7 @@ class Debtor extends \yii\db\ActiveRecord
         foreach ($accruals as $acc) {
             $date = strtotime($acc->accrual_date);
             $loans[] = [
-                'sum' => (float)$acc->accrual + (float)$acc->subsidies + (float)$acc->single + (float)$acc->additional_adjustment,
+                'sum' => $this->calcAccrualSum($acc),
                 'date' => $date,
             ];
         }
@@ -252,6 +252,11 @@ class Debtor extends \yii\db\ActiveRecord
         return 0;*/
     }
 
+    public static function calcAccrualSum(Accrual $acc)
+    {
+        return (float)$acc->accrual - (float)$acc->subsidies + (float)$acc->single + (float)$acc->additional_adjustment;
+    }
+
     public function calcDebts($sortParams = false)
     {
         $loans = [];
@@ -263,7 +268,7 @@ class Debtor extends \yii\db\ActiveRecord
         foreach ($accruals as $acc) {
             $date = strtotime($acc->accrual_date);
             $loans[] = [
-                'sum' => $acc->accrual,
+                'sum' => $this->calcAccrualSum($acc),
                 'date' => $date,
             ];
         }
