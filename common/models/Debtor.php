@@ -254,7 +254,11 @@ class Debtor extends \yii\db\ActiveRecord
 
     public static function calcAccrualSum(Accrual $acc)
     {
-        return (float)$acc->accrual - (float)$acc->subsidies + (float)$acc->single + (float)$acc->additional_adjustment;
+        if (empty($_GET['dis_sub'])) {
+            return (float)$acc->accrual - (float)$acc->subsidies + (float)$acc->single + (float)$acc->additional_adjustment;
+        } else {
+            return (float)$acc->accrual;
+        }
     }
 
     public function calcDebts($sortParams = false, &$endSum = null)
@@ -346,14 +350,7 @@ class Debtor extends \yii\db\ActiveRecord
     public function getDebtTotal()
     {
         $debt = 0;
-
         $this->calcDebts(false, $debt);
-/*
-        if ($calcDebts) {
-            //TODO: что делать если значений несколько?
-            $debt = $calcDebts[0]['debt'];
-        }*/
-
         return $debt;
     }
 
