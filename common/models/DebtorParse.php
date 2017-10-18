@@ -234,6 +234,7 @@ class DebtorParse extends Model
         'перерасчет',
         'доп.корректировка',
         'субсидии перерасчет',
+        'начисления',
     ];
 
     protected static function prepareStringToCompare($str)
@@ -337,17 +338,15 @@ class DebtorParse extends Model
         return ['headers' => $headers, 'colInfo' => $colInfo];
     }
 
-    /*public static function mergeResultInfo(array $info1, array $info2)
+    public static function mergeResultInfo(array $info1, array $info2)
     {
-        $result = $info1;
         foreach ($info1 as $key => $val) {
             foreach ($val as $key2 => $val2) {
-                $result[$key][$key2] += $info2[$key][$key2];
+                $info1[$key][$key2] += $info2[$key][$key2];
             }
         }
-
-        return $result;
-    }*/
+        return $info1;
+    }
 
     public static function saveDebtors(array $info)
     {
@@ -417,15 +416,17 @@ class DebtorParse extends Model
                         foreach ($debtor->accruals as $key => $acc) {
                             if ($acc['accrual_date'] == $rowInfo[$accrualDateIndex]) {
                                 $accrual = $acc;
-                                $tmpResultInfo['accruals']['updated'];
+                                ++$tmpResultInfo['accruals']['updated'];
+                                break;
                             }
                         }
                     }
                     if (isset($debtor->payments)) {
-                        foreach ($debtor->payments as $key => $acc) {
-                            if ($acc['accrual_date'] == $rowInfo[$accrualDateIndex]) {
-                                $accrual = $acc;
-                                $tmpResultInfo['payments']['updated'];
+                        foreach ($debtor->payments as $key => $payment) {
+                            if ($payment['payment_date'] == $rowInfo[$accrualDateIndex]) {
+                                $accrual = $payment;
+                                ++$tmpResultInfo['payments']['updated'];
+                                break;
                             }
                         }
                     }
@@ -501,9 +502,9 @@ class DebtorParse extends Model
 
                     //$whetherUpdate ? ++$saveResult['updated'] : ++$saveResult['added'];
                     array_walk_recursive($tmpResultInfo, function($item, $key) use (&$saveResult){
+                        if ($saveResult[$key])
                         $saveResult[$key] = isset($saveResult[$key]) ?  $item + $saveResult[$key] : $item;
                     });
-
 
                 } else {
                     $err = print_r($debtor->getErrors(), true);
@@ -593,7 +594,8 @@ class DebtorParse extends Model
                 if ($monthNumber < 10) {
                     $monthNumber = '0' . $monthNumber;
                 }
-                $sheetData[$key][14] = "01.$monthNumber.$year";
+                //$sheetData[$key][14] = "01.$monthNumber.$year";
+                $sheetData[$key][14] = "$year-$monthNumber-01 00:00:00";
             }
 
             $sheetData[$key][15] = $street;
@@ -659,7 +661,8 @@ class DebtorParse extends Model
             if ($monthNumber < 10) {
                 $monthNumber = '0' . $monthNumber;
             }
-            $sheetData[$key][0] = "01.$monthNumber.$year";
+            //$sheetData[$key][0] = "01.$monthNumber.$year";
+            $sheetData[$key][0] = "$year-$monthNumber-01 00:00:00";
 
             $sheetData[$key][10] = $LS_IKU_provider;
             $sheetData[$key][11] = $full_name;
