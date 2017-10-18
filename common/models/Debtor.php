@@ -55,6 +55,7 @@ class Debtor extends \yii\db\ActiveRecord
             [['ownership_type_id', 'location_id', 'name_id'], 'integer'],
             [['expiration_start'], 'safe'],
             [['phone', 'LS_EIRC', 'LS_IKU_provider', 'IKU', 'single', 'additional_adjustment', 'subsidies'], 'string', 'max' => 255],
+            [['LS_IKU_provider'], 'unique'],
             [['location_id'], 'exist', 'skipOnError' => true, 'targetClass' => Location::className(), 'targetAttribute' => ['location_id' => 'id']],
             [['name_id'], 'exist', 'skipOnError' => true, 'targetClass' => Name::className(), 'targetAttribute' => ['name_id' => 'id']],
             [['ownership_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => OwnershipType::className(), 'targetAttribute' => ['ownership_type_id' => 'id']],
@@ -496,12 +497,12 @@ class Debtor extends \yii\db\ActiveRecord
             $sheetData = DebtorParse::format_2($sheetDataRaw);
             //$info = DebtorParse::scrapeDebtsForAUserFromArray($sheetData, $sheetData[0][0]);
             self::addDebtors($sheetData);
-           /* $msg = Yii::t('app', 'Успешно прошла операция добавления в БД.') . "\n";
-            $addedNumber = empty($saveResult['added']) ? 0 : $saveResult['added'];
-            $updatedNumber = empty($saveResult['updated']) ? 0 : $saveResult['updated'];
-            $msg .= "Записей добавлено: $addedNumber\n"
-                . "Записей обновлено: $updatedNumber\n";
-            Yii::$app->getSession()->setFlash('success', $msg);*/
+            /* $msg = Yii::t('app', 'Успешно прошла операция добавления в БД.') . "\n";
+             $addedNumber = empty($saveResult['added']) ? 0 : $saveResult['added'];
+             $updatedNumber = empty($saveResult['updated']) ? 0 : $saveResult['updated'];
+             $msg .= "Записей добавлено: $addedNumber\n"
+                 . "Записей обновлено: $updatedNumber\n";
+             Yii::$app->getSession()->setFlash('success', $msg);*/
         } catch (\Exception $e) {
             Yii::$app->getSession()->setFlash('error', $e->getMessage());
         }
