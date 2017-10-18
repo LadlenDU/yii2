@@ -661,9 +661,13 @@ class DebtorParse extends Model
                 continue;
             }
 
+
+            foreach ($row as $k => $val) {
+                $val = str_replace(',', '.', $val);
+                $row[$k] = preg_replace('/\s+/', '', $val);
+            }
+
             // дата
-            $row[0] = str_replace(',', '.', $row[0]);
-            $row[0] = preg_replace('/\s+/', '', $row[0]);
             if (!$row[0]) {
                 continue;
             }
