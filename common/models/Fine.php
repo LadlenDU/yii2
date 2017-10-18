@@ -454,20 +454,21 @@ class Fine
 
     }
 
-    protected function clearLoans($arr)     // Отчистка долгов с отрицательной суммой
+    protected function clearLoans(&$arr)     // Отчистка долгов с отрицательной суммой
     {
         $res = [];
         $i = 0;
-        while ($i < count($arr)) {  //TODO: get rid of count
+        $arrLength = count($arr);
+        while ($i < $arrLength) {
             $c = $arr[$i];
             if ($c['sum'] < 0) {
                 $res[] = ['date' => $c['date'], 'datePlus' => isset($c['datePlus']) ? $c['datePlus'] : null, 'sum' => -$c['sum'], 'payFor' => null];
                 //arr.splice(i, 1);
                 unset($arr[$i]);
-            } else {
-                $i++;
             }
+            $i++;
         }
+        $arr = array_values($arr);
         return $res;
     }
 
@@ -538,7 +539,8 @@ class Fine
         $res = [];
         //$loans = $loans.slice(0);
         $loans = array_values($loans);  //$loans = $loans.slice(0); ???
-        for ($i = 0; $i < count($loans); $i++) {    //TODO: get rid of count()
+        $loansLength = count($loans);
+        for ($i = 0; $i < $loansLength; $i++) {
             $res[$i] = [];
             $c = $loans[$i];
             //$loans[$i] = ['sum' => $c['sum'], 'date' => $c['date'], 'month' => $c['date'].getFullYear()*12 + c.date.getMonth(), order: c.order];
@@ -546,7 +548,8 @@ class Fine
             $loans[$i] = ['sum' => $c['sum'], 'date' => $c['date'], 'month' => date('Y', $c['date']) * 12 + date('n', $c['date']), 'order' => (isset($c['order']) ? $c['order'] : '')];
         }
 
-        for ($i = 0; $i < count($payments); $i++) { //TODO: get rid of count()
+        $paymentsLength = count($payments);
+        for ($i = 0; $i < $paymentsLength; $i++) {
             $payment = $payments[$i];
             if ($payment['payFor']) {
                 //$curMonth = payment.payFor.getFullYear()*12 + payment.payFor.getMonth() + 1;

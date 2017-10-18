@@ -200,6 +200,7 @@ class Debtor extends \yii\db\ActiveRecord
             $fineRes = $fine->fineCalculator($dateFinish, $loans, $payments);
         } catch (\Exception $e) {
             //TODO: что-то с этим делать
+            $sd = 123;
         }
 
         return $fineRes;
