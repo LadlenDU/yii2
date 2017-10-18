@@ -340,11 +340,15 @@ class DebtorParse extends Model
             foreach ($info['headers'] as $key => $elem) {
                 if ($elem[0] == 'debtor' && $elem[1] == 'LS_IKU_provider') {
                     $uniqueIndex = $key;
-                    break;
+                    if ($accrualDateIndex !== false) {
+                        break;
+                    }
                 }
                 if ($elem[0] == 'accrual' && $elem[1] == 'accrual_date') {
                     $accrualDateIndex = $key;
-                    break;
+                    if ($uniqueIndex !== false) {
+                        break;
+                    }
                 }
             }
 
@@ -365,7 +369,7 @@ class DebtorParse extends Model
 
                 // Поиск уникального
                 if ($debtor = Debtor::find()->with(['name', 'location', 'debtDetails', 'accruals', 'payments'])
-                    ->where(['LS_IKU_provider' => $rowInfo[$uniqueIndex]])->one()
+                    ->where(['LS_IKU_provider' => $rowInfo[$uniqueIndex]])->createCommand()->sql->one()
                 ) {
                     // Обновляем
                     $whetherUpdate = true;
@@ -441,11 +445,11 @@ class DebtorParse extends Model
                 if ($debtor->validate()) {
                     $debtor->save();
 
-                    $debtDetails->save();
-                    $name->save();
-                    $location->save();
-                    $accrual->save();
-                    $payment->save();
+                    #$debtDetails->save();
+                    #$name->save();
+                    #$location->save();
+                    #$accrual->save();
+                    #$payment->save();
 
                     $debtor->link('debtDetails', $debtDetails);
                     $debtor->link('name', $name);
