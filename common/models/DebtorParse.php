@@ -397,7 +397,7 @@ class DebtorParse extends Model
                 if ($debtor = Debtor::find()->with(['name', 'location', 'debtDetails', 'accruals', 'payments'])
                     ->where(['LS_IKU_provider' => $rowInfo[$uniqueIndex]])->one()
                 ) {
-                    ++$tmpResultInfo['debtors']['updated'];
+                    //++$tmpResultInfo['debtors']['updated'];
 
                     // Обновляем
                     $whetherUpdate = true;
@@ -422,9 +422,9 @@ class DebtorParse extends Model
                         }
                     }
                     if (isset($debtor->payments)) {
-                        foreach ($debtor->payments as $key => $payment) {
-                            if ($payment['payment_date'] == $rowInfo[$accrualDateIndex]) {
-                                $accrual = $payment;
+                        foreach ($debtor->payments as $key => $pm) {
+                            if ($pm['payment_date'] == $rowInfo[$accrualDateIndex]) {
+                                $payment = $pm;
                                 ++$tmpResultInfo['payments']['updated'];
                                 break;
                             }
@@ -501,10 +501,11 @@ class DebtorParse extends Model
                     $payment->link('debtor', $debtor);
 
                     //$whetherUpdate ? ++$saveResult['updated'] : ++$saveResult['added'];
-                    array_walk_recursive($tmpResultInfo, function($item, $key) use (&$saveResult){
+                    /*array_walk_recursive($tmpResultInfo, function($item, $key) use (&$saveResult){
                         if ($saveResult[$key])
                         $saveResult[$key] = isset($saveResult[$key]) ?  $item + $saveResult[$key] : $item;
-                    });
+                    });*/
+                    $saveResult = self::mergeResultInfo($saveResult, $tmpResultInfo);
 
                 } else {
                     $err = print_r($debtor->getErrors(), true);
