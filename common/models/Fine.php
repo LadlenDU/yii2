@@ -869,7 +869,7 @@ class Fine
                     $dateStartInPeriod = null;
                     if ($payment['datePlus'] > $data['dateStart']) {
                         if ($j == 0 || $j >= 1 && $payments[$j - 1]['datePlus'] < $data['dateStart']) {
-                            $resData[] = ['type' => $this->DATA_TYPE_INFO, 'data' => $this->processData('sum', 'data', $data['dateStart'], $payment['date'])];
+                            $resData[] = ['type' => $this->DATA_TYPE_INFO, 'data' => $this->processData($sum, $data, $data['dateStart'], $payment['date'])];
                         }
                         $dateStartInPeriod = $payment['datePlus'];
                     } else {
