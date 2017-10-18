@@ -369,7 +369,7 @@ class DebtorParse extends Model
 
                 // Поиск уникального
                 if ($debtor = Debtor::find()->with(['name', 'location', 'debtDetails', 'accruals', 'payments'])
-                    ->where(['LS_IKU_provider' => $rowInfo[$uniqueIndex]])->createCommand()->sql->one()
+                    ->where(['LS_IKU_provider' => $rowInfo[$uniqueIndex]])->one()
                 ) {
                     // Обновляем
                     $whetherUpdate = true;
@@ -445,17 +445,23 @@ class DebtorParse extends Model
                 if ($debtor->validate()) {
                     $debtor->save();
 
-                    #$debtDetails->save();
-                    #$name->save();
-                    #$location->save();
-                    #$accrual->save();
-                    #$payment->save();
+                    //TODO: можно оптимизировать? (двойные запросы при перезаписи не будут??)
+                    $debtDetails->save();
+                    $name->save();
+                    $location->save();
+                    $accrual->save();
+                    $payment->save();
 
-                    $debtor->link('debtDetails', $debtDetails);
+                    /*$debtor->link('debtDetails', $debtDetails);
                     $debtor->link('name', $name);
                     $debtor->link('location', $location);
                     $debtor->link('accruals', $accrual);
-                    $debtor->link('payments', $payment);
+                    $debtor->link('payments', $payment);*/
+                    $debtDetails->link('debtor', $debtor);
+                    $name->link('debtor', $debtor);
+                    $location->link('debtors', $debtor);
+                    $accrual->link('debtor', $debtor);
+                    $payment->link('debtor', $debtor);
 
                     $whetherUpdate ? ++$saveResult['updated'] : ++$saveResult['added'];
 
