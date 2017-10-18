@@ -1033,6 +1033,19 @@ class Fine
 
     }
 
+    public function getEndSum($periods)
+    {
+        $endSum = 0;
+        $periodsLength = count($periods);
+        for ($i = 0; $i < $periodsLength; $i++) {
+            $period = $periods[$i];
+            $html = $this->getBuhMonthHtml($period, false);
+            $endSum += $html['endSum'];
+        }
+
+        return $endSum;
+    }
+
     //TODO: вынести во вью
     public function getBuhHtml($periods)
     {

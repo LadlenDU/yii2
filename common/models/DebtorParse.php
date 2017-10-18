@@ -677,7 +677,7 @@ class DebtorParse extends Model
 
             $sheetData[$key] = $row;
 
-            // Вычитаем перерасчет
+            // Добавляем перерасчет
             $sheetData[$key][2] += $sheetData[$key][3];
 
             list($monthNumber, $year) = explode('.', $sheetData[$key][0]);

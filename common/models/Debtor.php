@@ -257,7 +257,7 @@ class Debtor extends \yii\db\ActiveRecord
         return (float)$acc->accrual - (float)$acc->subsidies + (float)$acc->single + (float)$acc->additional_adjustment;
     }
 
-    public function calcDebts($sortParams = false)
+    public function calcDebts($sortParams = false, &$endSum = null)
     {
         $loans = [];
         $payments = [];
@@ -294,6 +294,9 @@ class Debtor extends \yii\db\ActiveRecord
         $elements = [];
 
         if (!empty($fineRes)) {
+            if ($endSum !== null) {
+                $endSum = $fine->getEndSum($fineRes);
+            }
             foreach ($fineRes as $res) {
                 if (!empty($res['data'])) {
                     foreach ($res['data'] as $data) {
@@ -344,11 +347,12 @@ class Debtor extends \yii\db\ActiveRecord
     {
         $debt = 0;
 
-        $calcDebts = $this->calcDebts();
+        $this->calcDebts(false, $debt);
+/*
         if ($calcDebts) {
             //TODO: что делать если значений несколько?
             $debt = $calcDebts[0]['debt'];
-        }
+        }*/
 
         return $debt;
     }
