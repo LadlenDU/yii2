@@ -679,12 +679,14 @@ class Fine
 
     protected function processData($sum, $data, $dateStart, $dateFinish)
     {
-        $ratePart = $data['rate'];
+        $rate = isset($data['rate']) ? $data['rate'] : 0;
+        $percent = isset($data['percent']) ? $data['percent'] : 0;
+        $ratePart = $rate;
         $days = $this->dateDiff($dateFinish, $dateStart);
         return [
-            'rate' => $data['rate'],
-            'percent' => $data['percent'],
-            'cost' => $this->countCost($sum, $days, $data['percent'], $this->getRate($ratePart)),
+            'rate' => $rate,
+            'percent' => $percent,
+            'cost' => $this->countCost($sum, $days, $percent, $this->getRate($ratePart)),
             'days' => $days,
             'dateStart' => $dateStart,
             'dateFinish' => $dateFinish,
@@ -884,16 +886,17 @@ class Fine
                         $sum = 0;
                     }
 
-                    $resData[] = ['type' => $this->DATA_TYPE_PAYED, 'data' => ['sum' => $toCut, 'date' => $payment['date'], 'order' => $payment['order']]];
+                    $resData[] = ['type' => $this->DATA_TYPE_PAYED, 'data' => ['sum' => $toCut, 'date' => $payment['date'], 'order' => isset($payment['order']) ? $payment['order'] : '']];
 
                     if ($sum < 0.01) {
                         $sum = 0;
                         continue;
                     }
                     //TODO: count() вместо 'length' ???
-                    if ($j + 1 >= $payments['length'] || $j + 1 < $payments['length'] && $payments[$j + 1]['datePlus'] > $data['dateFinish'] && $payment['date'] != $payments[$j + 1]['date']) {
+                    $paymentsLength = count($payments);
+                    if ($j + 1 >= $paymentsLength || $j + 1 < $paymentsLength && $payments[$j + 1]['datePlus'] > $data['dateFinish'] && $payment['date'] != $payments[$j + 1]['date']) {
                         $resData[] = ['type' => $this->DATA_TYPE_INFO, 'data' => $this->processData($sum, $data, $dateStartInPeriod, $data['dateFinish'])];
-                    } else if ($j + 1 < $payments['length'] && $payments[$j + 1]['datePlus'] <= $data['dateFinish'] && $payment['date'] != $payments[$j + 1]['date']) {
+                    } else if ($j + 1 < $paymentsLength && $payments[$j + 1]['datePlus'] <= $data['dateFinish'] && $payment['date'] != $payments[$j + 1]['date']) {
                         $resData[] = ['type' => $this->DATA_TYPE_INFO, 'data' => $this->processData($sum, $data, $dateStartInPeriod, $payments[$j + 1]['date'])];
                     }
 
@@ -923,7 +926,7 @@ class Fine
                 $sum = 0;
             }
 
-            $resData[] = ['type' => $this->DATA_TYPE_PAYED, 'data' => ['sum' => $toCut, 'date' => $payment['date'], 'order' => $payment['order']]];
+            $resData[] = ['type' => $this->DATA_TYPE_PAYED, 'data' => ['sum' => $toCut, 'date' => $payment['date'], 'order' => isset($payment['order']) ? $payment['order'] : '']];
         }
         return ['dateStart' => $dateStart, 'dateFinish' => $dateFinish, 'data' => $resData, 'endSum' => (float)$sum];
     }
