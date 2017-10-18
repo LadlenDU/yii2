@@ -693,13 +693,16 @@ class DebtorParse extends Model
 
     /**
      * TODO: костыль, исправляет ошибку когда их Excel файла берутся значения вроде 9.200799999999999 вместо 9.2008
-     * @param string $year - год типа 200799999999999
+     * @param string $year - год типа 200799999999999 (200900000000001)
      */
     protected static function fixYearBug($year)
     {
-        if (strlen($year) > 4 && $year[4] == '9') {
+        if (strlen($year) > 4) {
+            $increase = $year[4] == '9';
             $year = substr($year, 0, 4);
-            $year += 1;
+            if ($increase) {
+                $year += 1;
+            }
         }
         return $year;
     }
