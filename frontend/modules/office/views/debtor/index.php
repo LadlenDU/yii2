@@ -52,7 +52,7 @@ $columns = [
     [
         'attribute' => 'location.address',
         'value' => function (\common\models\Debtor $model, $key, $index) {
-            return $model->location->createFullAddress();
+            return isset($model->location) ? $model->location->createFullAddress() : '';
         },
         'hAlign' => 'center',
     ],
