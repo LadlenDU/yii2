@@ -201,7 +201,7 @@ class Fine
         $dateFinish,
         $loans = [],     // ['sum' => $loanAmount, 'date' => $dateStart]
         $payments = [],  // ['date' => $loanAmount, 'payFor' => null, 'sum'] 'payFor' - оплата за месяц
-        $rateType = 4,
+        $rateType = 2,   // 4,
         $back = false,
         $resultView = 0
         /*$payDates = [],
@@ -545,16 +545,16 @@ class Fine
             $c = $loans[$i];
             //$loans[$i] = ['sum' => $c['sum'], 'date' => $c['date'], 'month' => $c['date'].getFullYear()*12 + c.date.getMonth(), order: c.order];
             //$loans[$i] = ['sum' => $c['sum'], 'date' => $c['date'], 'month' => date('Y', $c['date']) * 12 + date('n', $c['date']) - 1, 'order' => $c['order']];
-            $loans[$i] = ['sum' => $c['sum'], 'date' => $c['date'], 'month' => date('Y', $c['date']) * 12 + date('n', $c['date']), 'order' => (isset($c['order']) ? $c['order'] : '')];
+            $loans[$i] = ['sum' => $c['sum'], 'date' => $c['date'], 'month' => date('Y', $c['date']) * 12 + date('n', $c['date']) - 1, 'order' => (isset($c['order']) ? $c['order'] : '')];
         }
 
         $paymentsLength = count($payments);
         for ($i = 0; $i < $paymentsLength; $i++) {
-            $payment = $payments[$i];
+            $payment = &$payments[$i];
             if ($payment['payFor']) {
                 //$curMonth = payment.payFor.getFullYear()*12 + payment.payFor.getMonth() + 1;
                 //$curMonth = date('Y', $payment['payFor']) * 12 + date('n', $payment['payFor']);
-                $curMonth = date('Y', $payment['payFor']) * 12 + date('n', $payment['payFor']) + 1;
+                $curMonth = date('Y', $payment['payFor']) * 12 + date('n', $payment['payFor']);
                 // ищем текущий месяц
                 for ($j = 0; $j < count($loans); $j++) {
                     if ($loans[$j]['month'] == $curMonth) {
@@ -574,7 +574,7 @@ class Fine
             }
 
             for ($j = 0; $j < count($loans) && $payment['sum'] > 0; $j++) {
-                $loan = $loans[$j];
+                $loan = &$loans[$j];
                 $toCut = min($payment['sum'], $loan['sum']);
 
                 if ($toCut >= 0.01) {
