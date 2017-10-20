@@ -218,6 +218,11 @@ class Fine
         $loanAmount = 0;
         $dateStart = 0;
 
+        $dt = new \DateTime();
+        $dt->setTimestamp($dateFinish);
+        $dt->setTime(0, 0);
+        $dateFinish = $dt->getTimestamp();
+
         $loansMod = [];
         foreach ($loans as $key => $l) {
             if ($key) {
