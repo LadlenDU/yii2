@@ -895,7 +895,7 @@ class Fine
                         $sum = 0;
                         continue;
                     }
-                    //TODO: count() вместо 'length' ???
+
                     $paymentsLength = count($payments);
                     if ($j + 1 >= $paymentsLength || $j + 1 < $paymentsLength && $payments[$j + 1]['datePlus'] > $data['dateFinish'] && $payment['date'] != $payments[$j + 1]['date']) {
                         $resData[] = ['type' => $this->DATA_TYPE_INFO, 'data' => $this->processData($sum, $data, $dateStartInPeriod, $data['dateFinish'])];
@@ -1003,7 +1003,7 @@ class Fine
 
         $toPayments = $this->clearLoans($loans);
         $loans = $this->sortLoans($loans);
-        $payments = $this->sortPayments($payments + $toPayments);
+        $payments = $this->sortPayments(array_merge($payments, $toPayments));
 
         $payments = $this->splitPayments($payments, $loans, $loanAmount, $dateStart, $dateFinish);
 
