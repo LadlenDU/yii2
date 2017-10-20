@@ -689,6 +689,8 @@ class DebtorParse extends Model
             $year = self::fixYearBug($year);
             //$sheetData[$key][0] = "01.$monthNumber.$year";
             $sheetData[$key][0] = "$year-$monthNumber-01 00:00:00";
+            //$dateOfAccrual = "$year-$monthNumber-01 00:00:00";
+            //$sheetData[$key][0] = date('Y-m-d H:i:s', strtotime("+1 month", strtotime($dateOfAccrual)));
 
             $sheetData[$key][10] = $LS_IKU_provider;
             $sheetData[$key][11] = $full_name;

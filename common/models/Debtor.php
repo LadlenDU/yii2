@@ -263,7 +263,7 @@ class Debtor extends \yii\db\ActiveRecord
 
     public function calcDebts($sortParams = false, &$endSum = null)
     {
-        $loans = [];
+        /*$loans = [];
         $payments = [];
 
         $fine = new Fine();
@@ -293,12 +293,15 @@ class Debtor extends \yii\db\ActiveRecord
             $fineRes = $fine->fineCalculator($dateFinish, $loans, $payments);
         } catch (\Exception $e) {
             //TODO: что-то с этим делать
-        }
+        }*/
+
+        $fineRes = $this->getFineCalculatorResult();
 
         $elements = [];
 
         if (!empty($fineRes)) {
             if ($endSum !== null) {
+                $fine = new Fine();
                 $endSum = $fine->getEndSum($fineRes);
             }
             foreach ($fineRes as $res) {
@@ -335,7 +338,15 @@ class Debtor extends \yii\db\ActiveRecord
         //$this::find()->sum('amount');
         //$this->accruals::find()->sum('accrual');
         //TODO: может, оптимизировать?
-        return $this->find()->from('accrual')->where(['debtor_id' => $this->id])->sum('accrual') ?: 0;
+        //return $this->find()->from('accrual')->where(['debtor_id' => $this->id])->sum('accrual') ?: 0;
+
+        //TODO: оптимизировать
+        $sum = 0;
+        $accruals = Accrual::find()->where(['debtor_id' => $this->id])->all();
+        foreach ($accruals as $acc) {
+            $sum += $this->calcAccrualSum($acc);
+        }
+        return $sum;
     }
 
     public function getPaymentSum()
