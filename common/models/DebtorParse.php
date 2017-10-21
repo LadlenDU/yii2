@@ -383,7 +383,11 @@ class DebtorParse extends Model
                 throw new \Exception(Yii::t('app', 'Не найдено поле с датой начисления.'));
             }
 
+            $fine = new Fine;
+
             foreach ($info['colInfo'] as $rowInfo) {
+                $accuralDateTimestamp = strtotime($rowInfo[$accrualDateIndex]);
+                $rowInfo[$accrualDateIndex] = date('Y-m-d H:i:s', $fine->checkVacationInput(false, $accuralDateTimestamp, true));
 
                 $tmpResultInfo = self::$resultInfo;
 

@@ -172,34 +172,111 @@ class Fine
         $this->NEW_LAW = strtotime('2016-01-01');
 
         // 2016
-        $this->WORK_DAYS[] = mktime(0, 0, 0, 1, 20, 2016);  //.push(new Date(2016, 1, 20));
+        $this->WORK_DAYS[] = mktime(0, 0, 0, 2, 20, 2016);  //.push(new Date(2016, 1, 20));
 
         // 2012
         $year = 2012;
-        $this->WORK_DAYS[] = mktime(0, 0, 0, 2, 11, $year);     //.push(new Date(year, 2, 11));
-        $this->WORK_DAYS[] = mktime(0, 0, 0, 3, 28, $year);     //.push(new Date(year, 3, 28));
-        $this->WORK_DAYS[] = mktime(0, 0, 0, 4, 12, $year);     //.push(new Date(year, 4, 12));
-        $this->WORK_DAYS[] = mktime(0, 0, 0, 5, 9, $year);      //.push(new Date(year, 5, 9));
-        $this->WORK_DAYS[] = mktime(0, 0, 0, 11, 29, $year);    //.push(new Date(year, 11, 29));
+        $this->WORK_DAYS[] = mktime(0, 0, 0, 3, 11, $year);     //.push(new Date(year, 2, 11));
+        $this->WORK_DAYS[] = mktime(0, 0, 0, 4, 28, $year);     //.push(new Date(year, 3, 28));
+        $this->WORK_DAYS[] = mktime(0, 0, 0, 5, 12, $year);     //.push(new Date(year, 4, 12));
+        $this->WORK_DAYS[] = mktime(0, 0, 0, 6, 9, $year);      //.push(new Date(year, 5, 9));
+        $this->WORK_DAYS[] = mktime(0, 0, 0, 12, 29, $year);    //.push(new Date(year, 11, 29));
 
         // 2011
         $year = 2011;
-        $this->WORK_DAYS[] = mktime(0, 0, 0, 2, 5, $year);    //.push(new Date(year, 2, 5));
+        $this->WORK_DAYS[] = mktime(0, 0, 0, 3, 5, $year);    //.push(new Date(year, 2, 5));
 
         // 2017
         for ($i = 1; $i <= 8; $i++) {
-            $this->VACATION_DAYS[] = strtotime("2017-1-$i");
-            $this->VACATION_DAYS[] = strtotime("2017-2-23");
-            $this->VACATION_DAYS[] = strtotime("2017-2-24");
-            $this->VACATION_DAYS[] = strtotime("2017-3-8");
-            $this->VACATION_DAYS[] = strtotime("2017-5-1");
-            $this->VACATION_DAYS[] = strtotime("2017-5-8");
-            $this->VACATION_DAYS[] = strtotime("2017-5-9");
-            $this->VACATION_DAYS[] = strtotime("2017-6-12");
-            $this->VACATION_DAYS[] = strtotime("2017-11-6");
+            $this->VACATION_DAYS[] = mktime(0, 0, 0, 1, $i, 2017);  //strtotime("2017-1-$i");
         }
+        $this->VACATION_DAYS[] = mktime(0, 0, 0, 2, 23, 2017);  //strtotime("2017-2-23");
+        $this->VACATION_DAYS[] = mktime(0, 0, 0, 2, 24, 2017);  //strtotime("2017-2-24");
+        $this->VACATION_DAYS[] = mktime(0, 0, 0, 3, 8, 2017);  //strtotime("2017-3-8");
+        $this->VACATION_DAYS[] = mktime(0, 0, 0, 5, 1, 2017);  //strtotime("2017-5-1");
+        $this->VACATION_DAYS[] = mktime(0, 0, 0, 5, 8, 2017);  //strtotime("2017-5-8");
+        $this->VACATION_DAYS[] = mktime(0, 0, 0, 5, 9, 2017);  //strtotime("2017-5-9");
+        $this->VACATION_DAYS[] = mktime(0, 0, 0, 6, 12, 2017);  //strtotime("2017-6-12");
+        $this->VACATION_DAYS[] = mktime(0, 0, 0, 11, 6, 2017);  //strtotime("2017-11-6");
 
+        // 2016
+        for ($i = 1; $i <= 8; $i++) {
+            $this->VACATION_DAYS[] = mktime(0, 0, 0, 1, $i, 2016);  // . push(new Date(2016, 0, i));
+        }
+        $this->VACATION_DAYS[] = mktime(0, 0, 0, 2, 22, 2016);  //.push(new Date(2016, 1, 22));
+        $this->VACATION_DAYS[] = mktime(0, 0, 0, 2, 23, 2016);  //.push(new Date(2016, 1, 23));
+        $this->VACATION_DAYS[] = mktime(0, 0, 0, 3, 7, 2016);  //.push(new Date(2016, 2, 7));
+        $this->VACATION_DAYS[] = mktime(0, 0, 0, 3, 8, 2016);  //.push(new Date(2016, 2, 8));
+        $this->VACATION_DAYS[] = mktime(0, 0, 0, 5, 2, 2016);  //.push(new Date(2016, 4, 2));
+        $this->VACATION_DAYS[] = mktime(0, 0, 0, 5, 3, 2016);  //.push(new Date(2016, 4, 3));
+        $this->VACATION_DAYS[] = mktime(0, 0, 0, 5, 9, 2016);  //.push(new Date(2016, 4, 9));
+        $this->VACATION_DAYS[] = mktime(0, 0, 0, 6, 13, 2016);  //.push(new Date(2016, 5, 13));
+        $this->VACATION_DAYS[] = mktime(0, 0, 0, 11, 4, 2016);  //.push(new Date(2016, 10, 4));
 
+        // 2015
+        for ($i = 1; $i <= 9; $i++) {
+            $this->VACATION_DAYS[] = mktime(0, 0, 0, 1, $i, 2015);  // . push(new Date(2015, 0, i));
+        }
+        $this->VACATION_DAYS[] = mktime(0, 0, 0, 2, 23, 2015);  //.push(new Date(2015, 1, 23));
+        $this->VACATION_DAYS[] = mktime(0, 0, 0, 3, 9, 2015);  //.push(new Date(2015, 2, 9));
+        $this->VACATION_DAYS[] = mktime(0, 0, 0, 5, 1, 2015);  //.push(new Date(2015, 4, 1));
+        $this->VACATION_DAYS[] = mktime(0, 0, 0, 5, 4, 2015);  //.push(new Date(2015, 4, 4));
+        $this->VACATION_DAYS[] = mktime(0, 0, 0, 5, 11, 2015);  //.push(new Date(2015, 4, 11));
+        $this->VACATION_DAYS[] = mktime(0, 0, 0, 6, 12, 2015);  //.push(new Date(2015, 5, 12));
+        $this->VACATION_DAYS[] = mktime(0, 0, 0, 11, 4, 2015);  //.push(new Date(2015, 10, 4));
+
+        // 2014
+        for ($i = 1; $i <= 8; $i++) {
+            $this->VACATION_DAYS[] = mktime(0, 0, 0, 1, $i, 2014);  // . push(new Date(2014, 0, i));
+        }
+        $this->VACATION_DAYS[] = mktime(0, 0, 0, 3, 10, 2014);  //.push(new Date(2014, 2, 10));
+        $this->VACATION_DAYS[] = mktime(0, 0, 0, 5, 1, 2014);  //.push(new Date(2014, 4, 1));
+        $this->VACATION_DAYS[] = mktime(0, 0, 0, 5, 2, 2014);  //.push(new Date(2014, 4, 2));
+        $this->VACATION_DAYS[] = mktime(0, 0, 0, 5, 9, 2014);  //.push(new Date(2014, 4, 9));
+        $this->VACATION_DAYS[] = mktime(0, 0, 0, 6, 12, 2014);  //.push(new Date(2014, 5, 12));
+        $this->VACATION_DAYS[] = mktime(0, 0, 0, 6, 13, 2014);  //.push(new Date(2014, 5, 13));
+        $this->VACATION_DAYS[] = mktime(0, 0, 0, 11, 3, 2014);  //.push(new Date(2014, 10, 3));
+        $this->VACATION_DAYS[] = mktime(0, 0, 0, 11, 4, 2014);  //.push(new Date(2014, 10, 4));
+
+        // 2013
+        for ($i = 1; $i <= 8; $i++) {
+            $this->VACATION_DAYS[] = mktime(0, 0, 0, 1, $i, 2013);  // . push(new Date(2013, 0, i));
+        }
+        $this->VACATION_DAYS[] = mktime(0, 0, 0, 3, 8, 2013);  //.push(new Date(2013, 2, 8));
+        $this->VACATION_DAYS[] = mktime(0, 0, 0, 5, 1, 2013);  //.push(new Date(2013, 4, 1));
+        $this->VACATION_DAYS[] = mktime(0, 0, 0, 5, 2, 2013);  //.push(new Date(2013, 4, 2));
+        $this->VACATION_DAYS[] = mktime(0, 0, 0, 5, 9, 2013);  //.push(new Date(2013, 4, 9));
+        $this->VACATION_DAYS[] = mktime(0, 0, 0, 6, 12, 2013);  //.push(new Date(2013, 5, 12));
+        $this->VACATION_DAYS[] = mktime(0, 0, 0, 11, 4, 2013);  //.push(new Date(2013, 10, 4));
+
+        // 2012
+        for ($i = 1; $i <= 9; $i++) {
+            $this->VACATION_DAYS[] = mktime(0, 0, 0, 1, $i, 2012);  //[] = mktime(0, 0, 0, 1, $i, 2017);  // . push(new Date(2012, 0, i));
+        }
+        $this->VACATION_DAYS[] = mktime(0, 0, 0, 2, 23, 2012);  //.push(new Date(2015, 1, 23));
+        $this->VACATION_DAYS[] = mktime(0, 0, 0, 3, 8, 2012);  //.push(new Date(2012, 2, 8));
+        $this->VACATION_DAYS[] = mktime(0, 0, 0, 3, 9, 2012);  //.push(new Date(2012, 2, 9));
+        $this->VACATION_DAYS[] = mktime(0, 0, 0, 4, 30, 2012);  //.push(new Date(2012, 3, 30));
+        $this->VACATION_DAYS[] = mktime(0, 0, 0, 5, 1, 2012);  //.push(new Date(2012, 4, 1));
+        $this->VACATION_DAYS[] = mktime(0, 0, 0, 5, 8, 2012);  //.push(new Date(2012, 4, 8));
+        $this->VACATION_DAYS[] = mktime(0, 0, 0, 5, 9, 2012);  //.push(new Date(2012, 4, 9));
+        $this->VACATION_DAYS[] = mktime(0, 0, 0, 6, 11, 2012);  //.push(new Date(2012, 5, 11));
+        $this->VACATION_DAYS[] = mktime(0, 0, 0, 6, 12, 2012);  //.push(new Date(2012, 5, 12));
+        $this->VACATION_DAYS[] = mktime(0, 0, 0, 11, 5, 2012);  //.push(new Date(2012, 10, 5));
+        $this->VACATION_DAYS[] = mktime(0, 0, 0, 12, 31, 2012);  //.push(new Date(2012, 11, 31));
+
+        // 2011
+        for ($i = 1; $i <= 10; $i++) {
+            $this->VACATION_DAYS[] = mktime(0, 0, 0, 1, $i, 2011);  // . push(new Date(2011, 0, i));
+        }
+        //TODO: why 2015 is?
+        $this->VACATION_DAYS[] = mktime(0, 0, 0, 2, 23, 2015);  //.push(new Date(2015, 1, 23));
+        $this->VACATION_DAYS[] = mktime(0, 0, 0, 3, 7, 2011);  //.push(new Date(2011, 2, 7));
+        $this->VACATION_DAYS[] = mktime(0, 0, 0, 3, 8, 2011);  //.push(new Date(2011, 2, 8));
+        $this->VACATION_DAYS[] = mktime(0, 0, 0, 5, 2, 2011);  //.push(new Date(2011, 4, 2));
+        $this->VACATION_DAYS[] = mktime(0, 0, 0, 5, 9, 2011);  //.push(new Date(2011, 4, 9));
+        $this->VACATION_DAYS[] = mktime(0, 0, 0, 6, 13, 2011);  //.push(new Date(2011, 5, 13));
+        $this->VACATION_DAYS[] = mktime(0, 0, 0, 11, 4, 2011);  //.push(new Date(2011, 10, 4));
     }
 
     /**
@@ -394,10 +471,10 @@ class Fine
 
     protected function collectLoans()
     {
-        foreach ($this->loans as $key => $loan) {
+        /*foreach ($this->loans as $key => $loan) {
             $this->loans[$key]['date'] = $this->checkVacationInput(false, $loan['date'], true);
             $this->loans[$key]['datePlus'] = $this->loans[$key]['date'] + $this->ONE_DAY;   //TODO: не совсем правильных подход, эта операция производится раньше
-        }
+        }*/
         return $this->loans;
         /*$res = [];
         $payDates = $this->loanDates;
@@ -521,7 +598,7 @@ class Fine
     }
 
     //protected function checkVacationInput($errorId, $inputId, $isExpire)
-    protected function checkVacationInput($errorId, $date, $isExpire)
+    public function checkVacationInput($errorId, $date, $isExpire)
     {
         //return;
 
