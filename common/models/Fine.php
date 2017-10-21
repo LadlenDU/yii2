@@ -1178,9 +1178,9 @@ class Fine
     {
         $resultString = '<table class="judge-table jt-4">' .
             '<tr class="head">' .
-            '<td rowspan="2">Месяц</td>' .
+            '<td rowspan="2">Период</td>' .
             '<td rowspan="2">Начислено</td>' .
-            '<td rowspan="2">Долг</td>' .
+            '<td rowspan="2">Задолженность</td>' .
             '<td colspan="3">Период просрочки</td>' .
             '<td rowspan="2">Ставка</td>' .
             '<td rowspan="2">Доля ставки</td>' .
