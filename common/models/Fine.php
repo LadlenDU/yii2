@@ -1173,6 +1173,71 @@ class Fine
         return $endSum;
     }
 
+    public function getHtml($data)
+    {
+        $dateStart = $data['dateStart'];
+        $resData = $data['data'];
+        $total = 0;
+        $resultString =
+            '<tr><td colspan="8"><h4 style="text-align: left">Расчёт пеней по задолженности, возникшей ' . $this->fd($dateStart) . '</h4></td></tr>' .
+            //'<table class="judge-table jt-2">' .
+            '<tr class="head">' .
+            '<td rowspan="2">Задолженность</td>' .
+            '<td colspan="3">Период просрочки</td>' .
+            '<td rowspan="2">Ставка</td>' .
+            '<td rowspan="2">Доля ставки</td>' .
+            '<td rowspan="2">Формула</td>' .
+            '<td rowspan="2">Пени</td>' .
+            '</tr>' .
+            '<tr class="head"><td>с</td><td>по</td><td>дней</td></tr>';
+
+        $resDataLength = count($resData);
+        for ($i = 0; $i < $resDataLength; $i++) {
+            $r = $resData[$i];
+            if ($r['type'] == $this->DATA_TYPE_INFO) {
+                $resultString .= '<tr>' .
+                    '<td>' . $this->moneyFormat($r['data']['sum']) . '</td>' .
+                    '<td>' . $this->fd($r['data']['dateStart']) . '</td>' .
+                    '<td>' . $this->fd($r['data']['dateFinish']) . '</td>' .
+                    '<td>' . $r['data']['days'] . '</td>' .
+                    '<td>' . $this->moneyFormat($r['data']['percent']) . ' %</td>' .
+                    '<td>' . $r['data']['rate'] . '</td>' .
+                    '<td>' . $this->moneyFormat($r['data']['sum']) . ' × ' . $r['data']['days'] . ' × ' . $r['data']['rate'] . ' × ' . $r['data']['percent'] . '% </td>' .
+                    '<td>' . $this->moneyFormat($r['data']['cost']) . ' р.</td>' .
+                    '</tr>';
+                $total += $r['data']['cost'];
+            } else if ($r['type'] == $this->DATA_TYPE_PAYED) {
+                $resultString .= '<tr class="jt-payed">'
+                    . '<td>-' . $this->moneyFormat($r['data']['sum']) . '</td>'
+                    . '<td>' . $this->fd($r['data']['date']) . '</td>'
+                    . '<td colspan="6" style="text-align: left">Погашение части долга' . ($r['data']['order'] ? ' (' . $r['data']['order'] . ')' : '') . '</td></tr>';
+            }
+        }
+        $resultString .= '<tr class="calc-footer"><td></td><td></td><td></td><td></td><td></td><td></td><td style="text-align: right"><b>Итого:</b></td><td><b>' . $this->moneyFormat($total) . '</b> р.</td></tr>';
+        return ['html' => $resultString, 'totalPct' => $total, 'endSum' => $data['endSum']];
+    }
+
+    public function getClassicHtml($periods)
+    {
+        $resultString = '<table class="judge-table jt-2">';
+        $totalPct = 0;
+        $endSum = 0;
+        $periodsLength = count($periods);
+        for ($i = 0; $i < $periodsLength; $i++) {
+            $period = $periods[$i];
+            $html = $this->getHtml($period);
+            $resultString .= $html['html'];
+            $totalPct += $html['totalPct'];
+            $endSum += $html['endSum'];
+        }
+
+        $resultString .= '<tr><td colspan="8" style="font-size:14px; text-align: right">Сумма основного долга: ' . $this->moneyFormat($endSum) . ' руб.</td></tr>';
+        $resultString .= '<tr><td colspan="8" style="font-size:14px; text-align: right">Сумма пеней по всем задолженностям: ' . $this->moneyFormat($totalPct) . ' руб.</td></tr>';
+        $resultString .= '</table>';
+        return $resultString;
+    }
+
+
     //TODO: вынести во вью
     public function getBuhHtml($periods)
     {
