@@ -171,6 +171,21 @@ class Fine
 
         $this->NEW_LAW = strtotime('2016-01-01');
 
+        // 2016
+        $this->WORK_DAYS[] = mktime(0, 0, 0, 1, 20, 2016);  //.push(new Date(2016, 1, 20));
+
+        // 2012
+        $year = 2012;
+        $this->WORK_DAYS[] = mktime(0, 0, 0, 2, 11, $year);     //.push(new Date(year, 2, 11));
+        $this->WORK_DAYS[] = mktime(0, 0, 0, 3, 28, $year);     //.push(new Date(year, 3, 28));
+        $this->WORK_DAYS[] = mktime(0, 0, 0, 4, 12, $year);     //.push(new Date(year, 4, 12));
+        $this->WORK_DAYS[] = mktime(0, 0, 0, 5, 9, $year);      //.push(new Date(year, 5, 9));
+        $this->WORK_DAYS[] = mktime(0, 0, 0, 11, 29, $year);    //.push(new Date(year, 11, 29));
+
+        // 2011
+        $year = 2011;
+        $this->WORK_DAYS[] = mktime(0, 0, 0, 2, 5, $year);    //.push(new Date(year, 2, 5));
+
         // 2017
         for ($i = 1; $i <= 8; $i++) {
             $this->VACATION_DAYS[] = strtotime("2017-1-$i");
@@ -183,6 +198,8 @@ class Fine
             $this->VACATION_DAYS[] = strtotime("2017-6-12");
             $this->VACATION_DAYS[] = strtotime("2017-11-6");
         }
+
+
     }
 
     /**
@@ -477,6 +494,28 @@ class Fine
         return $res;
     }
 
+    protected function checkVacation($date)
+    {
+        $dow = date('w', $date);
+        $time = $date;  //date.getTime();
+        if ($dow == 0 || $dow == 6) {
+            $workDaysLength = count($this->WORK_DAYS);
+            for ($i = 0; $i < $workDaysLength; $i++) {
+                if ($this->WORK_DAYS[$i] == $time) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        $vacationDaysLength = count($this->VACATION_DAYS);
+        for ($i = 0; $i < $vacationDaysLength; $i++) {
+            if ($this->VACATION_DAYS[$i] == $time) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     protected function checkVacationInput($errorId, $inputId, $isExpire)
     {
         return;
@@ -486,9 +525,8 @@ class Fine
             $d . setDate($d . getDate() - 1);
         }
 
-        var
-        el = errorId ? $('#' + errorId) : null;
-        if (!d || !checkVacation(d)) {
+        $el = $errorId ? $('#' + $errorId) : null;
+        if (!$d || !checkVacation($d)) {
             $(input) . removeClass('warning-field');
             if (el) el . hide();
             return;
