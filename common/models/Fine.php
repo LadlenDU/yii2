@@ -109,8 +109,8 @@ class Fine
     protected $datesBase = [];
     protected $percents = [];
 
-    protected $DATA_TYPE_INFO = 1;
-    protected $DATA_TYPE_PAYED = 2;
+    const DATA_TYPE_INFO = 1;
+    const DATA_TYPE_PAYED = 2;
 
     protected $RATE_TYPE_SINGLE = 1;
     protected $RATE_TYPE_PERIOD = 2;
@@ -985,7 +985,7 @@ class Fine
                 $sum = 0;
             }
 
-            $resData[] = ['type' => $this->DATA_TYPE_PAYED, 'data' => ['sum' => $toCut, 'date' => $payment['date'], 'order' => (isset($payment['order']) ? $payment['order'] : '')]];
+            $resData[] = ['type' => self::DATA_TYPE_PAYED, 'data' => ['sum' => $toCut, 'date' => $payment['date'], 'order' => (isset($payment['order']) ? $payment['order'] : '')]];
         }
         $startJ = $j;
 
@@ -999,7 +999,7 @@ class Fine
                     $dateStartInPeriod = null;
                     if ($payment['datePlus'] > $data['dateStart']) {
                         if ($j == 0 || $j >= 1 && $payments[$j - 1]['datePlus'] < $data['dateStart']) {
-                            $resData[] = ['type' => $this->DATA_TYPE_INFO, 'data' => $this->processData($sum, $data, $data['dateStart'], $payment['date'])];
+                            $resData[] = ['type' => self::DATA_TYPE_INFO, 'data' => $this->processData($sum, $data, $data['dateStart'], $payment['date'])];
                         }
                         $dateStartInPeriod = $payment['datePlus'];
                     } else {
@@ -1016,7 +1016,7 @@ class Fine
                         $sum = 0;
                     }
 
-                    $resData[] = ['type' => $this->DATA_TYPE_PAYED, 'data' => ['sum' => $toCut, 'date' => $payment['date'], 'order' => isset($payment['order']) ? $payment['order'] : '']];
+                    $resData[] = ['type' => self::DATA_TYPE_PAYED, 'data' => ['sum' => $toCut, 'date' => $payment['date'], 'order' => isset($payment['order']) ? $payment['order'] : '']];
 
                     if ($sum < 0.01) {
                         $sum = 0;
@@ -1025,9 +1025,9 @@ class Fine
 
                     $paymentsLength = count($payments);
                     if ($j + 1 >= $paymentsLength || $j + 1 < $paymentsLength && $payments[$j + 1]['datePlus'] > $data['dateFinish'] && $payment['date'] != $payments[$j + 1]['date']) {
-                        $resData[] = ['type' => $this->DATA_TYPE_INFO, 'data' => $this->processData($sum, $data, $dateStartInPeriod, $data['dateFinish'])];
+                        $resData[] = ['type' => self::DATA_TYPE_INFO, 'data' => $this->processData($sum, $data, $dateStartInPeriod, $data['dateFinish'])];
                     } else if ($j + 1 < $paymentsLength && $payments[$j + 1]['datePlus'] <= $data['dateFinish'] && $payment['date'] != $payments[$j + 1]['date']) {
-                        $resData[] = ['type' => $this->DATA_TYPE_INFO, 'data' => $this->processData($sum, $data, $dateStartInPeriod, $payments[$j + 1]['date'])];
+                        $resData[] = ['type' => self::DATA_TYPE_INFO, 'data' => $this->processData($sum, $data, $dateStartInPeriod, $payments[$j + 1]['date'])];
                     }
 
                 } else {//if (data.dateFinish <= payment.date) { // все остальные платежи уже из будущих
@@ -1039,7 +1039,7 @@ class Fine
                 break;
             }
             if ($lastStartJ == $startJ) { // не было периода в диапазоне ставки
-                $resData[] = ['type' => $this->DATA_TYPE_INFO, 'data' => $this->processData($sum, $data, $data['dateStart'], $data['dateFinish'])];
+                $resData[] = ['type' => self::DATA_TYPE_INFO, 'data' => $this->processData($sum, $data, $data['dateStart'], $data['dateFinish'])];
             }
         }
 
@@ -1056,7 +1056,7 @@ class Fine
                 $sum = 0;
             }
 
-            $resData[] = ['type' => $this->DATA_TYPE_PAYED, 'data' => ['sum' => $toCut, 'date' => $payment['date'], 'order' => isset($payment['order']) ? $payment['order'] : '']];
+            $resData[] = ['type' => self::DATA_TYPE_PAYED, 'data' => ['sum' => $toCut, 'date' => $payment['date'], 'order' => isset($payment['order']) ? $payment['order'] : '']];
         }
         return ['dateStart' => $dateStart, 'dateFinish' => $dateFinish, 'data' => $resData, 'endSum' => (float)$sum];
     }
@@ -1194,7 +1194,7 @@ class Fine
         $resDataLength = count($resData);
         for ($i = 0; $i < $resDataLength; $i++) {
             $r = $resData[$i];
-            if ($r['type'] == $this->DATA_TYPE_INFO) {
+            if ($r['type'] == self::DATA_TYPE_INFO) {
                 $resultString .= '<tr>' .
                     '<td>' . $this->moneyFormat($r['data']['sum']) . '</td>' .
                     '<td>' . $this->fd($r['data']['dateStart']) . '</td>' .
@@ -1206,7 +1206,7 @@ class Fine
                     '<td>' . $this->moneyFormat($r['data']['cost']) . ' р.</td>' .
                     '</tr>';
                 $total += $r['data']['cost'];
-            } else if ($r['type'] == $this->DATA_TYPE_PAYED) {
+            } else if ($r['type'] == self::DATA_TYPE_PAYED) {
                 $resultString .= '<tr class="jt-payed">'
                     . '<td>-' . $this->moneyFormat($r['data']['sum']) . '</td>'
                     . '<td>' . $this->fd($r['data']['date']) . '</td>'
@@ -1284,7 +1284,7 @@ class Fine
         $resDataLength = count($resData);
         for ($i = 0; $i < $resDataLength; $i++) {
             $r = $resData[$i];
-            if ($r['type'] == $this->DATA_TYPE_INFO) {
+            if ($r['type'] == self::DATA_TYPE_INFO) {
                 break;
             }
         }
@@ -1303,7 +1303,7 @@ class Fine
                 : '<td rowspan="' . $resDataLength . '">' . $this->buhDate($dateStart) . '</td>'
             )
             . '<td rowspan="' . $resDataLength . '">' . $this->moneyFormat($sum) . '</td>';
-        if ($r['type'] == $this->DATA_TYPE_INFO) {
+        if ($r['type'] == self::DATA_TYPE_INFO) {
             $resultString .= '<td>' . $this->moneyFormat($r['data']['sum']) . '</td>' .
                 '<td>' . $this->fd($r['data']['dateStart']) . '</td>' .
                 '<td>' . $this->fd($r['data']['dateFinish']) . '</td>' .
@@ -1323,7 +1323,7 @@ class Fine
 
         for ($i = 1; $i < $resDataLength; $i++) {
             $r = $resData[$i];
-            if ($r['type'] == $this->DATA_TYPE_INFO) {
+            if ($r['type'] == self::DATA_TYPE_INFO) {
                 $resultString .= '<tr>' .
                     '<td>' . $this->moneyFormat($r['data']['sum']) . '</td>' .
                     '<td>' . $this->fd($r['data']['dateStart']) . '</td>' .
@@ -1335,7 +1335,7 @@ class Fine
                     '<td>' . $this->moneyFormat($r['data']['cost']) . ' р.</td>' .
                     '</tr>';
                 $total += $r['data']['cost'];
-            } elseif ($r['type'] == $this->DATA_TYPE_PAYED) {
+            } elseif ($r['type'] == self::DATA_TYPE_PAYED) {
                 $resultString .= '<tr class="jt-payed">' .
                     '<td>-' . $this->moneyFormat($r['data']['sum']) . '</td>' .
                     '<td>' . $this->fd($r['data']['date']) . '</td>' .
