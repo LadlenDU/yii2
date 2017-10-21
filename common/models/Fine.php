@@ -394,8 +394,12 @@ class Fine
 
     protected function collectLoans()
     {
+        foreach ($this->loans as $key => $loan) {
+            $this->loans[$key]['date'] = $this->checkVacationInput(false, $loan['date'], true);
+            $this->loans[$key]['datePlus'] = $this->loans[$key]['date'] + $this->ONE_DAY;   //TODO: не совсем правильных подход, эта операция производится раньше
+        }
         return $this->loans;
-        $res = [];
+        /*$res = [];
         $payDates = $this->loanDates;
         if (!$payDates) {
             return $res;
@@ -422,7 +426,7 @@ class Fine
             }
         }
 
-        return $res;
+        return $res;*/
     }
 
     /*protected function preparePayments($payments)
@@ -516,29 +520,32 @@ class Fine
         return false;
     }
 
-    protected function checkVacationInput($errorId, $inputId, $isExpire)
+    //protected function checkVacationInput($errorId, $inputId, $isExpire)
+    protected function checkVacationInput($errorId, $date, $isExpire)
     {
-        return;
-        /*$input = document . getElementById($inputId);
-        $d = $this->dateStart;
+        //return;
+
+        //$input = document . getElementById($inputId);
+        //$d = $this->dateStart;
+        $d = $date;
         if ($isExpire) {
-            $d . setDate($d . getDate() - 1);
+            $d = $date - $this->ONE_DAY;     //$d.setDate($d.getDate() - 1);
         }
 
-        $el = $errorId ? $('#' + $errorId) : null;
-        if (!$d || !checkVacation($d)) {
-            $(input) . removeClass('warning-field');
-            if (el) el . hide();
-            return;
+        //$el = $errorId ? $('#' + $errorId) : null;
+        if (!$d || !$this->checkVacation($d)) {
+            //$(input) . removeClass('warning-field');
+            //if (el) el . hide();
+            return $date;
         }
         // это выходной!
         do {
-            d = new Date(d . getTime() + ONE_DAY);
-        } while (checkVacation(d));
-        $(input) . addClass('warning-field');
-        var
-        newDate = fd(isExpire ? new Date(d . getTime() + ONE_DAY) : d);
-        if (el) {
+            $d = $d + $this->ONE_DAY; //new Date(d . getTime() + ONE_DAY);
+        } while ($this->checkVacation($d));
+        //$(input) . addClass('warning-field');
+        $newDate = $isExpire ? $d + $this->ONE_DAY : $d;
+        return $newDate;
+        /*if (el) {
             if (isExpire)
                 el . html('Дата, предшествующая дню просрочки, установлена на выходной день. Согласно <a style="color:#990000" target="_blank" href="https://dogovor-urist.ru/кодексы/гк_рф_1/статья_193/">ст. 193 ГК РФ</a> необходимо изменить дату на ближайший рабочий день.<br><a href="javascript:" onclick="$el = document.getElementById(\'' + inputId + '\'); el.value=\'' + newDate + '\'; el.onchange()">Изменить на ' + newDate + '</a>');
             else
@@ -1039,7 +1046,7 @@ class Fine
         #$hash['loans'] = $this->prepareLoans($loans);
 
         $this->updateHash($hash);
-        $this->checkVacationInput('lfWarn', 'dateStart', true);
+        //$this->checkVacationInput('lfWarn', 'dateStart', true);
 
         //$loans.unshift({sum: loanAmount, date: dateStart, order: ''});
         array_unshift($loans, ['sum' => $loanAmount, 'date' => $dateStart, 'order' => '']);
