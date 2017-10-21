@@ -19,7 +19,7 @@ $gridColumns = [
         'contentOptions' => ['class' => 'kv-sticky-column'],
         'filterType' => GridView::FILTER_DATE,
     ],
-    [
+    /*[
         'attribute' => 'dateFinish',
         'label' => Yii::t('app', 'Конец просрочки'),
         'hAlign' => 'center',
@@ -29,7 +29,7 @@ $gridColumns = [
         'headerOptions' => ['class' => 'kv-sticky-column'],
         'contentOptions' => ['class' => 'kv-sticky-column'],
         'filterType' => GridView::FILTER_DATE,
-    ],
+    ],*/
     [
         'attribute' => 'fine',
         'label' => Yii::t('app', 'Пеня'),

@@ -200,7 +200,21 @@ class DebtorController extends Controller
         $elements = [];
 
         if ($debtor = Debtor::findOne($debtor_id)) {
-            $elements = $debtor->calcFines();
+            //$elements = $debtor->calcFines();
+            if ($periods = $debtor->getFineCalculatorResult()) {
+                foreach ($periods as $p) {
+                    $totalFine = 0;
+                    foreach ($p['data'] as $data) {
+                        if ($data['type'] == Fine::DATA_TYPE_INFO) {
+                            $totalFine += $data['data']['cost'];
+                        }
+                    }
+                    $elements[] = [
+                        'dateStart' => $p['dateStart'],
+                        'fine' => $totalFine,
+                    ];
+                }
+            }
         }
 
         $dataProvider = new ArrayDataProvider([
@@ -294,7 +308,8 @@ class DebtorController extends Controller
             $periods = $debtor->getFineCalculatorResult();
 
             $fine = new Fine();
-            $html = $fine->getBuhHtml($periods);
+            //$html = $fine->getBuhHtml($periods);
+            $html = $fine->getClassicHtml($periods);
         }
 
         $data = [
@@ -302,14 +317,15 @@ class DebtorController extends Controller
             'debtorId' => $debtor_id,
         ];
 
-        $this->layout = 'print_fine';   //"@app/views/layouts/mainLayout";
         if (Yii::$app->request->isAjax) {
             return $this->renderAjax('_full_report_fine_data', $data);
         } else {
-            return $this->render('_full_report_fine_data', $data);
-            /*return Yii::$app->html2pdf
-                ->render('_full_report_fine_data', $data)
-                ->saveAs('/path/to/output.pdf');*/
+            $this->layout = 'print_fine';   //"@app/views/layouts/mainLayout";
+            $html = $this->render('_full_report_fine_data', $data);
+            return $html;
+            //$tt = print_r(Yii::$app->html2pdf->convert($html)); exit;
+            Yii::$app->html2pdf->convert($html)->send('somename');
+            //->saveAs(fopen('php://stdout', 'w'));
         }
     }
 
