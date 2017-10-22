@@ -383,11 +383,11 @@ class DebtorParse extends Model
                 throw new \Exception(Yii::t('app', 'Не найдено поле с датой начисления.'));
             }
 
-            $fine = new Fine;
+            #$fine = new Fine;
 
             foreach ($info['colInfo'] as $rowInfo) {
-                $accuralDateTimestamp = strtotime($rowInfo[$accrualDateIndex]);
-                $rowInfo[$accrualDateIndex] = date('Y-m-d H:i:s', $fine->checkVacationInput(false, $accuralDateTimestamp, true));
+                #$accuralDateTimestamp = strtotime($rowInfo[$accrualDateIndex]);
+                #$rowInfo[$accrualDateIndex] = date('Y-m-d H:i:s', $fine->checkVacationInput(false, $accuralDateTimestamp, true));
 
                 $tmpResultInfo = self::$resultInfo;
 
@@ -488,8 +488,9 @@ class DebtorParse extends Model
                             if ($info['headers'][$key][1] == 'amount' && !$colInfo) {
                                 $savePayment = false;
                                 --$tmpResultInfo['payments']['added'];
+                            } else {
+                                $payment->{$info['headers'][$key][1]} = $colInfo;
                             }
-                            $payment->{$info['headers'][$key][1]} = $colInfo;
                         }
                     }
                 }
@@ -653,6 +654,8 @@ class DebtorParse extends Model
         $LS_IKU_provider = trim($sheetDataRaw[0][0]);
         $full_name = trim($sheetDataRaw[0][1]);
 
+        $fine = new Fine;
+
         foreach ($sheetDataRaw as $key => $row) {
             if ($key < 1) {
                 continue;
@@ -695,6 +698,9 @@ class DebtorParse extends Model
             $sheetData[$key][0] = "$year-$monthNumber-01 00:00:00";
             //$dateOfAccrual = "$year-$monthNumber-01 00:00:00";
             //$sheetData[$key][0] = date('Y-m-d H:i:s', strtotime("+1 month", strtotime($dateOfAccrual)));
+
+            $accuralDateTimestamp = strtotime($sheetData[$key][0]);
+            $sheetData[$key][0] = date('Y-m-d H:i:s', $fine->checkVacationInput(false, $accuralDateTimestamp, true));
 
             $sheetData[$key][10] = $LS_IKU_provider;
             $sheetData[$key][11] = $full_name;
