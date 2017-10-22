@@ -17,6 +17,8 @@ use common\models\Payment;
 use common\models\UploadForm;
 use yii\data\ArrayDataProvider;
 
+//use kartik\mpdf\Pdf;
+
 /**
  * DebtorController implements the CRUD actions for Debtor model.
  */
@@ -139,7 +141,7 @@ class DebtorController extends Controller
             $locationModel = $model->location ? $model->location : new Location;
             //TODO: проверить, рефакторинг
             $locationModel->save();
-            //$locationModel->link('debtors', $model);
+            //$locationModel->link('debtor', $model);
             $model->link('location', $locationModel);
             $locationModel->load(Yii::$app->request->post());
             $locationModel->save();
@@ -148,7 +150,7 @@ class DebtorController extends Controller
             $nameModel = $model->name ? $model->name : new Name;
             //TODO: проверить, рефакторинг
             $nameModel->save();
-            $nameModel->link('debtors', $model);
+            $nameModel->link('debtor', $model);
             $nameModel->load(Yii::$app->request->post());
             $nameModel->save();
 
@@ -200,8 +202,8 @@ class DebtorController extends Controller
         $elements = [];
 
         if ($debtor = Debtor::findOne($debtor_id)) {
-            //$elements = $debtor->calcFines();
-            if ($periods = $debtor->getFineCalculatorResult()) {
+            $elements = $debtor->calcFines();
+            /*if ($periods = $debtor->getFineCalculatorResult()) {
                 foreach ($periods as $p) {
                     $totalFine = 0;
                     foreach ($p['data'] as $data) {
@@ -214,7 +216,7 @@ class DebtorController extends Controller
                         'fine' => $totalFine,
                     ];
                 }
-            }
+            }*/
         }
 
         $dataProvider = new ArrayDataProvider([
@@ -315,17 +317,60 @@ class DebtorController extends Controller
         $data = [
             'html' => $html,
             'debtorId' => $debtor_id,
+            'debtorLS' => $debtor->LS_IKU_provider,
+            'debtorName' => $debtor->name->full_name,
+            'debtorAddress' => $debtor->location->full_address,
         ];
 
         if (Yii::$app->request->isAjax) {
             return $this->renderAjax('_full_report_fine_data', $data);
         } else {
+            set_time_limit(300);
+            #error_reporting(E_ALL);
+            #ini_set('display_errors', 1);
             $this->layout = 'print_fine';   //"@app/views/layouts/mainLayout";
             $html = $this->render('_full_report_fine_data', $data);
+            //$content = $this->renderPartial('_full_report_fine_data', $data);
             return $html;
             //$tt = print_r(Yii::$app->html2pdf->convert($html)); exit;
-            Yii::$app->html2pdf->convert($html)->send('somename');
+            Yii::$app->html2pdf->convert($html)->send('somename.pdf');
+            exit;
             //->saveAs(fopen('php://stdout', 'w'));
+
+            // setup kartik\mpdf\Pdf component
+            /*$pdf = new Pdf([
+                // set to use core fonts only
+                'mode' => Pdf::MODE_CORE,
+                // A4 paper format
+                'format' => Pdf::FORMAT_A4,
+                // portrait orientation
+                'orientation' => Pdf::ORIENT_PORTRAIT,
+                // stream to browser inline
+                'destination' => Pdf::DEST_BROWSER,
+                // your html content input
+                'content' => $content,
+                // format content from your own css file if needed or use the
+                // enhanced bootstrap css built by Krajee for mPDF formatting
+                //'cssFile' => '@vendor/kartik-v/yii2-mpdf/assets/kv-mpdf-bootstrap.min.css',
+                'cssFile' => '@frontend/web/css/fine-style.css',
+                #'cssFile' => '@frontend/web/css/fine-style.css',
+                #$this->registerCssFile('/css/fine-style.css');
+                #$this->registerCssFile('/css/fine-common.css');
+                #$this->registerCssFile('/css/fine-bookkeeping.css');
+
+                // any css to be embedded if required
+                //'cssInline' => '.kv-heading-1{font-size:18px}',
+                // set mPDF properties on the fly
+                'options' => ['title' => Yii::t('app', 'Печать пени')],
+                // call mPDF methods on the fly
+                'methods' => [
+                    'SetHeader' => ['Krajee Report Header'],
+                    'SetFooter' => ['{PAGENO}'],
+                ]
+            ]);
+
+            // return the pdf output as per the destination setting
+            return $pdf->render();*/
         }
     }
 
