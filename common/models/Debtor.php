@@ -213,7 +213,7 @@ class Debtor extends \yii\db\ActiveRecord
         if ($fineRes = $this->getFineCalculatorResult()) {
             foreach ($fineRes as $res) {
                 if (!empty($res['data'])) {
-                    foreach ($res['data'] as $data) {
+                    /*foreach ($res['data'] as $data) {
                         if ($data['type'] == 1) {
                             $elements[] = [
                                 'fine' => $data['data']['cost'],
@@ -224,7 +224,17 @@ class Debtor extends \yii\db\ActiveRecord
                                 'dateFinish' => $data['data']['dateFinish'],
                             ];
                         }
+                    }*/
+                    $totalFine = 0;
+                    foreach ($res['data'] as $data) {
+                        if ($data['type'] == Fine::DATA_TYPE_INFO) {
+                            $totalFine += $data['data']['cost'];
+                        }
                     }
+                    $elements[] = [
+                        'dateStart' => $res['dateStart'],
+                        'fine' => $totalFine,
+                    ];
                 }
             }
         }
