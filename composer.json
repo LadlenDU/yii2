@@ -37,7 +37,8 @@
         "kartik-v/yii2-editable": "*",
         "kartik-v/yii2-datecontrol": "dev-master",
         "yii2tech/html2pdf": "^1.0",
-        "kartik-v/yii2-mpdf": "dev-master"
+        "kartik-v/yii2-mpdf": "dev-master",
+        "caijq4ever/yii2-pdf": "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

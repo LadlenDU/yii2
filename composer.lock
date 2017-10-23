@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "cf6d331dfb2380412703a19513fd867e",
+    "content-hash": "80e95484996b973be42e5c2befc85cfc",
     "packages": [
         {
             "name": "almasaeed2010/adminlte",
@@ -412,6 +412,49 @@
                 "yii2"
             ],
             "time": "2016-04-08T15:34:24+00:00"
+        },
+        {
+            "name": "caijq4ever/yii2-pdf",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/loranceliu/yii2-pdf.git",
+                "reference": "350ae836c92c4dd54c0bd2f019c920d81a4bedf6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/loranceliu/yii2-pdf/zipball/350ae836c92c4dd54c0bd2f019c920d81a4bedf6",
+                "reference": "350ae836c92c4dd54c0bd2f019c920d81a4bedf6",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "junqi\\pdf\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Junqi Cai",
+                    "email": "caijq4ever@163.com"
+                }
+            ],
+            "description": "A yii2 wrapper for wkhtmltopdf",
+            "keywords": [
+                "extension",
+                "html convert to pdf",
+                "html to pdf",
+                "wkhtmltopdf",
+                "yii2"
+            ],
+            "time": "2017-09-18T06:28:35+00:00"
         },
         {
             "name": "cebe/markdown",
@@ -5657,7 +5700,8 @@
         "kartik-v/yii2-widget-fileinput": 20,
         "kartik-v/yii2-detail-view": 20,
         "kartik-v/yii2-datecontrol": 20,
-        "kartik-v/yii2-mpdf": 20
+        "kartik-v/yii2-mpdf": 20,
+        "caijq4ever/yii2-pdf": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

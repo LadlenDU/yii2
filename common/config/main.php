@@ -12,16 +12,16 @@ return [
             'class' => 'yii\caching\FileCache',
         ],
         'html2pdf' => [
-            'class' => 'yii2tech\html2pdf\Manager',
+            /*'class' => 'yii2tech\html2pdf\Manager',
             'viewPath' => '@app/pdf',
-            'converter' => 'wkhtmltopdf',
-            /*'class' => 'junqi\pdf\Pdf',
+            'converter' => 'wkhtmltopdf',*/
+            'class' => 'junqi\pdf\Pdf',
             'tmpDir' => '@runtime/pdf/',
 //            'options' => [
 //                'headerLeft' => 'world,hello',
 //                'headerLine' => true,
 //                //more options see `wkhtmltopdf -H`
-//            ],*/
+//            ],
         ],
         /*'html2pdf' => [
             'class' => 'yii2tech\html2pdf\Manager',
