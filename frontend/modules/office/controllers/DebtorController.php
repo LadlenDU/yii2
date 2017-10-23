@@ -365,6 +365,17 @@ class DebtorController extends Controller
         );
     }
 
+    public function actionFullReportFineDataPdf($debtor_id)
+    {
+        try {
+            Yii::$app->html2pdf->loadResource(\yii\helpers\Url::to(['/office/debtor/full-report-fine-data', 'debtor_id' => $debtor_id], true))
+                ->execute()
+                ->sendFile('Debts.pdf');
+        } catch (\junqi\pdf\PdfException $e) {
+            echo $e->getMessage();
+        }
+    }
+
     public function actionFullReportFineData($debtor_id)
     {
         $html = '';
@@ -394,13 +405,13 @@ class DebtorController extends Controller
             $this->layout = 'print_fine';   //"@app/views/layouts/mainLayout";
             $html = $this->render('_full_report_fine_data', $data);
             //$content = $this->renderPartial('_full_report_fine_data', $data);
-            //return $html;
+            return $html;
             //$tt = print_r(Yii::$app->html2pdf->convert($html)); exit;
-            Yii::$app->html2pdf->convert($html)->send('Debts.pdf');
+            //Yii::$app->html2pdf->convert($html)->send('Debts.pdf');
             /*try {
-            Yii::$app->html2pdf->loadHtml($html)
-                ->execute()
-                ->sendFile('Debts.pdf');
+                Yii::$app->html2pdf->loadResource($html)
+                    ->execute()
+                    ->sendFile('Debts.pdf');
             } catch (\junqi\pdf\PdfException $e) {
                 echo $e->getMessage();
             }*/
