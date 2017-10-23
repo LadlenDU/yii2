@@ -11,9 +11,24 @@ return [
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
-       /* 'authManager' => [
-            'class' => 'yii\rbac\DbManager',
+        'html2pdf' => [
+            'class' => 'yii2tech\html2pdf\Manager',
+            'viewPath' => '@app/pdf',
+            'converter' => 'wkhtmltopdf',
+        ],
+        /*'html2pdf' => [
+            'class' => 'yii2tech\html2pdf\Manager',
+            'viewPath' => '@frontend/modules/office/views/debtor',
+            'converter' => [
+                'class' => 'yii2tech\html2pdf\converters\Wkhtmltopdf',
+                'defaultOptions' => [
+                    'pageSize' => 'A4'
+                ],
+            ],
         ],*/
+        /* 'authManager' => [
+             'class' => 'yii\rbac\DbManager',
+         ],*/
     ],
     'modules' => [
         'pages' => [
@@ -47,14 +62,14 @@ return [
             'class' => 'dektrium\rbac\RbacWebModule',
             'admins' => ['Ladlen'],
         ],
-        'treemanager' =>  [
+        'treemanager' => [
             'class' => '\kartik\tree\Module',
             // other module settings, refer detailed documentation
         ],
         'user' => [
             'class' => 'dektrium\user\Module',
         ],
-        'datecontrol' =>  [
+        'datecontrol' => [
             'class' => 'kartik\datecontrol\Module',
 
             // format settings for displaying each date attribute (ICU format example)
@@ -82,7 +97,7 @@ return [
 
             // default settings for each widget from kartik\widgets used when autoWidget is true
             'autoWidgetSettings' => [
-                Module::FORMAT_DATE => ['type'=>2, 'pluginOptions'=>['autoclose'=>true]], // example
+                Module::FORMAT_DATE => ['type' => 2, 'pluginOptions' => ['autoclose' => true]], // example
                 Module::FORMAT_DATETIME => [], // setup if needed
                 Module::FORMAT_TIME => [], // setup if needed
             ],
@@ -94,7 +109,7 @@ return [
                     'class' => 'yii\jui\DatePicker', // example
                     'options' => [
                         'dateFormat' => 'php:d-M-Y',
-                        'options' => ['class'=>'form-control'],
+                        'options' => ['class' => 'form-control'],
                     ]
                 ]
             ]

@@ -331,10 +331,10 @@ class DebtorController extends Controller
             $this->layout = 'print_fine';   //"@app/views/layouts/mainLayout";
             $html = $this->render('_full_report_fine_data', $data);
             //$content = $this->renderPartial('_full_report_fine_data', $data);
-            return $html;
+            //return $html;
             //$tt = print_r(Yii::$app->html2pdf->convert($html)); exit;
-            Yii::$app->html2pdf->convert($html)->send('somename.pdf');
-            exit;
+            Yii::$app->html2pdf->convert($html)->send('Debts.pdf');
+            //exit;
             //->saveAs(fopen('php://stdout', 'w'));
 
             // setup kartik\mpdf\Pdf component
