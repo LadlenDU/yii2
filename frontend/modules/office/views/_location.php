@@ -16,17 +16,17 @@ if (!$model) {
 ?>
 <div class="location">
 
-        <?= $form->field($model, 'region') ?>
-        <?= $form->field($model, 'regionId') ?>
-        <?= $form->field($model, 'district') ?>
-        <?= $form->field($model, 'districtId') ?>
+        <?/*= $form->field($model, 'region') */?>
+        <?/*= $form->field($model, 'regionId') */?>
+        <?/*= $form->field($model, 'district') */?>
+        <?/*= $form->field($model, 'districtId') */?>
         <?= $form->field($model, 'city') ?>
-        <?= $form->field($model, 'cityId') ?>
+        <?/*= $form->field($model, 'cityId') */?>
         <?= $form->field($model, 'street') ?>
-        <?= $form->field($model, 'streetId') ?>
+        <?/*= $form->field($model, 'streetId') */?>
         <?= $form->field($model, 'building') ?>
-        <?= $form->field($model, 'buildingId') ?>
+        <?/*= $form->field($model, 'buildingId') */?>
         <?= $form->field($model, 'zip_code') ?>
-        <?= $form->field($model, 'full_address') ?>
+        <?/*= $form->field($model, 'full_address') */?>
     
 </div><!-- _location -->

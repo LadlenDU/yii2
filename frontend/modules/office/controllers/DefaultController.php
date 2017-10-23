@@ -149,7 +149,7 @@ class DefaultController extends Controller
             }
         }
 
-        // Компании пользователя
+        // Организации пользователя
         $searchModel = new CompanySearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $params['companies'] = [

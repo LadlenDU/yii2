@@ -6,9 +6,9 @@ use yii\helpers\Html;
 /* @var $model common\models\info\Company */
 
 $this->title = Yii::t('app', 'Обновить {modelClass}: ', [
-    'modelClass' => 'Компанию',
+    'modelClass' => 'организацию',
 ]) . $model->id;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Компании'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Организации'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = Yii::t('app', 'Обновить');
 ?>

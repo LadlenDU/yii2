@@ -25,11 +25,11 @@ $fileUploadConfig = $model->userInfo->fileUploadConfig();
 
 <!--<div class="company-index">
 
-    <label class="control-label"><? /*= Html::encode(Yii::t('app', 'Список компаний')) */ ?></label>
+    <label class="control-label"><? /*= Html::encode(Yii::t('app', 'Список организаций')) */ ?></label>
     <?php /*// echo $this->render('_search', ['model' => $searchModel]); */ ?>
 
     <p>
-        <? /*= Html::a(Yii::t('app', 'Создать компанию'), ['/office/company/create'], ['class' => 'btn btn-success']) */ ?>
+        <? /*= Html::a(Yii::t('app', 'Создать организацию'), ['/office/company/create'], ['class' => 'btn btn-success']) */ ?>
     </p>
     <?php /*Pjax::begin(); */ ?>    <? /*= GridView::widget([
         'dataProvider' => $companies['dataProvider'],

@@ -55,7 +55,7 @@ class LegalEntity extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'user_info_id' => Yii::t('app', 'User Info ID'),
-            'company_name' => Yii::t('app', 'Наименование компании, форма собственности'),
+            'company_name' => Yii::t('app', 'Наименование организации, форма собственности'),
             'INN' => Yii::t('app', 'ИНН'),
             'KPP' => Yii::t('app', 'КПП'),
             'OGRN' => Yii::t('app', 'ОГРН'),

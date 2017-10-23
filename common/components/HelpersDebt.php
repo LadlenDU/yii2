@@ -22,14 +22,14 @@ class HelpersDebt
     }
 
     /**
-     * Найти компанию должника
+     * Найти организацию должника
      *
      * @param ActiveRecord $sourceRecord должник
      * @return mixed
      */
     public static function findCompanyAddressForDebtor(ActiveRecord $sourceRecord)
     {
-        //TODO: раализовать - пока компанию не ищет, берет первый попавшийся
+        //TODO: раализовать - пока организацию не ищет, берет первый попавшийся
         return \common\models\info\Company::find()->one();
     }
 

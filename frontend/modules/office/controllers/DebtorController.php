@@ -372,6 +372,7 @@ class DebtorController extends Controller
                 ->execute()
                 ->sendFile('Debts.pdf');
         } catch (\junqi\pdf\PdfException $e) {
+            //TODO: дорабоать
             echo $e->getMessage();
         }
     }

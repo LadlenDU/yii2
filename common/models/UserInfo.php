@@ -92,8 +92,8 @@ class UserInfo extends \yii\db\ActiveRecord
             'tariff_plan_id' => Yii::t('app', 'Tariff Plan ID'),
             'location_id' => Yii::t('app', 'Location ID'),
             'user_files' => Yii::t('app', 'Пользовательские файлы'),
-            //'companies' => Yii::t('app', 'Компании'),
-            'primary_company' => Yii::t('app', 'Компания по умолчанию'),
+            //'companies' => Yii::t('app', 'Организации'),
+            'primary_company' => Yii::t('app', 'Организация по умолчанию'),
         ];
     }
 
