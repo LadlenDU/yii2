@@ -199,12 +199,16 @@ class DebtorsController extends Controller
 
         //TODO: оптимизировать
         foreach ($debtorIds as $dId) {
-            $debtDetails = DebtDetails::findOne($dId);
-            if ($debtDetails) {
-                $court = HelpersDebt::findCourtAddressForDebtor($debtDetails, 'common\models\Court');
+            //$debtDetails = DebtDetails::findOne($dId);
+            $debtor = Debtor::findOne($dId);
+            if ($debtor) {
+                $court = HelpersDebt::findCourtAddressForDebtor($debtor, 'common\models\Court');
+                $company = HelpersDebt::findCompanyAddressForDebtor($debtor);
                 $debts[] = [
-                    'debtDetails' => $debtDetails,
+                    //'debtDetails' => $debtDetails,
+                    'debtor' => $debtor,
                     'court' => $court,
+                    'company' => $company,
                 ];
             }
         }
@@ -216,7 +220,7 @@ class DebtorsController extends Controller
         return $this->render('statements',
             [
                 'debts' => $debts,
-                'userInfo' => Yii::$app->user->identity->userInfo,
+                //'userInfo' => Yii::$app->user->identity->userInfo,
             ]
         );
     }

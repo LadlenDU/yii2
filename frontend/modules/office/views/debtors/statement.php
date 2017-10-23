@@ -1,9 +1,9 @@
 <?php
 /**
  * @var yii\web\View $this
- * @var common\models\DebtDetails $debtDetails
+ * @var common\models\Debtor $debtor
  * @var common\models\Court $court
- * @var common\models\UserInfo $userInfo
+ * @var common\models\info\Company $company
  */
 
 use yii\helpers\Html;

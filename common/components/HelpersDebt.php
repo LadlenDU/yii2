@@ -17,7 +17,20 @@ class HelpersDebt
      */
     public static function findCourtAddressForDebtor(ActiveRecord $sourceRecord, $targetModel)
     {
+        //TODO: раализовать - пока суд не ищет, берет первый попавшийся
         return $targetModel::find()->one();
+    }
+
+    /**
+     * Найти компанию должника
+     *
+     * @param ActiveRecord $sourceRecord должник
+     * @return mixed
+     */
+    public static function findCompanyAddressForDebtor(ActiveRecord $sourceRecord)
+    {
+        //TODO: раализовать - пока компанию не ищет, берет первый попавшийся
+        return \common\models\info\Company::find()->one();
     }
 
     public static function fillInvoiceBlank(DebtDetails $debtDetails, Court $court, \PHPExcel_Worksheet $sheet)

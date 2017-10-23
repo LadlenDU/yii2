@@ -2,10 +2,9 @@
 /**
  * @var yii\web\View $this
  * @var array $debts
- * @var common\models\UserInfo $userInfo
  */
 
-use yii\helpers\Html;
+//use yii\helpers\Html;
 
 $css = <<<CSS
 @media print {
@@ -15,13 +14,8 @@ CSS;
 
 $this->registerCss($css);
 
-?>
-
-<?php
 foreach ($debts as $d) {
-    echo $this->render('statement', $d + ['userInfo' => $userInfo])
+    echo $this->render('statement', $d)
         . '<div class="page-break"></div>';
 }
-?>
-
 
