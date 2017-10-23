@@ -76,13 +76,32 @@ class Name extends \yii\db\ActiveRecord
         return new NameQuery(get_called_class());
     }
 
-    public function createFullName()
+    /**
+     * Возвращает полное имя, если надо - пытается его сгенерировать. Также может преобразовывать падеж.
+     *
+     * @param string|false $case название падежа
+     * @return string
+     */
+    public function createFullName($case = false)
     {
         if ($this->full_name) {
-            return $this->full_name;
+            $fio = $this->full_name;
+        } else {
+            //TODO: see Location::createFullAddress()
+            $fio = implode(' ', [$this->second_name, $this->first_name, $this->patronymic]);
         }
-        //TODO: see Location::createFullAddress()
-        $name = implode(' ', [$this->second_name, $this->first_name, $this->patronymic]);
-        return $name ?: yii::$app->formatter->nullDisplay;
+
+        if ($fio && $case) {
+            $fio = \morphos\Russian\inflectName($fio, $case);
+        }
+
+        return $fio ?: yii::$app->formatter->nullDisplay;
+    }
+
+    public function createShortName()
+    {
+        return $this->second_name
+            . mb_substr($this->generalManager->first_name, 0, 1, Yii::$app->charset) . '.'
+            . mb_substr($this->generalManager->patronymic, 0, 1, Yii::$app->charset) . '.';
     }
 }
