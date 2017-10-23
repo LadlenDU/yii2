@@ -52,7 +52,7 @@ class Company extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['full_name'], 'required'],
+            [['full_name', 'short_name'], 'required'],
             [['legal_address_location_id', 'actual_address_location_id', 'CEO'], 'integer'],
             [['full_name', 'short_name', 'INN', 'KPP', 'BIK', 'OGRN', 'checking_account', 'correspondent_account', 'full_bank_name', 'operates_on_the_basis_of', 'phone', 'fax', 'email'], 'string', 'max' => 255],
             [['CEO'], 'exist', 'skipOnError' => true, 'targetClass' => Name::className(), 'targetAttribute' => ['CEO' => 'id']],

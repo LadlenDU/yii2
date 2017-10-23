@@ -91,6 +91,17 @@ if (Yii::$app->controller->action->id === 'login') {
             #dynagrid-debtors-grid-modal {
                 z-index: 1051;
             }
+
+            .jkh-standart-form {
+                width: 90%;
+                margin: 0 auto;
+            }
+
+            .jkh-standart-form .required label:after {
+                content: "*";
+                color: red;
+                margin-left: .3em;
+            }
         </style>
 
     </head>

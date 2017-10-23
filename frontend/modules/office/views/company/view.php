@@ -1,10 +1,10 @@
 <?php
 
-use yii\helpers\Html;
-use yii\widgets\DetailView;
-
 /* @var $this yii\web\View */
 /* @var $model common\models\info\Company */
+
+use yii\helpers\Html;
+use kartik\tabs\TabsX;
 
 $this->title = $model->id;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Организации'), 'url' => ['index']];
@@ -25,27 +25,34 @@ $this->params['breadcrumbs'][] = $this->title;
         ]) ?>
     </p>
 
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'id',
-            'full_name',
-            'short_name',
-            'legal_address_location_id',
-            'actual_address_location_id',
-            'INN',
-            'KPP',
-            'BIK',
-            'OGRN',
-            'checking_account',
-            'correspondent_account',
-            'full_bank_name',
-            'CEO',
-            'operates_on_the_basis_of',
-            'phone',
-            'fax',
-            'email:email',
+    <?php
+
+    $tabItems = [
+        [
+            'label' => '<i class="glyphicon glyphicon-list-alt"></i>' . Yii::t('app', 'Общие данные'),
+            'content' => $this->render('view/_common_data', ['model' => $model]),
+            'active' => true,
         ],
-    ]) ?>
+        [
+            'label' => '<i class="glyphicon glyphicon-folder-open"></i>' . Yii::t('app', 'Обслуживаемые дома'),
+            'content' => 'empty',
+        ],
+        [
+            'label' => '<i class="glyphicon glyphicon-usd"></i>' . Yii::t('app', 'Отделы и должности'),
+            'content' => 'empty',
+        ],
+        [
+            'label' => '<i class="glyphicon glyphicon-usd"></i>' . Yii::t('app', 'Сотрудники'),
+            'content' => 'empty',
+        ],
+    ];
+
+    echo TabsX::widget([
+        'items' => $tabItems,
+        'position' => TabsX::POS_ABOVE,
+        'encodeLabels' => false,
+    ]);
+
+    ?>
 
 </div>

@@ -1,16 +1,26 @@
 <?php
 
-use yii\helpers\Html;
-use yii\widgets\ActiveForm;
-
 /* @var $this yii\web\View */
 /* @var $model common\models\info\Company */
 /* @var $form yii\widgets\ActiveForm */
+
+use yii\helpers\Html;
+use yii\bootstrap\ActiveForm;
 ?>
 
 <div class="company-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin([
+        'layout' => 'horizontal',
+        'options' => ['class' => 'jkh-standart-form'],
+        /*'options' => ['class' => 'form-horizontal jkh-standart-form'],
+        'fieldConfig' => [
+            'template' => '<div class="col-lg-3 jkh-standart-form-label">{label}</div><div class="col-lg-9">{input}</div><div class="col-lg-12 col-lg-offset-3">{error}</div>',
+            'label' => 'sdfsdf',
+            //'labelOptions' => ['class' => ''],
+        ],*/
+
+    ]); ?>
 
     <?= $form->field($model, 'full_name')->textInput(['maxlength' => true]) ?>
 
