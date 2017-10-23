@@ -28,7 +28,7 @@ $attributes = [
 echo DetailView::widget([
     'model' => $model,
     'attributes' => $attributes,
-    'mode' => 'view',
+    'mode' => DetailView::MODE_VIEW,
     'bordered' => true,
     'striped' => true,
     'condensed' => true,
@@ -36,5 +36,10 @@ echo DetailView::widget([
     'hover' => true,
     'hAlign' => 'right',
     'vAlign' => 'middle',
+    'panel' => [
+        'heading' => 'Общие данные организации',
+        'type' => DetailView::TYPE_INFO,
+    ],
+    'buttons1' => '{update}',
     'container' => ['id' => 'company-common-data'],
 ]);

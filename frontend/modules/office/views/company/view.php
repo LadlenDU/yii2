@@ -14,17 +14,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?/*= Html::a(Yii::t('app', 'Обновить'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) */?>
-        <?= Html::a(Yii::t('app', 'Удалить'), ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => Yii::t('app', 'Вы уверены что хотите удалить этот элемент?'),
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
-
     <?php
 
     $tabItems = [
@@ -54,5 +43,16 @@ $this->params['breadcrumbs'][] = $this->title;
     ]);
 
     ?>
+
+    <p style="text-align: right">
+        <?/*= Html::a(Yii::t('app', 'Обновить'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) */?>
+        <?= Html::a(Yii::t('app', 'Удалить организацию'), ['delete', 'id' => $model->id], [
+            'class' => 'btn btn-danger',
+            'data' => [
+                'confirm' => Yii::t('app', 'Вы уверены что хотите удалить текущую организацию?'),
+                'method' => 'post',
+            ],
+        ]) ?>
+    </p>
 
 </div>
