@@ -52,10 +52,10 @@ use kartik\file\FileInput;
                 <i class="icon-search icon-white"></i><?= Yii::t('app', 'Загрузка должников') ?>
             </button>
 
-            <button class="btn-sm btn btn-primary" id="print_invoices"
-                    title="<?= Yii::t('app', 'Распечатка бланков выбранных должников') ?>">
-                <i class="icon-search icon-white"></i><?= Yii::t('app', 'Распечатка бланков') ?>
-            </button>
+            <!--<button class="btn-sm btn btn-primary" id="print_invoices"
+                    title="<?/*= Yii::t('app', 'Распечатка бланков выбранных должников') */?>">
+                <i class="icon-search icon-white"></i><?/*= Yii::t('app', 'Распечатка бланков') */?>
+            </button>-->
 
             <button class="btn-sm btn btn-primary" id="print_statements"
                     title="<?= Yii::t('app', 'Распечатка заявлений в суд на выбранных должников') ?>">
@@ -121,7 +121,7 @@ $printErrorTxt = json_encode(Yii::t('app', 'Ошибка печати!'));
 $noDebtorsSelectedTxt = json_encode(Yii::t('app', 'Выберите пожалуйста должников.'));
 $script = <<<JS
     $("#print_invoices").click(function () {
-        var keys = $('#dynagrid-debts-options').yiiGridView('getSelectedRows');
+        var keys = $('#dynagrid-debtors-options').yiiGridView('getSelectedRows');
         if (!keys.length) {
             alert($noDebtorsSelectedTxt);
             return;
@@ -130,7 +130,7 @@ $script = <<<JS
         window.open(url, '_blank');
     });
     $("#print_statements").click(function () {
-        var keys = $('#dynagrid-debts-options').yiiGridView('getSelectedRows');
+        var keys = $('#dynagrid-debtors-options').yiiGridView('getSelectedRows');
         if (!keys.length) {
             alert($noDebtorsSelectedTxt);
             return;
