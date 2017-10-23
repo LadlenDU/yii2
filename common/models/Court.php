@@ -83,6 +83,7 @@ class Court extends \yii\db\ActiveRecord
 
     public function getFullAddress()
     {
+        //TODO: адрес вынести в таблицу location
         $addr = trim(implode(', ', [$this->region, $this->district, $this->city, $this->street, $this->building]));
         if (!$addr) {
             $addr = '(Нет адреса)';
