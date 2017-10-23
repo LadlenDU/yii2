@@ -187,6 +187,56 @@ class DebtorsController extends Controller
         );
     }
 
+    public function actionPrintDocuments()
+    {
+        $this->layout = 'print_fine';
+        $this->view->title = \Yii::t('app', 'Пакет документов');
+        $debtorIds = Yii::$app->request->post('debtorIds');
+        $this->getStatementHtml($debtorIds[0]);
+    }
+
+    protected function getFullReportFineDataHtml($debtorId)
+    {
+        $html = '';
+
+        if ($debtor = Debtor::findOne($debtorId)) {
+            $periods = $debtor->getFineCalculatorResult();
+
+            $fine = new \common\models\Fine();
+            //$html = $fine->getBuhHtml($periods);
+            $html = $fine->getClassicHtml($periods);
+        }
+
+        $data = [
+            'html' => $html,
+            'debtorId' => $debtorId,
+            'debtorLS' => $debtor->LS_IKU_provider,
+            'debtorName' => $debtor->name->full_name,
+            'debtorAddress' => $debtor->location->full_address,
+        ];
+
+        //TODO: костыль - не в том месте
+        set_time_limit(300);
+        $html = $this->renderPartial('_full_report_fine_data', $data);
+        return $html;
+    }
+
+    protected function getStatementHtml($debtorId)
+    {
+        $params = [];
+        $debtor = Debtor::findOne($debtorId);
+        if ($debtor) {
+            $court = HelpersDebt::findCourtAddressForDebtor($debtor, 'common\models\Court');
+            $company = HelpersDebt::findCompanyAddressForDebtor($debtor);
+            $params = [
+                'debtor' => $debtor,
+                'court' => $court,
+                'company' => $company,
+            ];
+        }
+        return $this->renderPartial('statement', $params);
+    }
+
     public function actionStatements()
     {
         #$debtorIds = $_POST['debtorIds'];
@@ -223,6 +273,8 @@ class DebtorsController extends Controller
                 //'userInfo' => Yii::$app->user->identity->userInfo,
             ]
         );
+
+        //Yii::$app->html2pdf->convert($html)->send('Debts.pdf');
     }
 
     public function actionInvoicePrev(array $debtorIds)

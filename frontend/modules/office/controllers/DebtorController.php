@@ -16,6 +16,7 @@ use common\models\Accrual;
 use common\models\Payment;
 use common\models\UploadForm;
 use yii\data\ArrayDataProvider;
+use common\components\HelpersDebt;
 
 //use kartik\mpdf\Pdf;
 
@@ -302,6 +303,68 @@ class DebtorController extends Controller
         }
     }
 
+    protected function getFullReportFineDataHtml($debtorId)
+    {
+        $html = '';
+
+        if ($debtor = Debtor::findOne($debtorId)) {
+            $periods = $debtor->getFineCalculatorResult();
+
+            $fine = new \common\models\Fine();
+            //$html = $fine->getBuhHtml($periods);
+            $html = $fine->getClassicHtml($periods);
+        }
+
+        $data = [
+            'html' => $html,
+            'debtorId' => $debtorId,
+            'debtorLS' => $debtor->LS_IKU_provider,
+            'debtorName' => $debtor->name->full_name,
+            'debtorAddress' => $debtor->location->full_address,
+        ];
+
+        //TODO: костыль - не в том месте
+        set_time_limit(300);
+        $html = $this->renderPartial('_full_report_fine_data', $data);
+        return $html;
+    }
+
+    protected function getStatementHtml($debtorId)
+    {
+        $params = [];
+        $debtor = Debtor::findOne($debtorId);
+        if ($debtor) {
+            $court = HelpersDebt::findCourtAddressForDebtor($debtor, 'common\models\Court');
+            $company = HelpersDebt::findCompanyAddressForDebtor($debtor);
+            $params = [
+                'debtor' => $debtor,
+                'court' => $court,
+                'company' => $company,
+            ];
+        }
+        return $this->renderPartial('statement', $params);
+    }
+
+    public function actionPrintDocuments()
+    {
+        $documents = [];
+
+        $this->layout = 'print_fine';
+        $this->view->title = \Yii::t('app', 'Пакет документов');
+
+        $debtorIds = Yii::$app->request->post('debtorIds');
+        $doc['statement'] = $this->getStatementHtml($debtorIds[0]);
+        $doc['full_fine_report'] = $this->getFullReportFineDataHtml($debtorIds[0]);
+
+        $documents[] = $doc;
+
+        return $this->render('print_documents',
+            [
+                'documents' => $documents,
+            ]
+        );
+    }
+
     public function actionFullReportFineData($debtor_id)
     {
         $html = '';
@@ -334,6 +397,13 @@ class DebtorController extends Controller
             //return $html;
             //$tt = print_r(Yii::$app->html2pdf->convert($html)); exit;
             Yii::$app->html2pdf->convert($html)->send('Debts.pdf');
+            /*try {
+            Yii::$app->html2pdf->loadHtml($html)
+                ->execute()
+                ->sendFile('Debts.pdf');
+            } catch (\junqi\pdf\PdfException $e) {
+                echo $e->getMessage();
+            }*/
             //exit;
             //->saveAs(fopen('php://stdout', 'w'));
 

@@ -136,7 +136,8 @@ $script = <<<JS
             return;
         }
         //var url = '/office/debtors/statements/?' + $.param({debtorIds:keys});
-        var url = '/office/debtors/statements';
+        //var url = '/office/debtors/statements';
+        var url = '/office/debtor/print-documents';
         $.post(url, {debtorIds:keys}, function(html) {
             //var statementWnd = window.open(url, '_blank');
             var statementWnd = window.open('', '_blank');
