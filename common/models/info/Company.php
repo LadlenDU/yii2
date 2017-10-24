@@ -20,6 +20,7 @@ use common\models\UserInfoCompany;
  * @property string $INN
  * @property string $KPP
  * @property string $BIK
+ * @property string $OGRN
  * @property string $OGRN_IP_type
  * @property string $OGRN_IP_number
  * @property string $OGRN_IP_date
@@ -44,6 +45,8 @@ use common\models\UserInfoCompany;
  * @property Location $legalAddressLocation
  * @property Location $postalAddressLocation
  * @property TaxSystem $taxSystem
+ * @property CompanyCompanyFiles[] $companyCompanyFiles
+ * @property CompanyFiles[] $companyFiles
  * @property CompanyPhone[] $companyPhones
  * @property UserInfo[] $userInfos
  * @property UserInfoCompany[] $userInfoCompanies
@@ -51,6 +54,8 @@ use common\models\UserInfoCompany;
  */
 class Company extends \yii\db\ActiveRecord
 {
+    public $company_files = [];
+
     /**
      * @inheritdoc
      */
@@ -68,8 +73,9 @@ class Company extends \yii\db\ActiveRecord
             [['full_name', 'short_name', 'company_type_id', 'tax_system_id'], 'required'],
             [['legal_address_location_id', 'postal_address_location_id', 'actual_address_location_id', 'OGRN_IP_type', 'CEO', 'company_type_id', 'OKOPF_id', 'tax_system_id'], 'integer'],
             [['OGRN_IP_date'], 'safe'],
+            [['company_files'], 'safe'],
             [['site'], 'string'],
-            [['full_name', 'short_name', 'INN', 'KPP', 'BIK', 'OGRN_IP_number', 'OGRN_IP_registered_company', 'checking_account', 'correspondent_account', 'full_bank_name', 'operates_on_the_basis_of', 'phone', 'fax', 'email'], 'string', 'max' => 255],
+            [['full_name', 'short_name', 'INN', 'KPP', 'BIK', 'OGRN', 'OGRN_IP_number', 'OGRN_IP_registered_company', 'checking_account', 'correspondent_account', 'full_bank_name', 'operates_on_the_basis_of', 'phone', 'fax', 'email'], 'string', 'max' => 255],
             [['CEO'], 'exist', 'skipOnError' => true, 'targetClass' => Name::className(), 'targetAttribute' => ['CEO' => 'id']],
             [['OKOPF_id'], 'exist', 'skipOnError' => true, 'targetClass' => OKOPF::className(), 'targetAttribute' => ['OKOPF_id' => 'id']],
             [['actual_address_location_id'], 'exist', 'skipOnError' => true, 'targetClass' => Location::className(), 'targetAttribute' => ['actual_address_location_id' => 'id']],
@@ -95,6 +101,7 @@ class Company extends \yii\db\ActiveRecord
             'INN' => Yii::t('app', 'ИНН'),
             'KPP' => Yii::t('app', 'КПП'),
             'BIK' => Yii::t('app', 'БИК'),
+            'OGRN' => Yii::t('app', 'ОГРН'),
             'OGRN_IP_type' => Yii::t('app', 'comment(\"Тип: ОГРН(0) или ОГРНИП(1)'),
             'OGRN_IP_number' => Yii::t('app', 'Номер ОГРН / ОГРНИП'),
             'OGRN_IP_date' => Yii::t('app', 'Дата ОГРН / ОГРНИП'),
@@ -168,6 +175,23 @@ class Company extends \yii\db\ActiveRecord
     public function getTaxSystem()
     {
         return $this->hasOne(TaxSystem::className(), ['id' => 'tax_system_id'])->inverseOf('companies');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCompanyCompanyFiles()
+    {
+        return $this->hasMany(CompanyCompanyFiles::className(), ['company_id' => 'id'])->inverseOf('company');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCompanyFiles()
+    {
+        return $this->hasMany(CompanyFiles::className(), ['id' => 'company_files_id'])->viaTable('company_company_files', ['company_id' => 'id']);
+        //return $this->hasOne(CompanyFiles::className(), ['id' => 'company_files_id'])->viaTable('company_company_files', ['company_id' => 'id']);
     }
 
     /**

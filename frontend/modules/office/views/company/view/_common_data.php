@@ -79,7 +79,7 @@ $attributes = [
     [
         'attribute' => 'legal_address_location_id',
         'label' => Yii::t('app', 'Юридический адрес'),
-        'format' => 'raw',
+        //'format' => 'raw',
         'type' => DetailView::INPUT_TEXT,
         'widgetOptions' => [
             'data' => $model->legalAddressLocation ? $model->legalAddressLocation->createFullAddress() : '',
@@ -110,20 +110,21 @@ $attributes = [
     ],
     'INN',
     'KPP',
-    [
-        'attribute' => 'OGRN_IP_number',
+    'OGRN',
+    /*[
+        'attribute' => 'OGRN',
         'label' => 'ОГРН',
-    ],
+    ],*/
     'checking_account',
     'BIK',
     'full_bank_name',
     'correspondent_account',
-    /* [
-         'attribute' => 'OGRN_IP_date',
-         'label' => Yii::t('app', 'Файл УГРЮЛ'),
-         //'format' => 'date',
-         'type' => DetailView::INPUT_FILEINPUT,
-     ],*/
+    /*[
+        'attribute' => 'company_files',
+        'label' => Yii::t('app', 'Файл УГРЮЛ'),
+        //'format' => 'date',
+        'type' => DetailView::INPUT_FILEINPUT,
+    ],*/
     /*[
         'group' => true,
         'label' => Yii::t('app', 'ОГРН / ОГРНИП'),
@@ -173,7 +174,7 @@ echo DetailView::widget([
     'condensed' => false,
     'responsive' => true,
     'hover' => true,
-    'hAlign' => 'right',
+    'hAlign' => 'left',
     'vAlign' => 'middle',
     'panel' => [
         'heading' => 'Общие данные организации',
