@@ -108,13 +108,21 @@ $attributes = [
     'INN',
     'KPP',
     [
-        'attribute' => 'OGRN_IP_type',
+        'group' => true,
         'label' => Yii::t('app', 'ОГРН / ОГРНИП'),
+        'rowOptions' => ['class' => 'info'],
+    ],
+    [
+        'attribute' => 'OGRN_IP_type',
+        'label' => Yii::t('app', 'Тип'),
         'format' => 'raw',
         'type' => DetailView::INPUT_RADIO_BUTTON_GROUP,
         'items' => [0 => 'ОГРН', 1 => 'ОГРНИП'],
     ],
-    'OGRN_IP_number',
+    [
+        'attribute' => 'OGRN_IP_number',
+        'label' => Yii::t('app', 'Номер'),
+    ],
     [
         'attribute' => 'OGRN_IP_date',
         'label' => Yii::t('app', 'Дата регистрации'),
@@ -123,9 +131,12 @@ $attributes = [
         'widgetOptions' => [
             'pluginOptions' => ['format' => 'yyyy-mm-dd']
         ],
-        'valueColOptions' => ['style' => 'width:30%']
+        //'valueColOptions' => ['style' => 'width:30%']
     ],
-    'OGRN_IP_registered_company',
+    [
+        'attribute' => 'OGRN_IP_registered_company',
+        'label' => Yii::t('app', 'Наименование зарегистрировавшей организации'),
+    ],
     //'BIK',
     //'OGRN',
     //'checking_account',
