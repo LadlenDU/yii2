@@ -42,9 +42,7 @@ $attributes = [
     [
         'attribute' => 'OKOPF_id',
         'label' => Yii::t('app', 'ОКОПФ'),
-        'value' => function ($model) {
-            return isset($model->OKOPF) ? $model->OKOPF->name : '';
-        },
+        'value' => $model->oKOPF ? $model->oKOPF->name : '-',
         'format' => 'raw',
         'type' => DetailView::INPUT_SELECT2,
         'widgetOptions' => [
