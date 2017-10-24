@@ -65,8 +65,9 @@ class Company extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['full_name', 'short_name'], 'required'],
+            [['full_name', 'short_name', 'company_type_id', 'tax_system_id'], 'required'],
             [['legal_address_location_id', 'postal_address_location_id', 'actual_address_location_id', 'OGRN_IP_type', 'CEO', 'company_type_id', 'OKOPF_id', 'tax_system_id'], 'integer'],
+            //TODO: OGRN_IP_date => OGRN_IP_type
             [['OGRN_IP_date'], 'safe'],
             [['site'], 'string'],
             [['full_name', 'short_name', 'INN', 'KPP', 'BIK', 'OGRN_IP_number', 'OGRN_IP_registered_company', 'checking_account', 'correspondent_account', 'full_bank_name', 'operates_on_the_basis_of', 'phone', 'fax', 'email'], 'string', 'max' => 255],

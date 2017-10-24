@@ -76,7 +76,7 @@ class CompanySearch extends Company
             ->andFilterWhere(['like', 'INN', $this->INN])
             ->andFilterWhere(['like', 'KPP', $this->KPP])
             ->andFilterWhere(['like', 'BIK', $this->BIK])
-            ->andFilterWhere(['like', 'OGRN', $this->OGRN])
+            //->andFilterWhere(['like', 'OGRN', $this->OGRN])
             ->andFilterWhere(['like', 'checking_account', $this->checking_account])
             ->andFilterWhere(['like', 'correspondent_account', $this->correspondent_account])
             ->andFilterWhere(['like', 'full_bank_name', $this->full_bank_name])

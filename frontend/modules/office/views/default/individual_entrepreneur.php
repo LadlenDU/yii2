@@ -104,7 +104,7 @@ $companies = $model->userInfo->companies;
         ]
     ]);
     */ ?>
-    <?= $form->field($model, 'OGRN') ?>
+    <?/*= $form->field($model, 'OGRN') */?>
     <?= $form->field($model, 'INN') ?>
     <?= $form->field($model, 'BIC') ?>
     <?= $form->field($model, 'checking_account_num') ?>

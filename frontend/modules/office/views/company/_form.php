@@ -52,7 +52,7 @@ use yii\bootstrap\ActiveForm;
 
     <?= $form->field($model, 'BIK')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'OGRN')->textInput(['maxlength' => true]) ?>
+    <?/*= $form->field($model, 'OGRN')->textInput(['maxlength' => true]) */?>
 
     <?= $form->field($model, 'checking_account')->textInput(['maxlength' => true]) ?>
 

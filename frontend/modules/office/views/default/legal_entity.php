@@ -30,7 +30,7 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'CEO_name') ?>
     <?= $form->field($model, 'INN') ?>
     <?= $form->field($model, 'KPP') ?>
-    <?= $form->field($model, 'OGRN') ?>
+    <?/*= $form->field($model, 'OGRN') */?>
     <?= $form->field($model, 'BIC') ?>
     <?= $form->field($model, 'checking_account_num') ?>
 
