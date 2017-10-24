@@ -21,7 +21,7 @@ $attributes = [
     'short_name',
     [
         'group' => true,
-        'label' => Yii::t('app', '----'),
+        'label' => Yii::t('app', 'Деятельность'),
         'rowOptions' => ['class' => 'info'],
     ],
     [
@@ -105,7 +105,7 @@ $attributes = [
     ],
     [
         'group' => true,
-        'label' => Yii::t('app', '----'),
+        'label' => Yii::t('app', 'Реквизиты'),
         'rowOptions' => ['class' => 'info'],
     ],
     'INN',
