@@ -108,6 +108,20 @@ $attributes = [
     'INN',
     'KPP',
     [
+        'attribute' => 'OGRN_IP_number',
+        'label' => 'ОГРН',
+    ],
+    'checking_account',
+    'BIK',
+    'full_bank_name',
+    'correspondent_account',
+   /* [
+        'attribute' => 'OGRN_IP_date',
+        'label' => Yii::t('app', 'Файл УГРЮЛ'),
+        //'format' => 'date',
+        'type' => DetailView::INPUT_FILEINPUT,
+    ],*/
+    /*[
         'group' => true,
         'label' => Yii::t('app', 'ОГРН / ОГРНИП'),
         'rowOptions' => ['class' => 'info'],
@@ -136,7 +150,7 @@ $attributes = [
     [
         'attribute' => 'OGRN_IP_registered_company',
         'label' => Yii::t('app', 'Наименование зарегистрировавшей организации'),
-    ],
+    ],*/
     //'BIK',
     //'OGRN',
     //'checking_account',
