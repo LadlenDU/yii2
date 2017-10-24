@@ -27,6 +27,7 @@ $attributes = [
     [
         'attribute' => 'company_type_id',
         'label' => Yii::t('app', 'Тип организации'),
+        'value' => $model->companyType->name,
         //'format'=>['decimal', 2],
         //'inputContainer' => ['class' => 'col-sm-6'],
         'format' => 'raw',
@@ -41,6 +42,9 @@ $attributes = [
     [
         'attribute' => 'OKOPF_id',
         'label' => Yii::t('app', 'ОКОПФ'),
+        'value' => function ($model) {
+            return isset($model->OKOPF) ? $model->OKOPF->name : '';
+        },
         'format' => 'raw',
         'type' => DetailView::INPUT_SELECT2,
         'widgetOptions' => [
@@ -52,6 +56,7 @@ $attributes = [
     [
         'attribute' => 'tax_system_id',
         'label' => Yii::t('app', 'Система налогообложения'),
+        'value' => $model->taxSystem->name,
         'format' => 'raw',
         'type' => DetailView::INPUT_SELECT2,
         'widgetOptions' => [
@@ -115,12 +120,12 @@ $attributes = [
     'BIK',
     'full_bank_name',
     'correspondent_account',
-   /* [
-        'attribute' => 'OGRN_IP_date',
-        'label' => Yii::t('app', 'Файл УГРЮЛ'),
-        //'format' => 'date',
-        'type' => DetailView::INPUT_FILEINPUT,
-    ],*/
+    /* [
+         'attribute' => 'OGRN_IP_date',
+         'label' => Yii::t('app', 'Файл УГРЮЛ'),
+         //'format' => 'date',
+         'type' => DetailView::INPUT_FILEINPUT,
+     ],*/
     /*[
         'group' => true,
         'label' => Yii::t('app', 'ОГРН / ОГРНИП'),
