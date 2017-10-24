@@ -16,7 +16,7 @@ use common\models\Accrual;
 use common\models\Payment;
 use common\models\UploadForm;
 use yii\data\ArrayDataProvider;
-use common\components\HelpersDebt;
+use common\helpers\DebtHelper;
 
 //use kartik\mpdf\Pdf;
 
@@ -334,8 +334,8 @@ class DebtorController extends Controller
         $params = [];
         $debtor = Debtor::findOne($debtorId);
         if ($debtor) {
-            $court = HelpersDebt::findCourtAddressForDebtor($debtor, 'common\models\Court');
-            $company = HelpersDebt::findCompanyAddressForDebtor($debtor);
+            $court = DebtHelper::findCourtAddressForDebtor($debtor, 'common\models\Court');
+            $company = DebtHelper::findCompanyAddressForDebtor($debtor);
             $params = [
                 'debtor' => $debtor,
                 'court' => $court,

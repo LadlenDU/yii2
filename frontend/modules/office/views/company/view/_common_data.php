@@ -119,12 +119,33 @@ $attributes = [
     'BIK',
     'full_bank_name',
     'correspondent_account',
-    /*[
+    [
         'attribute' => 'company_files',
         'label' => Yii::t('app', 'Файл УГРЮЛ'),
-        //'format' => 'date',
         'type' => DetailView::INPUT_FILEINPUT,
-    ],*/
+        'widgetOptions' => [
+            'options' => [
+                'accept' => 'application/pdf',
+                'multiple' => true,
+            ],
+            'pluginOptions' => [
+                'showRemove' => false,
+                #'initialPreview' => $filesPluginOptions['initialPreview'],
+                'initialPreviewAsData' => true,
+                'initialPreviewFileType' => 'pdf',
+                'initialCaption' => Yii::t('app', 'Дополнительные файлы'),
+                #'initialPreviewConfig' => $filesPluginOptions['initialPreviewConfig'],
+                'overwriteInitial' => false,
+            ],
+            'pluginEvents' => [
+                'filebeforedelete' =>
+                    'function() {
+                        var aborted = !window.confirm(' . json_encode(Yii::t('app', 'Вы уверены что хотите удалить элемент?')) . ');
+                        return aborted;
+                    }',
+            ],
+        ],
+    ],
     /*[
         'group' => true,
         'label' => Yii::t('app', 'ОГРН / ОГРНИП'),
@@ -168,7 +189,8 @@ $attributes = [
 echo DetailView::widget([
     'model' => $model,
     'attributes' => $attributes,
-    'mode' => DetailView::MODE_VIEW,
+    //'mode' => DetailView::MODE_VIEW,
+    'mode' => DetailView::MODE_EDIT,
     'bordered' => true,
     'striped' => false,
     'condensed' => false,

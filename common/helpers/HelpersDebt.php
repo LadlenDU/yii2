@@ -1,13 +1,13 @@
 <?php
 
-namespace common\components;
+namespace common\helpers;
 
 use common\models\DebtDetails;
 use yii\db\ActiveRecord;
 use common\models\Debtor;
 use common\models\Court;
 
-class HelpersDebt
+class DebtHelper
 {
     /**
      * Найти адрес.

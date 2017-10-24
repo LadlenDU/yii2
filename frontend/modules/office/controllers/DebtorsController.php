@@ -2,7 +2,7 @@
 
 namespace frontend\modules\office\controllers;
 
-use common\components\HelpersDebt;
+use common\helpers\DebtHelper;
 use common\models\DebtDetails;
 use common\models\Debtor;
 use common\models\DebtDetailsSearch;
@@ -51,7 +51,7 @@ class DebtorsController extends Controller
     public function actionDocument($debtorId)
     {
         if ($debtor = DebtDetails::findOne($debtorId)) {
-            //$court = HelpersDebt::findCourtAddressForDebtor($debtor, 'common\models\Court');
+            //$court = DebtHelper::findCourtAddressForDebtor($debtor, 'common\models\Court');
         } else {
             throw new \Exception(Yii::t('app', 'Не найден должник.'));
         }
@@ -176,7 +176,7 @@ class DebtorsController extends Controller
         if (!$debtDetails) {
             throw new \yii\web\NotFoundHttpException();
         }
-        $court = HelpersDebt::findCourtAddressForDebtor($debtDetails, 'common\models\Court');
+        $court = DebtHelper::findCourtAddressForDebtor($debtDetails, 'common\models\Court');
 
         return $this->render('statement',
             [
@@ -226,8 +226,8 @@ class DebtorsController extends Controller
         $params = [];
         $debtor = Debtor::findOne($debtorId);
         if ($debtor) {
-            $court = HelpersDebt::findCourtAddressForDebtor($debtor, 'common\models\Court');
-            $company = HelpersDebt::findCompanyAddressForDebtor($debtor);
+            $court = DebtHelper::findCourtAddressForDebtor($debtor, 'common\models\Court');
+            $company = DebtHelper::findCompanyAddressForDebtor($debtor);
             $params = [
                 'debtor' => $debtor,
                 'court' => $court,
@@ -252,8 +252,8 @@ class DebtorsController extends Controller
             //$debtDetails = DebtDetails::findOne($dId);
             $debtor = Debtor::findOne($dId);
             if ($debtor) {
-                $court = HelpersDebt::findCourtAddressForDebtor($debtor, 'common\models\Court');
-                $company = HelpersDebt::findCompanyAddressForDebtor($debtor);
+                $court = DebtHelper::findCourtAddressForDebtor($debtor, 'common\models\Court');
+                $company = DebtHelper::findCompanyAddressForDebtor($debtor);
                 $debts[] = [
                     //'debtDetails' => $debtDetails,
                     'debtor' => $debtor,
@@ -295,12 +295,12 @@ class DebtorsController extends Controller
             #$sheet->setTitle();
 
             if ($debtor = DebtDetails::findOne($id)) {
-                $court = HelpersDebt::findCourtAddressForDebtor($debtor, 'common\models\Court');
+                $court = DebtHelper::findCourtAddressForDebtor($debtor, 'common\models\Court');
             } else {
                 throw new \Exception(Yii::t('app', 'Не найден должник.'));
             }
 
-            HelpersDebt::fillInvoiceBlank($debtor, $court, $sheet);
+            DebtHelper::fillInvoiceBlank($debtor, $court, $sheet);
         }
 
         //TODO: use Yii::$app->getResponse()->sendContentAsFile(...)->send();
