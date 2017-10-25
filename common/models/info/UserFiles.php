@@ -27,6 +27,14 @@ class UserFiles extends \yii\db\ActiveRecord
         return 'user_files';
     }
 
+    public function behaviors()
+    {
+        return [
+            // anonymous behavior, behavior class name only
+            \common\models\FileUploadBehavior::className(),
+        ];
+    }
+
     /**
      * @inheritdoc
      */

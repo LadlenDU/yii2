@@ -10,7 +10,7 @@ use common\models\info\LegalEntity;
 use common\models\info\IndividualEntrepreneur;
 use common\models\info\Individual;
 use yii\web\UploadedFile;
-use common\models\info\UserFilesExt;
+use common\models\info\UserFiles;
 use yii\filters\VerbFilter;
 use common\models\info\CompanySearch;
 
@@ -52,18 +52,19 @@ class DefaultController extends Controller
 
     public function actionUserFile($id, $action = false)
     {
+        $model = $this->findUserFilesModel($id);
         switch ($action) {
             case 'download': {
-                UserFilesExt::outputFile($id);
+                $model->outputFile();
                 break;
             }
             case 'remove': {
-                UserFilesExt::remove($id);
+                $model->remove();
                 break;
             }
             default: {
                 // inline
-                UserFilesExt::outputInline($id);
+                $model->outputInline();
                 break;
             }
         }
@@ -116,7 +117,7 @@ class DefaultController extends Controller
 
                         if ($uploadedFiles = UploadedFile::getInstances($model->userInfo, 'user_files')) {
                             foreach ($uploadedFiles as $upFile) {
-                                $userFiles = new UserFilesExt();
+                                $userFiles = new UserFiles();
                                 $userFiles->content = file_get_contents($upFile->tempName);
                                 $userFiles->name = $upFile->name;
                                 $userFiles->mime_type = $upFile->type;
@@ -165,5 +166,13 @@ class DefaultController extends Controller
         ];*/
 
         return $this->render($viewName, $params);
+    }
+
+    protected function findUserFilesModel($id)
+    {
+        if (($model = UserFiles::findOne($id)) !== null) {
+            return $model;
+        }
+        throw new \yii\web\NotFoundHttpException();
     }
 }
