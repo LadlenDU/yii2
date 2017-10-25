@@ -10,6 +10,8 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use common\models\UserInfo;
+use yii\web\UploadedFile;
+use common\models\info\CompanyFiles;
 
 /**
  * CompanyController implements the CRUD actions for Company model.
@@ -73,6 +75,17 @@ class CompanyController extends Controller
         $fileUploadConfig = $fileUpload->fileUploadConfig($model->companyFiles);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            if ($uploadedFiles = UploadedFile::getInstances($model, 'company_files')) {
+                foreach ($uploadedFiles as $upFile) {
+                    $companyFiles = new CompanyFiles();
+                    $companyFiles->content = file_get_contents($upFile->tempName);
+                    $companyFiles->name = $upFile->name;
+                    $companyFiles->mime_type = $upFile->type;
+                    $companyFiles->save();
+                    $model->link('companyFiles', $companyFiles);
+                    //$infoModel->save(false);
+                }
+            }
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('view', [
@@ -165,7 +178,7 @@ class CompanyController extends Controller
 
     protected function findCompanyFilesModel($id)
     {
-        if (($model = \common\models\info\CompanyFiles::findOne($id)) !== null) {
+        if (($model = CompanyFiles::findOne($id)) !== null) {
             return $model;
         }
         throw new \yii\web\NotFoundHttpException();
