@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
         [
             'label' => '<i class="glyphicon glyphicon-list-alt"></i>' . Yii::t('app', 'Общие данные'),
             'content' => $this->render('view/_common_data', ['model' => $model, 'filesUploading' => $filesUploading]),
-            'active' => true,
+            //'active' => true,
         ],
         [
             'label' => '<i class="glyphicon glyphicon-folder-open"></i>' . Yii::t('app', 'Обслуживаемые дома'),
@@ -30,6 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
         [
             'label' => '<i class="glyphicon glyphicon-usd"></i>' . Yii::t('app', 'Отделы и должности'),
             'content' => $this->render('view/_departments_and_positions', ['model' => $model]),
+            'active' => true,
         ],
         [
             'label' => '<i class="glyphicon glyphicon-usd"></i>' . Yii::t('app', 'Сотрудники'),
