@@ -54,7 +54,8 @@ class DefaultController extends Controller
     public function actionUserFile($id, $action = false)
     {
         $model = $this->findUserFilesModel($id);
-        switch ($action) {
+        FileUploadHelper::handleAction($model, $action);
+        /*switch ($action) {
             case 'download': {
                 $model->outputFile();
                 break;
@@ -68,7 +69,7 @@ class DefaultController extends Controller
                 $model->outputInline();
                 break;
             }
-        }
+        }*/
     }
 
     public function actionMyOrganization()

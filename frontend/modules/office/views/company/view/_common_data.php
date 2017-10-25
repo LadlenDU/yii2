@@ -2,6 +2,7 @@
 
 /* @var $this yii\web\View */
 /* @var $model common\models\info\Company */
+/* @var $fileUploadConfig array */
 
 use kartik\detail\DetailView;
 use common\models\info\CompanyType;
@@ -123,7 +124,7 @@ $attributes = [
         'attribute' => 'company_files',
         'label' => Yii::t('app', 'Файлы УГРЮЛ'),
         'type' => DetailView::INPUT_FILEINPUT,
-        'widgetOptions' => [
+        'widgetOptions' => $fileUploadConfig,/*[
             'options' => [
                 'accept' => 'application/pdf',
                 'multiple' => true,
@@ -144,7 +145,7 @@ $attributes = [
                         return aborted;
                     }',
             ],
-        ],
+        ],*/
     ],
     /*[
         'group' => true,

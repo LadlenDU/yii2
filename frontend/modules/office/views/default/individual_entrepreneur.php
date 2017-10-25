@@ -14,6 +14,7 @@ use yii\helpers\ArrayHelper;
 /* @var $model common\models\info\IndividualEntrepreneur */
 /* @var $form ActiveForm */
 /* @var $companies array */
+/* @var $fileUploadConfig array */
 
 //TODO: title из БД
 

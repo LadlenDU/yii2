@@ -2,6 +2,7 @@
 
 /* @var $this yii\web\View */
 /* @var $model common\models\info\Company */
+/* @var $fileUploadConfig array */
 
 use yii\helpers\Html;
 use kartik\tabs\TabsX;
@@ -19,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
     $tabItems = [
         [
             'label' => '<i class="glyphicon glyphicon-list-alt"></i>' . Yii::t('app', 'Общие данные'),
-            'content' => $this->render('view/_common_data', ['model' => $model]),
+            'content' => $this->render('view/_common_data', ['model' => $model, 'fileUploadConfig' => $fileUploadConfig]),
             'active' => true,
         ],
         [

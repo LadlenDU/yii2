@@ -73,4 +73,23 @@ class FileUploadHelper
 
         return $options;
     }
+
+    public static function handleAction($model, $action)
+    {
+        switch ($action) {
+            case 'download': {
+                $model->outputFile();
+                break;
+            }
+            case 'remove': {
+                $model->remove();
+                break;
+            }
+            default: {
+                // inline
+                $model->outputInline();
+                break;
+            }
+        }
+    }
 }

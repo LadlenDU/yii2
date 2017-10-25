@@ -2,6 +2,7 @@
 
 namespace frontend\modules\office\controllers;
 
+use common\helpers\FileUploadHelper;
 use Yii;
 use common\models\info\Company;
 use common\models\info\CompanySearch;
@@ -45,6 +46,12 @@ class CompanyController extends Controller
         ]);
     }
 
+    public function actionUserFile($id, $action = false)
+    {
+        $model = $this->findCompanyFilesModel($id);
+        FileUploadHelper::handleAction($model, $action);
+    }
+
     /**
      * Displays a single Company model.
      * @param integer $id
@@ -58,11 +65,19 @@ class CompanyController extends Controller
 
         $model = $this->findModel($id);
 
+        $fileUpload = new FileUploadHelper('/office/company/company-file', [
+            'pluginOptions' => [
+                'initialCaption' => Yii::t('app', 'Файлы УГРЮЛ'),
+            ],
+        ]);
+        $fileUploadConfig = $fileUpload->fileUploadConfig($model->companyFiles);
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('view', [
                 'model' => $model,
+                'fileUploadConfig' => $fileUploadConfig,
             ]);
         }
     }
@@ -146,5 +161,13 @@ class CompanyController extends Controller
         } else {
             throw new NotFoundHttpException(Yii::t('app', 'Запрашиваемая страница не найдена.'));
         }
+    }
+
+    protected function findCompanyFilesModel($id)
+    {
+        if (($model = \common\models\info\CompanyFiles::findOne($id)) !== null) {
+            return $model;
+        }
+        throw new \yii\web\NotFoundHttpException();
     }
 }
