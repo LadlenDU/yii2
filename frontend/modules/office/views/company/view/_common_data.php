@@ -183,6 +183,6 @@ echo DetailView::widget([
         'heading' => 'Общие данные организации',
         'type' => DetailView::TYPE_INFO,
     ],
-    'buttons1' => '{update}',
+    //'buttons1' => '{update}',
     'container' => ['id' => 'company-common-data'],
 ]);
