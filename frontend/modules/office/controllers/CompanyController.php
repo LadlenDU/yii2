@@ -88,9 +88,17 @@ class CompanyController extends Controller
             }
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
+            $companyFilesNames = [];
+            foreach ($model->companyFiles as $file) {
+                $companyFilesNames[] = $file->name;
+            }
+            $companyFilesNames = implode('; ', $companyFilesNames);
             return $this->render('view', [
                 'model' => $model,
-                'fileUploadConfig' => $fileUploadConfig,
+                'filesUploading' => [
+                    'fileUploadConfig' => $fileUploadConfig,
+                    'companyFilesNames' => $companyFilesNames,
+                ],
             ]);
         }
     }
