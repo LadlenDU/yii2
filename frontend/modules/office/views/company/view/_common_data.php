@@ -121,7 +121,7 @@ $attributes = [
     'correspondent_account',
     [
         'attribute' => 'company_files',
-        'label' => Yii::t('app', 'Файл УГРЮЛ'),
+        'label' => Yii::t('app', 'Файлы УГРЮЛ'),
         'type' => DetailView::INPUT_FILEINPUT,
         'widgetOptions' => [
             'options' => [
@@ -133,7 +133,7 @@ $attributes = [
                 #'initialPreview' => $filesPluginOptions['initialPreview'],
                 'initialPreviewAsData' => true,
                 'initialPreviewFileType' => 'pdf',
-                'initialCaption' => Yii::t('app', 'Дополнительные файлы'),
+                'initialCaption' => Yii::t('app', 'Файлы УГРЮЛ'),
                 #'initialPreviewConfig' => $filesPluginOptions['initialPreviewConfig'],
                 'overwriteInitial' => false,
             ],
