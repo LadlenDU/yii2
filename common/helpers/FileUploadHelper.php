@@ -38,7 +38,7 @@ class FileUploadHelper
             ],
         ];
 
-        $this->uploadOptions = array_merge_recursive($this->uploadOptions, $uploadOptions);
+        $this->uploadOptions = array_replace_recursive($this->uploadOptions, $uploadOptions);
     }
 
     public function fileUploadConfig($files)
@@ -69,7 +69,7 @@ class FileUploadHelper
             ],
         ];
 
-        $options = array_merge_recursive($this->uploadOptions, $options);
+        $options = array_replace_recursive($this->uploadOptions, $options);
 
         return $options;
     }

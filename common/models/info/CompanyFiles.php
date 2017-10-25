@@ -25,6 +25,13 @@ class CompanyFiles extends \yii\db\ActiveRecord
         return 'company_files';
     }
 
+    public function behaviors()
+    {
+        return [
+            \common\models\FileUploadBehavior::className(),
+        ];
+    }
+
     /**
      * @inheritdoc
      */

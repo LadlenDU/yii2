@@ -76,11 +76,7 @@ class DefaultController extends Controller
         $params = [];
         $viewName = 'index';
 
-        $fileUpload = new FileUploadHelper('/office/user-file', [
-            'pluginOptions' => [
-                'initialCaption' => Yii::t('app', 'Дополнительные файлы sjfdldfj'),
-            ],
-        ]);
+        $fileUpload = new FileUploadHelper('/office/user-file');
 
         //TODO: код переместить в модель
         //TODO: также проверить корректно ли работает  UserInfo::find()->where(['user_id' => Yii::$app->user->identity->getId()])->one()
