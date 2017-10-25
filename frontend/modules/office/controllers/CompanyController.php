@@ -48,7 +48,7 @@ class CompanyController extends Controller
         ]);
     }
 
-    public function actionUserFile($id, $action = false)
+    public function actionCompanyFile($id, $action = false)
     {
         $model = $this->findCompanyFilesModel($id);
         FileUploadHelper::handleAction($model, $action);
