@@ -30,8 +30,17 @@ class UserFiles extends \yii\db\ActiveRecord
     public function behaviors()
     {
         return [
-            // anonymous behavior, behavior class name only
             \common\models\FileUploadBehavior::className(),
+            // anonymous behavior, configuration array
+            /*[
+                'class' => \common\models\FileUploadBehavior::className(),
+                'fileUploadLink' => '/office/user-file',
+                'uploadOptions' => [
+                    'pluginOptions' => [
+                        'initialCaption' => Yii::t('app', 'Дополнительные файлы odsdf'),
+                    ],
+                ],
+            ],*/
         ];
     }
 

@@ -19,7 +19,9 @@ use yii\helpers\ArrayHelper;
 
 #labels = $model->attributeLabels();
 
-$fileUploadConfig = $model->userInfo->fileUploadConfig();
+//$fileUploadConfig = $model->userInfo->fileUploadConfig();
+//$fuHelper = new \common\helpers\FileUploadHelper('');
+//$fileUploadConfig = $model->userInfo->fileUploadConfig();
 
 ?>
 

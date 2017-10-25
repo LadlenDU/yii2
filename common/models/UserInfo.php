@@ -246,7 +246,7 @@ class UserInfo extends \yii\db\ActiveRecord
         return $this->hasMany(UserFiles::className(), ['id' => 'user_files_id'])->viaTable('user_info_user_files', ['user_info_id' => 'id']);
     }
 
-    public function fileUploadConfig()
+    /*public function fileUploadConfig()
     {
         $filesPluginOptions = [
             'initialPreview' => [],
@@ -290,5 +290,5 @@ class UserInfo extends \yii\db\ActiveRecord
         ];
 
         return $options;
-    }
+    }*/
 }
