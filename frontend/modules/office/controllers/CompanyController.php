@@ -69,7 +69,7 @@ class CompanyController extends Controller
 
         $fileUpload = new FileUploadHelper('/office/company/company-file', [
             'pluginOptions' => [
-                'initialCaption' => Yii::t('app', 'Файлы УГРЮЛ'),
+                'initialCaption' => Yii::t('app', 'Файлы ЕГРЮЛ'),
             ],
         ]);
         $fileUploadConfig = $fileUpload->fileUploadConfig($model->companyFiles);

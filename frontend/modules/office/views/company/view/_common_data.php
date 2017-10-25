@@ -122,31 +122,10 @@ $attributes = [
     'correspondent_account',
     [
         'attribute' => 'company_files',
-        'label' => Yii::t('app', 'Файлы УГРЮЛ'),
+        'label' => Yii::t('app', 'Файлы ЕГРЮЛ'),
         'value' => $filesUploading['companyFilesNames'],
         'type' => DetailView::INPUT_FILEINPUT,
-        'widgetOptions' => $filesUploading['fileUploadConfig'],/*[
-            'options' => [
-                'accept' => 'application/pdf',
-                'multiple' => true,
-            ],
-            'pluginOptions' => [
-                'showRemove' => false,
-                #'initialPreview' => $filesPluginOptions['initialPreview'],
-                'initialPreviewAsData' => true,
-                'initialPreviewFileType' => 'pdf',
-                'initialCaption' => Yii::t('app', 'Файлы УГРЮЛ'),
-                #'initialPreviewConfig' => $filesPluginOptions['initialPreviewConfig'],
-                'overwriteInitial' => false,
-            ],
-            'pluginEvents' => [
-                'filebeforedelete' =>
-                    'function() {
-                        var aborted = !window.confirm(' . json_encode(Yii::t('app', 'Вы уверены что хотите удалить элемент?')) . ');
-                        return aborted;
-                    }',
-            ],
-        ],*/
+        'widgetOptions' => $filesUploading['fileUploadConfig'],
     ],
     /*[
         'group' => true,

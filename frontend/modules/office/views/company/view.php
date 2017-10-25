@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
         [
             'label' => '<i class="glyphicon glyphicon-usd"></i>' . Yii::t('app', 'Отделы и должности'),
-            'content' => 'empty',
+            'content' => $this->render('view/_departments_and_positions', ['model' => $model]),
         ],
         [
             'label' => '<i class="glyphicon glyphicon-usd"></i>' . Yii::t('app', 'Сотрудники'),
