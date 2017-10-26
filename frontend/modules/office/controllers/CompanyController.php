@@ -64,6 +64,17 @@ class CompanyController extends Controller
         FileUploadHelper::handleAction($model, $action);
     }
 
+    public function actionSetPrimary($primary_company_id)
+    {
+        if (Yii::$app->request->isAjax) {
+            //UserInfo::find()->where(['user_id' => Yii::$app->user->identity->getId()])
+            Yii::$app->user->identity->userInfo->primary_company = $primary_company_id;
+            Yii::$app->user->identity->userInfo->save();
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            return 'Организация по умолчанию установлена';
+        }
+    }
+
     /**
      * Displays a single Company model.
      * @param integer $id
