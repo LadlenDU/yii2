@@ -9,7 +9,7 @@ $data1 = [
         ['title' => 'Главный инженер', 'key' => '4'],
         ['title' => 'Исполнительный директор', 'key' => '5'],
         ['title' => 'Управляющий', 'key' => '6'],
-        ['title' => 'Создать должность', 'data' => ['action' => 'create_position']]
+        ['title' => 'Создать должность', 'data' => ['action' => 'create_position']],
     ]]
 ];
 $data2 = [
@@ -18,6 +18,7 @@ $data2 = [
         ['title' => 'Ревизор', 'checkbox' => true, 'key' => '4'],
         ['title' => 'Управляющий', 'checkbox' => true, 'key' => '5'],
         ['title' => 'Член правления', 'checkbox' => true, 'key' => '6'],
+        ['title' => 'Создать должность', 'data' => ['action' => 'create_position']],
     ]]
 ];
 $data3 = [
@@ -26,6 +27,7 @@ $data3 = [
         ['title' => 'Главный бухгалтер', 'checkbox' => true, 'key' => '4'],
         ['title' => 'Зам. главного бухгалтера', 'checkbox' => true, 'key' => '5'],
         ['title' => 'Экономист', 'checkbox' => true, 'key' => '6'],
+        ['title' => 'Создать должность', 'data' => ['action' => 'create_position']],
     ]]
 ];
 $data4 = [
@@ -34,6 +36,7 @@ $data4 = [
         ['title' => 'Разнорабочий', 'checkbox' => true, 'key' => '4'],
         ['title' => 'Сантехник', 'checkbox' => true, 'key' => '5'],
         ['title' => 'Электрик', 'checkbox' => true, 'key' => '6'],
+        ['title' => 'Создать должность', 'data' => ['action' => 'create_position']],
     ]]
 ];
 $data5 = [
@@ -42,6 +45,7 @@ $data5 = [
         ['title' => 'Зав. складом', 'checkbox' => true, 'key' => '4'],
         ['title' => 'Инженер', 'checkbox' => true, 'key' => '5'],
         ['title' => 'Начальник ПТО', 'checkbox' => true, 'key' => '6'],
+        ['title' => 'Создать должность', 'data' => ['action' => 'create_position']],
     ]]
 ];
 $data6 = [
@@ -50,6 +54,7 @@ $data6 = [
         ['title' => 'Консьерж', 'checkbox' => true, 'key' => '4'],
         ['title' => 'Начальник АДС', 'checkbox' => true, 'key' => '5'],
         ['title' => 'Оператор', 'checkbox' => true, 'key' => '6'],
+        ['title' => 'Создать должность', 'data' => ['action' => 'create_position']],
     ]]
 ];
 
@@ -62,15 +67,20 @@ $renderNode = <<<JS
 function(event, data) {
     var node = data.node;
     if (node.data && node.data.action == "create_position") {
+        console.log(data);
         var spanEl = $(node.span);
         spanEl.find("> span.fancytree-checkbox").remove();
+        spanEl.find("> span.fancytree-title").unbind('click');
         spanEl.find("> span.fancytree-title").click(function(){
-            var edit = $("<input type='text' placeholder='Введите название должности'>$iconOkCancel");
-            edit.click(function(){alert(7);});
-            $(this).replaceWith(edit);
+            //var edit = $("<input type='text' placeholder='Введите название должности'>$iconOkCancel");
+            //edit.click(function(){alert(7);});
+            //$(this).replaceWith(edit);
+            node.editCreateNode("before"/*, {
+                title: "",
+                //folder: true
+            }*/);
         });
     }
-    //console.log(data);
 }
 JS;
 
@@ -101,6 +111,19 @@ $w2 = FancytreeWidget::widget([
         'source' => $data2,
         'checkbox' => true,
         'icon' => false,
+        'renderNode' => new \yii\web\JsExpression($renderNode),
+        'extensions' => ["edit"],
+        'edit' => [
+            // Available options with their default:
+            'adjustWidthOfs' => 4,   // null: don't adjust input size to content
+            'inputCss' => ['minWidth' => "3em"],
+            'triggerStart' => ["f2", "dblclick", "shift+click", "mac+enter"],
+            'beforeEdit' => new \yii\web\JsExpression('$.noop'),  // Return false to prevent edit mode
+            'edit' => new \yii\web\JsExpression('$.noop'),        // Editor was opened (available as data.input)
+            'beforeClose' => new \yii\web\JsExpression('$.noop'), // Return false to prevent cancel/save (data.input is available)
+            'save' => new \yii\web\JsExpression('$.noop'),        // Save data.input.val() or return false to keep editor open
+            'close' => new \yii\web\JsExpression('$.noop'),       // Editor was removed
+        ],
     ]
 ]);
 
@@ -109,6 +132,19 @@ $w3 = FancytreeWidget::widget([
         'source' => $data3,
         'checkbox' => true,
         'icon' => false,
+        'renderNode' => new \yii\web\JsExpression($renderNode),
+        'extensions' => ["edit"],
+        'edit' => [
+            // Available options with their default:
+            'adjustWidthOfs' => 4,   // null: don't adjust input size to content
+            'inputCss' => ['minWidth' => "3em"],
+            'triggerStart' => ["f2", "dblclick", "shift+click", "mac+enter"],
+            'beforeEdit' => new \yii\web\JsExpression('$.noop'),  // Return false to prevent edit mode
+            'edit' => new \yii\web\JsExpression('$.noop'),        // Editor was opened (available as data.input)
+            'beforeClose' => new \yii\web\JsExpression('$.noop'), // Return false to prevent cancel/save (data.input is available)
+            'save' => new \yii\web\JsExpression('$.noop'),        // Save data.input.val() or return false to keep editor open
+            'close' => new \yii\web\JsExpression('$.noop'),       // Editor was removed
+        ],
     ]
 ]);
 
@@ -117,6 +153,19 @@ $w4 = FancytreeWidget::widget([
         'source' => $data4,
         'checkbox' => true,
         'icon' => false,
+        'renderNode' => new \yii\web\JsExpression($renderNode),
+        'extensions' => ["edit"],
+        'edit' => [
+            // Available options with their default:
+            'adjustWidthOfs' => 4,   // null: don't adjust input size to content
+            'inputCss' => ['minWidth' => "3em"],
+            'triggerStart' => ["f2", "dblclick", "shift+click", "mac+enter"],
+            'beforeEdit' => new \yii\web\JsExpression('$.noop'),  // Return false to prevent edit mode
+            'edit' => new \yii\web\JsExpression('$.noop'),        // Editor was opened (available as data.input)
+            'beforeClose' => new \yii\web\JsExpression('$.noop'), // Return false to prevent cancel/save (data.input is available)
+            'save' => new \yii\web\JsExpression('$.noop'),        // Save data.input.val() or return false to keep editor open
+            'close' => new \yii\web\JsExpression('$.noop'),       // Editor was removed
+        ],
     ]
 ]);
 
@@ -125,6 +174,19 @@ $w5 = FancytreeWidget::widget([
         'source' => $data5,
         'checkbox' => true,
         'icon' => false,
+        'renderNode' => new \yii\web\JsExpression($renderNode),
+        'extensions' => ["edit"],
+        'edit' => [
+            // Available options with their default:
+            'adjustWidthOfs' => 4,   // null: don't adjust input size to content
+            'inputCss' => ['minWidth' => "3em"],
+            'triggerStart' => ["f2", "dblclick", "shift+click", "mac+enter"],
+            'beforeEdit' => new \yii\web\JsExpression('$.noop'),  // Return false to prevent edit mode
+            'edit' => new \yii\web\JsExpression('$.noop'),        // Editor was opened (available as data.input)
+            'beforeClose' => new \yii\web\JsExpression('$.noop'), // Return false to prevent cancel/save (data.input is available)
+            'save' => new \yii\web\JsExpression('$.noop'),        // Save data.input.val() or return false to keep editor open
+            'close' => new \yii\web\JsExpression('$.noop'),       // Editor was removed
+        ],
     ]
 ]);
 
@@ -133,6 +195,19 @@ $w6 = FancytreeWidget::widget([
         'source' => $data6,
         'checkbox' => true,
         'icon' => false,
+        'renderNode' => new \yii\web\JsExpression($renderNode),
+        'extensions' => ["edit"],
+        'edit' => [
+            // Available options with their default:
+            'adjustWidthOfs' => 4,   // null: don't adjust input size to content
+            'inputCss' => ['minWidth' => "3em"],
+            'triggerStart' => ["f2", "dblclick", "shift+click", "mac+enter"],
+            'beforeEdit' => new \yii\web\JsExpression('$.noop'),  // Return false to prevent edit mode
+            'edit' => new \yii\web\JsExpression('$.noop'),        // Editor was opened (available as data.input)
+            'beforeClose' => new \yii\web\JsExpression('$.noop'), // Return false to prevent cancel/save (data.input is available)
+            'save' => new \yii\web\JsExpression('$.noop'),        // Save data.input.val() or return false to keep editor open
+            'close' => new \yii\web\JsExpression('$.noop'),       // Editor was removed
+        ],
     ]
 ]);
 
