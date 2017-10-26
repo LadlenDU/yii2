@@ -3,6 +3,7 @@
 use yii\grid\GridView;
 use yii\data\ArrayDataProvider;
 use kartik\detail\DetailView;
+//use yii\helpers\ArrayHelper;
 
 $elements = [
     [
@@ -80,14 +81,26 @@ $attributes = [
         'rowOptions' => ['class' => 'info'],
     ],
     [
-        'attribute' => 'registration_type_id',
+        'attribute' => 'user_id',
         'label' => 'Отдел',
-        'value' => '',
+        'format' => 'raw',
+        'type' => DetailView::INPUT_SELECT2,
+        'widgetOptions' => [
+            'data' => ['Администрация', 'Правление', 'Бухгалтерия', 'Линейные сотрудники', 'ПТО', 'Аварийно-диспетчерская служба'],
+            'options' => ['placeholder' => Yii::t('app', 'Выберите отдел ...')],
+            'pluginOptions' => ['allowClear' => true, 'width' => '100%'],
+        ],
     ],
     [
-        'attribute' => 'registration_type_id',
+        'attribute' => 'location_id',
         'label' => 'Должность',
-        'value' => '',
+        'format' => 'raw',
+        'type' => DetailView::INPUT_SELECT2,
+        'widgetOptions' => [
+            'data' => ['Генеральный директор', 'Главный инженер', 'Исполнительный директор', 'Управляющий', 'Создать должность'],
+            'options' => ['placeholder' => Yii::t('app', 'Выберите должность ...')],
+            'pluginOptions' => ['allowClear' => true, 'width' => '100%'],
+        ],
     ],
 ];
 
