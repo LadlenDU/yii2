@@ -15,10 +15,10 @@ use yii\widgets\Pjax;
 $this->title = Yii::t('app', 'Организации');
 $this->params['breadcrumbs'][] = $this->title;
 
-$setPrimaryCompanyLink = Url::to('/office/company/set-primary');
+$setPrimaryCompanyLink = json_encode(Url::to('/office/company/set-primary'));
 
 $js = <<<JS
-$(".set_default_company").click(function(e) {
+jQuery(".set_default_company").click(function(e) {
     e.preventDefault();
     var id = $("input[name=primaryCompany]:checked").val();
     $.post($setPrimaryCompanyLink, {primary_company_id:id}).done(function(msg) {
