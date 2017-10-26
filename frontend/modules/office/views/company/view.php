@@ -30,11 +30,12 @@ $this->params['breadcrumbs'][] = $this->title;
         [
             'label' => '<i class="glyphicon glyphicon-usd"></i>' . Yii::t('app', 'Отделы и должности'),
             'content' => $this->render('view/_departments_and_positions', ['model' => $model]),
-            'active' => true,
+            //'active' => true,
         ],
         [
             'label' => '<i class="glyphicon glyphicon-usd"></i>' . Yii::t('app', 'Сотрудники'),
-            'content' => 'empty',
+            'content' => $this->render('view/_collaborators', ['model' => $model]),
+            'active' => true,
         ],
     ];
 
