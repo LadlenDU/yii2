@@ -51,27 +51,27 @@ $attributes = [
         'rowOptions' => ['class' => 'info'],
     ],
     [
-        'attribute' => 'registration_type_id',
+        'attribute' => 'phone',
         'label' => 'Фамилия',
         'value' => '',
     ],
     [
-        'attribute' => 'registration_type_id',
+        'attribute' => 'LS_EIRC',
         'label' => 'Имя',
         'value' => '',
     ],
     [
-        'attribute' => 'registration_type_id',
+        'attribute' => 'LS_IKU_provider',
         'label' => 'Отчество',
         'value' => '',
     ],
     [
-        'attribute' => 'registration_type_id',
+        'attribute' => 'IKU',
         'label' => 'Email',
         'value' => '',
     ],
     [
-        'attribute' => 'registration_type_id',
+        'attribute' => 'IKU',
         'label' => 'Телефон',
         'value' => '',
     ],
@@ -81,7 +81,7 @@ $attributes = [
         'rowOptions' => ['class' => 'info'],
     ],
     [
-        'attribute' => 'user_id',
+        'attribute' => 'name_id',
         'label' => 'Отдел',
         'format' => 'raw',
         'type' => DetailView::INPUT_SELECT2,
@@ -123,7 +123,7 @@ $attributes = [
         </div>
     </div>-->
     <?= DetailView::widget([
-        'model' => new \common\models\UserInfo(),
+        'model' => new \common\models\Debtor(),
         'attributes' => $attributes,
         //'mode' => DetailView::MODE_VIEW,
         'mode' => DetailView::MODE_EDIT,
