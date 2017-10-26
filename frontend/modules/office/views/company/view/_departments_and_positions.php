@@ -6,9 +6,10 @@ use wbraganca\fancytree\FancytreeWidget;
 $data1 = [
     ['title' => 'Администрация', 'key' => '2', 'expanded' => true, 'children' => [
         ['title' => 'Генеральный директор', 'key' => '3'],
-        ['title' => 'Главный инженер', 'checkbox' => true, 'key' => '4'],
-        ['title' => 'Исполнительный директор', 'checkbox' => true, 'key' => '5'],
-        ['title' => 'Управляющий', 'checkbox' => true, 'key' => '6'],
+        ['title' => 'Главный инженер', 'key' => '4'],
+        ['title' => 'Исполнительный директор', 'key' => '5'],
+        ['title' => 'Управляющий', 'key' => '6'],
+        ['title' => 'Создать должность', 'data' => ['create_' => 'qaz']]
     ]]
 ];
 $data2 = [
@@ -57,6 +58,33 @@ $w1 = FancytreeWidget::widget([
         'source' => $data1,
         'checkbox' => true,
         'icon' => false,
+        'renderNode' => new \yii\web\JsExpression('function($event, $data) {
+                console.log($data);
+                //if ($data.data.key == 6) {
+                    //alert($data);
+                //}
+                //alert("EV: " + $event);
+            }'
+        ),
+        /*'function($event, $data) {
+        console.log($event);
+        console.log($data);
+        return;
+
+        // Optionally tweak data.node.span
+        var node = data.node;
+        if(node.data.cstrender){
+            var $span = $(node.span);
+            $span.find("> span.fancytree-title").text(">> " + node.title).css({
+                fontStyle: "italic"
+              });
+              $span.find("> span.fancytree-icon").css({
+    //                      border: "1px solid green",
+                backgroundImage: "url(skin-custom/customDoc2.gif)",
+                backgroundPosition: "0 0"
+              });
+            }
+    }',*/
     ]
 ]);
 
@@ -105,10 +133,10 @@ $w6 = FancytreeWidget::widget([
 
 <style>
     .department {
-        float: left;
-        display: inline-block;
-        width: 250px;
-        margin: 1em 2em;
+        /*float: left;*/
+        /*display: inline-block;*/
+        /*width: 250px;*/
+        padding: 1em 2em;
     }
 </style>
 
@@ -122,11 +150,15 @@ echo '<div class="department">' . $w1 . '</div>';*/
 
 ?>
 
-<div>
-    <div class="department"><?= $w1 ?></div>
-    <div class="department"><?= $w2 ?></div>
-    <div class="department"><?= $w3 ?></div>
-    <div class="department"><?= $w4 ?></div>
-    <div class="department"><?= $w5 ?></div>
-    <div class="department"><?= $w6 ?></div>
+<div class="row">
+    <div class="clearfix  visible-lg visible-sm visible-md"></div>
+    <div class="col-xs-12 col-sm-6 col-lg-4 department"><?= $w1 ?></div>
+    <div class="col-xs-12 col-sm-6 col-lg-4 department"><?= $w2 ?></div>
+    <div class="clearfix  visible-sm visible-md"></div>
+    <div class="col-xs-12 col-sm-6 col-lg-4 department"><?= $w3 ?></div>
+    <div class="clearfix  visible-lg"></div>
+    <div class="col-xs-12 col-sm-6 col-lg-4 department"><?= $w4 ?></div>
+    <div class="clearfix  visible-sm visible-md"></div>
+    <div class="col-xs-12 col-sm-6 col-lg-4 department"><?= $w5 ?></div>
+    <div class="col-xs-12 col-sm-6 col-lg-4 department"><?= $w6 ?></div>
 </div>
