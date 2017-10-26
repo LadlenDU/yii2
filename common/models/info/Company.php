@@ -47,6 +47,8 @@ use common\models\UserInfoCompany;
  * @property TaxSystem $taxSystem
  * @property CompanyCompanyFiles[] $companyCompanyFiles
  * @property CompanyFiles[] $companyFiles
+ * @property CompanyCompanyFilesHouses[] $companyCompanyFilesHouses
+ * @property CompanyFilesHouses[] $companyFilesHouses
  * @property CompanyPhone[] $companyPhones
  * @property UserInfo[] $userInfos
  * @property UserInfoCompany[] $userInfoCompanies
@@ -74,7 +76,6 @@ class Company extends \yii\db\ActiveRecord
             [['legal_address_location_id', 'postal_address_location_id', 'actual_address_location_id', 'OGRN_IP_type', 'CEO', 'company_type_id', 'OKOPF_id', 'tax_system_id'], 'integer'],
             [['OGRN_IP_date'], 'safe'],
             [['company_files'], 'safe'],
-            [['temp'], 'safe'],
             [['site'], 'string'],
             [['full_name', 'short_name', 'INN', 'KPP', 'BIK', 'OGRN', 'OGRN_IP_number', 'OGRN_IP_registered_company', 'checking_account', 'correspondent_account', 'full_bank_name', 'operates_on_the_basis_of', 'phone', 'fax', 'email'], 'string', 'max' => 255],
             [['CEO'], 'exist', 'skipOnError' => true, 'targetClass' => Name::className(), 'targetAttribute' => ['CEO' => 'id']],
@@ -193,6 +194,22 @@ class Company extends \yii\db\ActiveRecord
     public function getCompanyFiles()
     {
         return $this->hasMany(CompanyFiles::className(), ['id' => 'company_files_id'])->viaTable('company_company_files', ['company_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCompanyCompanyFilesHouses()
+    {
+        return $this->hasMany(CompanyCompanyFilesHouses::className(), ['company_id' => 'id'])->inverseOf('company');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCompanyFilesHouses()
+    {
+        return $this->hasMany(CompanyFilesHouses::className(), ['id' => 'company_files_houses_id'])->viaTable('company_company_files_houses', ['company_id' => 'id']);
     }
 
     /**
