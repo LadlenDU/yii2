@@ -8,7 +8,7 @@ use yii\widgets\ActiveForm;
 use kartik\file\FileInput;
 use kartik\detail\DetailView;
 
-/*$attributes = [
+$attributes = [
     [
         'attribute' => 'company_files_houses',
         'label' => Yii::t('app', 'Файлы обслуживаемых домов'),
@@ -16,7 +16,7 @@ use kartik\detail\DetailView;
         'type' => DetailView::INPUT_FILEINPUT,
         'widgetOptions' => $filesUploadingHouses['fileUploadHousesConfig'],
     ],
-];*/
+];
 
 ?>
 
@@ -26,9 +26,7 @@ use kartik\detail\DetailView;
 
 --><?php /*ActiveForm::end(); */?>
 
-Обслуживаемые дома
-
-<?/*= DetailView::widget([
+<?= DetailView::widget([
     'model' => $model,
     'attributes' => $attributes,
     //'mode' => DetailView::MODE_VIEW,
@@ -40,5 +38,9 @@ use kartik\detail\DetailView;
     'hover' => true,
     'hAlign' => 'left',
     'vAlign' => 'middle',
+    /*'panel' => [
+        'heading' => 'Общие данные организации',
+        'type' => DetailView::TYPE_INFO,
+    ],*/
     'container' => ['id' => 'company-houses-files'],
-]); */?>
+]); ?>
