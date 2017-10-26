@@ -3,6 +3,7 @@
 /* @var $this yii\web\View */
 /* @var $model common\models\info\Company */
 /* @var $filesUploading array */
+/* @var $filesUploadingHouses array */
 
 use yii\helpers\Html;
 use kartik\tabs\TabsX;
@@ -25,7 +26,8 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
         [
             'label' => '<i class="glyphicon glyphicon-folder-open"></i>' . Yii::t('app', 'Обслуживаемые дома'),
-            'content' => 'empty',
+            'content' => $this->render('view/_serviced_houses', ['model' => $model, 'filesUploadingHouses' => $filesUploadingHouses]),
+            'active' => true,
         ],
         [
             'label' => '<i class="glyphicon glyphicon-usd"></i>' . Yii::t('app', 'Отделы и должности'),
@@ -35,7 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
         [
             'label' => '<i class="glyphicon glyphicon-usd"></i>' . Yii::t('app', 'Сотрудники'),
             'content' => $this->render('view/_collaborators', ['model' => $model]),
-            'active' => true,
+            //'active' => true,
         ],
     ];
 

@@ -57,6 +57,7 @@ use common\models\UserInfoCompany;
 class Company extends \yii\db\ActiveRecord
 {
     public $company_files;
+    public $company_files_houses;
 
     /**
      * @inheritdoc
@@ -75,7 +76,7 @@ class Company extends \yii\db\ActiveRecord
             [['full_name', 'short_name', 'company_type_id', 'tax_system_id'], 'required'],
             [['legal_address_location_id', 'postal_address_location_id', 'actual_address_location_id', 'OGRN_IP_type', 'CEO', 'company_type_id', 'OKOPF_id', 'tax_system_id'], 'integer'],
             [['OGRN_IP_date'], 'safe'],
-            [['company_files'], 'safe'],
+            [['company_files', 'company_files_houses'], 'safe'],
             [['site'], 'string'],
             [['full_name', 'short_name', 'INN', 'KPP', 'BIK', 'OGRN', 'OGRN_IP_number', 'OGRN_IP_registered_company', 'checking_account', 'correspondent_account', 'full_bank_name', 'operates_on_the_basis_of', 'phone', 'fax', 'email'], 'string', 'max' => 255],
             [['CEO'], 'exist', 'skipOnError' => true, 'targetClass' => Name::className(), 'targetAttribute' => ['CEO' => 'id']],
@@ -121,6 +122,7 @@ class Company extends \yii\db\ActiveRecord
             'OKOPF_id' => Yii::t('app', 'ОКОПФ'),
             'tax_system_id' => Yii::t('app', 'Система налогообложения'),
             'company_files' => Yii::t('app', 'Файлы компании'),
+            'company_files_houses' => Yii::t('app', 'Файлы обслуживаемых домов компании'),
         ];
     }
 

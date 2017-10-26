@@ -67,7 +67,7 @@ $renderNode = <<<JS
 function(event, data) {
     var node = data.node;
     if (node.data && node.data.action == "create_position") {
-        console.log(data);
+        //console.log(data);
         var spanEl = $(node.span);
         spanEl.find("> span.fancytree-checkbox").remove();
         spanEl.find("> span.fancytree-title").unbind('click');

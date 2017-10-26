@@ -3,6 +3,7 @@
 namespace frontend\modules\office\controllers;
 
 use common\helpers\FileUploadHelper;
+use common\models\info\CompanyFilesHouses;
 use Yii;
 use common\models\info\Company;
 use common\models\info\CompanySearch;
@@ -54,6 +55,12 @@ class CompanyController extends Controller
         FileUploadHelper::handleAction($model, $action);
     }
 
+    public function actionCompanyFileHouses($id, $action = false)
+    {
+        $model = $this->findCompanyFilesHousesModel($id);
+        FileUploadHelper::handleAction($model, $action);
+    }
+
     /**
      * Displays a single Company model.
      * @param integer $id
@@ -74,7 +81,15 @@ class CompanyController extends Controller
         ]);
         $fileUploadConfig = $fileUpload->fileUploadConfig($model->companyFiles);
 
+        $fileUploadHouses = new FileUploadHelper('/office/company/company-file-houses', [
+            'pluginOptions' => [
+                'initialCaption' => Yii::t('app', 'Файлы обслуживаемых домов'),
+            ],
+        ]);
+        $fileUploadHousesConfig = $fileUploadHouses->fileUploadConfig($model->companyFilesHouses);
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+
             if ($uploadedFiles = UploadedFile::getInstances($model, 'company_files')) {
                 foreach ($uploadedFiles as $upFile) {
                     $companyFiles = new CompanyFiles();
@@ -83,21 +98,38 @@ class CompanyController extends Controller
                     $companyFiles->mime_type = $upFile->type;
                     $companyFiles->save();
                     $model->link('companyFiles', $companyFiles);
-                    //$infoModel->save(false);
                 }
             }
+
+            if ($uploadedFilesHouses = UploadedFile::getInstances($model, 'company_files_houses')) {
+                foreach ($uploadedFilesHouses as $upFileHouse) {
+                    $companyFilesHouses = new CompanyFilesHouses();
+                    $companyFilesHouses->content = file_get_contents($upFileHouse->tempName);
+                    $companyFilesHouses->name = $upFileHouse->name;
+                    $companyFilesHouses->mime_type = $upFileHouse->type;
+                    $companyFilesHouses->save();
+                    $model->link('companyFiles', $companyFilesHouses);
+                }
+            }
+
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
+
             $companyFilesNames = [];
             foreach ($model->companyFiles as $file) {
                 $companyFilesNames[] = $file->name;
             }
             $companyFilesNames = implode('; ', $companyFilesNames);
+
             return $this->render('view', [
                 'model' => $model,
                 'filesUploading' => [
                     'fileUploadConfig' => $fileUploadConfig,
                     'companyFilesNames' => $companyFilesNames,
+                ],
+                'filesUploadingHouses' => [
+                    'fileUploadHousesConfig' => $fileUploadHousesConfig,
+                    //'companyFilesNames' => $companyFilesNames,
                 ],
             ]);
         }
@@ -187,6 +219,14 @@ class CompanyController extends Controller
     protected function findCompanyFilesModel($id)
     {
         if (($model = CompanyFiles::findOne($id)) !== null) {
+            return $model;
+        }
+        throw new \yii\web\NotFoundHttpException();
+    }
+
+    protected function findCompanyFilesHousesModel($id)
+    {
+        if (($model = CompanyFilesHouses::findOne($id)) !== null) {
             return $model;
         }
         throw new \yii\web\NotFoundHttpException();
