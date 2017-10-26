@@ -108,7 +108,7 @@ class CompanyController extends Controller
                     $companyFilesHouses->name = $upFileHouse->name;
                     $companyFilesHouses->mime_type = $upFileHouse->type;
                     $companyFilesHouses->save();
-                    $model->link('companyFiles', $companyFilesHouses);
+                    $model->link('companyFilesHouses', $companyFilesHouses);
                 }
             }
 
