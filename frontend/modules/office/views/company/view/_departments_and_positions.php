@@ -9,7 +9,7 @@ $data1 = [
         ['title' => 'Главный инженер', 'key' => '4'],
         ['title' => 'Исполнительный директор', 'key' => '5'],
         ['title' => 'Управляющий', 'key' => '6'],
-        ['title' => 'Создать должность', 'data' => ['create_' => 'qaz']]
+        ['title' => 'Создать должность', 'data' => ['action' => 'create_position']]
     ]]
 ];
 $data2 = [
@@ -53,39 +53,47 @@ $data6 = [
     ]]
 ];
 
+
+$iconOkCancel = <<<HTML
+<a href='javascript:void(0)' style='color:green'><i class='glyphicon glyphicon-ok'></i></a><a href='javascript:void(0)' style='color:red'><i class='glyphicon glyphicon-remove'></i></a>
+HTML;
+
+$renderNode = <<<JS
+function(event, data) {
+    var node = data.node;
+    if (node.data && node.data.action == "create_position") {
+        var spanEl = $(node.span);
+        spanEl.find("> span.fancytree-checkbox").remove();
+        spanEl.find("> span.fancytree-title").click(function(){
+            var edit = $("<input type='text' placeholder='Введите название должности'>$iconOkCancel");
+            edit.click(function(){alert(7);});
+            $(this).replaceWith(edit);
+        });
+    }
+    //console.log(data);
+}
+JS;
+
+
 $w1 = FancytreeWidget::widget([
     'options' => [
         'source' => $data1,
         'checkbox' => true,
         'icon' => false,
-        'renderNode' => new \yii\web\JsExpression('function($event, $data) {
-                console.log($data);
-                //if ($data.data.key == 6) {
-                    //alert($data);
-                //}
-                //alert("EV: " + $event);
-            }'
-        ),
-        /*'function($event, $data) {
-        console.log($event);
-        console.log($data);
-        return;
-
-        // Optionally tweak data.node.span
-        var node = data.node;
-        if(node.data.cstrender){
-            var $span = $(node.span);
-            $span.find("> span.fancytree-title").text(">> " + node.title).css({
-                fontStyle: "italic"
-              });
-              $span.find("> span.fancytree-icon").css({
-    //                      border: "1px solid green",
-                backgroundImage: "url(skin-custom/customDoc2.gif)",
-                backgroundPosition: "0 0"
-              });
-            }
-    }',*/
-    ]
+        'renderNode' => new \yii\web\JsExpression($renderNode),
+        'extensions' => ["edit"],
+        'edit' => [
+            // Available options with their default:
+            'adjustWidthOfs' => 4,   // null: don't adjust input size to content
+            'inputCss' => ['minWidth' => "3em"],
+            'triggerStart' => ["f2", "dblclick", "shift+click", "mac+enter"],
+            'beforeEdit' => new \yii\web\JsExpression('$.noop'),  // Return false to prevent edit mode
+            'edit' => new \yii\web\JsExpression('$.noop'),        // Editor was opened (available as data.input)
+            'beforeClose' => new \yii\web\JsExpression('$.noop'), // Return false to prevent cancel/save (data.input is available)
+            'save' => new \yii\web\JsExpression('$.noop'),        // Save data.input.val() or return false to keep editor open
+            'close' => new \yii\web\JsExpression('$.noop'),       // Editor was removed
+        ],
+    ],
 ]);
 
 $w2 = FancytreeWidget::widget([
@@ -137,6 +145,10 @@ $w6 = FancytreeWidget::widget([
         /*display: inline-block;*/
         /*width: 250px;*/
         padding: 1em 2em;
+    }
+
+    .fancytree-title input {
+        color: black !important;
     }
 </style>
 
