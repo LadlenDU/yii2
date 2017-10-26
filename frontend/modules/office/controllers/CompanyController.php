@@ -42,10 +42,13 @@ class CompanyController extends Controller
     {
         $searchModel = new CompanySearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        //$primaryCompanyId = UserInfo::find()->where(['user_id' => Yii::$app->user->identity->getId()])->one()
+        $primaryCompanyId = Yii::$app->user->identity->userInfo->primary_company;
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'primaryCompanyId' => $primaryCompanyId,
         ]);
     }
 

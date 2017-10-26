@@ -6,6 +6,7 @@ use yii\widgets\Pjax;
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\info\CompanySearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
+/* @var $primaryCompanyId int */
 
 $this->title = Yii::t('app', 'Организации');
 $this->params['breadcrumbs'][] = $this->title;
@@ -17,14 +18,23 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?= Html::a(Yii::t('app', 'Создать организацию'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('app', 'Организация по умолчанию'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 <?php Pjax::begin(); ?>    <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
+            //['class' => 'yii\grid\SerialColumn'],
+            //'id',
+            [
+                'class' => 'yii\grid\RadioButtonColumn',
+                'radioOptions' => function ($model) use($primaryCompanyId) {
+                    return [
+                        'value' => $model['id'],
+                        'checked' => $model['id'] == $primaryCompanyId,
+                    ];
+                }
+            ],
             'full_name',
             'short_name',
             'legal_address_location_id',
