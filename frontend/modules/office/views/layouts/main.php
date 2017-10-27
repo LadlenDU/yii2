@@ -54,6 +54,11 @@ if (Yii::$app->controller->action->id === 'login') {
                 /*text-align: center;*/
             }
 
+            .menu-balance {
+                float: left;
+                padding: 18px 15px 0;
+            }
+
             /*TODO: попытка уменьшения размера*/
             body {
                 font-size: 1.1em !important;
