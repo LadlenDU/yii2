@@ -76,7 +76,10 @@ class DefaultController extends Controller
     {
         //Yii::$app->user->identity->userInfo->primaryCompany->id;
         ///office/company/view?id=6
-        $this->redirect(['/office/my-organization/view', 'id' => Yii::$app->user->identity->userInfo->primaryCompany->id]);
+        if (Yii::$app->user->identity->userInfo && Yii::$app->user->identity->userInfo->primaryCompany) {
+            $this->redirect(['/office/my-organization/view', 'id' => Yii::$app->user->identity->userInfo->primaryCompany->id]);
+        }
+        //TODO: add error code of something
         return '';
 
         $params = [];

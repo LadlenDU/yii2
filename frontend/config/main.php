@@ -43,13 +43,13 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                '/office/my-organization/<action:[\w-]+>' => 'office/company/<action>',
+                '/office/my-organization' => 'office/default/my-organization',
+
                 '<module:\w+>/<controller:\w+>/<action:[\w-]+>/<id:(.*?)>' => '<module>/<controller>/<action>/<id>',
                 '<module:\w+>/<controller:\w+>/<action:[\w-]+>' => '<module>/<controller>/<action>',
                 //'<module:\w+>/<action:[\w-]+>/<id:(.*?)>' => '<module>/default/<action>/<id>',
                 //'<module:\w+>/<action:[\w-]+>' => '<module>/default/<action>',
-
-                //'/office/my-organization'=> 'office/default/my-organization',
-                '/office/my-organization/<action:[\w-]+>/<id:(.*?)>' => 'office/company/<action>/<id>',
 
                 '/office/user-file' => 'office/default/user-file',
                 'pages/<page:[\w-]+>' => 'pages/default/index',
