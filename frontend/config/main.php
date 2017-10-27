@@ -47,8 +47,11 @@ return [
                 '<module:\w+>/<controller:\w+>/<action:[\w-]+>' => '<module>/<controller>/<action>',
                 //'<module:\w+>/<action:[\w-]+>/<id:(.*?)>' => '<module>/default/<action>/<id>',
                 //'<module:\w+>/<action:[\w-]+>' => '<module>/default/<action>',
-                '/office/my-organization'=> 'office/default/my-organization',
-                '/office/user-file'=> 'office/default/user-file',
+
+                //'/office/my-organization'=> 'office/default/my-organization',
+                '/office/my-organization/<action:[\w-]+>/<id:(.*?)>' => 'office/company/<action>/<id>',
+
+                '/office/user-file' => 'office/default/user-file',
                 'pages/<page:[\w-]+>' => 'pages/default/index',
             ],
         ],
@@ -76,11 +79,11 @@ return [
         'office' => [
             'class' => 'frontend\modules\office\Module',
         ],
-        'dynagrid' =>  [
+        'dynagrid' => [
             'class' => '\kartik\dynagrid\Module',
             // other settings (refer documentation)
         ],
-        'gridview' =>  [
+        'gridview' => [
             'class' => '\kartik\grid\Module',
             // other module settings
         ],

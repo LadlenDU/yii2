@@ -246,49 +246,40 @@ class UserInfo extends \yii\db\ActiveRecord
         return $this->hasMany(UserFiles::className(), ['id' => 'user_files_id'])->viaTable('user_info_user_files', ['user_info_id' => 'id']);
     }
 
-    /*public function fileUploadConfig()
+    public function getRelatedModel()
     {
-        $filesPluginOptions = [
-            'initialPreview' => [],
-            'initialPreviewConfig' => [],
-        ];
+        $model = null;
 
-        foreach ($this->userFiles as $key => $file) {
-            //TODO: проверить (реализовать) секьюрность (чтобы чужие файлы не открывались)
-            $filesPluginOptions['initialPreview'][] = Url::to(['/office/user-file', 'id' => $file->id]);
-            $filesPluginOptions['initialPreviewConfig'][] = [
-                'key' => $key,
-                'filetype' => $file->mime_type,
-                'caption' => $file->name,
-                'size' => strlen($file->content),
-                'url' => Url::to(['/office/user-file', 'id' => $file->id, 'action' => 'remove']),
-                'downloadUrl' => Url::to(['/office/user-file', 'id' => $file->id, 'action' => 'download']),
-            ];
+        switch ($this->registration_type_id) {
+            case 1: {
+                // юридическое лицо
+                if (!$model = LegalEntity::find()->where(['user_info_id' => $this->id])->one()) {
+                    $model = new LegalEntity();
+                }
+                $viewName = 'legal_entity';
+                break;
+            }
+            case 2: {
+                // индивидуальный предприниматель
+                if (!$model = IndividualEntrepreneur::find()->where(['user_info_id' => $this->id])->one()) {
+                    $model = new IndividualEntrepreneur();
+                }
+                $viewName = 'individual_entrepreneur';
+                break;
+            }
+            case 3: {
+                // физическое лицо
+                if (!$model = Individual::find()->where(['user_info_id' => $this->id])->one()) {
+                    $model = new Individual();
+                }
+                $viewName = 'individual';
+                break;
+            }
+            default: {
+                break;
+            }
         }
 
-        $options = [
-            'options' => [
-                'accept' => 'application/pdf',
-                'multiple' => true,
-            ],
-            'pluginOptions' => [
-                'showRemove' => false,
-                'initialPreview' => $filesPluginOptions['initialPreview'],
-                'initialPreviewAsData' => true,
-                'initialPreviewFileType' => 'pdf',
-                'initialCaption' => Yii::t('app', 'Дополнительные файлы'),
-                'initialPreviewConfig' => $filesPluginOptions['initialPreviewConfig'],
-                'overwriteInitial' => false,
-            ],
-            'pluginEvents' => [
-                'filebeforedelete' =>
-                    'function() {
-                        var aborted = !window.confirm(' . json_encode(Yii::t('app', 'Вы уверены что хотите удалить элемент?')) . ');
-                        return aborted;
-                    }',
-            ],
-        ];
-
-        return $options;
-    }*/
+        return $model;
+    }
 }

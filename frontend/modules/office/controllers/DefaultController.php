@@ -74,6 +74,11 @@ class DefaultController extends Controller
 
     public function actionMyOrganization()
     {
+        //Yii::$app->user->identity->userInfo->primaryCompany->id;
+        ///office/company/view?id=6
+        $this->redirect(['/office/my-organization/view', 'id' => Yii::$app->user->identity->userInfo->primaryCompany->id]);
+        return '';
+
         $params = [];
         $viewName = 'index';
 
@@ -83,37 +88,10 @@ class DefaultController extends Controller
         //TODO: также проверить корректно ли работает  UserInfo::find()->where(['user_id' => Yii::$app->user->identity->getId()])->one()
         //if ($infoModel = UserInfo::find()->where(['user_id' => Yii::$app->user->identity->getId()])->one()) {
         if ($infoModel = Yii::$app->user->identity->userInfo) {
-            switch ($infoModel->attributes['registration_type_id']) {
-                case 1: {
-                    // юридическое лицо
-                    if (!$model = LegalEntity::find()->where(['user_info_id' => $infoModel->id])->one()) {
-                        $model = new LegalEntity();
-                    }
-                    $viewName = 'legal_entity';
-                    break;
-                }
-                case 2: {
-                    // индивидуальный предприниматель
-                    if (!$model = IndividualEntrepreneur::find()->where(['user_info_id' => $infoModel->id])->one()) {
-                        $model = new IndividualEntrepreneur();
-                    }
-                    $viewName = 'individual_entrepreneur';
-                    break;
-                }
-                case 3: {
-                    // физическое лицо
-                    if (!$model = Individual::find()->where(['user_info_id' => $infoModel->id])->one()) {
-                        $model = new Individual();
-                    }
-                    $viewName = 'individual';
-                    break;
-                }
-                default: {
-                    break;
-                }
-            }
+            $model = $infoModel->getRelatedModel();
+            $viewName = \frontend\helpers\UserHelper::getViewByRelatedModel($model);
 
-            if (!empty($model)) {
+            if ($model) {
                 if ($model->load(Yii::$app->request->post())) {
                     //$model->birthday = date('Y-m-d H:i:s', strtotime($model->birthday));
                     if ($model->validate()) {
