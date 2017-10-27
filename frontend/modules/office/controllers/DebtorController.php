@@ -17,6 +17,7 @@ use common\models\Payment;
 use common\models\UploadForm;
 use yii\data\ArrayDataProvider;
 use common\helpers\DebtHelper;
+use yii\filters\AccessControl;
 
 //use kartik\mpdf\Pdf;
 
@@ -31,6 +32,15 @@ class DebtorController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [

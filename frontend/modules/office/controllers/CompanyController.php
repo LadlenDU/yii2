@@ -13,6 +13,7 @@ use yii\filters\VerbFilter;
 use common\models\UserInfo;
 use yii\web\UploadedFile;
 use common\models\info\CompanyFiles;
+use yii\filters\AccessControl;
 
 /**
  * CompanyController implements the CRUD actions for Company model.
@@ -25,6 +26,15 @@ class CompanyController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
