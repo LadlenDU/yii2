@@ -88,7 +88,7 @@ class UserInfo extends \yii\db\ActiveRecord
             'user_id' => Yii::t('app', 'User ID'),
             'complete' => Yii::t('app', 'Завершен ли процесс заполнения информации'),
             'registration_type_id' => Yii::t('app', 'Вариант регистрации'),
-            'balance' => Yii::t('app', 'Balance'),
+            'balance' => Yii::t('app', 'Счет'),
             'tariff_plan_id' => Yii::t('app', 'Tariff Plan ID'),
             'location_id' => Yii::t('app', 'Location ID'),
             'user_files' => Yii::t('app', 'Пользовательские файлы'),

@@ -13,7 +13,9 @@ class UserController extends BaseAdminController
         //TODO: что это?
         Url::remember('', 'actions-redirect');
         //$user = $this->findModel($id);
-        $user = \Yii::$app->user->identity;
+        //$user = \Yii::$app->user->identity;
+        //$userInfo = $user->userInfo;
+        $user = $this->findModel($id);
         $userInfo = $user->userInfo;
 
         if (!$userInfo) {
