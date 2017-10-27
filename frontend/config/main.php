@@ -72,9 +72,9 @@ return [
                 #'profile' => 'frontend\controllers\ProfileController',
                 'settings' => 'frontend\controllers\SettingsController',
             ],
-            'modelMap' => [
+            /*'modelMap' => [
                 'User' => 'frontend\models\User',
-            ],
+            ],*/
         ],
         'office' => [
             'class' => 'frontend\modules\office\Module',

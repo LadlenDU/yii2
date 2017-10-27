@@ -75,6 +75,9 @@ return [
         ],
         'user' => [
             'class' => 'dektrium\user\Module',
+            'modelMap' => [
+                'User' => 'common\models\User',
+            ],
         ],
         'datecontrol' => [
             'class' => 'kartik\datecontrol\Module',
