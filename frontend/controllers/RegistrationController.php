@@ -12,7 +12,16 @@ class RegistrationController extends BaseRegistrationController
     public function behaviors()
     {
         $behaviour = parent::behaviors();
-        $behaviour['access']['rules'][] = ['allow' => true, 'actions' => ['init'], 'roles' => ['@']];
+        //$behaviour['access']['rules'][] = ['allow' => true, 'actions' => ['init'], 'roles' => ['@']];
+        $behaviour['access']['rules'] = [
+            [
+                /*'allow' => true,
+                'actions' => ['init'],
+                'roles' => ['@']*/
+                'allow' => false,
+                'roles' => ['?'],
+            ]
+        ];
         return $behaviour;
     }
 
