@@ -52,6 +52,13 @@ return [
             'rules' => [
             ],
         ],
+        'view' => [
+            'theme' => [
+                'pathMap' => [
+                    '@dektrium/user/views/admin' => '@backend/views/user'
+                ],
+            ],
+        ],
         /*'view' => [
             'theme' => [
                 'pathMap' => [

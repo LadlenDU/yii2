@@ -58,7 +58,7 @@ return [
         /*'view' => [
             'theme' => [
                 'pathMap' => [
-                    '@dektrium/user/views' => '@frontend/views/user'
+                    '@dektrium/user/views/admin' => '@backend/views/user'
                 ],
             ],
         ],*/
