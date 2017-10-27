@@ -18,6 +18,8 @@ use frontend\models\ContactForm;
  */
 class SiteController extends Controller
 {
+    public $layout = 'empty_login';
+
     /**
      * @inheritdoc
      */
@@ -71,7 +73,10 @@ class SiteController extends Controller
 
     public function beforeAction($action)
     {
-        $this->redirect(\yii\helpers\Url::to('/office'));
+        if (!in_array($action->id, ['logout'])) {
+            $this->redirect(\yii\helpers\Url::to('/office'));
+        }
+        return parent::beforeAction($action);
     }
 
     /**
