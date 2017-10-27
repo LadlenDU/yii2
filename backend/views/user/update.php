@@ -52,7 +52,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         '<hr>',
                         [
                             'label' => Yii::t('app', 'Рабочая информация'),
-                            'url' => ['/user/admin/assignments', 'id' => $user->id],
+                            'url' => ['/user/admin/job-info', 'id' => $user->id],
                             'visible' => isset(Yii::$app->extensions['dektrium/yii2-rbac']),
                         ],
                         '<hr>',

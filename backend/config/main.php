@@ -14,6 +14,10 @@ return [
     'bootstrap' => ['log'],
     'modules' => [
         'user' => [
+            'class' => 'dektrium\user\Module',
+            'controllerMap' => [
+                'admin' => 'backend\controllers\UserController'
+            ],
             // following line will restrict access to profile, recovery, registration and settings controllers from backend
             'as backend' => 'dektrium\user\filters\BackendFilter',
         ],
