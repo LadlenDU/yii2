@@ -16,6 +16,7 @@ class User extends BaseUser
      */
     public function getUserInfo()
     {
+        //TODO: подумать что делать если userInfo не существует
         return $this->hasOne(UserInfo::className(), ['user_id' => 'id'])->inverseOf('user');
     }
 
@@ -55,6 +56,29 @@ class User extends BaseUser
     public function ifHasRequiredInfo()
     {
         //$this->userInfo->
+    }
+
+    public function decreaseBalance($amount)
+    {
+        if ($this->userInfo) {
+            $this->userInfo->balance -= $amount;
+            //TODO: решить что с этим делать
+            /*if ($this->userInfo->balance < 0) {
+                $this->userInfo->balance = 0;
+            }*/
+        }
+    }
+
+    public function printOperationStart()
+    {
+        //TODO: 500 вынести в БД или в настройки
+        $this->decreaseBalance(500);
+        $this->userInfo->save();
+    }
+
+    public function canPrint()
+    {
+        return $this->userInfo->balance >= 500;
     }
 
     /*public function registrationInfo()

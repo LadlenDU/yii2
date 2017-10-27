@@ -119,6 +119,7 @@ use kartik\file\FileInput;
 <?php
 $printErrorTxt = json_encode(Yii::t('app', 'Ошибка печати!'));
 $noDebtorsSelectedTxt = json_encode(Yii::t('app', 'Выберите пожалуйста должников.'));
+$lowBalance = json_encode(Yii::t('app', 'Недостаточно средств.'));
 $script = <<<JS
     $("#print_invoices").click(function () {
         var keys = $('#dynagrid-debtors-options').yiiGridView('getSelectedRows');
@@ -139,13 +140,17 @@ $script = <<<JS
         //var url = '/office/debtors/statements';
         var url = '/office/debtor/print-documents';
         $.post(url, {debtorIds:keys}, function(html) {
-            //var statementWnd = window.open(url, '_blank');
-            var statementWnd = window.open('', '_blank');
-            statementWnd.document.write(html);
-            statementWnd.document.close();
-            statementWnd.focus();
-            statementWnd.print();
-            statementWnd.close();
+            if (html == 'low_balance') {
+                alert($lowBalance);
+            } else {
+                //var statementWnd = window.open(url, '_blank');
+                var statementWnd = window.open('', '_blank');
+                statementWnd.document.write(html);
+                statementWnd.document.close();
+                statementWnd.focus();
+                statementWnd.print();
+                statementWnd.close();
+            }
         }, 'html').fail(function() {
             alert($printErrorTxt);
         });

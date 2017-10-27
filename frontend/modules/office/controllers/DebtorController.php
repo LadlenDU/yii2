@@ -359,20 +359,27 @@ class DebtorController extends Controller
     {
         $documents = [];
 
-        $this->layout = 'print_fine';
-        $this->view->title = \Yii::t('app', 'Пакет документов');
+        if (Yii::$app->user->identity->canPrint()) {
 
-        $debtorIds = Yii::$app->request->post('debtorIds');
-        $doc['statement'] = $this->getStatementHtml($debtorIds[0]);
-        $doc['full_fine_report'] = $this->getFullReportFineDataHtml($debtorIds[0]);
+            $this->layout = 'print_fine';
+            $this->view->title = \Yii::t('app', 'Пакет документов');
 
-        $documents[] = $doc;
+            $debtorIds = Yii::$app->request->post('debtorIds');
+            $doc['statement'] = $this->getStatementHtml($debtorIds[0]);
+            $doc['full_fine_report'] = $this->getFullReportFineDataHtml($debtorIds[0]);
 
-        return $this->render('print_documents',
-            [
-                'documents' => $documents,
-            ]
-        );
+            $documents[] = $doc;
+
+            Yii::$app->user->identity->printOperationStart();
+
+            return $this->render('print_documents',
+                [
+                    'documents' => $documents,
+                ]
+            );
+        } else {
+            die('low_balance');
+        }
     }
 
     public function actionFullReportFineDataPdf($debtor_id)
