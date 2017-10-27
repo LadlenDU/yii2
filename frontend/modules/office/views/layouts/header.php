@@ -18,7 +18,7 @@ use yii\helpers\Html;
 
         <div class="navbar-custom-menu">
 
-            <div class="menu-balance">Счет: <strong><?= Yii::$app->user->identity->userInfo->balance ?> руб.</strong></div>
+            <div class="menu-balance">Счет: <strong><?= Yii::$app->user->identity->userInfo ? Yii::$app->user->identity->userInfo->balance : '0.00' ?> руб.</strong></div>
 
 
             <ul class="nav navbar-nav">
