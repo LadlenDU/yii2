@@ -51,6 +51,12 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         '<hr>',
                         [
+                            'label' => Yii::t('app', 'Рабочая информация'),
+                            'url' => ['/user/admin/assignments', 'id' => $user->id],
+                            'visible' => isset(Yii::$app->extensions['dektrium/yii2-rbac']),
+                        ],
+                        '<hr>',
+                        [
                             'label' => Yii::t('user', 'Confirm'),
                             'url' => ['/user/admin/confirm', 'id' => $user->id],
                             'visible' => !$user->isConfirmed,

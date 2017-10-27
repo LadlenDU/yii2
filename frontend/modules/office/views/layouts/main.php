@@ -56,7 +56,11 @@ if (Yii::$app->controller->action->id === 'login') {
 
             .menu-balance {
                 float: left;
-                padding: 18px 15px 0;
+                padding: 16px 15px 0;
+                font-size: 1.2em;
+                border-left: 2px solid #357CA5;
+                border-right: 2px solid #357CA5;
+                height: 50px;
             }
 
             /*TODO: попытка уменьшения размера*/
