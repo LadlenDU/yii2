@@ -24,6 +24,14 @@ return [
         /*'permit' => [
             'class' => 'developeruz\db_rbac\Yii2DbRbac',
         ],*/
+        'dynagrid' => [
+            'class' => '\kartik\dynagrid\Module',
+            // other settings (refer documentation)
+        ],
+        'gridview' => [
+            'class' => '\kartik\grid\Module',
+            // other module settings
+        ],
     ],
     'components' => [
         'request' => [

@@ -55,6 +55,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             'url' => ['/user/admin/update-job-info', 'id' => $user->id],
                             'visible' => isset(Yii::$app->extensions['dektrium/yii2-rbac']),
                         ],
+                        [
+                            'label' => Yii::t('app', 'Статистика баланса'),
+                            'url' => ['/user/admin/stat-balance', 'id' => $user->id],
+                            'visible' => isset(Yii::$app->extensions['dektrium/yii2-rbac']),
+                        ],
                         '<hr>',
                         [
                             'label' => Yii::t('user', 'Confirm'),
