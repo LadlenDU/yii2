@@ -2,15 +2,19 @@
 
 namespace common\models;
 
+use common\models\stat\StatisticPrint;
 use dektrium\user\models\User as BaseUser;
 use dektrium\user\models\Token;
 use common\models\UserInfo;
+use common\events\UserBalanceEvent;
 
 /**
  * @property UserInfo[] $userInfos
  */
 class User extends BaseUser
 {
+    //const DECREASE_BALANCE = 'decreaseBalance';
+
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -58,26 +62,34 @@ class User extends BaseUser
         //$this->userInfo->
     }
 
-    public function decreaseBalance($amount)
+    public function decreaseBalance($amount, $operation)
     {
         if ($this->userInfo) {
+            $event = new UserBalanceEvent;
+            $event->amountToChange = $amount;
+            $event->oldBalance = $this->userInfo->balance;
+
             $this->userInfo->balance -= $amount;
             //TODO: решить что с этим делать
             /*if ($this->userInfo->balance < 0) {
                 $this->userInfo->balance = 0;
             }*/
+
+            //$this->trigger(self::DECREASE_BALANCE, $event);
         }
     }
 
     public function printOperationStart()
     {
         //TODO: 500 вынести в БД или в настройки
-        $this->decreaseBalance(500);
+        StatisticPrint::decreaseBalance(500, $this->userInfo->balance, $this->userInfo->primary_company);
+        $this->decreaseBalance(500, 'print');
         $this->userInfo->save();
     }
 
     public function canPrint()
     {
+        //TODO: 500 вынести в БД или в настройки
         return $this->userInfo->balance >= 500;
     }
 

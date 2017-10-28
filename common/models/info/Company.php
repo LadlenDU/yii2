@@ -7,6 +7,7 @@ use common\models\Name;
 use common\models\Location;
 use common\models\UserInfo;
 use common\models\UserInfoCompany;
+use common\models\stat\StatisticPrint;
 
 /**
  * This is the model class for table "company".
@@ -49,7 +50,10 @@ use common\models\UserInfoCompany;
  * @property CompanyFiles[] $companyFiles
  * @property CompanyCompanyFilesHouses[] $companyCompanyFilesHouses
  * @property CompanyFilesHouses[] $companyFilesHouses
+ * @property CompanyHouse[] $companyHouses
+ * @property House[] $houses
  * @property CompanyPhone[] $companyPhones
+ * @property StatisticPrint[] $statisticPrints
  * @property UserInfo[] $userInfos
  * @property UserInfoCompany[] $userInfoCompanies
  * @property UserInfo[] $userInfos0
@@ -217,9 +221,33 @@ class Company extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getCompanyHouses()
+    {
+        return $this->hasMany(CompanyHouse::className(), ['company_id' => 'id'])->inverseOf('company');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getHouses()
+    {
+        return $this->hasMany(House::className(), ['id' => 'house_id'])->viaTable('company_house', ['company_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getCompanyPhones()
     {
         return $this->hasMany(CompanyPhone::className(), ['company_id' => 'id'])->inverseOf('company');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getStatisticPrints()
+    {
+        return $this->hasMany(StatisticPrint::className(), ['company_id' => 'id'])->inverseOf('company');
     }
 
     /**
