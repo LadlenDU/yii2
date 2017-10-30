@@ -12,7 +12,7 @@ use kartik\dynagrid\DynaGrid;
 use yii\helpers\Url;
 use yii\bootstrap\Modal;
 
-$this->title = Yii::t('app', 'Должники');
+$this->title = Yii::t('app', 'Работа с должниками');
 $this->params['breadcrumbs'][] = $this->title;
 
 $columns = [

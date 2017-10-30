@@ -36,7 +36,7 @@
                     ['label' => 'Организации', 'icon' => 'handshake-o', 'url' => ['/office/company']],
                     ['label' => 'Дома', 'icon' => 'file-code-o', 'options' => ['class' => 'header']/*, 'url' => ['/office/buildings']*/],
                     [
-                        'label' => 'Должники',
+                        'label' => 'Работа с должниками',
                         'icon' => 'users',
                         'url' => ['/office/debtor'],
                     ],
