@@ -220,7 +220,7 @@ echo DetailView::widget([
     'container' => ['id' => 'company-common-data'],
 ]);
 
-$locationUrl = Url::to(['/office/location/update', 'id' => $model->legal_address_location_id]);
+$locationUrl = json_encode(Url::to(['/office/location/update', 'id' => $model->legal_address_location_id]));
 
 $this->registerJs(<<<JS
 $("#company-legaladdresslocationfull").click(function(e) {
@@ -228,8 +228,23 @@ $("#company-legaladdresslocationfull").click(function(e) {
   var pModal = $('#pModal-company-legaladdresslocationfull');
   pModal.find('.modal-content').html('<div style="text-align: center"><img src="/img/loading.gif" alt="Загрузка..." style="margin:1em"></div>');
   //pModal.modal('show').find('.modal-content').load($(this).attr('href'));
-  pModal.modal('show').find('.modal-content').load('$locationUrl');
+  pModal.modal('show').find('.modal-content').load($locationUrl, function() {
+    addLegalAddressEvent();
+  });
 });
+
+function addLegalAddressEvent() {
+    $('#pModal-company-legaladdresslocationfull form').unbind('submit');
+    $('#pModal-company-legaladdresslocationfull form').submit(function(e) {
+        e.preventDefault();
+        $.post($locationUrl, $(this).serialize(), function() {
+            //TODO: обновлять другим способом
+            location.reload();
+        });
+        return false;
+    });
+}
+
 JS
 );
 
