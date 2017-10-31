@@ -151,7 +151,7 @@ class CompanyController extends Controller
         }
     }
 
-    protected function attachCompanyFiles(Company $model)
+    protected function attachCompanyFiles(Company &$model)
     {
         if ($uploadedFiles = UploadedFile::getInstances($model, 'company_files')) {
             foreach ($uploadedFiles as $upFile) {
@@ -165,7 +165,7 @@ class CompanyController extends Controller
         }
     }
 
-    protected function attachCompanyFilesHouses(Company $model)
+    protected function attachCompanyFilesHouses(Company &$model)
     {
         if ($uploadedFilesHouses = UploadedFile::getInstances($model, 'company_files_houses')) {
             foreach ($uploadedFilesHouses as $upFileHouse) {
@@ -179,7 +179,7 @@ class CompanyController extends Controller
         }
     }
 
-    protected function attachCEO(Company $model)
+    protected function attachCEO(Company &$model)
     {
         #$userInfoModel = UserInfo::find()->where(['user_id' => Yii::$app->user->identity->getId()])->one();
         #$userInfoModel->link('companies', $model);
@@ -188,10 +188,13 @@ class CompanyController extends Controller
             $name = $model->cEO;
         } else {
             $name = new \common\models\Name;
-            $name->save();
+            //$name->save();
         }
 
         $name->first_name = $model->CEO_first_name;
+        $name->second_name = $model->CEO_last_name;
+        $name->patronymic = $model->CEO_patronymic;
+        $name->save();
         $model->link('cEO', $name);
     }
 

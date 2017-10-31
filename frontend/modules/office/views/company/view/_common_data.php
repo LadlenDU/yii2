@@ -75,6 +75,36 @@ $attributes = [
     'site',
     [
         'group' => true,
+        'label' => Yii::t('app', 'Исполнительный директор'),
+        'rowOptions' => ['class' => 'info'],
+    ],
+    [
+        'columns' => [
+            [
+                'attribute' => 'CEO_last_name',
+                'label' => Yii::t('app', 'Фамилия'),
+                'value' => $model->cEO->second_name,
+                'valueColOptions' => ['style' => 'width:13.3%'],
+                'format' => 'raw',
+            ],
+            [
+                'attribute' => 'CEO_first_name',
+                'label' => Yii::t('app', 'Имя'),
+                'value' => $model->cEO->first_name,
+                'valueColOptions' => ['style' => 'width:13.3%'],
+                'format' => 'raw',
+            ],
+            [
+                'attribute' => 'CEO_patronymic',
+                'label' => Yii::t('app', 'Отчество'),
+                'value' => $model->cEO->patronymic,
+                'valueColOptions' => ['style' => 'width:13.3%'],
+                'format' => 'raw',
+            ],
+        ],
+    ],
+    [
+        'group' => true,
         'label' => Yii::t('app', 'Адреса'),
         'rowOptions' => ['class' => 'info'],
     ],
