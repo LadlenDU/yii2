@@ -77,7 +77,8 @@ $attributes = [
     'site',
     [
         'group' => true,
-        'label' => Yii::t('app', 'Исполнительный директор'),
+        //'label' => Yii::t('app', 'Исполнительный директор'),
+        'label' => Yii::t('app', 'Генеральный директор'),
         'rowOptions' => ['class' => 'info'],
     ],
     [
