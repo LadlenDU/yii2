@@ -119,6 +119,9 @@ class CompanyController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
 
+            $userInfoModel = UserInfo::find()->where(['user_id' => Yii::$app->user->identity->getId()])->one();
+            $userInfoModel->link('companies', $model);
+
             $this->attachCompanyFiles($model);
             $this->attachCompanyFilesHouses($model);
             $this->attachCEO($model);
@@ -288,7 +291,7 @@ class CompanyController extends Controller
     {
         $userInfoId = UserInfo::find()->where(['user_id' => Yii::$app->user->identity->getId()])->one()->primaryKey;
         $model = Company::find()
-            ->joinWith(['userInfoCompanies', 'legalAddressLocation'])
+            ->joinWith(['userInfoCompanies', 'legalAddressLocation', 'cEO'])
             ->andFilterWhere(['user_info_company.user_info_id' => $userInfoId, 'company.id' => $id])
             ->one();
 
