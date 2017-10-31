@@ -123,20 +123,20 @@ $attributes = [
     [
         'attribute' => 'actualAddressLocationFull',
         'label' => Yii::t('app', 'Фактический адрес'),
-        'format' => 'raw',
+        'value' => $model->actualAddressLocation ? $model->actualAddressLocation->createFullAddress() : '',
         'type' => DetailView::INPUT_TEXT,
-        'widgetOptions' => [
-            'data' => $model->actualAddressLocation ? $model->actualAddressLocation->createFullAddress() : '',
+        'options' => [
+            'readonly' => 'readonly',
         ],
     ],
     [
         //'attribute' => 'postal_address_location_id',
         'attribute' => 'postalAddressLocationFull',
         'label' => Yii::t('app', 'Почтовый адрес'),
-        'format' => 'raw',
+        'value' => $model->postalAddressLocation ? $model->postalAddressLocation->createFullAddress() : '',
         'type' => DetailView::INPUT_TEXT,
-        'widgetOptions' => [
-            'data' => $model->postalAddressLocation ? $model->postalAddressLocation->createFullAddress() : '',
+        'options' => [
+            'readonly' => 'readonly',
         ],
     ],
     [
@@ -218,7 +218,10 @@ echo DetailView::widget([
 ]);
 
 $locationUrl = json_encode(Url::to(['/office/location/update', 'id' => $model->legal_address_location_id]));
+$locationUrlActual = json_encode(Url::to(['/office/location/update', 'id' => $model->actual_address_location_id]));
+$locationUrlPostal = json_encode(Url::to(['/office/location/update', 'id' => $model->postal_address_location_id]));
 
+//TODO: рефакторинг к DRY
 $this->registerJs(<<<JS
 $("#company-legaladdresslocationfull").click(function(e) {
   e.preventDefault();
@@ -229,12 +232,52 @@ $("#company-legaladdresslocationfull").click(function(e) {
     addLegalAddressEvent();
   });
 });
-
 function addLegalAddressEvent() {
     $('#pModal-company-legaladdresslocationfull form').unbind('submit');
     $('#pModal-company-legaladdresslocationfull form').submit(function(e) {
         e.preventDefault();
         $.post($locationUrl, $(this).serialize(), function() {
+            //TODO: обновлять другим способом
+            location.reload();
+        });
+        return false;
+    });
+}
+
+$("#company-actualaddresslocationfull").click(function(e) {
+  e.preventDefault();
+  var pModal = $('#pModal-company-actualaddresslocationfull');
+  pModal.find('.modal-content').html('<div style="text-align: center"><img src="/img/loading.gif" alt="Загрузка..." style="margin:1em"></div>');
+  pModal.modal('show').find('.modal-content').load($locationUrlActual, function() {
+    addActualAddressEvent();
+  });
+});
+function addActualAddressEvent() {
+    $('#pModal-company-actualaddresslocationfull form').unbind('submit');
+    $('#pModal-company-actualaddresslocationfull form').submit(function(e) {
+        e.preventDefault();
+        $.post($locationUrlActual, $(this).serialize(), function() {
+            //TODO: обновлять другим способом
+            location.reload();
+        });
+        return false;
+    });
+}
+
+$("#company-postaladdresslocationfull").click(function(e) {
+  e.preventDefault();
+  var pModal = $('#pModal-company-postaladdresslocationfull');
+  pModal.find('.modal-content').html('<div style="text-align: center"><img src="/img/loading.gif" alt="Загрузка..." style="margin:1em"></div>');
+  //pModal.modal('show').find('.modal-content').load($(this).attr('href'));
+  pModal.modal('show').find('.modal-content').load($locationUrlPostal, function() {
+    addPostalAddressEvent();
+  });
+});
+function addPostalAddressEvent() {
+    $('#pModal-company-postaladdresslocationfull form').unbind('submit');
+    $('#pModal-company-postaladdresslocationfull form').submit(function(e) {
+        e.preventDefault();
+        $.post($locationUrlPostal, $(this).serialize(), function() {
             //TODO: обновлять другим способом
             location.reload();
         });
@@ -249,6 +292,18 @@ $this->registerCss('.modal-content {padding: 1em;}');
 
 Modal::begin([
     'id' => 'pModal-company-legaladdresslocationfull',
+    'size' => 'modal-lg',
+]);
+Modal::end();
+
+Modal::begin([
+    'id' => 'pModal-company-actualaddresslocationfull',
+    'size' => 'modal-lg',
+]);
+Modal::end();
+
+Modal::begin([
+    'id' => 'pModal-company-postaladdresslocationfull',
     'size' => 'modal-lg',
 ]);
 Modal::end();
