@@ -142,7 +142,7 @@ class CompanyController extends Controller
                     'fileUploadHousesConfig' => $fileUploadHousesConfig,
                     //'companyFilesNames' => $companyFilesNames,
                 ],
-                'create' => $id,
+                'edit' => $id,
             ]);
         }
     }

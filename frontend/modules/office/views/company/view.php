@@ -4,7 +4,7 @@
 /* @var $model common\models\info\Company */
 /* @var $filesUploading array */
 /* @var $filesUploadingHouses array */
-/* @var $create integer */
+/* @var $edit integer */
 
 use yii\helpers\Html;
 use kartik\tabs\TabsX;
@@ -22,11 +22,11 @@ $this->params['breadcrumbs'][] = $this->title;
     $tabItems = [
         [
             'label' => '<i class="glyphicon glyphicon-list-alt"></i>' . Yii::t('app', 'Общие данные'),
-            'content' => $this->render('view/_common_data', ['model' => $model, 'filesUploading' => $filesUploading, 'create' => $create]),
+            'content' => $this->render('view/_common_data', ['model' => $model, 'filesUploading' => $filesUploading, 'edit' => $edit]),
             'active' => true,
         ],
     ];
-    if (!$create) {
+    if ($edit) {
         $tabItems = array_merge($tabItems, [
                 [
                     'label' => '<i class="glyphicon glyphicon-folder-open"></i>' . Yii::t('app', 'Обслуживаемые дома'),

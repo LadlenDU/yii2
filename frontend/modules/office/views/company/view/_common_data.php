@@ -3,7 +3,7 @@
 /* @var $this yii\web\View */
 /* @var $model common\models\info\Company */
 /* @var $filesUploading array */
-/* @var $create integer */
+/* @var $edit integer */
 
 use kartik\detail\DetailView;
 use common\models\info\CompanyType;
@@ -171,7 +171,7 @@ $attributes = [
 echo DetailView::widget([
     'model' => $model,
     'attributes' => $attributes,
-    'mode' => $create ? DetailView::MODE_EDIT : DetailView::MODE_VIEW,
+    'mode' => !$edit ? DetailView::MODE_EDIT : DetailView::MODE_VIEW,
     'bordered' => true,
     'striped' => false,
     'condensed' => false,
