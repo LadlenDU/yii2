@@ -119,8 +119,10 @@ class CompanyController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
 
-            $userInfoModel = UserInfo::find()->where(['user_id' => Yii::$app->user->identity->getId()])->one();
-            $userInfoModel->link('companies', $model);
+            if (!$model->userInfoCompanies) {
+                $userInfoModel = UserInfo::find()->where(['user_id' => Yii::$app->user->identity->getId()])->one();
+                $userInfoModel->link('companies', $model);
+            }
 
             $this->attachCompanyFiles($model);
             $this->attachCompanyFilesHouses($model);
