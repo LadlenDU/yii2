@@ -4,6 +4,7 @@
 /* @var $model common\models\info\Company */
 /* @var $filesUploading array */
 /* @var $filesUploadingHouses array */
+/* @var $create integer */
 
 use yii\helpers\Html;
 use kartik\tabs\TabsX;
@@ -21,25 +22,30 @@ $this->params['breadcrumbs'][] = $this->title;
     $tabItems = [
         [
             'label' => '<i class="glyphicon glyphicon-list-alt"></i>' . Yii::t('app', 'Общие данные'),
-            'content' => $this->render('view/_common_data', ['model' => $model, 'filesUploading' => $filesUploading]),
+            'content' => $this->render('view/_common_data', ['model' => $model, 'filesUploading' => $filesUploading, 'create' => $create]),
             'active' => true,
         ],
-        [
-            'label' => '<i class="glyphicon glyphicon-folder-open"></i>' . Yii::t('app', 'Обслуживаемые дома'),
-            'content' => $this->render('view/_serviced_houses', ['model' => $model, 'filesUploadingHouses' => $filesUploadingHouses]),
-            //'active' => true,
-        ],
-        [
-            'label' => '<i class="glyphicon glyphicon-usd"></i>' . Yii::t('app', 'Отделы и должности'),
-            'content' => $this->render('view/_departments_and_positions', ['model' => $model]),
-            //'active' => true,
-        ],
-        [
-            'label' => '<i class="glyphicon glyphicon-usd"></i>' . Yii::t('app', 'Сотрудники'),
-            'content' => $this->render('view/_collaborators', ['model' => $model]),
-            //'active' => true,
-        ],
     ];
+    if (!$create) {
+        $tabItems = array_merge($tabItems, [
+                [
+                    'label' => '<i class="glyphicon glyphicon-folder-open"></i>' . Yii::t('app', 'Обслуживаемые дома'),
+                    'content' => $this->render('view/_serviced_houses', ['model' => $model, 'filesUploadingHouses' => $filesUploadingHouses]),
+                    //'active' => true,
+                ],
+                [
+                    'label' => '<i class="glyphicon glyphicon-usd"></i>' . Yii::t('app', 'Отделы и должности'),
+                    'content' => $this->render('view/_departments_and_positions', ['model' => $model]),
+                    //'active' => true,
+                ],
+                [
+                    'label' => '<i class="glyphicon glyphicon-usd"></i>' . Yii::t('app', 'Сотрудники'),
+                    'content' => $this->render('view/_collaborators', ['model' => $model]),
+                    //'active' => true,
+                ],
+            ]
+        );
+    }
 
     echo TabsX::widget([
         'items' => $tabItems,
@@ -50,13 +56,13 @@ $this->params['breadcrumbs'][] = $this->title;
     ?>
 
     <!--<p style="text-align: right">
-        <?/*= Html::a(Yii::t('app', 'Удалить организацию'), ['delete', 'id' => $model->id], [
+        <? /*= Html::a(Yii::t('app', 'Удалить организацию'), ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => Yii::t('app', 'Вы уверены что хотите удалить текущую организацию?'),
                 'method' => 'post',
             ],
-        ]) */?>
+        ]) */ ?>
     </p>-->
 
 </div>

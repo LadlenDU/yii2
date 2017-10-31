@@ -64,6 +64,8 @@ class Company extends \yii\db\ActiveRecord
     public $company_files_houses;
 
     public $CEO_first_name;
+    public $CEO_last_name;
+    public $CEO_patronymic;
 
     /**
      * @inheritdoc
@@ -84,7 +86,7 @@ class Company extends \yii\db\ActiveRecord
             [['OGRN_IP_date'], 'safe'],
             [['company_files', 'company_files_houses'], 'safe'],
             [['site'], 'string'],
-            [['CEO_first_name'], 'string'],
+            [['CEO_first_name', 'CEO_last_name', 'CEO_patronymic'], 'string'],
             [['full_name', 'short_name', 'INN', 'KPP', 'BIK', 'OGRN', 'OGRN_IP_number', 'OGRN_IP_registered_company', 'checking_account', 'correspondent_account', 'full_bank_name', 'operates_on_the_basis_of', 'phone', 'fax', 'email'], 'string', 'max' => 255],
             [['CEO'], 'exist', 'skipOnError' => true, 'targetClass' => Name::className(), 'targetAttribute' => ['CEO' => 'id']],
             [['OKOPF_id'], 'exist', 'skipOnError' => true, 'targetClass' => OKOPF::className(), 'targetAttribute' => ['OKOPF_id' => 'id']],
@@ -130,6 +132,9 @@ class Company extends \yii\db\ActiveRecord
             'tax_system_id' => Yii::t('app', 'Система налогообложения'),
             'company_files' => Yii::t('app', 'Файлы компании'),
             'company_files_houses' => Yii::t('app', 'Файлы обслуживаемых домов компании'),
+            'CEO_first_name' => Yii::t('app', 'Имя'),
+            'CEO_last_name' => Yii::t('app', 'Фамилия'),
+            'CEO_patronymic' => Yii::t('app', 'Отчество'),
         ];
     }
 

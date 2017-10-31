@@ -87,18 +87,21 @@ class CompanyController extends Controller
         return 'Не AJAX запрос';
     }
 
-    /**
-     * Displays a single Company model.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionView($id)
+    protected function showForm($id = null)
     {
         /*return $this->render('view', [
             'model' => $this->findModel($id),
         ]);*/
 
-        $model = $this->findModel($id);
+        if ($id) {
+            $model = $this->findModel($id);
+        } else {
+            $model = new Company();
+        }
+
+        //TODO: косяк
+        $model->company_type_id = 1;
+        $model->tax_system_id = 1;
 
         $fileUpload = new FileUploadHelper('/office/company/company-file', [
             'pluginOptions' => [
@@ -116,27 +119,9 @@ class CompanyController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
 
-            if ($uploadedFiles = UploadedFile::getInstances($model, 'company_files')) {
-                foreach ($uploadedFiles as $upFile) {
-                    $companyFiles = new CompanyFiles();
-                    $companyFiles->content = file_get_contents($upFile->tempName);
-                    $companyFiles->name = $upFile->name;
-                    $companyFiles->mime_type = $upFile->type;
-                    $companyFiles->save();
-                    $model->link('companyFiles', $companyFiles);
-                }
-            }
-
-            if ($uploadedFilesHouses = UploadedFile::getInstances($model, 'company_files_houses')) {
-                foreach ($uploadedFilesHouses as $upFileHouse) {
-                    $companyFilesHouses = new CompanyFilesHouses();
-                    $companyFilesHouses->content = file_get_contents($upFileHouse->tempName);
-                    $companyFilesHouses->name = $upFileHouse->name;
-                    $companyFilesHouses->mime_type = $upFileHouse->type;
-                    $companyFilesHouses->save();
-                    $model->link('companyFilesHouses', $companyFilesHouses);
-                }
-            }
+            $this->attachCompanyFiles($model);
+            $this->attachCompanyFilesHouses($model);
+            $this->attachCEO($model);
 
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
@@ -157,8 +142,63 @@ class CompanyController extends Controller
                     'fileUploadHousesConfig' => $fileUploadHousesConfig,
                     //'companyFilesNames' => $companyFilesNames,
                 ],
+                'create' => $id,
             ]);
         }
+    }
+
+    protected function attachCompanyFiles(Company $model)
+    {
+        if ($uploadedFiles = UploadedFile::getInstances($model, 'company_files')) {
+            foreach ($uploadedFiles as $upFile) {
+                $companyFiles = new CompanyFiles();
+                $companyFiles->content = file_get_contents($upFile->tempName);
+                $companyFiles->name = $upFile->name;
+                $companyFiles->mime_type = $upFile->type;
+                $companyFiles->save();
+                $model->link('companyFiles', $companyFiles);
+            }
+        }
+    }
+
+    protected function attachCompanyFilesHouses(Company $model)
+    {
+        if ($uploadedFilesHouses = UploadedFile::getInstances($model, 'company_files_houses')) {
+            foreach ($uploadedFilesHouses as $upFileHouse) {
+                $companyFilesHouses = new CompanyFilesHouses();
+                $companyFilesHouses->content = file_get_contents($upFileHouse->tempName);
+                $companyFilesHouses->name = $upFileHouse->name;
+                $companyFilesHouses->mime_type = $upFileHouse->type;
+                $companyFilesHouses->save();
+                $model->link('companyFilesHouses', $companyFilesHouses);
+            }
+        }
+    }
+
+    protected function attachCEO(Company $model)
+    {
+        #$userInfoModel = UserInfo::find()->where(['user_id' => Yii::$app->user->identity->getId()])->one();
+        #$userInfoModel->link('companies', $model);
+
+        if ($model->cEO) {
+            $name = $model->cEO;
+        } else {
+            $name = new \common\models\Name;
+            $name->save();
+        }
+
+        $name->first_name = $model->CEO_first_name;
+        $model->link('cEO', $name);
+    }
+
+    /**
+     * Displays a single Company model.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionView($id)
+    {
+        return $this->showForm($id);
     }
 
     /**
@@ -168,7 +208,9 @@ class CompanyController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Company();
+        return $this->showForm();
+
+        /*$model = new Company();
 
         if ($model->load(Yii::$app->request->post())) {
             //TODO: валидация не проходит - заполнить
@@ -197,7 +239,7 @@ class CompanyController extends Controller
 
         return $this->render('create', [
             'model' => $model,
-        ]);
+        ]);*/
     }
 
     /**
