@@ -60,7 +60,9 @@ use yii\bootstrap\ActiveForm;
 
     <?= $form->field($model, 'full_bank_name')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'CEO')->textInput() ?>
+    <?/*= $form->field($model, 'CEO')->textInput() */?>
+    <?= $form->field($model, 'CEO_first_name')->textInput() ?>
+    <?php /*$form->field($model, 'CEO.second_name')->textInput() */?>
 
     <?= $form->field($model, 'operates_on_the_basis_of')->textInput(['maxlength' => true]) ?>
 

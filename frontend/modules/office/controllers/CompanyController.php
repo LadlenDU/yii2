@@ -171,9 +171,24 @@ class CompanyController extends Controller
         $model = new Company();
 
         if ($model->load(Yii::$app->request->post())) {
-            if ($model->save()) {
+            //TODO: валидация не проходит - заполнить
+            $model->company_type_id = 1;
+            $model->tax_system_id = 1;
+            if ($model->save(false)) {
                 $userInfoModel = UserInfo::find()->where(['user_id' => Yii::$app->user->identity->getId()])->one();
                 $userInfoModel->link('companies', $model);
+
+                if ($model->cEO) {
+                    $name = $model->cEO;
+                } else {
+                    $name = new \common\models\Name;
+                    $name->save();
+                }
+
+                $name->first_name = $model->CEO_first_name;
+                $model->link('cEO', $name);
+                //$name->link('companies', $this);
+
                 //return $this->redirect(['view', 'id' => $model->id]);
                 //TODO может понадобиться скорректировать
                 return $this->redirect('/office/my-organization');

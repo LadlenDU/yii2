@@ -63,6 +63,8 @@ class Company extends \yii\db\ActiveRecord
     public $company_files;
     public $company_files_houses;
 
+    public $CEO_first_name;
+
     /**
      * @inheritdoc
      */
@@ -82,6 +84,7 @@ class Company extends \yii\db\ActiveRecord
             [['OGRN_IP_date'], 'safe'],
             [['company_files', 'company_files_houses'], 'safe'],
             [['site'], 'string'],
+            [['CEO_first_name'], 'string'],
             [['full_name', 'short_name', 'INN', 'KPP', 'BIK', 'OGRN', 'OGRN_IP_number', 'OGRN_IP_registered_company', 'checking_account', 'correspondent_account', 'full_bank_name', 'operates_on_the_basis_of', 'phone', 'fax', 'email'], 'string', 'max' => 255],
             [['CEO'], 'exist', 'skipOnError' => true, 'targetClass' => Name::className(), 'targetAttribute' => ['CEO' => 'id']],
             [['OKOPF_id'], 'exist', 'skipOnError' => true, 'targetClass' => OKOPF::className(), 'targetAttribute' => ['OKOPF_id' => 'id']],
@@ -129,6 +132,22 @@ class Company extends \yii\db\ActiveRecord
             'company_files_houses' => Yii::t('app', 'Файлы обслуживаемых домов компании'),
         ];
     }
+
+    /*public function beforeSave($insert)
+    {
+        if ($this->cEO) {
+            $name = $this->cEO;
+        } else {
+            $name = new Name;
+            $name->save();
+        }
+
+        $name->first_name = $this->CEO_first_name;
+        //$this->link('cEO', $name);
+        $name->link('companies', $this);
+
+        return parent::beforeSave($insert);
+    }*/
 
     /**
      * @return \yii\db\ActiveQuery
