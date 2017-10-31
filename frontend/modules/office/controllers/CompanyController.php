@@ -108,6 +108,16 @@ class CompanyController extends Controller
             $location->save();
             $model->link('legalAddressLocation', $location);
         }
+        if (!$model->actual_address_location_id) {
+            $location = new Location;
+            $location->save();
+            $model->link('actualAddressLocation', $location);
+        }
+        if (!$model->postal_address_location_id) {
+            $location = new Location;
+            $location->save();
+            $model->link('postalAddressLocation', $location);
+        }
 
         $fileUpload = new FileUploadHelper('/office/company/company-file', [
             'pluginOptions' => [

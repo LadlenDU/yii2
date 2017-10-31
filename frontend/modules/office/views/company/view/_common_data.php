@@ -121,7 +121,7 @@ $attributes = [
         ],
     ],
     [
-        'attribute' => 'actual_address_location_id',
+        'attribute' => 'actualAddressLocationFull',
         'label' => Yii::t('app', 'Фактический адрес'),
         'format' => 'raw',
         'type' => DetailView::INPUT_TEXT,
@@ -130,7 +130,8 @@ $attributes = [
         ],
     ],
     [
-        'attribute' => 'postal_address_location_id',
+        //'attribute' => 'postal_address_location_id',
+        'attribute' => 'postalAddressLocationFull',
         'label' => Yii::t('app', 'Почтовый адрес'),
         'format' => 'raw',
         'type' => DetailView::INPUT_TEXT,
@@ -146,10 +147,6 @@ $attributes = [
     'INN',
     'KPP',
     'OGRN',
-    /*[
-        'attribute' => 'OGRN',
-        'label' => 'ОГРН',
-    ],*/
     'checking_account',
     'BIK',
     'full_bank_name',

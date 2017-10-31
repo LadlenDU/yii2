@@ -12,11 +12,13 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
+    <?= $form->field($model, 'zip_code')->textInput(['maxlength' => true]) ?>
+
     <?= $form->field($model, 'region')->textInput(['maxlength' => true]) ?>
 
     <?/*= $form->field($model, 'regionId')->textInput(['maxlength' => true]) */?>
 
-    <?= $form->field($model, 'district')->textInput(['maxlength' => true]) ?>
+    <?/*= $form->field($model, 'district')->textInput(['maxlength' => true]) */?>
 
     <?/*= $form->field($model, 'districtId')->textInput(['maxlength' => true]) */?>
 
@@ -32,9 +34,7 @@ use yii\widgets\ActiveForm;
 
     <?/*= $form->field($model, 'buildingId')->textInput(['maxlength' => true]) */?>
 
-    <?= $form->field($model, 'appartment')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'zip_code')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'appartment')->textInput(['maxlength' => true])->label('Офис/помещение') ?>
 
     <?/*= $form->field($model, 'full_address')->textInput(['maxlength' => true]) */?>
 

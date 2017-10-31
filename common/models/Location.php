@@ -25,7 +25,10 @@ use common\models\info\Company;
  *
  * @property Company[] $companies
  * @property Company[] $companies0
+ * @property Company[] $companies1
  * @property Debtor[] $debtors
+ * @property House[] $houses
+ * @property ServicedHouses[] $servicedHouses
  * @property UserInfo[] $userInfos
  */
 class Location extends \yii\db\ActiveRecord
@@ -91,9 +94,33 @@ class Location extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getCompanies1()
+    {
+        return $this->hasMany(Company::className(), ['postal_address_location_id' => 'id'])->inverseOf('postalAddressLocation');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getDebtors()
     {
         return $this->hasMany(Debtor::className(), ['location_id' => 'id'])->inverseOf('location');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getHouses()
+    {
+        return $this->hasMany(House::className(), ['location_id' => 'id'])->inverseOf('location');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getServicedHouses()
+    {
+        return $this->hasMany(ServicedHouses::className(), ['location_id' => 'id'])->inverseOf('location');
     }
 
     /**
