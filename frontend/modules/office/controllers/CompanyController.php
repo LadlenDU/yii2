@@ -14,6 +14,7 @@ use common\models\UserInfo;
 use yii\web\UploadedFile;
 use common\models\info\CompanyFiles;
 use yii\filters\AccessControl;
+use common\models\Location;
 
 /**
  * CompanyController implements the CRUD actions for Company model.
@@ -102,6 +103,12 @@ class CompanyController extends Controller
             $model->tax_system_id = 1;
         }
 
+        if (!$model->legal_address_location_id) {
+            $location = new Location;
+            $location->save();
+            $model->link('legalAddressLocation', $location);
+        }
+
         $fileUpload = new FileUploadHelper('/office/company/company-file', [
             'pluginOptions' => [
                 'initialCaption' => Yii::t('app', 'Файлы ЕГРЮЛ'),
@@ -136,6 +143,7 @@ class CompanyController extends Controller
             }
             $companyFilesNames = implode('; ', $companyFilesNames);
 
+            //TODO: пересмотреть работу
             if ($model->cEO) {
                 $model->CEO_last_name = $model->cEO->second_name;
                 $model->CEO_first_name = $model->cEO->first_name;

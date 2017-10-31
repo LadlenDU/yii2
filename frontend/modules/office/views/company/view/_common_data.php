@@ -12,6 +12,8 @@ use yii\helpers\ArrayHelper;
 use common\models\info\OKOPF;
 use common\models\info\TaxSystem;
 use common\models\Location;
+use yii\bootstrap\Modal;
+use yii\helpers\Url;
 
 $attributes = [
     [
@@ -85,21 +87,21 @@ $attributes = [
                 'label' => Yii::t('app', 'Фамилия'),
                 'value' => $model->cEO ? $model->cEO->second_name : '',
                 'valueColOptions' => ['style' => 'width:13.3%'],
-                'format' => 'raw',
+                //'format' => 'raw',
             ],
             [
                 'attribute' => 'CEO_first_name',
                 'label' => Yii::t('app', 'Имя'),
                 'value' => $model->cEO ? $model->cEO->first_name : '',
                 'valueColOptions' => ['style' => 'width:13.3%'],
-                'format' => 'raw',
+                //'format' => 'raw',
             ],
             [
                 'attribute' => 'CEO_patronymic',
                 'label' => Yii::t('app', 'Отчество'),
                 'value' => $model->cEO ? $model->cEO->patronymic : $model->cEO,
                 'valueColOptions' => ['style' => 'width:13.3%'],
-                'format' => 'raw',
+                //'format' => 'raw',
             ],
         ],
     ],
@@ -111,10 +113,10 @@ $attributes = [
     [
         'attribute' => 'legal_address_location_id',
         'label' => Yii::t('app', 'Юридический адрес'),
-        //'format' => 'raw',
+        'value' => $model->legalAddressLocation ? $model->legalAddressLocation->createFullAddress() : '',   //'<button>Изменить</button>',
         'type' => DetailView::INPUT_TEXT,
-        'widgetOptions' => [
-            'data' => $model->legalAddressLocation ? $model->legalAddressLocation->createFullAddress() : '',
+        'options' => [
+            'readonly' => 'readonly',
         ],
     ],
     [
@@ -216,3 +218,24 @@ echo DetailView::widget([
     //'buttons1' => '{update}',
     'container' => ['id' => 'company-common-data'],
 ]);
+
+$locationUrl = Url::to(['/office/location/update', 'id' => $model->legal_address_location_id]);
+
+$this->registerJs(<<<JS
+$("#company-legal_address_location_id").click(function(e) {
+  e.preventDefault();
+  var pModal = $('#pModal-company-legal_address_location_id');
+  pModal.find('.modal-content').html('<div style="text-align: center"><img src="/img/loading.gif" alt="Загрузка..." style="margin:1em"></div>');
+  //pModal.modal('show').find('.modal-content').load($(this).attr('href'));
+  pModal.modal('show').find('.modal-content').load('$locationUrl');
+});
+JS
+);
+
+$this->registerCss('.modal-content {padding: 1em;}');
+
+Modal::begin([
+    'id' => 'pModal-company-legal_address_location_id',
+    'size' => 'modal-lg',
+]);
+Modal::end();
