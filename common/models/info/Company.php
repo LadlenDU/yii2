@@ -85,6 +85,7 @@ class Company extends \yii\db\ActiveRecord
             [['legal_address_location_id', 'postal_address_location_id', 'actual_address_location_id', 'OGRN_IP_type', 'CEO', 'company_type_id', 'OKOPF_id', 'tax_system_id'], 'integer'],
             [['OGRN_IP_date'], 'safe'],
             [['company_files', 'company_files_houses'], 'safe'],
+            //[['LegalAddressLocationFull'], 'safe'],
             [['site'], 'string'],
             [['CEO_first_name', 'CEO_last_name', 'CEO_patronymic'], 'string'],
             [['full_name', 'short_name', 'INN', 'KPP', 'BIK', 'OGRN', 'OGRN_IP_number', 'OGRN_IP_registered_company', 'checking_account', 'correspondent_account', 'full_bank_name', 'operates_on_the_basis_of', 'phone', 'fax', 'email'], 'string', 'max' => 255],
@@ -136,6 +137,11 @@ class Company extends \yii\db\ActiveRecord
             'CEO_last_name' => Yii::t('app', 'Фамилия'),
             'CEO_patronymic' => Yii::t('app', 'Отчество'),
         ];
+    }
+
+    public function getLegalAddressLocationFull()
+    {
+        return $this->legalAddressLocation->createFullAddress();
     }
 
     /*public function beforeSave($insert)

@@ -112,7 +112,7 @@ $attributes = [
     ],
     [
         //'attribute' => 'legal_address_location_id',
-        'attribute' => 'legalAddressLocation',
+        'attribute' => 'legalAddressLocationFull',
         'label' => Yii::t('app', 'Юридический адрес'),
         'value' => $model->legalAddressLocation ? $model->legalAddressLocation->createFullAddress() : '',   //'<button>Изменить</button>',
         'type' => DetailView::INPUT_TEXT,
@@ -223,9 +223,9 @@ echo DetailView::widget([
 $locationUrl = Url::to(['/office/location/update', 'id' => $model->legal_address_location_id]);
 
 $this->registerJs(<<<JS
-$("#company-legal_address_location_id").click(function(e) {
+$("#company-legaladdresslocationfull").click(function(e) {
   e.preventDefault();
-  var pModal = $('#pModal-company-legal_address_location_id');
+  var pModal = $('#pModal-company-legaladdresslocationfull');
   pModal.find('.modal-content').html('<div style="text-align: center"><img src="/img/loading.gif" alt="Загрузка..." style="margin:1em"></div>');
   //pModal.modal('show').find('.modal-content').load($(this).attr('href'));
   pModal.modal('show').find('.modal-content').load('$locationUrl');
@@ -236,7 +236,7 @@ JS
 $this->registerCss('.modal-content {padding: 1em;}');
 
 Modal::begin([
-    'id' => 'pModal-company-legal_address_location_id',
+    'id' => 'pModal-company-legaladdresslocationfull',
     'size' => 'modal-lg',
 ]);
 Modal::end();
