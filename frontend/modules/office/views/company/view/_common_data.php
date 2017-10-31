@@ -111,7 +111,8 @@ $attributes = [
         'rowOptions' => ['class' => 'info'],
     ],
     [
-        'attribute' => 'legal_address_location_id',
+        //'attribute' => 'legal_address_location_id',
+        'attribute' => 'legalAddressLocation',
         'label' => Yii::t('app', 'Юридический адрес'),
         'value' => $model->legalAddressLocation ? $model->legalAddressLocation->createFullAddress() : '',   //'<button>Изменить</button>',
         'type' => DetailView::INPUT_TEXT,

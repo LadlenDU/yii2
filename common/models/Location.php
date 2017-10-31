@@ -132,12 +132,14 @@ class Location extends \yii\db\ActiveRecord
 
         $aP2 = [];
 
-        //TODO: учитывать отсутствие элементов
         $addressP1 = implode(', ', $aP1);
-        $addressP2 = $this->street
-            . Yii::t('app', ' д. ')
-            . $this->building . Yii::t('app',' кв. ')
-            . $this->appartment;
+        $addressP2 = $this->street;
+        if ($this->building) {
+            $addressP2 .= Yii::t('app', ' д. ') . $this->building;
+        }
+        if ($this->appartment) {
+            $addressP2 .= Yii::t('app', ' кв. ') . $this->appartment;
+        }
 
         $addressP1 ? ($aP2[] = $addressP1) : null;
         $addressP2 ? ($aP2[] = $addressP2) : null;
