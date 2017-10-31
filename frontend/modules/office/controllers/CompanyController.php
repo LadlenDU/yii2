@@ -136,6 +136,12 @@ class CompanyController extends Controller
             }
             $companyFilesNames = implode('; ', $companyFilesNames);
 
+            if ($model->cEO) {
+                $model->CEO_last_name = $model->cEO->second_name;
+                $model->CEO_first_name = $model->cEO->first_name;
+                $model->CEO_patronymic = $model->cEO->patronymic;
+            }
+
             return $this->render('view', [
                 'model' => $model,
                 'filesUploading' => [
