@@ -97,11 +97,10 @@ class CompanyController extends Controller
             $model = $this->findModel($id);
         } else {
             $model = new Company();
+            //TODO: косяк
+            $model->company_type_id = 1;
+            $model->tax_system_id = 1;
         }
-
-        //TODO: косяк
-        $model->company_type_id = 1;
-        $model->tax_system_id = 1;
 
         $fileUpload = new FileUploadHelper('/office/company/company-file', [
             'pluginOptions' => [
