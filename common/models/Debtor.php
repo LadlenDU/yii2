@@ -443,6 +443,7 @@ class Debtor extends \yii\db\ActiveRecord
     public function calculateStateFee2()
     {
         $amount = $this->getDebtTotal();
+        $amount += $this->getFineTotal();
 
         if ($amount <= 10000) {
             // до 10 000 рублей - 2 процента цены иска, но не менее 200 рублей;
