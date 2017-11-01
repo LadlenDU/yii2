@@ -12,7 +12,7 @@ use yii\helpers\Html;
 
 <table style="width: 100%">
     <tr>
-        <td style="text-align: center">
+        <td style="text-align: center; width:30%">
             <strong><?= Html::encode($company->short_name) ?></strong><br>
             ИНН <?= Html::encode($company->INN) ?><br>
             ОГРН <?= Html::encode($company->OGRN) ?><br>
@@ -25,20 +25,23 @@ use yii\helpers\Html;
                     <td>&nbsp;</td>
                     <td style="text-align: left">
                         <strong>
-                            Мировому судье судебного участка № 281
-                            <?= Html::encode("$court->district, $court->region") ?>
+                            <!--Мировому судье судебного участка № 281-->
+                            <? /*= Html::encode("$court->district, $court->region") */ ?>
+                            <?= Html::encode($court->name) ?>
                         </strong>
                     </td>
                 </tr>
                 <tr>
-                    <td style="text-align: right;font-weight: bold;text-decoration: underline">Взыскатель</td>
+                    <td style="text-align: right;font-weight: bold;text-decoration: underline;padding:0 1.5em 0 2em;">
+                        Взыскатель
+                    </td>
                     <td style="text-align: left">
-                        <strong><?= Html::encode($court->name) ?></strong><br>
-                        <?= Html::encode($court->getFullAddress()) ?>
+                        <strong><?= Html::encode($company->short_name) ?></strong><br>
+                        <?= Html::encode($company->legalAddressLocation->createFullAddress()) ?>
                     </td>
                 </tr>
                 <tr>
-                    <td style="text-align: right;text-decoration: underline">Должник</td>
+                    <td style="text-align: right;text-decoration: underline;padding:0 1.5em 0 2em;">Должник</td>
                     <td style="text-align: left">
                         <strong><?= Html::encode($debtor->name->createFullName()) ?></strong><br>
                         <?= Html::encode($debtor->location->full_address) ?>
@@ -60,7 +63,8 @@ use yii\helpers\Html;
 
 <br>
 
-<p><strong><?= Html::encode($debtor->name->createFullName()) ?></strong> обладает правом пользования жилого помещения, расположенного по адресу: <?= Html::encode($debtor->location->full_address) ?></p>
+<p><strong><?= Html::encode($debtor->name->createFullName()) ?></strong> обладает правом пользования жилого помещения,
+    расположенного по адресу: <?= Html::encode($debtor->location->full_address) ?></p>
 <p>Согласно п. 3 ст. 30, п. 1 ст. 39, ст. 153, п.п. 2, 4 ст. 154, п.п. 1, 7, 8, 10, 11 ст. 155 ЖК РФ, а также абз. г, д
     п. 19 Правил пользования жилыми помещениями (утв. постановлением Правительства РФ от 21 января 2006 г. N 25)
     собственник обязан своевременно вносить плату за жилое помещение и коммунальные услуги (плата за наём; плата за
@@ -75,7 +79,8 @@ use yii\helpers\Html;
 <p>Согласно п. 1 ст. 323 ГК РФ при солидарной обязанности должников кредитор вправе требовать исполнения как от всех
     должников совместно, так и от любого из них в отдельности, притом как полностью, так и в части долга.</p>
 <p>Ответчик систематически уклоняется от внесения указанных платежей, будучи от них не освобожденным.</p>
-<p>Таким образом, размер задолженность ответчиков перед <?= Html::encode($debtor->LS_IKU_provider) ?> за период с мая 2016г. по июнь 2017г. составляет
+<p>Таким образом, размер задолженность ответчиков перед <?= Html::encode($debtor->LS_IKU_provider) ?> за период с мая
+    2016г. по июнь 2017г. составляет
     30865,36руб.Неустойка за просрочку платежа на дату подачи заявления составляет 5006,02руб.</p>
 <p>Руководствуясь п. 3 ст. 382 Гражданского кодекса РФ, и в соответствии с договором уступки прав (цессии) № 2706/2017
     от «27» июня 2017 года, МП ГПЩ «ДЕЗ ЖКХ» уступило, а ООО «Альфа» ИНН 5050130861, приняло право требования
@@ -85,7 +90,9 @@ use yii\helpers\Html;
 
 <div style="text-align: center;font-weight: bold">ПРОШУ СУД:</div>
 
-<p>Вынести судебный приказ о взыскании с <strong><?= Html::encode($debtor->name->createFullName('родительный')) ?></strong> 14.08.1983 года рождения место рождения: г.
+<p>Вынести судебный приказ о взыскании с
+    <strong><?= Html::encode($debtor->name->createFullName('родительный')) ?></strong> 14.08.1983 года рождения место
+    рождения: г.
     Мытищи Московской области, зарегистрированного по адресу: 141100, МО, г. Щелково, 1-й Советский пер. д.19,к.2,
     кв.47, в пользу ООО «Альфа», ИНН/КПП 5050130861/505001001, ОГРН 1175050002313,на р/сч 40702810700001007864,
     к/сч30101810645250000801, Инвестиционный Банк "ВЕСТА", БИК: 044525801</p>
@@ -108,4 +115,4 @@ use yii\helpers\Html;
 </ol>
 <br>
 <br>
-Генеральный директор ________________ Мукин В.И.<?= '' //Html::encode($company->manager_name->createShortName()) ?>
+Генеральный директор ________________ Мукин В.И.<?= '' //Html::encode($company->manager_name->createShortName())  ?>
