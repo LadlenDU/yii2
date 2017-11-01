@@ -9,6 +9,8 @@ namespace common\models;
  */
 class AccrualQuery extends \yii\db\ActiveQuery
 {
+    use \common\models\DebtDateRestrictionTrait;
+
     /*public function active()
     {
         return $this->andWhere('[[status]]=1');
@@ -20,7 +22,14 @@ class AccrualQuery extends \yii\db\ActiveQuery
      */
     public function all($db = null)
     {
+        $this->addDateRestriction('accrual_date');
         return parent::all($db);
+    }
+
+    public function count($q = '*', $db = null)
+    {
+        $this->addDateRestriction('accrual_date');
+        return parent::count($q, $db);
     }
 
     /**
