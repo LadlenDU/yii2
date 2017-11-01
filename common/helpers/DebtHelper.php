@@ -29,8 +29,11 @@ class DebtHelper
      */
     public static function findCompanyAddressForDebtor(ActiveRecord $sourceRecord)
     {
-        //TODO: раализовать - пока организацию не ищет, берет первый попавшийся
-        return \common\models\info\Company::find()->one();
+        //TODO: реализовать - пока организацию не ищет, берет первый попавшийся
+        //return \common\models\info\Company::find()->one();
+        //TODO: пока будем брать организацию по умолчанию залогиненого пользователя
+        return \Yii::$app->user->identity->userInfo->getPrimaryCompany()->one();
+
     }
 
     public static function fillInvoiceBlank(DebtDetails $debtDetails, Court $court, \PHPExcel_Worksheet $sheet)
