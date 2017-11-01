@@ -14,9 +14,9 @@ if (!$model) {
 ?>
 <div class="name">
 
-        <?= $form->field($model, 'first_name') ?>
-        <?= $form->field($model, 'second_name') ?>
-        <?= $form->field($model, 'patronymic') ?>
-        <?= $form->field($model, 'full_name') ?>
+    <?= $form->field($model, 'second_name') ?>
+    <?= $form->field($model, 'first_name') ?>
+    <?= $form->field($model, 'patronymic') ?>
+    <?/*= $form->field($model, 'full_name') */?>
 
 </div><!-- _name -->
