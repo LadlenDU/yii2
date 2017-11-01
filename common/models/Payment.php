@@ -70,7 +70,7 @@ class Payment extends \yii\db\ActiveRecord
     public function save($runValidation = true, $attributeNames = NULL)
     {
         if ($this->payment_date) {
-            $this->payment_date .= '-01 00:00:00';
+            //$this->payment_date .= '-01 00:00:00';
         }
 
         parent::save($runValidation, $attributeNames);
