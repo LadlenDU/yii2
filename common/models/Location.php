@@ -145,26 +145,38 @@ class Location extends \yii\db\ActiveRecord
         return $this->street . ' д. ' . $this->building . ' кв. ' . $this->appartment;
     }*/
 
-    public function createFullAddress()
+    public function createFullAddress($elements = [])
     {
-        if ($this->full_address) {
+        if (!$elements && $this->full_address) {
             return $this->full_address;
         }
 
         $aP1 = [];
-        $this->zip_code ? ($aP1[] = $this->zip_code) : null;
-        $this->region ? ($aP1[] = $this->region) : null;
-        $this->district ? ($aP1[] = $this->district) : null;
-        $this->city ? ($aP1[] = $this->city) : null;
+        if (!$elements || in_array('zip_code', $elements)) {
+            $this->zip_code ? ($aP1[] = $this->zip_code) : null;
+        }
+        if (!$elements || in_array('region', $elements)) {
+            $this->region ? ($aP1[] = $this->region) : null;
+        }
+        if (!$elements || in_array('district', $elements)) {
+            $this->district ? ($aP1[] = $this->district) : null;
+        }
+        if (!$elements || in_array('city', $elements)) {
+            $this->city ? ($aP1[] = $this->city) : null;
+        }
 
         $aP2 = [];
 
         $addressP1 = implode(', ', $aP1);
-        $addressP2 = $this->street;
-        if ($this->building) {
+        $addressP2 = '';
+
+        if (!$elements || in_array('street', $elements)) {
+            $addressP2 .= $this->street;
+        }
+        if ((!$elements || in_array('building', $elements)) && $this->building) {
             $addressP2 .= Yii::t('app', ' д. ') . $this->building;
         }
-        if ($this->appartment) {
+        if ((!$elements || in_array('appartment', $elements)) && $this->appartment) {
             $addressP2 .= Yii::t('app', ' кв. ') . $this->appartment;
         }
 
