@@ -117,11 +117,15 @@ class DebtorController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
 
-            $locationModel = Location::find()->where(['location_id' => $this->location->id])->one();
-            $locationModel->link('location', $model);
+            //$locationModel = Location::find()->where(['location_id' => $model->location->id])->one();
+            $locationModel = new Location();
+            $locationModel->save();
+            $model->link('location', $locationModel);
 
-            $nameModel = Name::find()->where(['name_id' => $this->name->id])->one();
-            $nameModel->link('name', $model);
+            //$nameModel = Name::find()->where(['name_id' => $this->name->id])->one();
+            $nameModel = new Name();
+            $nameModel->save();
+            $model->link('name', $nameModel);
 
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
