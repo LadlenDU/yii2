@@ -361,7 +361,8 @@ class Debtor extends \yii\db\ActiveRecord
 
     public function getPaymentSum()
     {
-        return $this->find()->from('payment')->where(['debtor_id' => $this->id])->sum('amount') ?: 0;
+        //return $this->find()->from('payment')->where(['debtor_id' => $this->id])->sum('amount') ?: 0;
+        return $this->getPayments()->sum('amount') ?: 0;
     }
 
     /**
