@@ -119,11 +119,13 @@ class DebtorController extends Controller
 
             //$locationModel = Location::find()->where(['location_id' => $model->location->id])->one();
             $locationModel = new Location();
+            $locationModel->load(Yii::$app->request->post());
             $locationModel->save();
             $model->link('location', $locationModel);
 
             //$nameModel = Name::find()->where(['name_id' => $this->name->id])->one();
             $nameModel = new Name();
+            $nameModel->load(Yii::$app->request->post());
             $nameModel->save();
             $model->link('name', $nameModel);
 
