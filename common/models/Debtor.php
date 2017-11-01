@@ -203,7 +203,7 @@ class Debtor extends \yii\db\ActiveRecord
             ];
         }
 
-        $dateFinish = time() - 60 * 60 * 24;
+        $dateFinish = $this->getDebtDateEnd();
 
         try {
             $fineRes = $fine->fineCalculator($dateFinish, $loans, $payments);
@@ -213,6 +213,11 @@ class Debtor extends \yii\db\ActiveRecord
         }
 
         return $fineRes;
+    }
+
+    protected function getDebtDateEnd()
+    {
+        return time() - 60 * 60 * 24;
     }
 
     public function calcFines()
@@ -401,6 +406,23 @@ class Debtor extends \yii\db\ActiveRecord
         }
 
         return $fine;
+    }
+
+    /**
+     * @return false|int unix timestamp - начало периода задолженности
+     */
+    public function getDebtPeriodStart()
+    {
+        $date = $this->getAccruals()->orderBy('accrual_date ASC')->one()->accrual_date;
+        return strtotime($date);
+    }
+
+    /**
+     * @return false|int unix timestamp - конец периода задолженности
+     */
+    public function getDebtPeriodEnd()
+    {
+        return $this->getDebtDateEnd();
     }
 
     /**

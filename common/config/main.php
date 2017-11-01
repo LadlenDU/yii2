@@ -3,6 +3,9 @@
 use yii\filters\AccessControl;
 use kartik\datecontrol\Module;
 
+//TODO: что за странный костыль???
+setlocale(LC_ALL, 'ru_RU.UTF-8');
+
 return [
     'id' => 'software-package-upravdolg',
     'name' => 'Программный комплекс «УПРАВДОЛГ»',
