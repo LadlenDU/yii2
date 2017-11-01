@@ -17,7 +17,7 @@ use yii\helpers\Html;
             ИНН <?= Html::encode($company->INN) ?><br>
             ОГРН <?= Html::encode($company->OGRN) ?><br>
             ***<br>
-            адрес: <?= Html::encode($court->getFullAddress()) ?>
+            адрес: <?= Html::encode($company->legalAddressLocation->createFullAddress()) ?>
         </td>
         <td>
             <table style="float: right">
