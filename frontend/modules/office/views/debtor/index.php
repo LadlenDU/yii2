@@ -47,6 +47,9 @@ $columns = [
     ],
     [
         'attribute' => 'location.city',
+        'value' => function (\common\models\Debtor $model, $key, $index) {
+            return $model->getLocationCity();
+        },
         'hAlign' => 'center',
     ],
     [

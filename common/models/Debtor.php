@@ -554,4 +554,20 @@ class Debtor extends \yii\db\ActiveRecord
             Yii::$app->getSession()->setFlash('error', $e->getMessage());
         }
     }
+
+    public function getLocationCity()
+    {
+        $city = '';
+        if ($this->location && $this->location->city) {
+            $city = $this->location->city;
+        } else {
+            if (Yii::$app->user->identity->userInfo
+                && Yii::$app->user->identity->userInfo->primaryCompany
+                && Yii::$app->user->identity->userInfo->primaryCompany->actualAddressLocation
+            ) {
+                $city = Yii::$app->user->identity->userInfo->primaryCompany->actualAddressLocation->city;
+            }
+        }
+        return $city;
+    }
 }
