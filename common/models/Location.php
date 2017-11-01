@@ -165,7 +165,7 @@ class Location extends \yii\db\ActiveRecord
             $addressP2 .= Yii::t('app', ' д. ') . $this->building;
         }
         if ($this->appartment) {
-            $addressP2 .= Yii::t('app', ' кв. ') . $this->appartment;
+            $addressP2 .= Yii::t('app', ' пом. ') . $this->appartment;
         }
 
         $addressP1 ? ($aP2[] = $addressP1) : null;
