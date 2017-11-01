@@ -16,6 +16,7 @@ use common\models\info\Company;
  *
  * @property Company[] $companies
  * @property Debtor $debtor
+ * @property DebtorCohabitant $debtorCohabitant
  */
 class Name extends \yii\db\ActiveRecord
 {
@@ -65,6 +66,14 @@ class Name extends \yii\db\ActiveRecord
     public function getDebtor()
     {
         return $this->hasOne(Debtor::className(), ['name_id' => 'id'])->inverseOf('name');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDebtorCohabitant()
+    {
+        return $this->hasOne(DebtorCohabitant::className(), ['name_id' => 'id'])->inverseOf('name');
     }
 
     /**

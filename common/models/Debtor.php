@@ -31,6 +31,7 @@ use common\models\DebtorParse;
  * @property Location $location
  * @property Name $name
  * @property OwnershipType $ownershipType
+ * @property DebtorCohabitant[] $debtorCohabitants
  * @property DebtorPublicService[] $debtorPublicServices
  * @property PublicService[] $publicServices
  * @property Payment[] $payments
@@ -131,6 +132,14 @@ class Debtor extends \yii\db\ActiveRecord
     public function getOwnershipType()
     {
         return $this->hasOne(OwnershipType::className(), ['id' => 'ownership_type_id'])->inverseOf('debtors');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDebtorCohabitants()
+    {
+        return $this->hasMany(DebtorCohabitant::className(), ['debtor_id' => 'id'])->inverseOf('debtor');
     }
 
     /**
