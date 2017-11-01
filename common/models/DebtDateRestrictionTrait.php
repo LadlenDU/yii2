@@ -8,6 +8,6 @@ trait DebtDateRestrictionTrait
     {
         $time = new \DateTime('now');
         $topTime = $time->modify('-3 years')->format('Y-m-d');
-        $this->where(['>=', $column, $topTime]);
+        $this->andWhere(['>=', $column, $topTime]);
     }
 }
