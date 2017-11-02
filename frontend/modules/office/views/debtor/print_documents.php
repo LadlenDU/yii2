@@ -4,6 +4,8 @@
  * @var array $documents
  */
 
+$this->context->layout = '@frontend/modules/office/views/layouts/print_fine';
+
 $css = <<<CSS
 @media print {
     .page-break {page-break-after: always;}

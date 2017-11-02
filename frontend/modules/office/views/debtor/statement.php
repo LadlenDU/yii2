@@ -107,7 +107,7 @@ $this->registerCss($style);
     <br>
     <br>
 
-    № _______ от ______________<br><br>
+    № _______ от ______________<br><br><br>
 
     <div style="text-align: center;width: 60%;font-weight: bold;margin: auto">Заявление о выдаче судебного приказа
         <br>о взыскании задолженности за жилищно-коммунальные услуги

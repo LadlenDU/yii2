@@ -409,8 +409,10 @@ class DebtorController extends Controller
 
             $documents[] = $doc;
 
-            $rContent = Yii::$app->html2pdf->render('print_documents', ['documents' => $documents]);
+            $rContent = Yii::$app->html2pdf->render('@frontend/modules/office/views/debtor/print_documents', ['documents' => $documents]);
             return $rContent->send('DebtorInfo.pdf', ['mimeType' => 'application/pdf', 'inline' => true]);
+
+            //gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=finished.pdf file1.pdf file2.pdf
 
             //return Yii::$app->response->sendFile($pdfTempPath, 'debtor_info', ['inline' => true]);
 

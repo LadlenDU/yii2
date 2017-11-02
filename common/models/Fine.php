@@ -1195,7 +1195,7 @@ class Fine
         return $endSum;
     }
 
-    public function getHtml($data)
+    public function getHtml($data, $totalSteadily = 0)
     {
         $dateStart = $data['dateStart'];
         $resData = $data['data'];
@@ -1212,6 +1212,8 @@ class Fine
             '<td rowspan="2">Пени</td>' .
             '</tr>' .
             '<tr class="head"><td>с</td><td>по</td><td>дней</td></tr>';
+
+        //$totalSteadily = 0;
 
         $resDataLength = count($resData);
         for ($i = 0; $i < $resDataLength; $i++) {
@@ -1236,6 +1238,10 @@ class Fine
             }
         }
         $resultString .= '<tr class="calc-footer"><td></td><td></td><td></td><td></td><td></td><td></td><td style="text-align: right"><b>Итого:</b></td><td><b>' . $this->moneyFormat($total) . '</b> р.</td></tr>';
+
+        //$totalSteadily += $total;
+        $resultString .= '<tr class="calc-footer"><td></td><td></td><td></td><td></td><td></td><td></td><td style="text-align: right"><b>Итого сумма:</b></td><td><b>' . $this->moneyFormat($totalSteadily + $total) . '</b> р.</td></tr>';
+
         return ['html' => $resultString, 'totalPct' => $total, 'endSum' => $data['endSum']];
     }
 
@@ -1245,9 +1251,10 @@ class Fine
         $totalPct = 0;
         $endSum = 0;
         $periodsLength = count($periods);
+
         for ($i = 0; $i < $periodsLength; $i++) {
             $period = $periods[$i];
-            $html = $this->getHtml($period);
+            $html = $this->getHtml($period, $totalPct);
             $resultString .= $html['html'];
             $totalPct += $html['totalPct'];
             $endSum += $html['endSum'];

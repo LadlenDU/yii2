@@ -31,7 +31,7 @@ return [
         ],*/
         'html2pdf' => [
             'class' => 'yii2tech\html2pdf\Manager',
-            'viewPath' => '@frontend/modules/office/views/debtor',
+            //'viewPath' => '@frontend/modules/office/views/debtor',
             'converter' => [
                 'class' => 'yii2tech\html2pdf\converters\Wkhtmltopdf',
                 'defaultOptions' => [
