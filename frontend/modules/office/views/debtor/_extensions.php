@@ -120,6 +120,7 @@ use kartik\file\FileInput;
 $printErrorTxt = json_encode(Yii::t('app', 'Ошибка печати!'));
 $noDebtorsSelectedTxt = json_encode(Yii::t('app', 'Выберите пожалуйста должников.'));
 $lowBalance = json_encode(Yii::t('app', 'Недостаточно средств.'));
+$pdfUrl = json_encode(\yii\helpers\Url::to('/office/debtor/print-documents/?'));
 $script = <<<JS
     $("#print_invoices").click(function () {
         var keys = $('#dynagrid-debtors-options').yiiGridView('getSelectedRows');
@@ -136,6 +137,19 @@ $script = <<<JS
             alert($noDebtorsSelectedTxt);
             return;
         }
+        
+        /*var urlParams = '';
+        for (var k in keys) {
+            urlParams += 'debtorIds[]=' + encodeUriComponent(keys[k]) + '&';
+        }*/
+        
+        var statementWnd = window.open($pdfUrl + $.param({debtorIds:keys}), '_blank');
+        statementWnd.focus();
+        //statementWnd.print();
+        //statementWnd.close();
+        return;
+        
+        $("body").css("cursor", "progress");
         //var url = '/office/debtors/statements/?' + $.param({debtorIds:keys});
         //var url = '/office/debtors/statements';
         var url = '/office/debtor/print-documents';
@@ -148,11 +162,13 @@ $script = <<<JS
                 statementWnd.document.write(html);
                 statementWnd.document.close();
                 statementWnd.focus();
-                statementWnd.print();
-                statementWnd.close();
+                //statementWnd.print();
+                //statementWnd.close();
             }
         }, 'html').fail(function() {
             alert($printErrorTxt);
+        }).done(function() {
+            $("body").css("cursor", "default");
         });
     });
     $("#print_documents").click(function () {

@@ -364,7 +364,7 @@ class DebtorController extends Controller
             $this->layout = 'print_fine';
             $this->view->title = \Yii::t('app', 'Пакет документов');
 
-            $debtorIds = Yii::$app->request->post('debtorIds');
+            $debtorIds = Yii::$app->request->get('debtorIds');
             $doc['statement'] = $this->getStatementHtml($debtorIds[0]);
             $doc['full_fine_report'] = $this->getFullReportFineDataHtml($debtorIds[0]);
 
@@ -372,11 +372,19 @@ class DebtorController extends Controller
 
             Yii::$app->user->identity->printOperationStart();
 
-            return $this->render('print_documents',
+            $pdfTempPath = tempnam(sys_get_temp_dir(), 'pdf_debtor_');
+
+            $rContent = Yii::$app->html2pdf->render('print_documents', ['documents' => $documents]);
+            //$rContent->saveAs($pdfTempPath);
+            return $rContent->send('DebtorInfo.pdf', ['mimeType' => 'application/pdf', 'inline' => true]);
+
+            //return Yii::$app->response->sendFile($pdfTempPath, 'debtor_info', ['inline' => true]);
+
+            /*return $this->render('print_documents',
                 [
                     'documents' => $documents,
                 ]
-            );
+            );*/
         } else {
             die('low_balance');
         }

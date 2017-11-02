@@ -17,10 +17,10 @@ return [
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
-        'html2pdf' => [
-            /*'class' => 'yii2tech\html2pdf\Manager',
-            'viewPath' => '@app/pdf',
-            'converter' => 'wkhtmltopdf',*/
+        /*'html2pdf' => [
+//            'class' => 'yii2tech\html2pdf\Manager',
+//            'viewPath' => '@app/pdf',
+//            'converter' => 'wkhtmltopdf',
             'class' => 'junqi\pdf\Pdf',
             'tmpDir' => '@runtime/pdf/',
 //            'options' => [
@@ -28,17 +28,17 @@ return [
 //                'headerLine' => true,
 //                //more options see `wkhtmltopdf -H`
 //            ],
-        ],
-        /*'html2pdf' => [
+        ],*/
+        'html2pdf' => [
             'class' => 'yii2tech\html2pdf\Manager',
             'viewPath' => '@frontend/modules/office/views/debtor',
             'converter' => [
                 'class' => 'yii2tech\html2pdf\converters\Wkhtmltopdf',
                 'defaultOptions' => [
-                    'pageSize' => 'A4'
+                    'pageSize' => 'A4',
                 ],
             ],
-        ],*/
+        ],
         /* 'authManager' => [
              'class' => 'yii\rbac\DbManager',
          ],*/
