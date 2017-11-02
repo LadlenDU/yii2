@@ -40,6 +40,10 @@ $dateDebtStart = (isset($monthMorph[$startDebtMonth]) ? $monthMorph[$startDebtMo
 /*$formatter = \Yii::$app->formatter;
 $formatter->asDate('', '');*/
 
+$companyFullAddress = $company->legalAddressLocation ? Html::encode($company->legalAddressLocation->createFullAddress()) : '';
+$debtorFullName = $debtor->name ? Html::encode($debtor->name->createFullName()) : '';
+$debtorFullAddress = $debtor->location ? Html::encode($debtor->location->createFullAddress()) : '';
+
 $style = <<<CSS
 p, 
 ul li, 
@@ -65,7 +69,7 @@ $this->registerCss($style);
                 ИНН <?= Html::encode($company->INN) ?><br>
                 ОГРН <?= Html::encode($company->OGRN) ?><br>
                 ***<br>
-                адрес: <?= Html::encode($company->legalAddressLocation->createFullAddress()) ?>
+                адрес: <?= $companyFullAddress ?>
             </td>
             <td>
                 <table style="float: right">
@@ -85,14 +89,14 @@ $this->registerCss($style);
                         </td>
                         <td style="text-align: left">
                             <strong><?= Html::encode($company->short_name) ?></strong><br>
-                            <?= Html::encode($company->legalAddressLocation->createFullAddress()) ?>
+                            <?= $companyFullAddress ?>
                         </td>
                     </tr>
                     <tr>
                         <td style="text-align: right;text-decoration: underline;padding:0 1.5em 0 2em;">Должник</td>
                         <td style="text-align: left">
-                            <strong><?= Html::encode($debtor->name->createFullName()) ?></strong><br>
-                            <?= Html::encode($debtor->location->createFullAddress()) ?>
+                            <strong><?= $debtorFullName ?></strong><br>
+                            <?= $debtorFullAddress ?>
                         </td>
                     </tr>
                 </table>
@@ -111,9 +115,9 @@ $this->registerCss($style);
 
     <br>
 
-    <p><strong><?= Html::encode($debtor->name->createFullName()) ?></strong> обладает правом пользования жилого
+    <p><strong><?= $debtorFullName ?></strong> обладает правом пользования жилого
         помещения,
-        расположенного по адресу: <?= Html::encode($debtor->location->createFullAddress()) ?></p>
+        расположенного по адресу: <?= $debtorFullAddress ?></p>
     <p>Согласно п. 3 ст. 30, п. 1 ст. 39, ст. 153, п.п. 2, 4 ст. 154, п.п. 1, 7, 8, 10, 11 ст. 155 ЖК РФ, а также абз.
         г, д
         п. 19 Правил пользования жилыми помещениями (утв. постановлением Правительства РФ от 21 января 2006 г. N 25)
@@ -146,7 +150,7 @@ $this->registerCss($style);
     <div style="text-align: center;font-weight: bold;text-decoration: underline;margin: 0 0 .5em;">ПРОСИМ СУД:</div>
 
     <p>Вынести судебный приказ о взыскании с
-        <strong><?= Html::encode($debtor->name->createFullName('родительный')) ?></strong> в пользу
+        <strong><?= Html::encode($debtor->name ? $debtor->name->createFullName('родительный') : '') ?></strong> в пользу
         <?= Html::encode($company->short_name) ?>:</p>
     <!--<ul>
         <li>плату за жилищно-коммунальные услуги (электроснабжение ОДН, Водоотведение, Холодное в/с, Содержание ж/ф)
@@ -184,7 +188,7 @@ $this->registerCss($style);
     </ol>
     <br>
     <br>
-    <p>Генеральный директор ________________ <?= Html::encode($company->cEO->createShortName()) ?></p>
+    <p>Генеральный директор ________________ <?= Html::encode($company->cEO ? $company->cEO->createShortName() : '') ?></p>
 
 <?php
 //Yii::$app->response->sendFile($completePath, 'pdf_file', ['inline' => true]);
