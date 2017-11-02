@@ -319,6 +319,8 @@ class Fine
 
         $loansMod = [];
         foreach ($loans as $key => $l) {
+            //TODO: recalcLoanDate() - косяк, думаю готовая дата уже должна быть на входе
+            $l['date'] = $this->recalcLoanDate($l['date']);
             if ($key) {
                 $modLoan['date'] = $l['date'];
                 $modLoan['datePlus'] = $l['date'] + $this->ONE_DAY;
@@ -355,6 +357,26 @@ class Fine
         $this->loanSums = $loanSums;*/
 
         return $this->updateData(true);
+    }
+
+    /**
+     * Коррекция "чтобы пеня считалась в калькуляторе с 11 числа рабочего дня"
+     * TODO: сделать учет с рабочего дня если 11 попадает на выходной
+     *
+     * @param int $date unix timestamp
+     * @return int
+     */
+    protected function recalcLoanDate($date)
+    {
+        $dateObj = new \DateTime();
+        $dateObj->setTimestamp($date);
+        $d = $dateObj->format('d');
+        $m = $dateObj->format('m');
+        $Y = $dateObj->format('Y');
+        if ($d < 11) {
+            $dateObj->setDate($Y , $m , 11);
+        }
+        return $dateObj->getTimestamp();
     }
 
 
