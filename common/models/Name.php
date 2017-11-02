@@ -109,8 +109,8 @@ class Name extends \yii\db\ActiveRecord
 
     public function createShortName()
     {
-        return $this->second_name
-            . mb_substr($this->generalManager->first_name, 0, 1, Yii::$app->charset) . '.'
-            . mb_substr($this->generalManager->patronymic, 0, 1, Yii::$app->charset) . '.';
+        return $this->second_name . ' '
+            . mb_substr($this->first_name, 0, 1, Yii::$app->charset) . '.'
+            . mb_substr($this->patronymic, 0, 1, Yii::$app->charset) . '.';
     }
 }
