@@ -258,7 +258,7 @@ class DebtorController extends Controller
         }
     }
 
-    public function actionInfoForDebtOld($debtor_id)
+    /*public function actionInfoForDebtOld($debtor_id)
     {
         $elements = [];
 
@@ -271,12 +271,6 @@ class DebtorController extends Controller
 
         $dataProvider = new ArrayDataProvider([
             'allModels' => $elements,
-            /*'sort' => [
-                'attributes' => ['date'],
-            ],*/
-            /*'pagination' => [
-                'pageSize' => 100,
-            ],*/
         ]);
 
         $data = [
@@ -288,7 +282,7 @@ class DebtorController extends Controller
         } else {
             return $this->render('_debt_list', $data);
         }
-    }
+    }*/
 
     public function actionInfoForDebt($debtor_id)
     {

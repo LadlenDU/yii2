@@ -6,6 +6,7 @@ use Yii;
 use common\models\Fine;
 use yii\web\UploadedFile;
 use common\models\DebtorParse;
+//use morphos\Russian\inflectName;
 
 /**
  * This is the model class for table "debtor".
@@ -411,9 +412,12 @@ class Debtor extends \yii\db\ActiveRecord
     /**
      * @return false|int unix timestamp - начало периода задолженности
      */
-    public function getDebtPeriodStart()
+    public function getDebtPeriodStart($case = false)
     {
         $date = $this->getAccruals()->orderBy('accrual_date ASC')->one()->accrual_date;
+        /*if ($date && $case) {
+                $date = inflectName($date, $case);
+        }*/
         return strtotime($date);
     }
 
@@ -431,7 +435,7 @@ class Debtor extends \yii\db\ActiveRecord
      * @param int $date Дата задолженности - unix timestamp
      * @return float
      */
-    public static function getDebt($date)
+    /*public static function getDebt($date)
     {
         $debt = 0;
 
@@ -465,7 +469,7 @@ class Debtor extends \yii\db\ActiveRecord
         #$searchModel = new \common\models\AccrualSearch();
         #$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         //return $this->find()->from('payment')->where(['debtor_id' => $this->id])->sum('amount') ?: 0;
-    }
+    }*/
 
     /**
      * Расчет пошлины - новая редакция (действует на Oct.01.2017).
