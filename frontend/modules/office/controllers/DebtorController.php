@@ -404,9 +404,13 @@ class DebtorController extends Controller
             $documents[] = $doc;
 
             $rContent = Yii::$app->html2pdf->render('@frontend/modules/office/views/debtor/print_documents', ['documents' => $documents]);
-            #return $rContent->send('DebtorInfo.pdf', ['mimeType' => 'application/pdf', 'inline' => true]);
+
+            if (empty(Yii::$app->user->identity->userInfo->primaryCompany->companyFiles)) {
+                return $rContent->send('DebtorInfo.pdf', ['mimeType' => 'application/pdf', 'inline' => true]);
+            }
 
             //TODO: проверять файл на принадлежность к формату pdf
+            //TODO: склеивать множественные файлы pdf
             $tempFNamePdf = tempnam(sys_get_temp_dir(), 'pdf_fine_') . '.pdf';
             $tempFNameResult = tempnam(sys_get_temp_dir(), 'pdf_fine_') . '.pdf';
 
@@ -415,13 +419,16 @@ class DebtorController extends Controller
                 Yii::$app->user->identity->userInfo->primaryCompany->companyFiles[0]->content
             );
 
-            //$rContent->name
-            $command = "gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=$tempFNameResult $tempFNamePdf $rContent->name 2>&1";
+            $command = "gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=$tempFNameResult $rContent->name $tempFNamePdf 2>&1";
             $outputLines = [];
             exec($command, $outputLines, $exitCode);
             if ($exitCode !== 0) {
                 throw new \Exception("Ошибка склеивания файлов': " . implode("\n", $outputLines));
             }
+
+            unlink($tempFNamePdf);
+
+            //TODO: unlink $tempFNameResult
 
             return Yii::$app->response->sendFile(
                 $tempFNameResult,
@@ -429,11 +436,11 @@ class DebtorController extends Controller
                 ['mimeType' => 'application/pdf', 'inline' => true]
             );
 
-            return $this->render('print_documents',
+            /*return $this->render('print_documents',
                 [
                     'documents' => $documents,
                 ]
-            );
+            );*/
         } else {
             die('low_balance');
         }
