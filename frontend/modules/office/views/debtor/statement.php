@@ -7,6 +7,7 @@
  */
 
 use yii\helpers\Html;
+use common\helpers\FormatHelper;
 
 //TODO: как-то оптимизировать, вынести в отдельный класс что-ли... или найти морфер
 $monthMorph = [
@@ -133,7 +134,7 @@ $this->registerCss($style);
     4
     ГПК РФ</p> */ ?>
 
-<div style="text-align: center;font-weight: bold;text-decoration: underline;">ПРОСИМ СУД:</div>
+<div style="text-align: center;font-weight: bold;text-decoration: underline;margin-bottom: .5em;">ПРОСИМ СУД:</div>
 
 <p>Вынести судебный приказ о взыскании с
     <strong><?= Html::encode($debtor->name->createFullName('родительный')) ?></strong> в пользу
@@ -148,17 +149,17 @@ $this->registerCss($style);
 <ul>
     <li>
         сумму задолженности по оплате жилищно - коммунальных услуг в
-        размере <?= Html::encode($debtor->getDebtTotal()) ?> за период
+        размере <?= Html::encode(FormatHelper::roubleKopek($debtor->getDebtTotal())) ?> за период
         с <?= Html::encode($dateDebtStart) ?> года
         по <?= Html::encode(mb_strtolower(strftime('%B %Y', $debtor->getDebtPeriodEnd()), Yii::$app->charset)) ?> года;
     </li>
     <li>
-        сумму пени в размере <?= Html::encode($debtor->getFineTotal()) ?> за период
+        сумму пени в размере <?= Html::encode(FormatHelper::roubleKopek($debtor->getFineTotal())) ?> за период
         с <?= Html::encode($dateDebtStart) ?> года
         по <?= Html::encode(mb_strtolower(strftime('%B %Y', $debtor->getDebtPeriodEnd()), Yii::$app->charset)) ?> года;
     </li>
     <li>
-        государственную пошлину в размере <?= $debtor->calculateStateFee2() ?>.
+        государственную пошлину в размере <?= Html::encode(FormatHelper::roubleKopek($debtor->calculateStateFee2())) ?>.
     </li>
 </ul>
 <br>
@@ -173,4 +174,4 @@ $this->registerCss($style);
 </ol>
 <br>
 <br>
-<div style="margin-left: 8em">Генеральный директор ________________ <?= Html::encode($company->cEO->createShortName()) ?></div>
+<p>Генеральный директор ________________ <?= Html::encode($company->cEO->createShortName()) ?></p>
