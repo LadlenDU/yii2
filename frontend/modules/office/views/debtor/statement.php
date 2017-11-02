@@ -28,6 +28,8 @@ $monthMorph = [
 $debtPeriodStart = $debtor->getDebtPeriodStart();
 $debtPeriodEnd = $debtor->getDebtPeriodEnd();
 
+$finePeriodStart = (new \common\models\Fine)->recalcLoanDate($debtPeriodStart);
+
 $debtTotal = $debtor->getDebtTotal();
 $fineTotal = $debtor->getFineTotal();
 $stateFee2 = $debtor->calculateStateFee2();
@@ -161,7 +163,7 @@ $this->registerCss($style);
     </li>
     <li>
         сумму пени в размере <?= Html::encode(FormatHelper::roubleKopek($fineTotal)) ?> за период
-        с <?= Html::encode(strftime('%d.%m.%Y', $debtPeriodStart)) ?> года
+        с <?= Html::encode(strftime('%d.%m.%Y', $finePeriodStart)) ?> года
         по <?= Html::encode(strftime('%d.%m.%Y', $debtPeriodEnd)) ?> года;
     </li>
     <li>

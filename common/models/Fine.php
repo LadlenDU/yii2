@@ -366,7 +366,7 @@ class Fine
      * @param int $date unix timestamp
      * @return int
      */
-    protected function recalcLoanDate($date)
+    public function recalcLoanDate($date)
     {
         $dateObj = new \DateTime();
         $dateObj->setTimestamp($date);
