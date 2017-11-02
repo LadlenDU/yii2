@@ -37,18 +37,9 @@ class DebtorController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['print-documents'],
-                        'allow' => true,
-                    ],
-                    [
                         'allow' => true,
                         'roles' => ['@'],
                     ],
-                    /*[
-                        'allow' => true,
-                        'action' => 'print-documents',
-                        'roles' => ['?'],
-                    ],*/
                 ],
             ],
             'verbs' => [
@@ -323,11 +314,11 @@ class DebtorController extends Controller
         }
     }
 
-    protected function getFullReportFineDataHtml($debtorId)
+    protected function getFullReportFineDataHtml(Debtor $debtor)
     {
         $html = '';
 
-        if ($debtor = Debtor::findOne($debtorId)) {
+        if ($debtor) {
             $periods = $debtor->getFineCalculatorResult();
 
             $fine = new \common\models\Fine();
@@ -337,10 +328,10 @@ class DebtorController extends Controller
 
         $data = [
             'html' => $html,
-            'debtorId' => $debtorId,
+            'debtorId' => $debtor->id,
             'debtorLS' => $debtor->LS_IKU_provider,
-            'debtorName' => $debtor->name->full_name,
-            'debtorAddress' => $debtor->location->createFullAddress(),
+            'debtorName' => $debtor->name ? $debtor->name->full_name : '',
+            'debtorAddress' => $debtor->location ? $debtor->location->createFullAddress() : '',
         ];
 
         //TODO: костыль - не в том месте
@@ -349,10 +340,10 @@ class DebtorController extends Controller
         return $html;
     }
 
-    protected function getStatementHtml($debtorId)
+    protected function getStatementHtml(Debtor $debtor)
     {
         $params = [];
-        $debtor = Debtor::findOne($debtorId);
+        //$debtor = Debtor::findOne($debtorId);
         if ($debtor) {
             $court = DebtHelper::findCourtAddressForDebtor($debtor, 'common\models\Court');
             $company = DebtHelper::findCompanyAddressForDebtor($debtor);
@@ -404,17 +395,39 @@ class DebtorController extends Controller
             $this->view->title = \Yii::t('app', 'Пакет документов');
 
             $debtorIds = Yii::$app->request->get('debtorIds');
-            $doc['statement'] = $this->getStatementHtml($debtorIds[0]);
-            $doc['full_fine_report'] = $this->getFullReportFineDataHtml($debtorIds[0]);
+
+            $debtor = Debtor::findOne($debtorIds[0]);
+
+            $doc['statement'] = $this->getStatementHtml($debtor);
+            $doc['full_fine_report'] = $this->getFullReportFineDataHtml($debtor);
 
             $documents[] = $doc;
 
             $rContent = Yii::$app->html2pdf->render('@frontend/modules/office/views/debtor/print_documents', ['documents' => $documents]);
-            return $rContent->send('DebtorInfo.pdf', ['mimeType' => 'application/pdf', 'inline' => true]);
+            #return $rContent->send('DebtorInfo.pdf', ['mimeType' => 'application/pdf', 'inline' => true]);
 
-            //gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=finished.pdf file1.pdf file2.pdf
+            //TODO: проверять файл на принадлежность к формату pdf
+            $tempFNamePdf = tempnam(sys_get_temp_dir(), 'pdf_fine_') . '.pdf';
+            $tempFNameResult = tempnam(sys_get_temp_dir(), 'pdf_fine_') . '.pdf';
 
-            //return Yii::$app->response->sendFile($pdfTempPath, 'debtor_info', ['inline' => true]);
+            file_put_contents(
+                $tempFNamePdf,
+                Yii::$app->user->identity->userInfo->primaryCompany->companyFiles[0]->content
+            );
+
+            //$rContent->name
+            $command = "gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=$tempFNameResult $tempFNamePdf $rContent->name 2>&1";
+            $outputLines = [];
+            exec($command, $outputLines, $exitCode);
+            if ($exitCode !== 0) {
+                throw new \Exception("Ошибка склеивания файлов': " . implode("\n", $outputLines));
+            }
+
+            return Yii::$app->response->sendFile(
+                $tempFNameResult,
+                'DebtorInfo.pdf',
+                ['mimeType' => 'application/pdf', 'inline' => true]
+            );
 
             return $this->render('print_documents',
                 [
