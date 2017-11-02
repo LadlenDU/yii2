@@ -15,12 +15,21 @@ class RegistrationController extends BaseRegistrationController
         //$behaviour['access']['rules'][] = ['allow' => true, 'actions' => ['init'], 'roles' => ['@']];
         $behaviour['access']['rules'] = [
             [
+                'actions' => ['register', 'confirm'],
+                'allow' => true,
+            ],
+            [
+                'actions' => ['init'],
+                'allow' => true,
+                'roles' => ['@'],
+            ],
+            [
                 /*'allow' => true,
                 'actions' => ['init'],
                 'roles' => ['@']*/
                 'allow' => false,
                 'roles' => ['?'],
-            ]
+            ],
         ];
         return $behaviour;
     }
