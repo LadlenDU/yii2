@@ -75,7 +75,7 @@ $this->registerCss($style);
                 <table style="float: right">
                     <tr>
                         <td>&nbsp;</td>
-                        <td style="text-align: left">
+                        <td style="vertical-align:top;text-align: left;padding-bottom:.5em">
                             <strong>
                                 <!--Мировому судье судебного участка № 281-->
                                 <? /*= Html::encode("$court->district, $court->region") */ ?>
@@ -84,17 +84,17 @@ $this->registerCss($style);
                         </td>
                     </tr>
                     <tr>
-                        <td style="text-align: right;font-weight: bold;text-decoration: underline;padding:0 1.5em 0 2em;">
+                        <td style="vertical-align:top;text-align: right;font-weight: bold;text-decoration: underline;padding:0 1.5em 0 2em;">
                             Взыскатель
                         </td>
-                        <td style="text-align: left">
+                        <td style="vertical-align:top;text-align: left;padding-bottom:.5em">
                             <strong><?= Html::encode($company->short_name) ?></strong><br>
                             <?= $companyFullAddress ?>
                         </td>
                     </tr>
                     <tr>
-                        <td style="text-align: right;text-decoration: underline;padding:0 1.5em 0 2em;">Должник</td>
-                        <td style="text-align: left">
+                        <td style="vertical-align:top;text-align: right;text-decoration: underline;padding:0 1.5em 0 2em;">Должник</td>
+                        <td style="vertical-align:top;text-align: left;padding-bottom:.5em">
                             <strong><?= $debtorFullName ?></strong><br>
                             <?= $debtorFullAddress ?>
                         </td>
