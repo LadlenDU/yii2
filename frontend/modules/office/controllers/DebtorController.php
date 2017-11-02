@@ -330,7 +330,7 @@ class DebtorController extends Controller
             'debtorId' => $debtorId,
             'debtorLS' => $debtor->LS_IKU_provider,
             'debtorName' => $debtor->name->full_name,
-            'debtorAddress' => $debtor->location->full_address,
+            'debtorAddress' => $debtor->location->createFullAddress(),
         ];
 
         //TODO: костыль - не в том месте
@@ -411,7 +411,7 @@ class DebtorController extends Controller
             'debtorId' => $debtor_id,
             'debtorLS' => $debtor->LS_IKU_provider,
             'debtorName' => $debtor->name->full_name,
-            'debtorAddress' => $debtor->location->full_address,
+            'debtorAddress' => $debtor->location->createFullAddress(),
         ];
 
         if (Yii::$app->request->isAjax) {

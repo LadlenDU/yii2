@@ -11,7 +11,7 @@
 
 <table style="width: 100%;margin:1em 0;">
     <tr>
-        <th colspan="2"><?= Yii::t('app','Расчет пени за коммунальрные услуги (ст. 155 ЖК РФ)') ?></th>
+        <th colspan="2" style="padding-bottom: 1em"><?= Yii::t('app','Расчет пени за коммунальрные услуги (ст. 155 ЖК РФ)') ?></th>
     </tr>
     <tr>
         <td><?= Yii::t('app','№ ЛС') ?></td>
