@@ -16,6 +16,6 @@ $this->registerCss($css);
 
 foreach ($debts as $d) {
     echo $this->render('statement', $d)
-        . '<div class="page-break"></div>';
+        . '<div class="page-break" style="page-break-after: always;"></div>';
 }
 

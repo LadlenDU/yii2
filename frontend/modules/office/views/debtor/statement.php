@@ -189,6 +189,3 @@ $this->registerCss($style);
     <br>
     <br>
     <p style="text-indent: 4em">Генеральный директор ________________ <?= Html::encode($company->cEO ? $company->cEO->createShortName() : '') ?></p>
-
-<?php
-//Yii::$app->response->sendFile($completePath, 'pdf_file', ['inline' => true]);
