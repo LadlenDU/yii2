@@ -18,6 +18,7 @@ use common\models\UploadForm;
 use yii\data\ArrayDataProvider;
 use common\helpers\DebtHelper;
 use yii\filters\AccessControl;
+use yii\helpers\Url;
 
 //use kartik\mpdf\Pdf;
 
@@ -36,9 +37,18 @@ class DebtorController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
+                        'actions' => ['print-documents'],
+                        'allow' => true,
+                    ],
+                    [
                         'allow' => true,
                         'roles' => ['@'],
                     ],
+                    /*[
+                        'allow' => true,
+                        'action' => 'print-documents',
+                        'roles' => ['?'],
+                    ],*/
                 ],
             ],
             'verbs' => [
@@ -355,45 +365,65 @@ class DebtorController extends Controller
         return $this->renderPartial('statement', $params);
     }
 
+    public function actionPrintDocumentsPdf()
+    {
+        if (Yii::$app->user->identity->canPrint()) {
+            $debtorIds = Yii::$app->request->get('debtorIds');
+
+            try {
+                $pdfTempPath = Yii::$app->html2pdf
+                    //->loadResource(Url::to(['/office/debtor/print-documents', 'debtorIds' => $debtorIds, 'primaryCompany' => \Yii::$app->user->identity->userInfo->getPrimaryCompany()->one()->id], true))
+                    ->loadResource(Url::to(['/office/debtor/print-documents', 'debtorIds' => $debtorIds], true))
+                    ->execute()
+                    ->getFile();
+
+                Yii::$app->user->identity->printOperationStart();
+
+                return Yii::$app->getResponse()->sendFile(
+                    $pdfTempPath,
+                    'DebtorInfo.pdf',
+                    ['mimeType' => 'application/pdf', 'inline' => true]
+                );
+            } catch (\junqi\pdf\PdfException $e) {
+                //TODO: дорабоать
+                echo $e->getMessage();
+            }
+        } else {
+            die('low_balance');
+        }
+
+        return '';
+    }
+
     public function actionPrintDocuments()
     {
         $documents = [];
 
-        if (Yii::$app->user->identity->canPrint()) {
+        $this->layout = 'print_fine';
+        $this->view->title = \Yii::t('app', 'Пакет документов');
 
-            $this->layout = 'print_fine';
-            $this->view->title = \Yii::t('app', 'Пакет документов');
+        $debtorIds = Yii::$app->request->get('debtorIds');
+        $doc['statement'] = $this->getStatementHtml($debtorIds[0]);
+        $doc['full_fine_report'] = $this->getFullReportFineDataHtml($debtorIds[0]);
 
-            $debtorIds = Yii::$app->request->get('debtorIds');
-            $doc['statement'] = $this->getStatementHtml($debtorIds[0]);
-            $doc['full_fine_report'] = $this->getFullReportFineDataHtml($debtorIds[0]);
+        $documents[] = $doc;
 
-            $documents[] = $doc;
+        $rContent = Yii::$app->html2pdf->render('print_documents', ['documents' => $documents]);
+        return $rContent->send('DebtorInfo.pdf', ['mimeType' => 'application/pdf', 'inline' => true]);
 
-            Yii::$app->user->identity->printOperationStart();
+        //return Yii::$app->response->sendFile($pdfTempPath, 'debtor_info', ['inline' => true]);
 
-            $pdfTempPath = tempnam(sys_get_temp_dir(), 'pdf_debtor_');
-
-            $rContent = Yii::$app->html2pdf->render('print_documents', ['documents' => $documents]);
-            //$rContent->saveAs($pdfTempPath);
-            return $rContent->send('DebtorInfo.pdf', ['mimeType' => 'application/pdf', 'inline' => true]);
-
-            //return Yii::$app->response->sendFile($pdfTempPath, 'debtor_info', ['inline' => true]);
-
-            /*return $this->render('print_documents',
-                [
-                    'documents' => $documents,
-                ]
-            );*/
-        } else {
-            die('low_balance');
-        }
+        return $this->render('print_documents',
+            [
+                'documents' => $documents,
+            ]
+        );
     }
 
     public function actionFullReportFineDataPdf($debtor_id)
     {
         try {
-            Yii::$app->html2pdf->loadResource(\yii\helpers\Url::to(['/office/debtor/full-report-fine-data', 'debtor_id' => $debtor_id], true))
+            Yii::$app->html2pdf->loadResource(Url::to(['/office/debtor/full-report-fine-data', 'debtor_id' => $debtor_id], true))
                 ->execute()
                 ->sendFile('Debts.pdf');
         } catch (\junqi\pdf\PdfException $e) {
