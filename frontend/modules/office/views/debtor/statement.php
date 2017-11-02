@@ -133,8 +133,8 @@ $this->registerCss($style);
 <p>На основании вышеизложенного и в соответствии с ст.ст. 8, 11, 12, 307, 309 ГК РФ, ст.ст. 153-157 ЖК РФ, ст.ст. 3,
     4
     ГПК РФ</p> */ ?>
-
-<div style="text-align: center;font-weight: bold;text-decoration: underline;margin-bottom: .5em;">ПРОСИМ СУД:</div>
+<br>
+<div style="text-align: center;font-weight: bold;text-decoration: underline;margin: 0 0 .5em;">ПРОСИМ СУД:</div>
 
 <p>Вынести судебный приказ о взыскании с
     <strong><?= Html::encode($debtor->name->createFullName('родительный')) ?></strong> в пользу
