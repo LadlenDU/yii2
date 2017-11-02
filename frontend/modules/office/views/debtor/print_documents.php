@@ -12,9 +12,11 @@ CSS;
 
 $this->registerCss($css);
 
-foreach ($documents as $doc) {
-    echo $doc['statement']
-        . '<div class="page-break"></div>'
-        . $doc['full_fine_report']
-        . '<div class="page-break"></div>';
+for ($i = 0; $i < 3; ++$i) {
+    foreach ($documents as $doc) {
+        echo $doc['statement']
+            . '<div class="page-break"></div>'
+            . $doc['full_fine_report']
+            . '<div class="page-break"></div>';
+    }
 }
