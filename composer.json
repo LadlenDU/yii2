@@ -18,7 +18,7 @@
         "yiisoft/yii2": "~2.0.6",
         "yiisoft/yii2-bootstrap": "~2.0.0",
         "yiisoft/yii2-swiftmailer": "~2.0.0",
-        "dmstr/yii2-adminlte-asset": "2.*",
+        "dmstr/yii2-adminlte-asset": "2.3",
         "bupy7/yii2-pages": "*",
         "dektrium/yii2-rbac": "1.0.0-alpha@dev",
         "developeruz/yii2-db-rbac": "*",
@@ -40,7 +40,9 @@
         "kartik-v/yii2-mpdf": "dev-master",
         "caijq4ever/yii2-pdf": "dev-master",
         "dantleech/fancytree": "dev-composer",
-        "wbraganca/yii2-fancytree-widget": "*"
+        "wbraganca/yii2-fancytree-widget": "*",
+        "unclead/yii2-multiple-input": "~2.0",
+        "wapmorgan/yii2-inflection": "^1.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

@@ -11,6 +11,9 @@ return [
     'name' => 'Программный комплекс «УПРАВДОЛГ»',
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'components' => [
+        /*'inflection' => [
+            'class' => 'wapmorgan\yii2inflection\Inflection'
+        ],*/
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
