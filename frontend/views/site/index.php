@@ -2,7 +2,7 @@
 
 /* @var $this yii\web\View */
 
-$this->title = Yii::t('app', '«Программный комплекс «УПРАВДОЛГ»');
+$this->title = Yii::t('app', '«Программный комплекс «Умный город»');
 ?>
 <div class="row middle-ad-block">
     <section class="col-md-6">разработка сайтов</section>

@@ -8,7 +8,7 @@ setlocale(LC_ALL, 'ru_RU.UTF-8');
 
 return [
     'id' => 'software-package-upravdolg',
-    'name' => 'Программный комплекс «УПРАВДОЛГ»',
+    'name' => 'Программный комплекс «Умный город»',
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'components' => [
         /*'inflection' => [
