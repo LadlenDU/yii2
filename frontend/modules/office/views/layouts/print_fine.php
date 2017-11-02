@@ -15,7 +15,7 @@ $this->registerCssFile('/css/fine-bookkeeping.css');
 <head>
     <meta charset="<?= Yii::$app->charset ?>"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><?= Html::encode('Печать пени') ?></title>
+    <title><?= Html::encode('Печать документов') ?></title>
     <?php $this->head() ?>
 </head>
 <body>

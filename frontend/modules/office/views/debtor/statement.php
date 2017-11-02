@@ -26,6 +26,12 @@ $monthMorph = [
 ];
 
 $debtPeriodStart = $debtor->getDebtPeriodStart();
+$debtPeriodEnd = $debtor->getDebtPeriodEnd();
+
+$debtTotal = $debtor->getDebtTotal();
+$fineTotal = $debtor->getFineTotal();
+$stateFee2 = $debtor->calculateStateFee2();
+
 $startDebtYear = strftime('%Y', $debtPeriodStart);
 $startDebtMonth = mb_strtolower(strftime('%B', $debtPeriodStart), Yii::$app->charset);
 $dateDebtStart = (isset($monthMorph[$startDebtMonth]) ? $monthMorph[$startDebtMonth] . ' ' : '') . $startDebtYear;
@@ -122,10 +128,10 @@ $this->registerCss($style);
 <p>Ответчик систематически уклоняется от внесения указанных платежей, будучи от них не освобожденным.</p>
 <p>Таким образом, размер задолженность ответчиков перед <?= Html::encode($company->short_name) ?> за период с
     <?= Html::encode($dateDebtStart) ?>
-    по <?= Html::encode(mb_strtolower(strftime('%B %Y', $debtor->getDebtPeriodEnd()), Yii::$app->charset)) ?> составляет
-    <strong><?= Html::encode($debtor->getDebtTotal()) ?></strong> руб. Неустойка за просрочку платежа на дату подачи
+    по <?= Html::encode(mb_strtolower(strftime('%B %Y', $debtPeriodEnd), Yii::$app->charset)) ?> составляет
+    <strong><?= Html::encode($debtTotal) ?></strong> руб. Неустойка за просрочку платежа на дату подачи
     заявления составляет
-    <strong><?= Html::encode($debtor->getFineTotal()) ?></strong> руб.</p>
+    <strong><?= Html::encode($fineTotal) ?></strong> руб.</p>
 <?php /* <p>Руководствуясь п. 3 ст. 382 Гражданского кодекса РФ, и в соответствии с договором уступки прав (цессии) №
     2706/2017
     от «27» июня 2017 года, МП ГПЩ «ДЕЗ ЖКХ» уступило, а ООО «Альфа» ИНН 5050130861, приняло право требования
@@ -149,17 +155,17 @@ $this->registerCss($style);
 <ul>
     <li>
         сумму задолженности по оплате жилищно - коммунальных услуг в
-        размере <?= Html::encode(FormatHelper::roubleKopek($debtor->getDebtTotal())) ?> за период
-        с <?= Html::encode($dateDebtStart) ?> года
-        по <?= Html::encode(mb_strtolower(strftime('%B %Y', $debtor->getDebtPeriodEnd()), Yii::$app->charset)) ?> года;
+        размере <?= Html::encode(FormatHelper::roubleKopek($debtTotal)) ?> за период
+        с <?= Html::encode(strftime('%d.%m.%Y', $debtPeriodStart)) ?> года
+        по <?= Html::encode(strftime('%d.%m.%Y', $debtPeriodEnd)) ?> года;
     </li>
     <li>
-        сумму пени в размере <?= Html::encode(FormatHelper::roubleKopek($debtor->getFineTotal())) ?> за период
-        с <?= Html::encode($dateDebtStart) ?> года
-        по <?= Html::encode(mb_strtolower(strftime('%B %Y', $debtor->getDebtPeriodEnd()), Yii::$app->charset)) ?> года;
+        сумму пени в размере <?= Html::encode(FormatHelper::roubleKopek($fineTotal)) ?> за период
+        с <?= Html::encode(strftime('%d.%m.%Y', $debtPeriodStart)) ?> года
+        по <?= Html::encode(strftime('%d.%m.%Y', $debtPeriodEnd)) ?> года;
     </li>
     <li>
-        государственную пошлину в размере <?= Html::encode(FormatHelper::roubleKopek($debtor->calculateStateFee2())) ?>.
+        государственную пошлину в размере <?= Html::encode(FormatHelper::roubleKopek($stateFee2)) ?>.
     </li>
 </ul>
 <br>
