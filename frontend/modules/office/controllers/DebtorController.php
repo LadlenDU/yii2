@@ -365,7 +365,7 @@ class DebtorController extends Controller
         return $this->renderPartial('statement', $params);
     }
 
-    public function actionPrintDocumentsPdf()
+    /*public function actionPrintDocumentsPdf()
     {
         if (Yii::$app->user->identity->canPrint()) {
             $debtorIds = Yii::$app->request->get('debtorIds');
@@ -393,31 +393,37 @@ class DebtorController extends Controller
         }
 
         return '';
-    }
+    }*/
 
     public function actionPrintDocuments()
     {
-        $documents = [];
+        if (Yii::$app->user->identity->canPrint()) {
+            $documents = [];
 
-        $this->layout = 'print_fine';
-        $this->view->title = \Yii::t('app', 'Пакет документов');
+            $this->layout = 'print_fine';
+            $this->view->title = \Yii::t('app', 'Пакет документов');
 
-        $debtorIds = Yii::$app->request->get('debtorIds');
-        $doc['statement'] = $this->getStatementHtml($debtorIds[0]);
-        $doc['full_fine_report'] = $this->getFullReportFineDataHtml($debtorIds[0]);
+            $debtorIds = Yii::$app->request->get('debtorIds');
+            $doc['statement'] = $this->getStatementHtml($debtorIds[0]);
+            $doc['full_fine_report'] = $this->getFullReportFineDataHtml($debtorIds[0]);
 
-        $documents[] = $doc;
+            $documents[] = $doc;
 
-        $rContent = Yii::$app->html2pdf->render('print_documents', ['documents' => $documents]);
-        return $rContent->send('DebtorInfo.pdf', ['mimeType' => 'application/pdf', 'inline' => true]);
+            $rContent = Yii::$app->html2pdf->render('print_documents', ['documents' => $documents]);
+            return $rContent->send('DebtorInfo.pdf', ['mimeType' => 'application/pdf', 'inline' => true]);
 
-        //return Yii::$app->response->sendFile($pdfTempPath, 'debtor_info', ['inline' => true]);
+            //return Yii::$app->response->sendFile($pdfTempPath, 'debtor_info', ['inline' => true]);
 
-        return $this->render('print_documents',
-            [
-                'documents' => $documents,
-            ]
-        );
+            return $this->render('print_documents',
+                [
+                    'documents' => $documents,
+                ]
+            );
+        } else {
+            die('low_balance');
+        }
+
+        return '';
     }
 
     public function actionFullReportFineDataPdf($debtor_id)

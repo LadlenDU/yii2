@@ -17,6 +17,8 @@ use yii\helpers\Html;
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= Html::encode('Печать документов') ?></title>
 
+    <?php $this->head() ?>
+
     <style>
         /* /css/fine-style.css */
 
@@ -5582,7 +5584,7 @@ use yii\helpers\Html;
 
     </style>
 
-    <?php $this->head() ?>
+
 </head>
 <body>
 <?php echo $content ?>
