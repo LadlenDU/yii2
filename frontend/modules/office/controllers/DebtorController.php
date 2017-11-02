@@ -405,28 +405,50 @@ class DebtorController extends Controller
 
             $rContent = Yii::$app->html2pdf->render('@frontend/modules/office/views/debtor/print_documents', ['documents' => $documents]);
 
-            if (empty(Yii::$app->user->identity->userInfo->primaryCompany->companyFiles)) {
+            if (empty(Yii::$app->user->identity->userInfo->primaryCompany->companyFiles)
+                && empty(Yii::$app->user->identity->userInfo->primaryCompany->companyFilesHouses)) {
                 return $rContent->send('DebtorInfo.pdf', ['mimeType' => 'application/pdf', 'inline' => true]);
             }
 
             //TODO: проверять файл на принадлежность к формату pdf
             //TODO: склеивать множественные файлы pdf
-            $tempFNamePdf = tempnam(sys_get_temp_dir(), 'pdf_fine_') . '.pdf';
             $tempFNameResult = tempnam(sys_get_temp_dir(), 'pdf_fine_') . '.pdf';
 
-            file_put_contents(
-                $tempFNamePdf,
-                Yii::$app->user->identity->userInfo->primaryCompany->companyFiles[0]->content
-            );
+            $commandTail = '';
 
-            $command = "gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=$tempFNameResult $rContent->name $tempFNamePdf 2>&1";
+            if (!empty(Yii::$app->user->identity->userInfo->primaryCompany->companyFiles)) {
+                $tempFNamePdf = tempnam(sys_get_temp_dir(), 'pdf_fine_') . '.pdf';
+                file_put_contents(
+                    $tempFNamePdf,
+                    Yii::$app->user->identity->userInfo->primaryCompany->companyFiles[0]->content
+                );
+                $commandTail .= " $tempFNamePdf ";
+            }
+
+            if (!empty(Yii::$app->user->identity->userInfo->primaryCompany->companyFilesHouses[0])) {
+                $tempFNamePdfHouses = tempnam(sys_get_temp_dir(), 'pdf_fine_') . '.pdf';
+                file_put_contents(
+                    $tempFNamePdfHouses,
+                    Yii::$app->user->identity->userInfo->primaryCompany->companyFilesHouses[0]->content
+                );
+                $commandTail .= " $tempFNamePdfHouses ";
+            }
+
+            $command = "gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=$tempFNameResult $rContent->name $commandTail 2>&1";
             $outputLines = [];
             exec($command, $outputLines, $exitCode);
             if ($exitCode !== 0) {
                 throw new \Exception("Ошибка склеивания файлов': " . implode("\n", $outputLines));
             }
 
-            unlink($tempFNamePdf);
+            @file_put_contents('/tmp/look_for_pdf.txt', print_r($outputLines, true), FILE_APPEND);
+
+            if (!empty($tempFNamePdf)) {
+                unlink($tempFNamePdf);
+            }
+            if (!empty($tempFNamePdfHouses)) {
+                unlink($tempFNamePdfHouses);
+            }
 
             //TODO: unlink $tempFNameResult
 
