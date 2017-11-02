@@ -145,10 +145,13 @@ class Location extends \yii\db\ActiveRecord
         return $this->street . ' д. ' . $this->building . ' кв. ' . $this->appartment;
     }*/
 
-    public function createFullAddress($elements = [])
+    public function createFullAddress($elements = [], $appName = 'кв.')
     {
-        if (!$elements && $this->full_address) {
-            return $this->full_address;
+        if (!$elements) {
+            if ($this->full_address) {
+                return $this->full_address;
+            }
+            $elements = [];
         }
 
         $aP1 = [];
@@ -177,7 +180,13 @@ class Location extends \yii\db\ActiveRecord
             $addressP2 .= Yii::t('app', ' д. ') . $this->building;
         }
         if ((!$elements || in_array('appartment', $elements)) && $this->appartment) {
-            $addressP2 .= Yii::t('app', ' кв. ') . $this->appartment;
+            // предположительно квартира отмечена как офис (или квартира)
+            if (mb_strpos($this->appartment, 'оф', null, Yii::$app->charset) === false
+                && mb_strpos($this->appartment, 'кв', null, Yii::$app->charset) === false
+            ) {
+                $addressP2 .= Yii::t('app', " $appName ");
+            }
+            $addressP2 .= $this->appartment;
         }
 
         $addressP1 ? ($aP2[] = $addressP1) : null;

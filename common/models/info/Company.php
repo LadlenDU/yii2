@@ -140,17 +140,17 @@ class Company extends \yii\db\ActiveRecord
 
     public function getLegalAddressLocationFull()
     {
-        return $this->legalAddressLocation->createFullAddress();
+        return $this->legalAddressLocation->createFullAddress([], 'оф.');
     }
 
     public function getActualAddressLocationFull()
     {
-        return $this->actualAddressLocation->createFullAddress();
+        return $this->actualAddressLocation->createFullAddress([], 'оф.');
     }
 
     public function getPostalAddressLocationFull()
     {
-        return $this->postalAddressLocation->createFullAddress();
+        return $this->postalAddressLocation->createFullAddress([], 'оф.');
     }
 
     /*public function beforeSave($insert)
