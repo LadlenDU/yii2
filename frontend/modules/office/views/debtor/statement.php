@@ -32,8 +32,16 @@ $dateDebtStart = (isset($monthMorph[$startDebtMonth]) ? $monthMorph[$startDebtMo
 $formatter->asDate('', '');*/
 
 $style = <<<CSS
-p {
+p, 
+ul li, 
+ol li {
     text-indent: 4em;
+}
+ul li {
+    list-style: disc inside;
+}
+ol li {
+    list-style: decimal inside;
 }
 CSS;
 
@@ -140,7 +148,7 @@ $this->registerCss($style);
 <ul>
     <li>
         сумму задолженности по оплате жилищно - коммунальных услуг в
-        размере <strong><?= Html::encode($debtor->getDebtTotal()) ?></strong> за период
+        размере <?= Html::encode($debtor->getDebtTotal()) ?> за период
         с <?= Html::encode($dateDebtStart) ?> года
         по <?= Html::encode(mb_strtolower(strftime('%B %Y', $debtor->getDebtPeriodEnd()), Yii::$app->charset)) ?> года;
     </li>
@@ -165,4 +173,4 @@ $this->registerCss($style);
 </ol>
 <br>
 <br>
-Генеральный директор ________________ <?= Html::encode($company->cEO->createShortName()) ?>
+<div style="margin-left: 8em">Генеральный директор ________________ <?= Html::encode($company->cEO->createShortName()) ?></div>
