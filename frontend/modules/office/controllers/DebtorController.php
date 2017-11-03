@@ -335,7 +335,7 @@ class DebtorController extends Controller
         ];
 
         //TODO: костыль - не в том месте
-        set_time_limit(300);
+        //set_time_limit(300);
         $html = $this->renderPartial('_full_report_fine_data', $data);
         return $html;
     }
@@ -390,7 +390,7 @@ class DebtorController extends Controller
     {
         if (Yii::$app->user->identity->canPrint()) {
             $documents = [];
-
+            set_time_limit(300);
             $this->layout = 'print_fine';
             $this->view->title = \Yii::t('app', 'Пакет документов');
 
@@ -406,7 +406,9 @@ class DebtorController extends Controller
             $rContent = Yii::$app->html2pdf->render('@frontend/modules/office/views/debtor/print_documents', ['documents' => $documents]);
 
             if (empty(Yii::$app->user->identity->userInfo->primaryCompany->companyFiles)
-                && empty(Yii::$app->user->identity->userInfo->primaryCompany->companyFilesHouses)) {
+                && empty(Yii::$app->user->identity->userInfo->primaryCompany->companyFilesHouses)
+            ) {
+                Yii::$app->user->identity->printOperationStart();
                 return $rContent->send('DebtorInfo.pdf', ['mimeType' => 'application/pdf', 'inline' => true]);
             }
 
@@ -451,6 +453,8 @@ class DebtorController extends Controller
             }
 
             //TODO: unlink $tempFNameResult
+
+            Yii::$app->user->identity->printOperationStart();
 
             return Yii::$app->response->sendFile(
                 $tempFNameResult,
