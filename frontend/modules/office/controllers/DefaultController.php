@@ -76,11 +76,11 @@ class DefaultController extends Controller
     {
         //Yii::$app->user->identity->userInfo->primaryCompany->id;
         ///office/company/view?id=6
-        if (Yii::$app->user->identity->userInfo && Yii::$app->user->identity->userInfo->primaryCompany) {
+        if (!empty(Yii::$app->user->identity->userInfo->primaryCompany)) {
             $this->redirect(['/office/my-organization/view', 'id' => Yii::$app->user->identity->userInfo->primaryCompany->id]);
         }
         //TODO: add error code of something
-        return '';
+        return $this->render('no_default_organization');
 
         $params = [];
         $viewName = 'index';
