@@ -81,6 +81,26 @@ class Company extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            /*[['legal_address_location_id'], 'default', 'value' => function () {
+                $location = new Location;
+                $location->save();
+                $this->link('legalAddressLocation', $location);
+            }],
+            [['actual_address_location_id'], 'default', 'value' => function () {
+                $location = new Location;
+                $location->save();
+                $this->link('actualAddressLocation', $location);
+            }],
+            [['postal_address_location_id'], 'default', 'value' => function () {
+                $location = new Location;
+                $location->save();
+                $this->link('postalAddressLocation', $location);
+            }],
+            [['CEO'], 'default', 'value' => function () {
+                $name = new Name;
+                $name->save();
+                $this->link('cEO', $name);
+            }],*/
             [['full_name', 'short_name', 'company_type_id', 'tax_system_id'], 'required'],
             [['legal_address_location_id', 'postal_address_location_id', 'actual_address_location_id', 'OGRN_IP_type', 'CEO', 'company_type_id', 'OKOPF_id', 'tax_system_id'], 'integer'],
             [['OGRN_IP_date'], 'safe'],
@@ -140,17 +160,23 @@ class Company extends \yii\db\ActiveRecord
 
     public function getLegalAddressLocationFull()
     {
-        return $this->legalAddressLocation->createFullAddress([], 'оф.');
+        return $this->legalAddressLocation
+            ? $this->legalAddressLocation->createFullAddress([], 'оф.')
+            : Yii::$app->formatter->nullDisplay;
     }
 
     public function getActualAddressLocationFull()
     {
-        return $this->actualAddressLocation->createFullAddress([], 'оф.');
+        return $this->actualAddressLocation
+            ? $this->actualAddressLocation->createFullAddress([], 'оф.')
+            : Yii::$app->formatter->nullDisplay;
     }
 
     public function getPostalAddressLocationFull()
     {
-        return $this->postalAddressLocation->createFullAddress([], 'оф.');
+        return $this->postalAddressLocation
+            ? $this->postalAddressLocation->createFullAddress([], 'оф.')
+            : Yii::$app->formatter->nullDisplay;
     }
 
     /*public function beforeSave($insert)
@@ -322,10 +348,10 @@ class Company extends \yii\db\ActiveRecord
         return new CompanyQuery(get_called_class());
     }
 
-    public function init()
+    public function beforeSave($insert)
     {
-        parent::init();
-
+        //TODO: Для работы с legacy поведением - сделаем так
+        //if ($insert) {
         if (!$this->legal_address_location_id) {
             $location = new Location;
             $location->save();
@@ -346,5 +372,8 @@ class Company extends \yii\db\ActiveRecord
             $name->save();
             $this->link('cEO', $name);
         }
+        //}
+
+        return parent::beforeSave($insert);
     }
 }
