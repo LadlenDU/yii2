@@ -29,6 +29,9 @@ use Yii;
  * @property string $OKTMO
  * @property string $beneficiary_bank_name
  * @property string $KBK
+ * @property integer $user_id
+ *
+ * @property User $user
  */
 class Court extends \yii\db\ActiveRecord
 {
@@ -46,7 +49,9 @@ class Court extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['user_id'], 'integer'],
             [['name', 'address', 'region', 'regionId', 'district', 'districtId', 'city', 'cityId', 'street', 'streetId', 'building', 'buildingId', 'phone', 'name_of_payee', 'BIC', 'beneficiary_account_number', 'INN', 'KPP', 'OKTMO', 'beneficiary_bank_name', 'KBK'], 'string', 'max' => 255],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
 
@@ -78,6 +83,7 @@ class Court extends \yii\db\ActiveRecord
             'OKTMO' => Yii::t('app', 'ОКТМО'),
             'beneficiary_bank_name' => Yii::t('app', 'Наименование банка получателя платежа'),
             'KBK' => Yii::t('app', 'КБК'),
+            'user_id' => Yii::t('app', 'ID пользователя'),
         ];
     }
 
@@ -89,5 +95,13 @@ class Court extends \yii\db\ActiveRecord
             $addr = '(Нет адреса)';
         }
         return $addr;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUser()
+    {
+        return $this->hasOne(User::className(), ['id' => 'user_id'])->inverseOf('courts');
     }
 }

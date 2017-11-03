@@ -9,7 +9,9 @@ use common\models\UserInfo;
 use common\events\UserBalanceEvent;
 
 /**
- * @property UserInfo[] $userInfos
+ * @property Court[] $courts
+ * @property Debtor[] $debtors
+ * @property UserInfo $userInfo
  */
 class User extends BaseUser
 {
@@ -22,6 +24,22 @@ class User extends BaseUser
             return true;
         }
         return parent::getIsAdmin();
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCourts()
+    {
+        return $this->hasMany(Court::className(), ['user_id' => 'id'])->inverseOf('user');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDebtors()
+    {
+        return $this->hasMany(Debtor::className(), ['user_id' => 'id'])->inverseOf('user');
     }
 
     /**
