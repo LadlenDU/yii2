@@ -32,7 +32,7 @@ class UploadForm extends Model
         if ($this->validate()) {
             //if ($this->excelFile) {
             //$this->imageFile->saveAs('uploads/' . $this->imageFile->baseName . '.' . $this->imageFile->extension);
-            $fileName = tempnam(Yii::getAlias('@common') . '/uploads/debtors', $type . '_');
+            $fileName = @tempnam(Yii::getAlias('@common') . '/uploads/debtors', $type . '_');
             //$fileName .= '.' . $this->excelFile->extension;
             $this->$type->saveAs($fileName);
             return $fileName;
