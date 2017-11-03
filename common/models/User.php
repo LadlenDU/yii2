@@ -15,6 +15,15 @@ class User extends BaseUser
 {
     //const DECREASE_BALANCE = 'decreaseBalance';
 
+    //TODO: CRUD - костыль - исправить
+    public function getIsAdmin()
+    {
+        if (YII_ENV == 'dev') {
+            return true;
+        }
+        return parent::getIsAdmin();
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */
