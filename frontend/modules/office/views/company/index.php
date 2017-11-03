@@ -6,6 +6,8 @@ use yii\helpers\{
 //use yii\helpers\Url;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+//use common\models\Location;
+use common\models\info\Company;
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\info\CompanySearch */
@@ -58,8 +60,20 @@ $this->registerJs($js);
             ],
             'full_name',
             'short_name',
-            'legal_address_location_id',
-            'actual_address_location_id',
+            [
+                'attribute' => 'legal_address_location_id',
+                'format' => 'text',
+                'value' => function (Company $model) {
+                    return $model->legalAddressLocation ? $model->legalAddressLocation->createFullAddress() : Yii::$app->formatter->nullDisplay;
+                },
+            ],
+            [
+                'attribute' => 'actual_address_location_id',
+                'format' => 'text',
+                'value' => function (Company $model) {
+                    return $model->actualAddressLocation ? $model->actualAddressLocation->createFullAddress() : Yii::$app->formatter->nullDisplay;
+                },
+            ],
             // 'INN',
             // 'KPP',
             // 'BIK',
