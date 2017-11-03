@@ -14,6 +14,12 @@ class DebtorQuery extends \yii\db\ActiveQuery
         return $this->andWhere('[[status]]=1');
     }*/
 
+    public function prepare($builder)
+    {
+        $this->andWhere(['user_id' => \Yii::$app->user->identity->getId()]);
+        return parent::prepare($builder);
+    }
+
     /**
      * @inheritdoc
      * @return Debtor[]|array

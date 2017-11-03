@@ -104,4 +104,13 @@ class Court extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::className(), ['id' => 'user_id'])->inverseOf('courts');
     }
+
+    /**
+     * @inheritdoc
+     * @return CourtQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new CourtQuery(get_called_class());
+    }
 }
