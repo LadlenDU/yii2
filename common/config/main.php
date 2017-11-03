@@ -39,9 +39,9 @@ return [
                 ],
             ],
         ],
-        /* 'authManager' => [
-             'class' => 'yii\rbac\DbManager',
-         ],*/
+        /*'authManager' => [
+            'class' => 'yii\rbac\DbManager',
+        ],*/
     ],
     'modules' => [
         'pages' => [
@@ -84,6 +84,7 @@ return [
             'modelMap' => [
                 'User' => 'common\models\User',
             ],
+            //'admins' => ['Ladlen'],
         ],
         'datecontrol' => [
             'class' => 'kartik\datecontrol\Module',
