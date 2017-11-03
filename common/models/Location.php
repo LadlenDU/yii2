@@ -184,9 +184,9 @@ class Location extends \yii\db\ActiveRecord
             if (mb_strpos($this->appartment, 'оф', null, Yii::$app->charset) === false
                 && mb_strpos($this->appartment, 'кв', null, Yii::$app->charset) === false
             ) {
-                $addressP2 .= ' ' . Yii::t('app', $appName) . ' ';
+                $addressP2 .= ' ' . Yii::t('app', $appName);
             }
-            $addressP2 .= $this->appartment;
+            $addressP2 .= ' ' . $this->appartment;
         }
 
         $addressP1 ? ($aP2[] = $addressP1) : null;
