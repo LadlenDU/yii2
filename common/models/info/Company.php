@@ -321,4 +321,30 @@ class Company extends \yii\db\ActiveRecord
     {
         return new CompanyQuery(get_called_class());
     }
+
+    public function init()
+    {
+        parent::init();
+
+        if (!$this->legal_address_location_id) {
+            $location = new Location;
+            $location->save();
+            $this->link('legalAddressLocation', $location);
+        }
+        if (!$this->actual_address_location_id) {
+            $location = new Location;
+            $location->save();
+            $this->link('actualAddressLocation', $location);
+        }
+        if (!$this->postal_address_location_id) {
+            $location = new Location;
+            $location->save();
+            $this->link('postalAddressLocation', $location);
+        }
+        if (!$this->CEO) {
+            $name = new Name;
+            $name->save();
+            $this->link('cEO', $name);
+        }
+    }
 }

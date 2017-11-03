@@ -103,7 +103,7 @@ class CompanyController extends Controller
             $model->tax_system_id = 1;
         }
 
-        if (!$model->legal_address_location_id) {
+        /*if (!$model->legal_address_location_id) {
             $location = new Location;
             $location->save();
             $model->link('legalAddressLocation', $location);
@@ -117,7 +117,7 @@ class CompanyController extends Controller
             $location = new Location;
             $location->save();
             $model->link('postalAddressLocation', $location);
-        }
+        }*/
 
         $fileUpload = new FileUploadHelper('/office/company/company-file', [
             'pluginOptions' => [
