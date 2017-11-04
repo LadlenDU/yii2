@@ -386,17 +386,94 @@ class DebtorController extends Controller
         return '';
     }*/
 
+    public function createPdfForDebtor($debtorId)
+    {
+        $debtor = Debtor::findOne($debtorId);
+
+        $doc['statement'] = $this->getStatementHtml($debtor);
+        $doc['full_fine_report'] = $this->getFullReportFineDataHtml($debtor);
+
+        $rContent = Yii::$app->html2pdf->render('@frontend/modules/office/views/debtor/print_documents', ['doc' => $doc]);
+
+        //TODO: проверять файл на принадлежность к формату pdf
+        $tempFNameResult = tempnam(sys_get_temp_dir(), 'pdf_fine_') . '.pdf';
+
+        $commandTail = '';
+
+        $tempFNamePdf = false;
+        $tempFNamePdfHouses = false;
+
+        if (!empty(Yii::$app->user->identity->userInfo->primaryCompany->companyFiles)) {
+            $tempFNamePdf = tempnam(sys_get_temp_dir(), 'pdf_fine_') . '.pdf';
+            file_put_contents(
+                $tempFNamePdf,
+                Yii::$app->user->identity->userInfo->primaryCompany->companyFiles[0]->content
+            );
+            $commandTail .= " $tempFNamePdf ";
+        }
+
+        if (!empty(Yii::$app->user->identity->userInfo->primaryCompany->companyFilesHouses[0])) {
+            $tempFNamePdfHouses = tempnam(sys_get_temp_dir(), 'pdf_fine_') . '.pdf';
+            file_put_contents(
+                $tempFNamePdfHouses,
+                Yii::$app->user->identity->userInfo->primaryCompany->companyFilesHouses[0]->content
+            );
+            $commandTail .= " $tempFNamePdfHouses ";
+        }
+
+        //TODO: надо ли удалять $rContent->name ?
+
+        $command = "gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=$tempFNameResult $rContent->name $commandTail 2>&1";
+        $outputLines = [];
+        exec($command, $outputLines, $exitCode);
+        if ($exitCode !== 0) {
+            //TODO: грамотное логирование
+            throw new \Exception("Ошибка склеивания файлов': " . implode("\n", $outputLines));
+        }
+
+        $tempFNamePdf && unlink($tempFNamePdf);
+        $tempFNamePdfHouses && unlink($tempFNamePdfHouses);
+
+        return $tempFNameResult;
+    }
+
     public function actionPrintDocuments()
     {
         if (Yii::$app->user->identity->canPrint()) {
-            set_time_limit(300);
+            set_time_limit(400);
 
-            $documents = [];
+            //$documents = [];
 
-            $this->layout = 'print_fine';
+            //$this->layout = 'print_fine';
             $this->view->title = \Yii::t('app', 'Пакет документов');
 
             $debtorIds = Yii::$app->request->get('debtorIds');
+
+            $pdfItem = $this->createPdfForDebtor($debtorIds[0]);
+
+            $tempFNameResult = tempnam(sys_get_temp_dir(), 'pdf_fine_') . '.pdf';
+
+            $command = "gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=$tempFNameResult $pdfItem $pdfItem $pdfItem 2>&1";
+            $outputLines = [];
+            exec($command, $outputLines, $exitCode);
+            if ($exitCode !== 0) {
+                //TODO: грамотное логирование
+                throw new \Exception("Ошибка склеивания файлов': " . implode("\n", $outputLines));
+            }
+
+            unlink($pdfItem);
+
+            Yii::$app->user->identity->printOperationStart();
+
+            //TODO: unlink $tempFNameResult
+
+            //return Yii::$app->getResponse()->xSendFile(
+            return Yii::$app->getResponse()->sendFile(
+                $tempFNameResult,
+                'DebtorInfo.pdf',
+                ['mimeType' => 'application/pdf', 'inline' => true]
+            );
+
 
             $debtor = Debtor::findOne($debtorIds[0]);
 
@@ -428,12 +505,12 @@ class DebtorController extends Controller
 
             $rContent = Yii::$app->html2pdf->render('@frontend/modules/office/views/debtor/print_documents', ['documents' => $documents]);
 
-            if (empty(Yii::$app->user->identity->userInfo->primaryCompany->companyFiles)
+            /*if (empty(Yii::$app->user->identity->userInfo->primaryCompany->companyFiles)
                 && empty(Yii::$app->user->identity->userInfo->primaryCompany->companyFilesHouses)
             ) {
                 Yii::$app->user->identity->printOperationStart();
                 return $rContent->send('DebtorInfo.pdf', ['mimeType' => 'application/pdf', 'inline' => true]);
-            }
+            }*/
 
             //TODO: проверять файл на принадлежность к формату pdf
             //TODO: склеивать множественные файлы pdf
