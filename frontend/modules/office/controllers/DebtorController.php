@@ -403,9 +403,28 @@ class DebtorController extends Controller
             $doc['statement'] = $this->getStatementHtml($debtor);
             $doc['full_fine_report'] = $this->getFullReportFineDataHtml($debtor);
 
+            /*if (!empty(Yii::$app->user->identity->userInfo->primaryCompany->companyFiles)) {
+                $tempFNamePdf = tempnam(sys_get_temp_dir(), 'pdf_fine_') . '.pdf';
+                file_put_contents(
+                    $tempFNamePdf,
+                    Yii::$app->user->identity->userInfo->primaryCompany->companyFiles[0]->content
+                );
+//                $pdf = new \Gufy\PdfToHtml\Pdf($tempFNamePdf);
+//                $doc['EGRUL'] = $pdf->html();
+
+                $tempImagePdf = tempnam(sys_get_temp_dir(), 'img_fine_') . '.jpg';
+
+                $pdf = new \Spatie\PdfToImage\Pdf($tempFNamePdf);
+                $pdf->saveImage($tempImagePdf);
+                $imgData = $pdf->getImageData($tempImagePdf);
+
+                unlink($tempImagePdf);
+                unlink($tempFNamePdf);
+            }*/
+
             $documents[] = $doc;
 
-            return $this->render('@frontend/modules/office/views/debtor/print_documents', ['documents' => $documents]);
+            //return $this->render('@frontend/modules/office/views/debtor/print_documents', ['documents' => $documents]);
 
             $rContent = Yii::$app->html2pdf->render('@frontend/modules/office/views/debtor/print_documents', ['documents' => $documents]);
 
