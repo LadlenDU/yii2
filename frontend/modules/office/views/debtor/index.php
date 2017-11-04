@@ -11,6 +11,7 @@ use yii\widgets\Pjax;
 use kartik\dynagrid\DynaGrid;
 use yii\helpers\Url;
 use yii\bootstrap\Modal;
+use common\models\Debtor;
 
 $this->title = Yii::t('app', 'Работа с должниками');
 $this->params['breadcrumbs'][] = $this->title;
@@ -47,16 +48,24 @@ $columns = [
     ],
     [
         'attribute' => 'location.city',
-        'value' => function (\common\models\Debtor $model, $key, $index) {
+        'value' => function (Debtor $model, $key, $index) {
             return $model->getLocationCity();
         },
         'hAlign' => 'center',
     ],
     [
         'attribute' => 'location.address',
-        'value' => function (\common\models\Debtor $model, $key, $index) {
+        'value' => function (Debtor $model, $key, $index) {
             return isset($model->location) ? $model->location->createFullAddress(['street', 'building', 'appartment']) : '';
         },
+        'hAlign' => 'center',
+    ],
+    [
+        'attribute' => 'status',
+        'value' => function (Debtor $model, $key, $index) {
+            return '' . $model->getStatusName(true) . '';
+        },
+        'format' => 'raw',
         'hAlign' => 'center',
     ],
     [
@@ -79,7 +88,7 @@ $columns = [
     [
         'attribute' => Yii::t('app', 'Пошлина'),
         //'value' => function (\common\models\DebtDetails $model, $key, $index) {
-        'value' => function (\common\models\Debtor $model, $key, $index) {
+        'value' => function (Debtor $model, $key, $index) {
             return $model->calculateStateFee2();
         },
         'format' => ['decimal', 2],
@@ -110,7 +119,7 @@ $columns = [
     ],*/
     /*[
         'attribute' => Yii::t('app', 'Пеня'),
-        'value' => function (\common\models\Debtor $model, $key, $index) {
+        'value' => function (Debtor $model, $key, $index) {
             return $model->calcFine();
         },
         'format' => ['decimal', 2],

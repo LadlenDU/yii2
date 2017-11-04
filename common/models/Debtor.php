@@ -28,6 +28,7 @@ use common\models\debtor_status\DebtorStatusFiles;
  * @property string $additional_adjustment
  * @property string $subsidies
  * @property integer $user_id
+ * @property string $status
  *
  * @property Accrual[] $accruals
  * @property DebtDetails[] $debtDetails
@@ -43,6 +44,13 @@ use common\models\debtor_status\DebtorStatusFiles;
  */
 class Debtor extends \yii\db\ActiveRecord
 {
+    protected $statuses = [
+        'new' => 'Новое',
+        'submitted_to_court' => 'Подано в суд',
+        'adjudicated' => 'Вынесено решение',
+        'application_withdrawn' => 'Заявление отозвано',
+    ];
+
     /**
      * @inheritdoc
      */
@@ -60,7 +68,7 @@ class Debtor extends \yii\db\ActiveRecord
             [['space_common', 'space_living', 'debt_total'], 'number'],
             [['ownership_type_id', 'location_id', 'name_id', 'user_id'], 'integer'],
             [['expiration_start'], 'safe'],
-            [['phone', 'LS_EIRC', 'LS_IKU_provider', 'IKU', 'single', 'additional_adjustment', 'subsidies'], 'string', 'max' => 255],
+            [['phone', 'LS_EIRC', 'LS_IKU_provider', 'IKU', 'single', 'additional_adjustment', 'subsidies', 'status'], 'string', 'max' => 255],
             [['LS_IKU_provider'], 'unique'],
             [['name_id'], 'unique'],
             [['location_id'], 'exist', 'skipOnError' => true, 'targetClass' => Location::className(), 'targetAttribute' => ['location_id' => 'id']],
@@ -98,6 +106,7 @@ class Debtor extends \yii\db\ActiveRecord
             'debtTotal' => Yii::t('app', 'Задолженность'),
             'fineTotal' => Yii::t('app', 'Пеня'),
             'user_id' => Yii::t('app', 'ID пользователя'),
+            'status' => Yii::t('app', 'Статус должника'),
         ];
     }
 
@@ -627,5 +636,19 @@ class Debtor extends \yii\db\ActiveRecord
             }
         }
         return $city;
+    }
+
+    /*public function getStatusNameByCodeName($codeName)
+    {
+        return $this->statuses[$codeName];
+    }*/
+
+    public function getStatusName($uppercase = false)
+    {
+        $status = $this->statuses[$this->status];
+        if ($uppercase) {
+            mb_strtoupper($status, Yii::$app->charset);
+        }
+        return $status;
     }
 }

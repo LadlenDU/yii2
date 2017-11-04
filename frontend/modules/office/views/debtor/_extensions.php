@@ -145,6 +145,7 @@ $script = <<<JS
             + '</body></html>';
         
         //window.location.href = $pdfUrl + $.param({debtorIds:keys});
+        //TODO: false вместо '' ??
         var statementWnd = window.open('', '_blank');
         statementWnd.addEventListener('load', function() {
                 //TODO: костыль - подумать что с ним делать
