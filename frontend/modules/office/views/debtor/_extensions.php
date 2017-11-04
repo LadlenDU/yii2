@@ -9,18 +9,18 @@ use yii\widgets\ActiveForm;
 use kartik\file\FileInput;
 
 ?>
-<div class="arrow-steps clearfix">
-    <div class="step"><span><?= Yii::t('app', 'Досудебная практика') ?></span></div>
-    <div class="step current"><span><?= Yii::t('app', 'Судебная практика') ?></span></div>
-    <div class="step"><span> <?= Yii::t('app', 'Исполнительное производство') ?></span></div>
-</div>
+    <div class="arrow-steps clearfix">
+        <div class="step"><span><?= Yii::t('app', 'Досудебная практика') ?></span></div>
+        <div class="step current"><span><?= Yii::t('app', 'Судебная практика') ?></span></div>
+        <div class="step"><span> <?= Yii::t('app', 'Исполнительное производство') ?></span></div>
+    </div>
 
-<br>
+    <br>
 
-<div class="grid-head">
-    <div class="row">
-        <div class="col-sm-12 controls-buttons">
-            <!--<div class="btn-group">
+    <div class="grid-head">
+        <div class="row">
+            <div class="col-sm-12 controls-buttons">
+                <!--<div class="btn-group">
                 <button id="debtors-bottom-menu" class="btn btn-primary btn-sm dropdown-toggle"
                         data-toggle="dropdown" aria-expanded="true">
                     <? /*= Yii::t('app', 'Действия к должникам') */ ?> <b class="caret"></b></button>
@@ -38,38 +38,38 @@ use kartik\file\FileInput;
                 </ul>
             </div>-->
 
-            <!--<button class="btn-sm toggle-filter btn btn-primary" id="show_debtors_filter" data-toggle="collapse"
+                <!--<button class="btn-sm toggle-filter btn btn-primary" id="show_debtors_filter" data-toggle="collapse"
                     data-target="#search-debtors">
                 <i class="icon-search icon-white"></i><? /*= Yii::t('app', 'Поиск должников') */ ?>
             </button>-->
-            <!--<button class="hide btn-sm btn btn-grey" id="reset-debtors-filter" style="display: none">
+                <!--<button class="hide btn-sm btn btn-grey" id="reset-debtors-filter" style="display: none">
                 <i class="fa fa-filter"></i><? /*= Yii::t('app', 'Сбросить фильтр') */ ?>
             </button>-->
 
-            <button class="btn-sm toggle-filter btn btn-primary" id="load_debtors" data-toggle="collapse"
-                    data-target="#load-debtors"
-                    title="<?= Yii::t('app', 'Загрузка должников из файла') ?>">
-                <i class="icon-search icon-white"></i><?= Yii::t('app', 'Загрузка должников') ?>
-            </button>
+                <button class="btn-sm toggle-filter btn btn-primary" id="load_debtors" data-toggle="collapse"
+                        data-target="#load-debtors"
+                        title="<?= Yii::t('app', 'Загрузка должников из файла') ?>">
+                    <i class="icon-search icon-white"></i><?= Yii::t('app', 'Загрузка должников') ?>
+                </button>
 
-            <!--<button class="btn-sm btn btn-primary" id="print_invoices"
-                    title="<?/*= Yii::t('app', 'Распечатка бланков выбранных должников') */?>">
-                <i class="icon-search icon-white"></i><?/*= Yii::t('app', 'Распечатка бланков') */?>
+                <!--<button class="btn-sm btn btn-primary" id="print_invoices"
+                    title="<?/*= Yii::t('app', 'Распечатка бланков выбранных должников') */ ?>">
+                <i class="icon-search icon-white"></i><?/*= Yii::t('app', 'Распечатка бланков') */ ?>
             </button>-->
 
-            <button class="btn-sm btn btn-primary" id="print_statements"
-                    title="<?= Yii::t('app', 'Распечатка заявлений в суд на выбранных должников') ?>">
-                <i class="icon-search icon-white"></i><?= Yii::t('app', 'Распечатка заявлений') ?>
-            </button>
+                <button class="btn-sm btn btn-primary" id="print_statements"
+                        title="<?= Yii::t('app', 'Распечатка заявлений в суд на выбранных должников') ?>">
+                    <i class="icon-search icon-white"></i><?= Yii::t('app', 'Распечатка заявлений') ?>
+                </button>
 
-            <!--<button class="btn-sm btn btn-primary" id="print_documents"
-                    title="<?/*= Yii::t('app', 'Распечатка документов выбранных должников') */?>">
-                <i class="icon-search icon-white"></i><?/*= Yii::t('app', 'Распечатка документов') */?>
+                <!--<button class="btn-sm btn btn-primary" id="print_documents"
+                    title="<?/*= Yii::t('app', 'Распечатка документов выбранных должников') */ ?>">
+                <i class="icon-search icon-white"></i><?/*= Yii::t('app', 'Распечатка документов') */ ?>
             </button>-->
 
-            <div class="clearfix"></div>
-        </div>
-        <!--<div class="col-sm-6">
+                <div class="clearfix"></div>
+            </div>
+            <!--<div class="col-sm-6">
             <div class="pull-right" style="white-space: nowrap;"><? /*= Yii::t('app', 'Показывать записей') */ ?>
                 <select id="debtors-grid_sizer" class="page-sizer" name="pageSize_Accounts">
                     <option value="10">10</option>
@@ -79,48 +79,48 @@ use kartik\file\FileInput;
                 </select>
             </div>
         </div>-->
+        </div>
     </div>
-</div>
-<br>
+    <br>
 
-<div class="row collapse" id="load-debtors">
-    <div class="col-xs-12">
-        <?php
-        $form = ActiveForm::begin([
-            'options' => [
-                'enctype' => 'multipart/form-data',
-            ],
-        ]);
-        //echo $form->field($uploadModel, 'action')->hiddenInput(['value' => 'upload_debtors_excel']);
-        echo Html::hiddenInput('action', 'upload_debtors_excel_a_user');
-        echo $form->field($uploadModel, 'excelFileForAUser')->widget(FileInput::classname(), $uploadModel->fileUploadConfig('excel'));
-        ActiveForm::end();
-        ?>
+    <div class="row collapse" id="load-debtors">
+        <div class="col-xs-12">
+            <?php
+            $form = ActiveForm::begin([
+                'options' => [
+                    'enctype' => 'multipart/form-data',
+                ],
+            ]);
+            //echo $form->field($uploadModel, 'action')->hiddenInput(['value' => 'upload_debtors_excel']);
+            echo Html::hiddenInput('action', 'upload_debtors_excel_a_user');
+            echo $form->field($uploadModel, 'excelFileForAUser')->widget(FileInput::classname(), $uploadModel->fileUploadConfig('excel'));
+            ActiveForm::end();
+            ?>
+        </div>
+        <div class="col-xs-12">
+            <?php
+            $form = ActiveForm::begin([
+                /*'action' => [
+                    '/office/debtors/debt-verification',
+                    'action' => 'upload_debtors_csv',
+                ],*/
+                'options' => [
+                    'enctype' => 'multipart/form-data',
+                ],
+            ]);
+            //echo $form->field($uploadModel, 'action')->hiddenInput(['value' => 'upload_debtors_csv']);
+            echo Html::hiddenInput('action', 'upload_debtors_csv');
+            echo $form->field($uploadModel, 'csvFile')->widget(FileInput::classname(), $uploadModel->fileUploadConfig('csv'));
+            ActiveForm::end();
+            ?>
+        </div>
     </div>
-    <div class="col-xs-12">
-        <?php
-        $form = ActiveForm::begin([
-            /*'action' => [
-                '/office/debtors/debt-verification',
-                'action' => 'upload_debtors_csv',
-            ],*/
-            'options' => [
-                'enctype' => 'multipart/form-data',
-            ],
-        ]);
-        //echo $form->field($uploadModel, 'action')->hiddenInput(['value' => 'upload_debtors_csv']);
-        echo Html::hiddenInput('action', 'upload_debtors_csv');
-        echo $form->field($uploadModel, 'csvFile')->widget(FileInput::classname(), $uploadModel->fileUploadConfig('csv'));
-        ActiveForm::end();
-        ?>
-    </div>
-</div>
 
 <?php
 $printErrorTxt = json_encode(Yii::t('app', 'Ошибка печати!'));
 $noDebtorsSelectedTxt = json_encode(Yii::t('app', 'Выберите пожалуйста должников.'));
 $lowBalance = json_encode(Yii::t('app', 'Недостаточно средств.'));
-$pdfUrl = json_encode(\yii\helpers\Url::to('/office/debtor/print-documents/?'));
+$pdfUrl = json_encode(\yii\helpers\Url::to('/office/debtor/print-documents/?', true));
 $script = <<<JS
     $("#print_invoices").click(function () {
         var keys = $('#dynagrid-debtors-options').yiiGridView('getSelectedRows');
@@ -131,23 +131,44 @@ $script = <<<JS
         var url = '/office/debtors/invoice-prev/?' + $.param({debtorIds:keys});
         window.open(url, '_blank');
     });
-    $("#print_statements").click(function () {
+
+    $("#print_statements").click(function (e) {
+        e.preventDefault();
         var keys = $('#dynagrid-debtors-options').yiiGridView('getSelectedRows');
         if (!keys.length) {
             alert($noDebtorsSelectedTxt);
-            return;
+            return false;
         }
+                
+        var embedHtml = '<html><head><style>body{margin:0;padding:0;}html,body{width:100%;height:100%}</style></head><body>' 
+            + '<embed type="application/pdf" src="' + $pdfUrl + $.param({debtorIds:keys}) + '" id="pdfDocument" width="100%" height="100%" />'
+            + '</body></html>';
         
-        /*var urlParams = '';
-        for (var k in keys) {
-            urlParams += 'debtorIds[]=' + encodeUriComponent(keys[k]) + '&';
-        }*/
-        
-        var statementWnd = window.open($pdfUrl + $.param({debtorIds:keys}), '_blank');
-        statementWnd.focus();
+        //window.location.href = $pdfUrl + $.param({debtorIds:keys});
+        var statementWnd = window.open('', '_blank');
+        statementWnd.addEventListener('load', function() {
+                //TODO: костыль - подумать что с ним делать
+                setTimeout(function() {
+                        statementWnd.focus();
+                        statementWnd.print();
+                    },
+                    5000
+                );
+            }, false);
+        statementWnd.document.open();
+        statementWnd.document.write(embedHtml);
+        statementWnd.document.close();
+        /*statementWnd[statementWnd.addEventListener ? 'addEventListener' : 'attachEvent'](
+            (statementWnd.attachEvent ? 'on' : '') + 'load', function() {
+                alert(1);
+                statementWnd.focus();
+                statementWnd.print();
+            }, false
+        );*/
+        //statementWnd.focus();
         //statementWnd.print();
         //statementWnd.close();
-        return;
+        return false;
         
         $("body").css("cursor", "progress");
         //var url = '/office/debtors/statements/?' + $.param({debtorIds:keys});
