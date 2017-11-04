@@ -647,7 +647,7 @@ class Debtor extends \yii\db\ActiveRecord
     {
         $status = $this->statuses[$this->status];
         if ($uppercase) {
-            mb_strtoupper($status, Yii::$app->charset);
+            $status = mb_strtoupper($status, Yii::$app->charset);
         }
         return $status;
     }

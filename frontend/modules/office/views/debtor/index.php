@@ -16,6 +16,15 @@ use common\models\Debtor;
 $this->title = Yii::t('app', 'Работа с должниками');
 $this->params['breadcrumbs'][] = $this->title;
 
+$this->registerJs(<<<JS
+    $(".change-status").click(function(e) {
+        e.preventDefault();
+        
+        return false;
+    });
+JS
+);
+
 $columns = [
     [
         'class' => 'kartik\grid\CheckboxColumn',
@@ -63,7 +72,9 @@ $columns = [
     [
         'attribute' => 'status',
         'value' => function (Debtor $model, $key, $index) {
-            return '' . $model->getStatusName(true) . '';
+            //return '<a class="change-status" data-id="'. $key .'">' . $model->getStatusName(true) . '</a>';
+            return '<button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#statusesModal">'
+                . $model->getStatusName(true) . '</button>';
         },
         'format' => 'raw',
         'hAlign' => 'center',
@@ -230,13 +241,13 @@ $columns = [
 ?>
 
 <!--<div class="arrow-steps clearfix">
-    <div class="step"><span><?/*= Yii::t('app', 'Досудебная практика') */?></span></div>
-    <div class="step current"><span><?/*= Yii::t('app', 'Судебная практика') */?></span></div>
-    <div class="step"><span> <?/*= Yii::t('app', 'Исполнительное производство') */?></span></div>
+    <div class="step"><span><? /*= Yii::t('app', 'Досудебная практика') */ ?></span></div>
+    <div class="step current"><span><? /*= Yii::t('app', 'Судебная практика') */ ?></span></div>
+    <div class="step"><span> <? /*= Yii::t('app', 'Исполнительное производство') */ ?></span></div>
 </div>-->
 
 <?php
-    echo $this->render('_extensions', ['uploadModel' => $uploadModel]);
+echo $this->render('_extensions', ['uploadModel' => $uploadModel]);
 ?>
 
 <div class="debtor-index">
@@ -348,3 +359,23 @@ JS
     Modal::end();
 
     ?>
+
+    <div id="statusesModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Modal Header</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Some text in the modal.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
