@@ -36,6 +36,10 @@ return [
                 'class' => 'yii2tech\html2pdf\converters\Wkhtmltopdf',
                 'defaultOptions' => [
                     'pageSize' => 'A4',
+                    'marginTop' => '20mm',
+                    'marginBottom' => '20mm',
+                    'marginLeft' => '30mm',
+                    'marginRight' => '15mm',
                 ],
             ],
         ],
