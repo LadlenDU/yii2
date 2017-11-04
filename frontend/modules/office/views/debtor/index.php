@@ -382,8 +382,8 @@ JS
                     </select>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal"><?= Yii::t('app', 'Сохранить') ?></button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal"><?= Yii::t('app', 'Отменить') ?></button>
+                    <button type="button" class="submit btn btn-success btn-small btn-sm" data-dismiss="modal"><?= Yii::t('app', 'Сохранить') ?></button>
+                    <button type="button" class="btn btn-danger btn-small btn-sm" data-dismiss="modal"><?= Yii::t('app', 'Отменить') ?></button>
                 </div>
             </div>
 
