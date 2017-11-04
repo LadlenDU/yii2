@@ -3,10 +3,11 @@
 namespace common\models;
 
 use Yii;
-use common\models\Fine;
+//use common\models\Fine;
 use yii\web\UploadedFile;
-use common\models\DebtorParse;
+//use common\models\DebtorParse;
 //use morphos\Russian\inflectName;
+use common\models\debtor_status\DebtorStatusFiles;
 
 /**
  * This is the model class for table "debtor".
@@ -37,6 +38,7 @@ use common\models\DebtorParse;
  * @property DebtorCohabitant[] $debtorCohabitants
  * @property DebtorPublicService[] $debtorPublicServices
  * @property PublicService[] $publicServices
+ * @property DebtorStatusFiles[] $debtorStatusFiles
  * @property Payment[] $payments
  */
 class Debtor extends \yii\db\ActiveRecord
@@ -169,6 +171,14 @@ class Debtor extends \yii\db\ActiveRecord
     public function getPublicServices()
     {
         return $this->hasMany(PublicService::className(), ['id' => 'public_service_id'])->viaTable('debtor_public_service', ['debtor_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDebtorStatusFiles()
+    {
+        return $this->hasMany(DebtorStatusFiles::className(), ['debtor_id' => 'id'])->inverseOf('debtor');
     }
 
     /**
