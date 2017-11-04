@@ -449,11 +449,32 @@ class DebtorController extends Controller
 
             $debtorIds = Yii::$app->request->get('debtorIds');
 
-            $pdfItem = $this->createPdfForDebtor($debtorIds[0]);
+            Yii::$app->user->identity->printOperationStart();
 
-            $tempFNameResult = tempnam(sys_get_temp_dir(), 'pdf_fine_') . '.pdf';
+            $tempFNameResults = [];
 
-            $command = "gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=$tempFNameResult $pdfItem $pdfItem $pdfItem 2>&1";
+            foreach ($debtorIds as $dId) {
+
+                $pdfItem = $this->createPdfForDebtor($dId);
+
+                $tempFNameResults[] = tempnam(sys_get_temp_dir(), 'pdf_fine_1_') . '.pdf';
+
+                $command = "gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=$tempFNameResult $pdfItem $pdfItem $pdfItem 2>&1";
+                $outputLines = [];
+                exec($command, $outputLines, $exitCode);
+                if ($exitCode !== 0) {
+                    //TODO: грамотное логирование
+                    throw new \Exception("Ошибка склеивания файлов': " . implode("\n", $outputLines));
+                }
+
+                unlink($pdfItem);
+            }
+
+            $finalResultName = tempnam(sys_get_temp_dir(), 'pdf_fine_2_') . '.pdf';
+
+            $pdfItems = implode(' ', $finalResultName);
+
+            $command = "gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=$finalResultName $pdfItems 2>&1";
             $outputLines = [];
             exec($command, $outputLines, $exitCode);
             if ($exitCode !== 0) {
@@ -461,15 +482,15 @@ class DebtorController extends Controller
                 throw new \Exception("Ошибка склеивания файлов': " . implode("\n", $outputLines));
             }
 
-            unlink($pdfItem);
+            foreach ($pdfItems as $item) {
+                unlink($item);
+            }
 
-            Yii::$app->user->identity->printOperationStart();
-
-            //TODO: unlink $tempFNameResult
+            //TODO: unlink $finalResultName
 
             //return Yii::$app->getResponse()->xSendFile(
             return Yii::$app->getResponse()->sendFile(
-                $tempFNameResult,
+                $finalResultName,
                 'DebtorInfo.pdf',
                 ['mimeType' => 'application/pdf', 'inline' => true]
             );
