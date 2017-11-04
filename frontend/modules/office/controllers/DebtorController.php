@@ -475,9 +475,9 @@ class DebtorController extends Controller
 
             $finalResultName = tempnam(sys_get_temp_dir(), 'pdf_fine_2_') . '.pdf';
 
-            $pdfItems = implode(' ', $tempFNameResults);
+            $pdfItemsQueryTail = implode(' ', $tempFNameResults);
 
-            $command = "gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=$finalResultName $pdfItems 2>&1";
+            $command = "gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=$finalResultName $pdfItemsQueryTail 2>&1";
             $outputLines = [];
             exec($command, $outputLines, $exitCode);
             if ($exitCode !== 0) {
@@ -485,7 +485,7 @@ class DebtorController extends Controller
                 throw new \Exception("Ошибка склеивания файлов': " . implode("\n", $outputLines));
             }
 
-            foreach ($pdfItems as $item) {
+            foreach ($tempFNameResults as $item) {
                 unlink($item);
             }
 
