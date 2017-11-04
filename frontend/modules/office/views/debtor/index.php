@@ -75,6 +75,7 @@ $columns = [
     ],
     [
         'attribute' => 'status',
+        'label' => Yii::t('app', 'Статус'),
         'value' => function (Debtor $model, $key, $index) {
             //return '<a class="change-status" data-id="'. $key .'">' . $model->getStatusName(true) . '</a>';
             return '<button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#statusesModal" data-debtor-id="' . $key . '">'
