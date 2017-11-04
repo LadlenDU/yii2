@@ -365,27 +365,31 @@ JS
     ?>
 
     <div id="statusesModal" class="modal fade" role="dialog">
-        <div class="modal-dialog">
+        <div class="vertical-alignment-helper">
+            <div class="modal-dialog vertical-align-center">
 
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Смена статуса заявления</h4>
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Смена статуса заявления</h4>
+                    </div>
+                    <div class="modal-body">
+                        <select>
+                            <option>Новое</option>
+                            <option>Подано в суд</option>
+                            <option>Вынесено решение</option>
+                            <option>Заявление отозвано</option>
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="submit btn btn-success btn-small btn-sm"
+                                data-dismiss="modal"><?= Yii::t('app', 'Сохранить') ?></button>
+                        <button type="button" class="btn btn-danger btn-small btn-sm"
+                                data-dismiss="modal"><?= Yii::t('app', 'Отменить') ?></button>
+                    </div>
                 </div>
-                <div class="modal-body">
-                    <select>
-                        <option>Новое</option>
-                        <option>Подано в суд</option>
-                        <option>Вынесено решение</option>
-                        <option>Заявление отозвано</option>
-                    </select>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="submit btn btn-success btn-small btn-sm" data-dismiss="modal"><?= Yii::t('app', 'Сохранить') ?></button>
-                    <button type="button" class="btn btn-danger btn-small btn-sm" data-dismiss="modal"><?= Yii::t('app', 'Отменить') ?></button>
-                </div>
+
             </div>
-
         </div>
     </div>
