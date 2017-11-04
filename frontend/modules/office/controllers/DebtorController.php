@@ -431,6 +431,7 @@ class DebtorController extends Controller
             throw new \Exception("Ошибка склеивания файлов': " . implode("\n", $outputLines));
         }
 
+        //TODO: !!!! эти файлы пригодятся позже для других пользователей - вынести их за функцию
         $tempFNamePdf && unlink($tempFNamePdf);
         $tempFNamePdfHouses && unlink($tempFNamePdfHouses);
 
@@ -457,7 +458,9 @@ class DebtorController extends Controller
 
                 $pdfItem = $this->createPdfForDebtor($dId);
 
-                $tempFNameResults[] = tempnam(sys_get_temp_dir(), 'pdf_fine_1_') . '.pdf';
+                $tempFNameResult = tempnam(sys_get_temp_dir(), 'pdf_fine_1_') . '.pdf';
+
+                $tempFNameResults[] = $tempFNameResult;
 
                 $command = "gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=$tempFNameResult $pdfItem $pdfItem $pdfItem 2>&1";
                 $outputLines = [];
