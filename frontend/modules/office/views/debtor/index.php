@@ -17,10 +17,14 @@ $this->title = Yii::t('app', 'Работа с должниками');
 $this->params['breadcrumbs'][] = $this->title;
 
 $this->registerJs(<<<JS
-    $(".change-status").click(function(e) {
-        e.preventDefault();
+    $('#statusesModal').on('show.bs.modal', function(e) {
+
+        //get data-id attribute of the clicked element
+        var debtorId = $(e.relatedTarget).data('debtor-id');
+        return;
         
-        return false;
+        //populate the textbox
+        $(e.currentTarget).find('input[name="bookId"]').val(bookId);
     });
 JS
 );
@@ -73,7 +77,7 @@ $columns = [
         'attribute' => 'status',
         'value' => function (Debtor $model, $key, $index) {
             //return '<a class="change-status" data-id="'. $key .'">' . $model->getStatusName(true) . '</a>';
-            return '<button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#statusesModal">'
+            return '<button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#statusesModal" data-debtor-id="' . $key . '">'
                 . $model->getStatusName(true) . '</button>';
         },
         'format' => 'raw',
@@ -367,13 +371,19 @@ JS
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Modal Header</h4>
+                    <h4 class="modal-title">Смена статуса заявления</h4>
                 </div>
                 <div class="modal-body">
-                    <p>Some text in the modal.</p>
+                    <select>
+                        <option>Новое</option>
+                        <option>Подано в суд</option>
+                        <option>Вынесено решение</option>
+                        <option>Заявление отозвано</option>
+                    </select>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><?= Yii::t('app', 'Сохранить') ?></button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><?= Yii::t('app', 'Отменить') ?></button>
                 </div>
             </div>
 
