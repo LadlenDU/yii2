@@ -440,7 +440,15 @@ class DebtorController extends Controller
 
     public function actionPrintDocuments()
     {
+        //TODO: move to model
         if (Yii::$app->user->identity->canPrint()) {
+
+            //TODO: непонятной природы и вроде бессмысленное дублирование (может использовать xSendFile?)
+            //TODO: это костыль чтобы исправить это дублирование
+            if (!empty($_SERVER['HTTP_RANGE'])) {
+                return '';
+            }
+
             set_time_limit(400);
 
             //$documents = [];
@@ -495,7 +503,10 @@ class DebtorController extends Controller
             return Yii::$app->getResponse()->sendFile(
                 $finalResultName,
                 'DebtorInfo.pdf',
-                ['mimeType' => 'application/pdf', 'inline' => true]
+                [
+                    'mimeType' => 'application/pdf',
+                    'inline' => true,
+                ]
             );
 
 
