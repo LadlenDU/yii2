@@ -389,8 +389,10 @@ class DebtorController extends Controller
     public function actionPrintDocuments()
     {
         if (Yii::$app->user->identity->canPrint()) {
-            $documents = [];
             set_time_limit(300);
+
+            $documents = [];
+
             $this->layout = 'print_fine';
             $this->view->title = \Yii::t('app', 'Пакет документов');
 
@@ -402,6 +404,8 @@ class DebtorController extends Controller
             $doc['full_fine_report'] = $this->getFullReportFineDataHtml($debtor);
 
             $documents[] = $doc;
+
+            return $this->render('@frontend/modules/office/views/debtor/print_documents', ['documents' => $documents]);
 
             $rContent = Yii::$app->html2pdf->render('@frontend/modules/office/views/debtor/print_documents', ['documents' => $documents]);
 
@@ -456,7 +460,8 @@ class DebtorController extends Controller
 
             Yii::$app->user->identity->printOperationStart();
 
-            return Yii::$app->response->sendFile(
+            //return Yii::$app->getResponse()->xSendFile(
+            return Yii::$app->getResponse()->sendFile(
                 $tempFNameResult,
                 'DebtorInfo.pdf',
                 ['mimeType' => 'application/pdf', 'inline' => true]
