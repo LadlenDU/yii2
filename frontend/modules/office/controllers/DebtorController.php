@@ -475,7 +475,7 @@ class DebtorController extends Controller
 
             $finalResultName = tempnam(sys_get_temp_dir(), 'pdf_fine_2_') . '.pdf';
 
-            $pdfItems = implode(' ', $finalResultName);
+            $pdfItems = implode(' ', $tempFNameResults);
 
             $command = "gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=$finalResultName $pdfItems 2>&1";
             $outputLines = [];
