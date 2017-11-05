@@ -42,7 +42,10 @@
         "dantleech/fancytree": "dev-composer",
         "wbraganca/yii2-fancytree-widget": "*",
         "unclead/yii2-multiple-input": "~2.0",
-        "wapmorgan/yii2-inflection": "^1.0"
+        "wapmorgan/yii2-inflection": "^1.0",
+        "gufy/pdftohtml-php": "~2",
+        "spatie/pdf-to-image": "^1.5",
+        "kartik-v/yii2-widget-datetimepicker": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
