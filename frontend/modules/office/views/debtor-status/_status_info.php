@@ -23,12 +23,18 @@ CSS
 );
 
 $this->registerJs(<<<JS
-$("#debtorstatus-status").change(function () {
-    var debtorStatusForm = $("#debtor-status-form");
-    var visibleClass = '.d_status_' + $(this).val();
-    debtorStatusForm.find(".show-hide").hide();
-    debtorStatusForm.find(visibleClass).fadeIn();      
-});
+(function(){
+    function statusChanged() {
+        var debtorStatusForm = $("#debtor-status-form");
+        var visibleClass = '.d_status_' + debtorStatusForm.find("#debtorstatus-status").val();
+        debtorStatusForm.find(".show-hide").hide();
+        debtorStatusForm.find(visibleClass).fadeIn();    
+    }
+    $("#debtorstatus-status").change(function () {
+          statusChanged();
+    });
+    statusChanged();
+})();
 JS
 );
 ?>
