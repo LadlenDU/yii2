@@ -10,7 +10,6 @@ use kartik\datetime\DateTimePicker;
 /* @var $debtorId integer */
 /* @var $debtorStatus common\models\DebtorStatus */
 /* @var $fileUploadConfig array */
-$fileUploadConfig = [];
 
 $this->registerCss(<<<CSS
 #debtor-status-form .show-hide {
@@ -43,7 +42,7 @@ JS
     [
         'layout' => 'horizontal',
         'id' => 'debtor-status-form',
-        'action' => yii\helpers\Url::to(['/office/debtor-status/save', 'debtorId' => $debtorId]),
+        'action' => yii\helpers\Url::to(['/office/debtor-status', 'debtorId' => $debtorId]),
     ]
 ); ?>
 

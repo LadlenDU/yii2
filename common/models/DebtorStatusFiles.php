@@ -25,6 +25,13 @@ class DebtorStatusFiles extends \yii\db\ActiveRecord
         return 'debtor_status_files';
     }
 
+    public function behaviors()
+    {
+        return [
+            \common\models\FileUploadBehavior::className(),
+        ];
+    }
+
     /**
      * @inheritdoc
      */
