@@ -744,11 +744,21 @@ class DebtorController extends Controller
     public function actionStatusInfo($debtorId)
     {
         $debtor = $this->findModel($debtorId);
-        return $this->render('_status_info',
-            [
-                'debtor' => $debtor,
-                'debtorStatus' => $debtor->status,
-            ]
-        );
+
+        if (Yii::$app->request->isAjax) {
+            return $this->renderAjax('_status_info',
+                [
+                    'debtor' => $debtor,
+                    'debtorStatus' => $debtor->status,
+                ]
+            );
+        } else {
+            return $this->render('_status_info',
+                [
+                    'debtor' => $debtor,
+                    'debtorStatus' => $debtor->status,
+                ]
+            );
+        }
     }
 }

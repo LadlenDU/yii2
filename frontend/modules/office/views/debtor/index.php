@@ -19,16 +19,26 @@ use common\models\DebtorStatus;
 $this->title = Yii::t('app', 'Работа с должниками');
 $this->params['breadcrumbs'][] = $this->title;
 
-$getStatusInfoUrl = json_encode(Url::to('/office/debtor/status-info'));
+$getStatusInfoUrl = json_encode(Url::to('/office/debtor/status-info/?', true));
+
+$ajaxLoader = json_encode(\common\helpers\HtmlHelper::getCenteredAjaxLoadImg());
 
 $this->registerJs(<<<JS
     $('#statusesModal').on('show.bs.modal', function(e) {
-
-        //get data-id attribute of the clicked element
+        
+        $(e.currentTarget).find('.modal-body').html($ajaxLoader);
+        
+        //TODO: почему-то происходит редирект при 404
         var debtorId = $(e.relatedTarget).data('debtor-id');
-       
-        //populate the textbox
-        $(e.currentTarget).find('.modal-body').load($getStatusInfoUrl + $.param({debtorId:debtorId}));
+        $(e.currentTarget).find('.modal-body').load($getStatusInfoUrl + $.param({debtorId:debtorId}),
+            function(response, status, xhr) {
+                if (status == "error") {
+                    var msg = "Произошла ошибка: ";
+                    $(this).html(msg + xhr.status + " " + xhr.statusText);
+                }
+                return true;
+            }
+        );
     });
 JS
 );
