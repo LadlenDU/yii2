@@ -19,6 +19,14 @@ use Yii;
  */
 class DebtorStatus extends \yii\db\ActiveRecord
 {
+    const STATUSES = [
+        'new' => 'Новое',
+        'to_work' => 'В работу',
+        'submitted_to_court' => 'Подано в суд',
+        'adjudicated' => 'Вынесено решение',
+        'application_withdrawn' => 'Заявление отозвано',
+    ];
+
     /**
      * @inheritdoc
      */
@@ -68,5 +76,26 @@ class DebtorStatus extends \yii\db\ActiveRecord
     public function getDebtorStatusFiles()
     {
         return $this->hasMany(DebtorStatusFiles::className(), ['debtor_status_id' => 'id'])->inverseOf('debtorStatus');
+    }
+
+    protected static function prepareStatusName($statusId, $uppercase)
+    {
+        $status = self::STATUSES[$statusId];
+        if ($uppercase) {
+            $status = mb_strtoupper($status, Yii::$app->charset);
+        }
+        return $status;
+    }
+
+    public function getStatusName($uppercase = false)
+    {
+        return self::prepareStatusName($this->status, $uppercase);
+    }
+
+    public static function getStatusByDebtor(Debtor $debtor, $uppercase = false)
+    {
+        return empty($debtor->status)
+            ? self::prepareStatusName('new', $uppercase)
+            : $debtor->status->getStatusName(true);
     }
 }

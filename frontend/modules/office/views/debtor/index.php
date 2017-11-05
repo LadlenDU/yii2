@@ -6,25 +6,29 @@
 /* @var $uploadModel common\models\UploadForm */
 
 use yii\helpers\Html;
-use yii\grid\GridView;
-use yii\widgets\Pjax;
+
+//use yii\grid\GridView;
+//use yii\widgets\Pjax;
 use kartik\dynagrid\DynaGrid;
 use yii\helpers\Url;
 use yii\bootstrap\Modal;
 use common\models\Debtor;
+use yii\widgets\ActiveForm;
+use common\models\DebtorStatus;
 
 $this->title = Yii::t('app', 'Работа с должниками');
 $this->params['breadcrumbs'][] = $this->title;
+
+$getStatusInfoUrl = json_encode(Url::to('/office/debtor/status-info'));
 
 $this->registerJs(<<<JS
     $('#statusesModal').on('show.bs.modal', function(e) {
 
         //get data-id attribute of the clicked element
         var debtorId = $(e.relatedTarget).data('debtor-id');
-        return;
-        
+       
         //populate the textbox
-        $(e.currentTarget).find('input[name="bookId"]').val(bookId);
+        $(e.currentTarget).find('.modal-body').load($getStatusInfoUrl + $.param({debtorId:debtorId}));
     });
 JS
 );
@@ -77,9 +81,8 @@ $columns = [
         'attribute' => 'status',
         'label' => Yii::t('app', 'Статус'),
         'value' => function (Debtor $model, $key, $index) {
-            //return '<a class="change-status" data-id="'. $key .'">' . $model->getStatusName(true) . '</a>';
             return '<button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#statusesModal" data-debtor-id="' . $key . '">'
-                . $model->getStatusName(true) . '</button>';
+                . DebtorStatus::getStatusByDebtor($model, true) . '</button>';
         },
         'format' => 'raw',
         'hAlign' => 'center',
@@ -373,16 +376,9 @@ JS
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Смена статуса заявления</h4>
+                        <h4 class="modal-title"><?= Yii::t('app', 'Смена статуса заявления') ?></h4>
                     </div>
-                    <div class="modal-body">
-                        <select>
-                            <option>Новое</option>
-                            <option>Подано в суд</option>
-                            <option>Вынесено решение</option>
-                            <option>Заявление отозвано</option>
-                        </select>
-                    </div>
+                    <div class="modal-body"></div>
                     <div class="modal-footer">
                         <button type="button" class="submit btn btn-success btn-small btn-sm"
                                 data-dismiss="modal"><?= Yii::t('app', 'Сохранить') ?></button>

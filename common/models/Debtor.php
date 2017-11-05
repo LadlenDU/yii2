@@ -5,6 +5,7 @@ namespace common\models;
 use Yii;
 //use common\models\Fine;
 use yii\web\UploadedFile;
+
 //use common\models\DebtorParse;
 //use morphos\Russian\inflectName;
 
@@ -43,13 +44,6 @@ use yii\web\UploadedFile;
  */
 class Debtor extends \yii\db\ActiveRecord
 {
-    const STATUSES = [
-        'new' => 'Новое',
-        'submitted_to_court' => 'Подано в суд',
-        'adjudicated' => 'Вынесено решение',
-        'application_withdrawn' => 'Заявление отозвано',
-    ];
-
     /**
      * @inheritdoc
      */
@@ -206,6 +200,18 @@ class Debtor extends \yii\db\ActiveRecord
     {
         return new DebtorQuery(get_called_class());
     }
+
+    //TODO: что с этим не так?
+   /* public function init()
+    {
+        parent::init();
+        if (!$this->status) {
+            $status = new DebtorStatus();
+            $status->save();
+            $this->link('status', $status);
+            $this->save();
+        }
+    }*/
 
     public function getFineCalculatorResult()
     {
@@ -636,14 +642,5 @@ class Debtor extends \yii\db\ActiveRecord
             }
         }
         return $city;
-    }
-
-    public function getStatusName($uppercase = false)
-    {
-        $status = self::STATUSES[$this->status];
-        if ($uppercase) {
-            $status = mb_strtoupper($status, Yii::$app->charset);
-        }
-        return $status;
     }
 }

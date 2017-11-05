@@ -740,4 +740,15 @@ class DebtorController extends Controller
                 //'userInfoModel' => $userInfoModel,
             ]);
     }*/
+
+    public function actionStatusInfo($debtorId)
+    {
+        $debtor = $this->findModel($debtorId);
+        return $this->render('_status_info',
+            [
+                'debtor' => $debtor,
+                'debtorStatus' => $debtor->status,
+            ]
+        );
+    }
 }
