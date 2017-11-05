@@ -7,7 +7,6 @@ use Yii;
 use yii\web\UploadedFile;
 //use common\models\DebtorParse;
 //use morphos\Russian\inflectName;
-use common\models\debtor_status\DebtorStatusFiles;
 
 /**
  * This is the model class for table "debtor".
@@ -28,23 +27,23 @@ use common\models\debtor_status\DebtorStatusFiles;
  * @property string $additional_adjustment
  * @property string $subsidies
  * @property integer $user_id
- * @property string $status
+ * @property integer $status_id
  *
  * @property Accrual[] $accruals
  * @property DebtDetails[] $debtDetails
  * @property Location $location
  * @property Name $name
  * @property OwnershipType $ownershipType
+ * @property DebtorStatus $status
  * @property User $user
  * @property DebtorCohabitant[] $debtorCohabitants
  * @property DebtorPublicService[] $debtorPublicServices
  * @property PublicService[] $publicServices
- * @property DebtorStatusFiles[] $debtorStatusFiles
  * @property Payment[] $payments
  */
 class Debtor extends \yii\db\ActiveRecord
 {
-    protected $statuses = [
+    const STATUSES = [
         'new' => 'Новое',
         'submitted_to_court' => 'Подано в суд',
         'adjudicated' => 'Вынесено решение',
@@ -66,14 +65,15 @@ class Debtor extends \yii\db\ActiveRecord
     {
         return [
             [['space_common', 'space_living', 'debt_total'], 'number'],
-            [['ownership_type_id', 'location_id', 'name_id', 'user_id'], 'integer'],
+            [['ownership_type_id', 'location_id', 'name_id', 'user_id', 'status_id'], 'integer'],
             [['expiration_start'], 'safe'],
-            [['phone', 'LS_EIRC', 'LS_IKU_provider', 'IKU', 'single', 'additional_adjustment', 'subsidies', 'status'], 'string', 'max' => 255],
+            [['phone', 'LS_EIRC', 'LS_IKU_provider', 'IKU', 'single', 'additional_adjustment', 'subsidies'], 'string', 'max' => 255],
             [['LS_IKU_provider'], 'unique'],
             [['name_id'], 'unique'],
             [['location_id'], 'exist', 'skipOnError' => true, 'targetClass' => Location::className(), 'targetAttribute' => ['location_id' => 'id']],
             [['name_id'], 'exist', 'skipOnError' => true, 'targetClass' => Name::className(), 'targetAttribute' => ['name_id' => 'id']],
             [['ownership_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => OwnershipType::className(), 'targetAttribute' => ['ownership_type_id' => 'id']],
+            [['status_id'], 'exist', 'skipOnError' => true, 'targetClass' => DebtorStatus::className(), 'targetAttribute' => ['status_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
@@ -106,7 +106,7 @@ class Debtor extends \yii\db\ActiveRecord
             'debtTotal' => Yii::t('app', 'Задолженность'),
             'fineTotal' => Yii::t('app', 'Пеня'),
             'user_id' => Yii::t('app', 'ID пользователя'),
-            'status' => Yii::t('app', 'Статус должника'),
+            'status_id' => Yii::t('app', 'ID cтатуса'),
         ];
     }
 
@@ -153,6 +153,14 @@ class Debtor extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getStatus()
+    {
+        return $this->hasOne(DebtorStatus::className(), ['id' => 'status_id'])->inverseOf('debtors');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'user_id'])->inverseOf('debtors');
@@ -180,14 +188,6 @@ class Debtor extends \yii\db\ActiveRecord
     public function getPublicServices()
     {
         return $this->hasMany(PublicService::className(), ['id' => 'public_service_id'])->viaTable('debtor_public_service', ['debtor_id' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getDebtorStatusFiles()
-    {
-        return $this->hasMany(DebtorStatusFiles::className(), ['debtor_id' => 'id'])->inverseOf('debtor');
     }
 
     /**
@@ -638,14 +638,9 @@ class Debtor extends \yii\db\ActiveRecord
         return $city;
     }
 
-    /*public function getStatusNameByCodeName($codeName)
-    {
-        return $this->statuses[$codeName];
-    }*/
-
     public function getStatusName($uppercase = false)
     {
-        $status = $this->statuses[$this->status];
+        $status = self::STATUSES[$this->status];
         if ($uppercase) {
             $status = mb_strtoupper($status, Yii::$app->charset);
         }
