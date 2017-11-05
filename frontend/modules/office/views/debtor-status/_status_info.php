@@ -7,7 +7,7 @@ use kartik\file\FileInput;
 use kartik\datetime\DateTimePicker;
 
 /* @var $this yii\web\View */
-/* @var $debtor common\models\Debtor */
+/* @var $debtorId integer */
 /* @var $debtorStatus common\models\DebtorStatus */
 /* @var $fileUploadConfig array */
 $fileUploadConfig = [];
@@ -15,6 +15,9 @@ $fileUploadConfig = [];
 $this->registerCss(<<<CSS
 #debtor-status-form .show-hide {
     display: none;
+}
+#debtor-status-form textarea {
+    height: 7em !important;
 }
 CSS
 );
@@ -34,6 +37,7 @@ JS
     [
         'layout' => 'horizontal',
         'id' => 'debtor-status-form',
+        'action' => yii\helpers\Url::to(['/office/debtor-status/save', 'debtorId' => $debtorId]),
     ]
 ); ?>
 

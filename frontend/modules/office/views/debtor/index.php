@@ -19,7 +19,7 @@ use common\models\DebtorStatus;
 $this->title = Yii::t('app', 'Работа с должниками');
 $this->params['breadcrumbs'][] = $this->title;
 
-$getStatusInfoUrl = json_encode(Url::to('/office/debtor/status-info/?', true));
+$getStatusInfoUrl = json_encode(Url::to('/office/debtor-status/?', true));
 
 $ajaxLoader = json_encode(\common\helpers\HtmlHelper::getCenteredAjaxLoadImg());
 
@@ -39,6 +39,10 @@ $this->registerJs(<<<JS
                 return true;
             }
         );
+    });
+
+    $("#statusesModal .submit").click(function() {
+        $("#debtor-status-form").submit();
     });
 JS
 );

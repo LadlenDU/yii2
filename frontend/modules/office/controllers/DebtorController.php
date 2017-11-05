@@ -751,9 +751,16 @@ class DebtorController extends Controller
             ]);
     }*/
 
-    public function actionStatusInfo($debtorId)
+    /*public function actionStatusInfo($debtorId)
     {
         $debtor = $this->findModel($debtorId);
+
+        if ($debtor->load(Yii::$app->request->post()) && $debtor->save()) {
+
+
+
+            return $this->redirect(['/office/debtor']);
+        }
 
         if (Yii::$app->request->isAjax) {
             return $this->renderAjax('_status_info',
@@ -771,5 +778,5 @@ class DebtorController extends Controller
                 ]
             );
         }
-    }
+    }*/
 }
