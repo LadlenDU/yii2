@@ -18,6 +18,12 @@ $this->registerCss(<<<CSS
 #debtor-status-form textarea {
     height: 7em !important;
 }
+/*
+.krajee-default.file-preview-frame .kv-file-content {
+    width: 50px !important;
+    height: 50px !important;
+}*/
+
 CSS
 );
 
@@ -41,6 +47,16 @@ JS
 <? $form = ActiveForm::begin(
     [
         'layout' => 'horizontal',
+        'fieldConfig' => [
+            'template' => "{label}\n{beginWrapper}\n{input}\n{hint}\n{error}\n{endWrapper}",
+            'horizontalCssClasses' => [
+                'label' => 'col-sm-3',
+                'offset' => 'col-sm-offset-3',
+                'wrapper' => 'col-sm-9',
+                'error' => '',
+                'hint' => '',
+            ],
+        ],
         'id' => 'debtor-status-form',
         'action' => yii\helpers\Url::to(['/office/debtor-status', 'debtorId' => $debtorId]),
     ]
