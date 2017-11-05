@@ -26,6 +26,11 @@ $ajaxLoader = json_encode(\common\helpers\HtmlHelper::getCenteredAjaxLoadImg());
 $this->registerJs(<<<JS
     $('#statusesModal').on('show.bs.modal', function(e) {
         
+        //TODO: не очень уверен в правильности решения
+        if (e.namespace != 'bs.modal') {
+            return;
+        }
+        
         $(e.currentTarget).find('.modal-body').html($ajaxLoader);
         
         //TODO: почему-то происходит редирект при 404

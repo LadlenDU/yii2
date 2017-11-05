@@ -57,7 +57,8 @@ JS
         'options' => ['placeholder' => 'Введите дату ...'],
         'pluginOptions' => [
             'autoclose' => true,
-        ]
+        ],
+        //'type' => DatePicker::TYPE_BUTTON,
     ]); ?>
 </div>
 
