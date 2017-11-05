@@ -2,6 +2,7 @@
 
 //use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use common\models\DebtorStatus;
 
 /* @var $this yii\web\View */
 /* @var $debtor common\models\Debtor */
@@ -10,6 +11,6 @@ use yii\widgets\ActiveForm;
 
 <? $form = ActiveForm::begin(); ?>
 
-<?= $form->field($debtorStatus, 'status')->dropDownList($debtorStatus::STATUSES); ?>
+<?= $form->field($debtorStatus, 'status')->dropDownList(DebtorStatus::STATUSES); ?>
 
 <? $form = ActiveForm::end(); ?>

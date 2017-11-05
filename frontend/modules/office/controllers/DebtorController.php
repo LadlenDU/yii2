@@ -19,6 +19,7 @@ use yii\data\ArrayDataProvider;
 use common\helpers\DebtHelper;
 use yii\filters\AccessControl;
 use yii\helpers\Url;
+use common\models\DebtorStatus;
 
 //use kartik\mpdf\Pdf;
 
@@ -209,6 +210,15 @@ class DebtorController extends Controller
     protected function findModel($id)
     {
         if (($model = Debtor::findOne($id)) !== null) {
+
+            //TODO: попробовать перенести в модель этот костыль
+            if (!$model->status) {
+                $status = new DebtorStatus();
+                $status->save();
+                $model->link('status', $status);
+                $model->save();
+            }
+
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
@@ -749,6 +759,7 @@ class DebtorController extends Controller
             return $this->renderAjax('_status_info',
                 [
                     'debtor' => $debtor,
+                    //'debtorStatus' => $debtor->getStatus(),
                     'debtorStatus' => $debtor->status,
                 ]
             );
