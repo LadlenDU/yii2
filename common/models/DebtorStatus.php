@@ -27,6 +27,12 @@ class DebtorStatus extends \yii\db\ActiveRecord
         'application_withdrawn' => 'Заявление отозвано',
     ];
 
+    const ADJUDICATED_RESULT = [
+        'positive' => 'Положительный результат',
+        'negative' => 'Отрицательный результат',
+        'settlement_agreement' => 'Мировое соглашение',
+    ];
+
     /**
      * @inheritdoc
      */
