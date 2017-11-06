@@ -2,11 +2,13 @@
 
 namespace common\models;
 
+use common\models\debtor_parse\Format_csv_1;
 use Yii;
 //use common\models\Fine;
 use yii\web\UploadedFile;
+use common\models\debtor_parse\DebtorParse;
 
-//use common\models\DebtorParse;
+//use common\models\debtor_parse\DebtorParse;
 //use morphos\Russian\inflectName;
 
 /**
@@ -568,6 +570,10 @@ class Debtor extends \yii\db\ActiveRecord
 
     public static function handleDebtorsCsvFile(UploadForm $uploadModel)
     {
+        //TODO: костыль - исправить
+        ini_set('memory_limit', '-1');
+        ini_set('max_execution_time', 1000);
+
         $uploadModel->csvFile = UploadedFile::getInstance($uploadModel, 'csvFile');
         if ($fileName = $uploadModel->uploadCsv()) {
             if ($handle = fopen($fileName, 'r')) {
@@ -578,7 +584,7 @@ class Debtor extends \yii\db\ActiveRecord
                 }
                 fclose($handle);
 
-                $sheetData = DebtorParse::format_1($sheetDataRaw);
+                $sheetData = Format_csv_1::format($sheetDataRaw);
                 self::addDebtors($sheetData);
 
             } else {

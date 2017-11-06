@@ -12,7 +12,7 @@ use yii\web\Controller;
 use yii\filters\AccessControl;
 use yii\web\UploadedFile;
 use common\models\UploadForm;
-use common\models\DebtorParse;
+use common\models\debtor_parse\DebtorParse;
 //use common\components\ColumnNotFoundException;
 //use yii\data\ActiveDataProvider;
 //use yii\data\ArrayDataProvider;
