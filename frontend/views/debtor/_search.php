@@ -26,7 +26,7 @@ use yii\bootstrap\ActiveForm;
             <?= $form->field($model, 'LS_IKU_provider')->textInput(['placeholder' => Yii::t('app', 'Номер лицевого счета')]) ?>
         </div>
         <div class="col-md-4">
-            <?= $form->field($model, 'status')->dropDownList(\common\models\DebtorStatus::STATUSES, ['id' => 'debtorstatus-status-search']); ?>
+            <?= $form->field($model, 'status_status')->dropDownList(\common\models\DebtorStatus::STATUSES, ['id' => 'debtorstatus-status-search']); ?>
         </div>
     </div>
 

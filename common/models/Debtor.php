@@ -50,6 +50,7 @@ class Debtor extends \yii\db\ActiveRecord
     public $location_building;
     public $clam_sum_from;
     public $clam_sum_to;
+    public $status_status;
 
     /**
      * @inheritdoc

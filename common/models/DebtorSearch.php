@@ -42,7 +42,8 @@ class DebtorSearch extends Debtor
      */
     public function search($params)
     {
-        $query = Debtor::find()->with('location');
+        //$query = Debtor::find()->with('location');
+        $query = Debtor::find()->with('status');
 
         // add conditions that should always apply here
 
@@ -70,7 +71,10 @@ class DebtorSearch extends Debtor
             'debt_total' => $this->debt_total,
             'user_id' => $this->user_id,
             'status_id' => $this->status_id,
+            'status_status' => $this->status_status,
         ]);
+
+        //$query->andFilterWhere(['like', 'tbl_country.name', $this->country]);
 
         $query->andFilterWhere(['like', 'phone', $this->phone])
             ->andFilterWhere(['like', 'LS_EIRC', $this->LS_EIRC])

@@ -88,38 +88,32 @@ use kartik\file\FileInput;
     </div>
     <br>
 
-    <div class="row collapse" id="search-debtors">
+    <!--<div class="row collapse" id="search-debtors">
         <div class="col-xs-12">
             <?php
-            $form = ActiveForm::begin([
+/*            $form = ActiveForm::begin([
                 'options' => [
                     'enctype' => 'multipart/form-data',
                 ],
             ]);
-            //echo $form->field($uploadModel, 'action')->hiddenInput(['value' => 'upload_debtors_excel']);
             echo Html::hiddenInput('action', 'upload_debtors_excel_a_user');
             echo $form->field($uploadModel, 'excelFileForAUser')->widget(FileInput::classname(), $uploadModel->fileUploadConfig('excel'));
             ActiveForm::end();
-            ?>
+            */?>
         </div>
         <div class="col-xs-12">
             <?php
-            $form = ActiveForm::begin([
-                /*'action' => [
-                    '/office/debtors/debt-verification',
-                    'action' => 'upload_debtors_csv',
-                ],*/
+/*            $form = ActiveForm::begin([
                 'options' => [
                     'enctype' => 'multipart/form-data',
                 ],
             ]);
-            //echo $form->field($uploadModel, 'action')->hiddenInput(['value' => 'upload_debtors_csv']);
             echo Html::hiddenInput('action', 'upload_debtors_csv');
             echo $form->field($uploadModel, 'csvFile')->widget(FileInput::classname(), $uploadModel->fileUploadConfig('csv'));
             ActiveForm::end();
-            ?>
+            */?>
         </div>
-    </div>
+    </div>-->
 
     <div class="row collapse" id="load-debtors">
         <div class="col-xs-12">
