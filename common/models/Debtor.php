@@ -318,10 +318,14 @@ class Debtor extends \yii\db\ActiveRecord
 
     public static function calcAccrualSum(Accrual $acc)
     {
+        $accrual = $acc->accrual ?: null;
         if (empty($_GET['dis_sub'])) {
-            return (float)$acc->accrual - (float)$acc->subsidies + (float)$acc->single + (float)$acc->additional_adjustment;
+            $subsidies = $acc->subsidies ?: null;
+            $single = $acc->single ?: null;
+            $additional_adjustment = $acc->additional_adjustment ?: null;
+            return (float)$accrual - (float)$subsidies + (float)$single + (float)$additional_adjustment;
         } else {
-            return (float)$acc->accrual;
+            return (float)$accrual;
         }
     }
 
@@ -572,7 +576,7 @@ class Debtor extends \yii\db\ActiveRecord
     {
         //TODO: костыль - исправить
         ini_set('memory_limit', '-1');
-        ini_set('max_execution_time', 1000);
+        ini_set('max_execution_time', 100000);
 
         $uploadModel->csvFile = UploadedFile::getInstance($uploadModel, 'csvFile');
         if ($fileName = $uploadModel->uploadCsv()) {

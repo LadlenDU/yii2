@@ -50,9 +50,15 @@ class DebtorParseHelper
         } else {
             list($month, $year) = explode(' ', $dateRawString);
         }
-        $monthShortName = mb_strtolower(mb_substr(trim($month), 0, 3, 'UTF-8'), 'UTF-8');
-        $year = '20' . trim($year);
-        $monthNumber = isset(DebtorParseHelper::MONTHS[$monthShortName]) ? DebtorParseHelper::MONTHS[$monthShortName] : 1;
+        $month = trim($month);
+        $year = trim($year);
+        $month = mb_strtolower($month, 'UTF-8');
+        if (isset(DebtorParseHelper::MONTHS[$month]) || isset(DebtorParseHelper::MONTHS_FULL[$month])) {
+            $monthShortName = mb_strtolower(mb_substr(trim($month), 0, 3, 'UTF-8'), 'UTF-8');
+            $monthNumber = DebtorParseHelper::MONTHS[$monthShortName];
+        } else {
+            $monthNumber = (int)$month;
+        }
         if ($monthNumber < 10) {
             $monthNumber = '0' . $monthNumber;
         }
