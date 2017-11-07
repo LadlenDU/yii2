@@ -68,7 +68,7 @@ class Debtor extends \yii\db\ActiveRecord
         return [
             [['space_common', 'space_living', 'debt_total'], 'number'],
             [['ownership_type_id', 'location_id', 'name_id', 'user_id', 'status_id'], 'integer'],
-            [['expiration_start'], 'safe'],
+            [['expiration_start', 'location_street', 'location_building', 'clam_sum_from', 'clam_sum_to', 'status_status'], 'safe'],
             [['phone', 'LS_EIRC', 'LS_IKU_provider', 'IKU', 'single', 'additional_adjustment', 'subsidies'], 'string', 'max' => 255],
             [['LS_IKU_provider'], 'unique'],
             [['name_id'], 'unique'],

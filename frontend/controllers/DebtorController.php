@@ -36,7 +36,9 @@ class DebtorController extends Controller
     public function actionIndex()
     {
         $searchModel = new DebtorSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        //TODO: почему пришлось сгенерированный queryParams заменить на post() ??
+        //$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->search(Yii::$app->request->post());
 
         return $this->render('index', [
             'searchModel' => $searchModel,

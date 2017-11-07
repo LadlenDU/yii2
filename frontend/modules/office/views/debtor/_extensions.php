@@ -2,10 +2,12 @@
 /**
  * @var yii\web\View $this
  * @var common\models\UploadForm $uploadModel
+ * @var $filterModel common\models\DebtorSearch
+ * filterModel
  */
 
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+use yii\bootstrap\ActiveForm;
 use kartik\file\FileInput;
 
 ?>
@@ -88,32 +90,46 @@ use kartik\file\FileInput;
     </div>
     <br>
 
-    <!--<div class="row collapse" id="search-debtors">
-        <div class="col-xs-12">
-            <?php
-/*            $form = ActiveForm::begin([
-                'options' => [
-                    'enctype' => 'multipart/form-data',
-                ],
-            ]);
-            echo Html::hiddenInput('action', 'upload_debtors_excel_a_user');
-            echo $form->field($uploadModel, 'excelFileForAUser')->widget(FileInput::classname(), $uploadModel->fileUploadConfig('excel'));
-            ActiveForm::end();
-            */?>
+    <div class="row collapse" id="search-debtors">
+        <?php $form = ActiveForm::begin([
+            'action' => ['index'],
+            'fieldConfig' => [
+                'enableLabel' => false,
+            ],
+        ]); ?>
+
+        <div class="row">
+
+            <div class="col-md-4">
+                <?= $form->field($filterModel, 'location_street')->textInput(['placeholder' => Yii::t('app', 'Адрес дома')]) ?>
+            </div>
+            <div class="col-md-4">
+                <?= $form->field($filterModel, 'LS_IKU_provider')->textInput(['placeholder' => Yii::t('app', 'Номер лицевого счета')]) ?>
+            </div>
+            <div class="col-md-4">
+                <?= $form->field($filterModel, 'status_status')->dropDownList(\common\models\DebtorStatus::STATUSES, ['id' => 'debtorstatus-status-search']); ?>
+            </div>
         </div>
-        <div class="col-xs-12">
-            <?php
-/*            $form = ActiveForm::begin([
-                'options' => [
-                    'enctype' => 'multipart/form-data',
-                ],
-            ]);
-            echo Html::hiddenInput('action', 'upload_debtors_csv');
-            echo $form->field($uploadModel, 'csvFile')->widget(FileInput::classname(), $uploadModel->fileUploadConfig('csv'));
-            ActiveForm::end();
-            */?>
+
+        <div class="row">
+            <div class="col-md-4">
+                <?= $form->field($filterModel, 'location_building')->textInput(['placeholder' => Yii::t('app', '№ помещения')]) ?>
+            </div>
+            <div class="col-md-4">
+                <?= $form->field($filterModel, 'clam_sum_from')->textInput(['placeholder' => Yii::t('app', 'Цена иска от')]) ?>
+            </div>
+            <div class="col-md-4">
+                <?= $form->field($filterModel, 'clam_sum_to')->textInput(['placeholder' => Yii::t('app', 'Цена иска до')]) ?>
+            </div>
         </div>
-    </div>-->
+
+        <div class="form-group">
+            <?= Html::submitButton(Yii::t('app', 'Искать'), ['class' => 'btn btn-primary']) ?>
+            <?= Html::resetButton(Yii::t('app', 'Сбросить'), ['class' => 'btn btn-default']) ?>
+        </div>
+
+        <?php ActiveForm::end(); ?>
+    </div>
 
     <div class="row collapse" id="load-debtors">
         <div class="col-xs-12">

@@ -274,7 +274,7 @@ $columns = [
 </div>-->
 
 <?php
-echo $this->render('_extensions', ['uploadModel' => $uploadModel]);
+echo $this->render('_extensions', ['uploadModel' => $uploadModel, 'searchModel' => $searchModel]);
 ?>
 
 <div class="debtor-index">

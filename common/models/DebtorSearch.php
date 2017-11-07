@@ -19,7 +19,7 @@ class DebtorSearch extends Debtor
     {
         return [
             [['id', 'ownership_type_id', 'location_id', 'name_id', 'user_id', 'status_id'], 'integer'],
-            [['phone', 'LS_EIRC', 'LS_IKU_provider', 'IKU', 'expiration_start', 'single', 'additional_adjustment', 'subsidies'], 'safe'],
+            [['phone', 'LS_EIRC', 'LS_IKU_provider', 'IKU', 'expiration_start', 'single', 'additional_adjustment', 'subsidies', 'location_street', 'location_building', 'clam_sum_from', 'clam_sum_to', 'status_status'], 'safe'],
             [['space_common', 'space_living', 'debt_total'], 'number'],
         ];
     }
@@ -43,7 +43,8 @@ class DebtorSearch extends Debtor
     public function search($params)
     {
         //$query = Debtor::find()->with('location');
-        $query = Debtor::find()->with('status');
+        $query = Debtor::find();
+        $query->joinWith(['status']);
 
         // add conditions that should always apply here
 
@@ -71,7 +72,7 @@ class DebtorSearch extends Debtor
             'debt_total' => $this->debt_total,
             'user_id' => $this->user_id,
             'status_id' => $this->status_id,
-            'status_status' => $this->status_status,
+            'debtor_status.status' => $this->status_status,
         ]);
 
         //$query->andFilterWhere(['like', 'tbl_country.name', $this->country]);
