@@ -459,6 +459,7 @@ class DebtorParse extends Model
                 }
 
                 $savePayment = true;
+                $saveAccrual = true;
 
                 //$debtor = new DebtorExt;
                 //$debtDetails = new DebtDetails();
@@ -479,7 +480,18 @@ class DebtorParse extends Model
                         } elseif ($info['headers'][$key][0] == 'location') {
                             $location->{$info['headers'][$key][1]} = $colInfo;
                         } elseif ($info['headers'][$key][0] == 'accrual') {
-                            $accrual->{$info['headers'][$key][1]} = self::convertNumberForSql($colInfo);
+                            if ($info['headers'][$key][1] == 'accrual' && !$colInfo) {
+                                $saveAccrual = false;
+                                --$tmpResultInfo['accruals']['added'];
+                            } else {
+                                if (in_array($info['headers'][$key][1], ['accrual', 'additional_adjustment', 'subsidies', 'single'])) {
+                                    $accrual->{$info['headers'][$key][1]} = self::convertNumberForSql($colInfo);
+                                } else {
+                                    if ($info['headers'][$key][1] == 'accrual_date') {
+                                        $accrual->{$info['headers'][$key][1]} = $colInfo;
+                                    }
+                                }
+                            }
                         } elseif ($info['headers'][$key][0] == 'payment') {
                             // Оплата не велась - не сохраняем
                             if ($info['headers'][$key][1] == 'amount' && !$colInfo) {
@@ -504,8 +516,10 @@ class DebtorParse extends Model
                     $location->save();
                     $location->link('debtors', $debtor);
 
-                    $accrual->save();
-                    $accrual->link('debtor', $debtor);
+                    if ($saveAccrual) {
+                        $accrual->save();
+                        $accrual->link('debtor', $debtor);
+                    }
 
                     if ($savePayment) {
                         $payment->save();
