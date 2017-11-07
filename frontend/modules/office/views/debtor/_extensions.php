@@ -2,7 +2,7 @@
 /**
  * @var yii\web\View $this
  * @var common\models\UploadForm $uploadModel
- * @var $filterModel common\models\DebtorSearch
+ * @var $searchModel common\models\DebtorSearch
  * filterModel
  */
 
@@ -101,25 +101,25 @@ use kartik\file\FileInput;
         <div class="row">
 
             <div class="col-md-4">
-                <?= $form->field($filterModel, 'location_street')->textInput(['placeholder' => Yii::t('app', 'Адрес дома')]) ?>
+                <?= $form->field($searchModel, 'location_street')->textInput(['placeholder' => Yii::t('app', 'Адрес дома')]) ?>
             </div>
             <div class="col-md-4">
-                <?= $form->field($filterModel, 'LS_IKU_provider')->textInput(['placeholder' => Yii::t('app', 'Номер лицевого счета')]) ?>
+                <?= $form->field($searchModel, 'LS_IKU_provider')->textInput(['placeholder' => Yii::t('app', 'Номер лицевого счета')]) ?>
             </div>
             <div class="col-md-4">
-                <?= $form->field($filterModel, 'status_status')->dropDownList(\common\models\DebtorStatus::STATUSES, ['id' => 'debtorstatus-status-search']); ?>
+                <?= $form->field($searchModel, 'status_status')->dropDownList(\common\models\DebtorStatus::STATUSES, ['id' => 'debtorstatus-status-search']); ?>
             </div>
         </div>
 
         <div class="row">
             <div class="col-md-4">
-                <?= $form->field($filterModel, 'location_building')->textInput(['placeholder' => Yii::t('app', '№ помещения')]) ?>
+                <?= $form->field($searchModel, 'location_building')->textInput(['placeholder' => Yii::t('app', '№ помещения')]) ?>
             </div>
             <div class="col-md-4">
-                <?= $form->field($filterModel, 'clam_sum_from')->textInput(['placeholder' => Yii::t('app', 'Цена иска от')]) ?>
+                <?= $form->field($searchModel, 'clam_sum_from')->textInput(['placeholder' => Yii::t('app', 'Цена иска от')]) ?>
             </div>
             <div class="col-md-4">
-                <?= $form->field($filterModel, 'clam_sum_to')->textInput(['placeholder' => Yii::t('app', 'Цена иска до')]) ?>
+                <?= $form->field($searchModel, 'clam_sum_to')->textInput(['placeholder' => Yii::t('app', 'Цена иска до')]) ?>
             </div>
         </div>
 
