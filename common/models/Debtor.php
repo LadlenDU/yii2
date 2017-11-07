@@ -48,10 +48,8 @@ class Debtor extends \yii\db\ActiveRecord
 {
     public $location_street;
     public $location_building;
-    public $debt_sum_from;
-    public $debt_sum_to;
-    public $month_amount_from;
-    public $month_amount_to;
+    public $clam_sum_from;
+    public $clam_sum_to;
 
     /**
      * @inheritdoc

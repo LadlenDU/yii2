@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+use yii\bootstrap\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\DebtorSearch */
@@ -12,61 +12,45 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin([
         'action' => ['index'],
-        'method' => 'get',
+        'fieldConfig' => [
+            'enableLabel' => false,
+        ],
     ]); ?>
 
     <div class="row">
 
-        <div class="col-md-4 col-sm-4">
-            <?= $form->field($model, 'location_street')->textInput(['placeholder' => 'Адрес дома']) ?>
+        <div class="col-md-4">
+            <?= $form->field($model, 'location_street')->textInput(['placeholder' => Yii::t('app', 'Адрес дома')]) ?>
         </div>
-
-        <div class="col-md-4 col-sm-4">
-            <?= $form->field($model, 'location_building')->textInput(['placeholder' => '№ помещения']) ?>
+        <div class="col-md-4">
+            <?= $form->field($model, 'LS_IKU_provider')->textInput(['placeholder' => Yii::t('app', 'Номер лицевого счета')]) ?>
         </div>
-
-        <div class="col-md-4 col-sm-4">
-            <?= $form->field($model, 'LS_IKU_provider')->textInput(['placeholder' => 'Номер лицевого счета']) ?>
+        <div class="col-md-4">
+            <?= $form->field($model, 'status')->dropDownList(\common\models\DebtorStatus::STATUSES, ['id' => 'debtorstatus-status-search']); ?>
         </div>
     </div>
 
     <div class="row">
-        <div class="col-sm-6 col-md-4">
-
-            <div class="row">
-                <div class="col-md-6 col-xs-6">
-                    <?= $form->field($model, 'debt_sum_from')->textInput(['placeholder' => 'Сумма долга от']) ?>
-                </div>
-
-                <div class="col-md-6 col-xs-6">
-                    <?= $form->field($model, 'debt_sum_to')->textInput(['placeholder' => 'Сумма долга до']) ?>
-                </div>
-            </div>
+        <div class="col-md-4">
+            <?= $form->field($model, 'location_building')->textInput(['placeholder' => Yii::t('app', '№ помещения')]) ?>
+        </div>
+        <div class="col-md-4">
+            <?= $form->field($model, 'clam_sum_from')->textInput(['placeholder' => Yii::t('app', 'Цена иска от')]) ?>
         </div>
 
-        <div class="col-sm-6 col-md-4">
-
-            <div class="row">
-                <div class="col-md-6 col-xs-6 no-padding-right">
-                    <?= $form->field($model, 'month_amount_from')->textInput(['placeholder' => 'Кол-во месяцев от']) ?>
-                </div>
-
-                <div class="col-md-6 col-xs-6 no-padding-right">
-                    <?= $form->field($model, 'month_amount_to')->textInput(['placeholder' => 'Кол-во месяцев до']) ?>
-                </div>
-            </div>
+        <div class="col-md-4">
+            <?= $form->field($model, 'clam_sum_to')->textInput(['placeholder' => Yii::t('app', 'Цена иска до')]) ?>
         </div>
-
     </div>
 
 
-    <?= $form->field($model, 'phone') ?>
+    <? /*= $form->field($model, 'phone') */ ?><!--
 
-    <?= $form->field($model, 'LS_EIRC') ?>
+    <? /*= $form->field($model, 'LS_EIRC') */ ?>
 
-    <?= $form->field($model, 'LS_IKU_provider') ?>
+    <? /*= $form->field($model, 'LS_IKU_provider') */ ?>
 
-    <?= $form->field($model, 'IKU') ?>
+    --><? /*= $form->field($model, 'IKU') */ ?>
 
     <?php // echo $form->field($model, 'space_common') ?>
 
@@ -93,8 +77,8 @@ use yii\widgets\ActiveForm;
     <?php // echo $form->field($model, 'status_id') ?>
 
     <div class="form-group">
-        <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-default']) ?>
+        <?= Html::submitButton(Yii::t('app', 'Искать'), ['class' => 'btn btn-primary']) ?>
+        <?= Html::resetButton(Yii::t('app', 'Сбросить'), ['class' => 'btn btn-default']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

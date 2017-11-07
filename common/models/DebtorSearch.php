@@ -42,7 +42,7 @@ class DebtorSearch extends Debtor
      */
     public function search($params)
     {
-        $query = Debtor::find();
+        $query = Debtor::find()->with('location');
 
         // add conditions that should always apply here
 
