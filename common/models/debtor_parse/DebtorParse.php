@@ -385,6 +385,8 @@ class DebtorParse extends Model
 
             #$fine = new Fine;
 
+            $userId = Yii::$app->user->getId();
+
             foreach ($info['colInfo'] as $rowInfo) {
                 #$accuralDateTimestamp = strtotime($rowInfo[$accrualDateIndex]);
                 #$rowInfo[$accrualDateIndex] = date('Y-m-d H:i:s', $fine->checkVacationInput(false, $accuralDateTimestamp, true));
@@ -400,9 +402,11 @@ class DebtorParse extends Model
                 $accrual = false;
                 $payment = false;
 
+                //TODO: add LS_IKU_provider, user_id index
+
                 // Поиск уникального
                 if ($debtor = Debtor::find()->with(['name', 'location', 'debtDetails', 'accruals', 'payments'])
-                    ->where(['LS_IKU_provider' => $rowInfo[$uniqueIndex]])->one()
+                    ->where(['LS_IKU_provider' => $rowInfo[$uniqueIndex], 'user_id' => $userId])->one()
                 ) {
                     //++$tmpResultInfo['debtors']['updated'];
 
@@ -442,6 +446,8 @@ class DebtorParse extends Model
                 if (empty($debtor)) {
                     $debtor = new DebtorExt;
                     ++$tmpResultInfo['debtors']['added'];
+
+                    $debtor->user_id = $userId;
                 }
                 if (empty($debtDetails)) {
                     $debtDetails = new DebtDetails;
