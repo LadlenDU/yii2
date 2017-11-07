@@ -90,7 +90,7 @@ use kartik\file\FileInput;
     </div>
     <br>
 
-    <div class="row collapse" id="search-debtors">
+    <div class="collapse" id="search-debtors">
         <?php $form = ActiveForm::begin([
             'action' => ['index'],
             'fieldConfig' => [
