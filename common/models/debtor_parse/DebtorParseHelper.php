@@ -19,6 +19,21 @@ class DebtorParseHelper
         'дек' => 12,
     ];
 
+    const MONTHS_FULL = [
+        'январь' => 1,
+        'февраль' => 2,
+        'март' => 3,
+        'апрель' => 4,
+        'май' => 5,
+        'июнь' => 6,
+        'июль' => 7,
+        'август' => 8,
+        'сенябрь' => 9,
+        'октябрь' => 10,
+        'ноябрь' => 11,
+        'декабрь' => 12,
+    ];
+
     /**
      * Конвертация формата типа "янв.14" в формат MySQL '0000-00-00 00:00:00'
      *
@@ -30,8 +45,12 @@ class DebtorParseHelper
         //TODO: обработка ошибок
         $dateString = false;
 
-        list($month, $year) = explode('.', $dateRawString);
-        $monthShortName = mb_substr(trim($month), 0, 3, 'UTF-8');
+        if (strpos($dateRawString, '.') !== false) {
+            list($month, $year) = explode('.', $dateRawString);
+        } else {
+            list($month, $year) = explode(' ', $dateRawString);
+        }
+        $monthShortName = mb_strtolower(mb_substr(trim($month), 0, 3, 'UTF-8'), 'UTF-8');
         $year = '20' . trim($year);
         $monthNumber = isset(DebtorParseHelper::MONTHS[$monthShortName]) ? DebtorParseHelper::MONTHS[$monthShortName] : 1;
         if ($monthNumber < 10) {
