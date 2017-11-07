@@ -47,7 +47,7 @@ class Format_csv_1
                 $sheetData[9][15] = 'Улица';
                 $sheetData[9][16] = 'Дом';
                 $sheetData[9][17] = 'Дата начисления';
-                //$sheetData[9][18] = 'Дата оплаты';
+                $sheetData[9][18] = 'Дата оплаты';
                 continue;
             }
 
@@ -79,24 +79,17 @@ class Format_csv_1
 
             $sheetData[$key] = $row;
 
-            // дата
+            // дата зачисления
+            /*$sheetData[$key][14] = $accrualDate;
             $sheetData[$key][14] = trim($sheetData[$key][14]);
             if ($sheetData[$key][14]) {
                 $sheetData[$key][14] = DebtorParseHelper::convertDateFormat_1($sheetData[$key][14]);
-                /*list($month, $year) = explode('.', $sheetData[$key][14]);
-                $monthShortName = mb_substr(trim($month), 0, 3, 'UTF-8');
-                $year = '20' . trim($year);
-                $monthNumber = isset(DebtorParseHelper::MONTHS[$monthShortName]) ? DebtorParseHelper::MONTHS[$monthShortName] : 1;
-                if ($monthNumber < 10) {
-                    $monthNumber = '0' . $monthNumber;
-                }
-                //$sheetData[$key][14] = "01.$monthNumber.$year";
-                $sheetData[$key][14] = "$year-$monthNumber-01 00:00:00";*/
-            }
+            }*/
 
             $sheetData[$key][15] = $street;
             $sheetData[$key][16] = $building;
             $sheetData[$key][17] = $accrualDate;
+            $sheetData[$key][18] = $accrualDate;
         }
 
         return $sheetData;

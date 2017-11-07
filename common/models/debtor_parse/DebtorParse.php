@@ -137,7 +137,8 @@ class DebtorParse extends Model
 
     protected static $FIELDS_PAYMENT = [
         'payment_date' => [
-            'Месяц последней оплаты',   //TODO: После модификации должен содержать полную дату - сделать с этим что-то
+            //'Месяц последней оплаты',   //TODO: После модификации должен содержать полную дату - сделать с этим что-то
+            'Дата оплаты',  // Искусственная колонка
         ],
         'amount' => [
             'Оплачено',
@@ -238,6 +239,7 @@ class DebtorParse extends Model
         'оплачено субсидий',
         'исходящее сальдо (дебет)',
         'исходящее сальдо (кредит)',
+        'месяц последней оплаты',
     ];
 
     protected static function prepareStringToCompare($str)
@@ -448,7 +450,6 @@ class DebtorParse extends Model
                 if (empty($debtor)) {
                     $debtor = new DebtorExt;
                     ++$tmpResultInfo['debtors']['added'];
-
                     $debtor->user_id = $userId;
                 }
                 if (empty($debtDetails)) {
@@ -515,26 +516,36 @@ class DebtorParse extends Model
                     }
                 }
                 if ($debtor->validate()) {
-                    $debtor->save();
+                    $transaction = \Yii::$app->db->beginTransaction();
 
-                    //TODO: можно оптимизировать? (двойные запросы при перезаписи не будут??)
-                    $debtDetails->save();
-                    $debtDetails->link('debtor', $debtor);
+                    try {
+                        $debtor->save();
 
-                    $name->save();
-                    $name->link('debtor', $debtor);
+                        //TODO: можно оптимизировать? (двойные запросы при перезаписи не будут??)
+                        $debtDetails->save();
+                        $debtDetails->link('debtor', $debtor);
 
-                    $location->save();
-                    $location->link('debtors', $debtor);
+                        $name->save();
+                        $name->link('debtor', $debtor);
 
-                    if ($saveAccrual) {
-                        $accrual->save();
-                        $accrual->link('debtor', $debtor);
-                    }
+                        $location->save();
+                        $location->link('debtors', $debtor);
 
-                    if ($savePayment) {
-                        $payment->save();
-                        $payment->link('debtor', $debtor);
+                        if ($saveAccrual) {
+                            $accrual->save();
+                            $accrual->link('debtor', $debtor);
+                        }
+
+                        if ($savePayment) {
+                            $payment->save();
+                            $payment->link('debtor', $debtor);
+                        }
+
+                        $transaction->commit();
+
+                    } catch (\Exception $e) {
+                        $transaction->rollBack();
+                        throw $e;
                     }
 
                     /*$debtor->link('debtDetails', $debtDetails);
