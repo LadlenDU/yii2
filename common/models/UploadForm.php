@@ -46,7 +46,7 @@ class UploadForm extends Model
         //TODO: косяк, костыль - исправить
         //if ($this->validate()) {
         if (1) {
-            $fileName = tempnam(Yii::getAlias('@common') . '/uploads/debtors', 'csv_');
+            $fileName = @tempnam(Yii::getAlias('@common') . '/uploads/debtors', 'csv_');
             //$fileName .= '.' . $this->csvFile->extension;
             $this->csvFile->saveAs($fileName);
             //TODO: жесткий косяк - ПЕРЕДЕЛАТЬ!!!
