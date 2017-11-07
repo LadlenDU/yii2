@@ -52,6 +52,9 @@ class DebtorParseHelper
         }
         $month = trim($month);
         $year = trim($year);
+        if (strlen($year) == 2) {
+            $year = '20' . $year;
+        }
         $month = mb_strtolower($month, 'UTF-8');
         if (isset(DebtorParseHelper::MONTHS[$month]) || isset(DebtorParseHelper::MONTHS_FULL[$month])) {
             $monthShortName = mb_strtolower(mb_substr(trim($month), 0, 3, 'UTF-8'), 'UTF-8');

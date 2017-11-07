@@ -137,7 +137,7 @@ class DebtorParse extends Model
 
     protected static $FIELDS_PAYMENT = [
         'payment_date' => [
-            'Месяц последней оплаты',   //TODO: После модификации должен содержать полну дату - сделать с этим что-то
+            'Месяц последней оплаты',   //TODO: После модификации должен содержать полную дату - сделать с этим что-то
         ],
         'amount' => [
             'Оплачено',
@@ -355,19 +355,30 @@ class DebtorParse extends Model
             // Найдем индекс, по которому искать уникальность пользователя
             $uniqueIndex = false;
             $accrualDateIndex = false;
+            $paymentDateIndex = false;
             foreach ($info['headers'] as $key => $elem) {
                 if ($elem[0] == 'debtor' && $elem[1] == 'LS_IKU_provider') {
                     $uniqueIndex = $key;
-                    if ($accrualDateIndex !== false) {
+                    if ($accrualDateIndex !== false && $paymentDateIndex !== false) {
                         break;
                     }
                 }
                 if ($elem[0] == 'accrual' && $elem[1] == 'accrual_date') {
                     $accrualDateIndex = $key;
-                    if ($uniqueIndex !== false) {
+                    if ($uniqueIndex !== false && $paymentDateIndex !== false) {
                         break;
                     }
                 }
+                if ($elem[0] == 'payment' && $elem[1] == 'payment_date') {
+                    $paymentDateIndex = $key;
+                    if ($uniqueIndex !== false && $accrualDateIndex !== false) {
+                        break;
+                    }
+                }
+            }
+
+            if (!$paymentDateIndex) {
+                $paymentDateIndex = $accrualDateIndex;
             }
 
             if ($accrualDateIndex === false) {
@@ -425,7 +436,7 @@ class DebtorParse extends Model
                     }
                     if (isset($debtor->payments)) {
                         foreach ($debtor->payments as $key => $pm) {
-                            if ($pm['payment_date'] == $rowInfo[$accrualDateIndex]) {
+                            if ($pm['payment_date'] == $rowInfo[$paymentDateIndex]) {
                                 $payment = $pm;
                                 ++$tmpResultInfo['payments']['updated'];
                                 break;
