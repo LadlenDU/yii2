@@ -44,7 +44,7 @@ class DebtorSearch extends Debtor
     {
         //$query = Debtor::find()->with('location');
         $query = Debtor::find();
-        $query->joinWith(['status']);
+        $query->joinWith(['status', 'location']);
 
         // add conditions that should always apply here
 
@@ -72,8 +72,23 @@ class DebtorSearch extends Debtor
             'debt_total' => $this->debt_total,
             'user_id' => $this->user_id,
             'status_id' => $this->status_id,
-            'debtor_status.status' => $this->status_status,
+            'location_building.building' => $this->location_building,
         ]);
+
+        if ($this->status_status) {
+            if ($this->status_status == 'new') {
+                $query->andWhere(['or',
+                        ['debtor_status.status' => $this->status_status],
+                        ['debtor_status.status' => null],
+                    ]
+                );
+            } else {
+                $query->andFilterWhere([
+                        'debtor_status.status' => $this->status_status,
+                    ]
+                );
+            }
+        }
 
         //$query->andFilterWhere(['like', 'tbl_country.name', $this->country]);
 
@@ -83,7 +98,11 @@ class DebtorSearch extends Debtor
             ->andFilterWhere(['like', 'IKU', $this->IKU])
             ->andFilterWhere(['like', 'single', $this->single])
             ->andFilterWhere(['like', 'additional_adjustment', $this->additional_adjustment])
-            ->andFilterWhere(['like', 'subsidies', $this->subsidies]);
+            ->andFilterWhere(['like', 'subsidies', $this->subsidies])
+            ->andFilterWhere(['like', 'location_street.region', $this->location_street])
+            ->andFilterWhere(['like', 'location_street.district', $this->location_street])
+            ->andFilterWhere(['like', 'location_street.city', $this->location_street])
+            ->andFilterWhere(['like', 'location_street.street', $this->location_street]);
 
         return $dataProvider;
     }
