@@ -46,6 +46,11 @@ use kartik\file\FileInput;
                 <i class="fa fa-filter"></i><? /*= Yii::t('app', 'Сбросить фильтр') */ ?>
             </button>-->
 
+                <button class="btn-sm toggle-filter btn btn-primary" id="search_debtors" data-toggle="collapse"
+                        data-target="#search-debtors">
+                    <i class="icon-search icon-white"></i><?= Yii::t('app', 'Поиск должников') ?>
+                </button>
+
                 <button class="btn-sm toggle-filter btn btn-primary" id="load_debtors" data-toggle="collapse"
                         data-target="#load-debtors"
                         title="<?= Yii::t('app', 'Загрузка должников из файла') ?>">
@@ -82,6 +87,39 @@ use kartik\file\FileInput;
         </div>
     </div>
     <br>
+
+    <div class="row collapse" id="search-debtors">
+        <div class="col-xs-12">
+            <?php
+            $form = ActiveForm::begin([
+                'options' => [
+                    'enctype' => 'multipart/form-data',
+                ],
+            ]);
+            //echo $form->field($uploadModel, 'action')->hiddenInput(['value' => 'upload_debtors_excel']);
+            echo Html::hiddenInput('action', 'upload_debtors_excel_a_user');
+            echo $form->field($uploadModel, 'excelFileForAUser')->widget(FileInput::classname(), $uploadModel->fileUploadConfig('excel'));
+            ActiveForm::end();
+            ?>
+        </div>
+        <div class="col-xs-12">
+            <?php
+            $form = ActiveForm::begin([
+                /*'action' => [
+                    '/office/debtors/debt-verification',
+                    'action' => 'upload_debtors_csv',
+                ],*/
+                'options' => [
+                    'enctype' => 'multipart/form-data',
+                ],
+            ]);
+            //echo $form->field($uploadModel, 'action')->hiddenInput(['value' => 'upload_debtors_csv']);
+            echo Html::hiddenInput('action', 'upload_debtors_csv');
+            echo $form->field($uploadModel, 'csvFile')->widget(FileInput::classname(), $uploadModel->fileUploadConfig('csv'));
+            ActiveForm::end();
+            ?>
+        </div>
+    </div>
 
     <div class="row collapse" id="load-debtors">
         <div class="col-xs-12">

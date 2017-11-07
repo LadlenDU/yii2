@@ -46,6 +46,13 @@ use common\models\debtor_parse\DebtorParse;
  */
 class Debtor extends \yii\db\ActiveRecord
 {
+    public $location_street;
+    public $location_building;
+    public $debt_sum_from;
+    public $debt_sum_to;
+    public $month_amount_from;
+    public $month_amount_to;
+
     /**
      * @inheritdoc
      */
@@ -204,16 +211,16 @@ class Debtor extends \yii\db\ActiveRecord
     }
 
     //TODO: что с этим не так?
-   /* public function init()
-    {
-        parent::init();
-        if (!$this->status) {
-            $status = new DebtorStatus();
-            $status->save();
-            $this->link('status', $status);
-            $this->save();
-        }
-    }*/
+    /* public function init()
+     {
+         parent::init();
+         if (!$this->status) {
+             $status = new DebtorStatus();
+             $status->save();
+             $this->link('status', $status);
+             $this->save();
+         }
+     }*/
 
     public function getFineCalculatorResult()
     {

@@ -18,9 +18,9 @@ class DebtorSearch extends Debtor
     public function rules()
     {
         return [
-            [['id', 'ownership_type_id', 'location_id', 'name_id'], 'integer'],
-            [['phone', 'LS_EIRC', 'LS_IKU_provider', 'IKU'], 'safe'],
-            [['space_common', 'space_living'], 'number'],
+            [['id', 'ownership_type_id', 'location_id', 'name_id', 'user_id', 'status_id'], 'integer'],
+            [['phone', 'LS_EIRC', 'LS_IKU_provider', 'IKU', 'expiration_start', 'single', 'additional_adjustment', 'subsidies'], 'safe'],
+            [['space_common', 'space_living', 'debt_total'], 'number'],
         ];
     }
 
@@ -66,12 +66,19 @@ class DebtorSearch extends Debtor
             'ownership_type_id' => $this->ownership_type_id,
             'location_id' => $this->location_id,
             'name_id' => $this->name_id,
+            'expiration_start' => $this->expiration_start,
+            'debt_total' => $this->debt_total,
+            'user_id' => $this->user_id,
+            'status_id' => $this->status_id,
         ]);
 
         $query->andFilterWhere(['like', 'phone', $this->phone])
             ->andFilterWhere(['like', 'LS_EIRC', $this->LS_EIRC])
             ->andFilterWhere(['like', 'LS_IKU_provider', $this->LS_IKU_provider])
-            ->andFilterWhere(['like', 'IKU', $this->IKU]);
+            ->andFilterWhere(['like', 'IKU', $this->IKU])
+            ->andFilterWhere(['like', 'single', $this->single])
+            ->andFilterWhere(['like', 'additional_adjustment', $this->additional_adjustment])
+            ->andFilterWhere(['like', 'subsidies', $this->subsidies]);
 
         return $dataProvider;
     }
