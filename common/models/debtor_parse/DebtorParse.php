@@ -303,16 +303,7 @@ class DebtorParse extends Model
 
                         //TODO: исправить костыль(и)
                         if ($headers[$key][1] == 'amount' || $headers[$key][1] == 'amount_additional_services') {
-                            //TODO: цифровой формат может иметь запятую в качестве разделителя разрядов (1,336.44)
-                            //в то время как в оригинале будет 1336,44 (1 336,44)
-                            //выяснить почему и как обойтись без потенциальных ошибок
-                            //TODO 2: в CSV запятая разделяет копейки. Попробуем искать точку, если она есть, то действуем
-                            //как прежде.
-                            if (strpos($colPrepared, '.') !== false) {
-                                $col = str_replace([' ', ','], '', $colPrepared);
-                            } else {
-                                $col = str_replace([' ', ','], ['', '.'], $colPrepared);
-                            }
+                            $col = self::convertNumberForSql($colPrepared);
                             //} elseif ($headers[$key][1] == 'privatized') {
                         } elseif ($headers[$key][1] == 'ownership_type_id') {
                             $col = ($colPrepared == 'приватизированное') ? 1 : 0;
@@ -488,7 +479,7 @@ class DebtorParse extends Model
                         } elseif ($info['headers'][$key][0] == 'location') {
                             $location->{$info['headers'][$key][1]} = $colInfo;
                         } elseif ($info['headers'][$key][0] == 'accrual') {
-                            $accrual->{$info['headers'][$key][1]} = $colInfo;
+                            $accrual->{$info['headers'][$key][1]} = self::convertNumberForSql($colInfo);
                         } elseif ($info['headers'][$key][0] == 'payment') {
                             // Оплата не велась - не сохраняем
                             if ($info['headers'][$key][1] == 'amount' && !$colInfo) {
@@ -544,6 +535,22 @@ class DebtorParse extends Model
         }
 
         return $saveResult;
+    }
+
+    public static function convertNumberForSql($number)
+    {
+        //TODO: цифровой формат может иметь запятую в качестве разделителя разрядов (1,336.44)
+        //в то время как в оригинале будет 1336,44 (1 336,44)
+        //выяснить почему и как обойтись без потенциальных ошибок
+        //TODO 2: в CSV запятая разделяет копейки. Попробуем искать точку, если она есть, то действуем
+        //как прежде.
+        if (strpos($number, '.') !== false) {
+            $number = str_replace([' ', ','], '', $number);
+        } else {
+            $number = str_replace([' ', ','], ['', '.'], $number);
+        }
+
+        return $number;
     }
 
     /**
