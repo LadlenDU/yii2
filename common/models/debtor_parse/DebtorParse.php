@@ -351,11 +351,6 @@ class DebtorParse extends Model
         $saveResult = self::$resultInfo;
 
         if ($info['headers']) {
-            //TODO: костыль - сделать сравнение пользователей
-            //DebtorExt::deleteAll();
-            //TODO: кроме того, посмотреть корректность удаления
-            //DebtDetails::deleteAll();
-
             // Найдем индекс, по которому искать уникальность пользователя
             $uniqueIndex = false;
             $accrualDateIndex = false;
@@ -408,124 +403,160 @@ class DebtorParse extends Model
                 $accrual = false;
                 $payment = false;
 
-                //TODO: add LS_IKU_provider, user_id index
+                $transaction = \Yii::$app->db->beginTransaction();
 
-                // Поиск уникального
-                if ($debtor = Debtor::find()->with(['name', 'location', 'debtDetails', 'accruals', 'payments'])
-                    ->where(['LS_IKU_provider' => $rowInfo[$uniqueIndex], 'user_id' => $userId])->one()
-                ) {
-                    //++$tmpResultInfo['debtors']['updated'];
+                try {
 
-                    // Обновляем
-                    $whetherUpdate = true;
-                    //TODO: косяк - должник может иметь несколько долгов (пока оставим)
-                    if (isset($debtor->debtDetails[0])) {
-                        $debtDetails = $debtor->debtDetails[0];
-                    }
-                    if (isset($debtor->name)) {
-                        $name = $debtor->name;
-                    }
-                    if (isset($debtor->location)) {
-                        $location = $debtor->location;
-                    }
-                    if (isset($debtor->accruals)) {
-                        // Найдем на ту же дату
-                        foreach ($debtor->accruals as $key => $acc) {
-                            if ($acc['accrual_date'] == $rowInfo[$accrualDateIndex]) {
-                                $accrual = $acc;
-                                ++$tmpResultInfo['accruals']['updated'];
-                                break;
-                            }
+                    // Поиск уникального пользователя
+                    if ($debtor = Debtor::find()
+                        //->select(['debtor.*', 'accrual.id'])
+                        //->joinWith(['accruals'])
+                        //->andWhere(['accrual.accrual_date' => $rowInfo[$accrualDateIndex]])
+                        ->andWhere(['LS_IKU_provider' => $rowInfo[$uniqueIndex]])->one()
+                    ) {
+                        /*if ($debtor = Debtor::find()->with(['name', 'location', 'debtDetails', 'accruals', 'payments'])
+                            ->where(['accruals.accrual_date' => $rowInfo[$accrualDateIndex]])
+                            // user_id устанавливается в DebtorQuery
+                            //->where(['LS_IKU_provider' => $rowInfo[$uniqueIndex], 'user_id' => $userId])->one()
+                            ->where(['LS_IKU_provider' => $rowInfo[$uniqueIndex]])->one()
+                        ) {*/
+                        //++$tmpResultInfo['debtors']['updated'];
+
+                        // Обновляем
+                        $whetherUpdate = true;
+                        //TODO: косяк - должник может иметь несколько долгов (пока оставим)
+                        //TODO: debtDetails пока закомментируем
+                        /*if (isset($debtor->debtDetails[0])) {
+                            $debtDetails = $debtor->debtDetails[0];
+                        }*/
+                        if (isset($debtor->name)) {
+                            $name = $debtor->name;
                         }
-                    }
-                    if (isset($debtor->payments)) {
-                        foreach ($debtor->payments as $key => $pm) {
-                            if ($pm['payment_date'] == $rowInfo[$paymentDateIndex]) {
-                                $payment = $pm;
-                                ++$tmpResultInfo['payments']['updated'];
-                                break;
-                            }
+                        if (isset($debtor->location)) {
+                            $location = $debtor->location;
                         }
-                    }
-                }
-
-                if (empty($debtor)) {
-                    $debtor = new DebtorExt;
-                    ++$tmpResultInfo['debtors']['added'];
-                    $debtor->user_id = $userId;
-                }
-                if (empty($debtDetails)) {
-                    $debtDetails = new DebtDetails;
-                }
-                if (empty($name)) {
-                    $name = new Name;
-                }
-                if (empty($location)) {
-                    $location = new Location;
-                }
-                if (empty($accrual)) {
-                    $accrual = new Accrual;
-                    ++$tmpResultInfo['accruals']['added'];
-                }
-                if (empty($payment)) {
-                    $payment = new Payment;
-                    ++$tmpResultInfo['payments']['added'];
-                }
-
-                $savePayment = true;
-                $saveAccrual = true;
-
-                //$debtor = new DebtorExt;
-                //$debtDetails = new DebtDetails();
-                foreach ($rowInfo as $key => $colInfo) {
-                    if (!empty($info['headers'][$key])) {
-                        if ($info['headers'][$key][0] == 'debtor') {
-                            $debtor->{$info['headers'][$key][1]} = $colInfo;
-                        } elseif ($info['headers'][$key][0] == 'debt_details') {    //TODO: get rid of debt_details or change it
-                            $debtDetails->{$info['headers'][$key][1]} = $colInfo;
-                            //$debtDetails->save();
-                            //$debtor->link('debtDetails', $debtDetails);
-                            #$debtor->debtDetails[$info['headers'][$key][1]] = $colInfo;
-                            #$debtor->getDebtDetails()->{$info['headers'][$key][1]} = $colInfo;
-                            #$debtDetails = $debtor->getDebtDetails();
-                            #$debtDetails->{$info['headers'][$key][1]} = $colInfo;
-                        } elseif ($info['headers'][$key][0] == 'name') {
-                            $name->{$info['headers'][$key][1]} = $colInfo;
-                        } elseif ($info['headers'][$key][0] == 'location') {
-                            $location->{$info['headers'][$key][1]} = $colInfo;
-                        } elseif ($info['headers'][$key][0] == 'accrual') {
-                            if ($info['headers'][$key][1] == 'accrual' && !$colInfo) {
-                                $saveAccrual = false;
-                                --$tmpResultInfo['accruals']['added'];
-                            } else {
-                                if (in_array($info['headers'][$key][1], ['accrual', 'additional_adjustment', 'subsidies', 'single'])) {
-                                    $accrual->{$info['headers'][$key][1]} = self::convertNumberForSql($colInfo);
-                                } else {
-                                    if ($info['headers'][$key][1] == 'accrual_date') {
-                                        $accrual->{$info['headers'][$key][1]} = $colInfo;
-                                    }
+                        if ($accrual = $debtor->getAccruals()->where(['accrual.accrual_date' => $rowInfo[$accrualDateIndex]])->one()) {
+                            ++$tmpResultInfo['accruals']['updated'];
+                        }
+                        /*if (isset($debtor->accruals)) {
+                            // Найдем на ту же дату
+                            foreach ($debtor->accruals as $key => $acc) {
+                                if ($acc['accrual_date'] == $rowInfo[$accrualDateIndex]) {
+                                    $accrual = $acc;
+                                    ++$tmpResultInfo['accruals']['updated'];
+                                    break;
                                 }
                             }
-                        } elseif ($info['headers'][$key][0] == 'payment') {
-                            // Оплата не велась - не сохраняем
-                            if ($info['headers'][$key][1] == 'amount' && !$colInfo) {
-                                $savePayment = false;
-                                --$tmpResultInfo['payments']['added'];
-                            } else {
-                                $payment->{$info['headers'][$key][1]} = $colInfo;
+                        }*/
+                        //$accrual = '' . $debtor['accrual.id'];
+
+                        if ($payment = $debtor->getPayments()->where(['payment.payment_date' => $rowInfo[$paymentDateIndex]])->one()) {
+                            ++$tmpResultInfo['payments']['updated'];
+                        }
+                        /*if (isset($debtor->payments)) {
+                            foreach ($debtor->payments as $key => $pm) {
+                                if ($pm['payment_date'] == $rowInfo[$paymentDateIndex]) {
+                                    $payment = $pm;
+                                    ++$tmpResultInfo['payments']['updated'];
+                                    break;
+                                }
+                            }
+                        }*/
+                    }
+
+                    if (empty($debtor)) {
+                        $debtor = new DebtorExt;
+                        ++$tmpResultInfo['debtors']['added'];
+                        $debtor->user_id = $userId;
+                    }
+                    //TODO: debtDetails пока закомментируем
+                    /*if (empty($debtDetails)) {
+                        $debtDetails = new DebtDetails;
+                    }*/
+                    if (empty($name)) {
+                        $name = new Name;
+                    }
+                    if (empty($location)) {
+                        $location = new Location;
+                    }
+                    if (empty($accrual)) {
+                        $accrual = new Accrual;
+                        ++$tmpResultInfo['accruals']['added'];
+                    }
+                    if (empty($payment)) {
+                        $payment = new Payment;
+                        ++$tmpResultInfo['payments']['added'];
+                    }
+
+                    $savePayment = true;
+                    $saveAccrual = true;
+
+                    foreach ($rowInfo as $key => $colInfo) {
+                        if (!empty($info['headers'][$key])) {
+                            if ($info['headers'][$key][0] == 'debtor') {
+                                if ($colInfo) {
+                                    $debtor->{$info['headers'][$key][1]} = $colInfo;
+                                }
+                            } elseif ($info['headers'][$key][0] == 'debt_details') {    //TODO: get rid of debt_details or change it
+                                //TODO: debtDetails пока закомментируем
+                                /*if ($colInfo) {
+                                    $debtDetails->{$info['headers'][$key][1]} = $colInfo;
+                                }*/
+                            } elseif ($info['headers'][$key][0] == 'name') {
+                                if ($colInfo) {
+                                    $name->{$info['headers'][$key][1]} = $colInfo;
+                                }
+                            } elseif ($info['headers'][$key][0] == 'location') {
+                                if ($colInfo) {
+                                    $location->{$info['headers'][$key][1]} = $colInfo;
+                                }
+                            } elseif ($info['headers'][$key][0] == 'accrual') {
+                                if ($info['headers'][$key][1] == 'accrual' && !$colInfo) {
+                                    $saveAccrual = false;
+                                    --$tmpResultInfo['accruals']['added'];
+                                } else {
+                                    /*if (is_string($accrual)) {
+                                        // Здесь потребуется обновление
+                                        if (in_array($info['headers'][$key][1], ['accrual', 'additional_adjustment', 'subsidies', 'single'])) {
+                                            $accrualModel = new Accrual;
+                                            //TODO: возможно, костыль
+                                            $accrualModel->isNewRecord = false;
+                                            $accrualModel->id = $accrual;
+                                            $accrualModel->{$info['headers'][$key][1]} = self::convertNumberForSql($colInfo);
+                                            $accrualModel->save();
+                                        }
+                                    } else {*/
+                                    // Запись в новый объект
+                                    if (in_array($info['headers'][$key][1], ['accrual', 'additional_adjustment', 'subsidies', 'single'])) {
+                                        $accrual->{$info['headers'][$key][1]} = self::convertNumberForSql($colInfo);
+                                    } else {
+                                        if ($info['headers'][$key][1] == 'accrual_date') {
+                                            $accrual->{$info['headers'][$key][1]} = $colInfo;
+                                        }
+                                    }
+                                    //}
+                                }
+                            } elseif ($info['headers'][$key][0] == 'payment') {
+                                // Оплата не велась - не сохраняем
+                                if ($info['headers'][$key][1] == 'amount' && !$colInfo) {
+                                    $savePayment = false;
+                                    --$tmpResultInfo['payments']['added'];
+                                } else {
+                                    $payment->{$info['headers'][$key][1]} = $colInfo;
+                                }
                             }
                         }
                     }
-                }
-                if ($debtor->validate()) {
-                    $transaction = \Yii::$app->db->beginTransaction();
 
-                    try {
+                    //TODO: подумать нужна ли валидация (пока отключим, по-моему нет)
+                    //if ($debtor->validate()) {
+
                         $debtor->save();
 
                         //TODO: можно оптимизировать? (двойные запросы при перезаписи не будут??)
-                        $debtDetails->save();
-                        $debtDetails->link('debtor', $debtor);
+                        //TODO: debtDetails пока закомментируем
+                        /*$debtDetails->save();
+                        $debtDetails->link('debtor', $debtor);*/
 
                         $name->save();
                         $name->link('debtor', $debtor);
@@ -545,27 +576,16 @@ class DebtorParse extends Model
 
                         $transaction->commit();
 
-                    } catch (\Exception $e) {
-                        $transaction->rollBack();
-                        throw $e;
-                    }
+                        $saveResult = self::mergeResultInfo($saveResult, $tmpResultInfo);
 
-                    /*$debtor->link('debtDetails', $debtDetails);
-                    $debtor->link('name', $name);
-                    $debtor->link('location', $location);
-                    $debtor->link('accruals', $accrual);
-                    $debtor->link('payments', $payment);*/
+                    /*} else {
+                        $err = print_r($debtor->getErrors(), true);
+                        throw new UserException(Yii::t('app', "Данные не прошли валидацию: $err"));
+                    }*/
 
-                    //$whetherUpdate ? ++$saveResult['updated'] : ++$saveResult['added'];
-                    /*array_walk_recursive($tmpResultInfo, function($item, $key) use (&$saveResult){
-                        if ($saveResult[$key])
-                        $saveResult[$key] = isset($saveResult[$key]) ?  $item + $saveResult[$key] : $item;
-                    });*/
-                    $saveResult = self::mergeResultInfo($saveResult, $tmpResultInfo);
-
-                } else {
-                    $err = print_r($debtor->getErrors(), true);
-                    throw new UserException(Yii::t('app', "Данные не прошли валидацию: $err"));
+                } catch (\Exception $e) {
+                    $transaction->rollBack();
+                    throw $e;
                 }
             }
         } else {

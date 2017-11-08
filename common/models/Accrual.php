@@ -75,7 +75,6 @@ class Accrual extends \yii\db\ActiveRecord
 
     public function save($runValidation = true, $attributeNames = NULL)
     {
-        //TODO: не сохранять если дата уже есть
         if ($this->accrual_date) {
             //$this->accrual_date .= '-01 00:00:00';
             /*$parts = explode('-', $this->accrual_date);
