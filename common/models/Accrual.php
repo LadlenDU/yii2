@@ -14,6 +14,7 @@ use Yii;
  * @property string $single
  * @property string $additional_adjustment
  * @property string $subsidies
+ * @property string $accrual_recount
  *
  * @property Debtor $debtor
  */
@@ -35,7 +36,7 @@ class Accrual extends \yii\db\ActiveRecord
         return [
             [['debtor_id'], 'integer'],
             [['accrual_date'], 'safe'],
-            [['accrual', 'single', 'additional_adjustment', 'subsidies'], 'number'],
+            [['accrual', 'single', 'additional_adjustment', 'subsidies', 'accrual_recount'], 'number'],
             [['debtor_id'], 'exist', 'skipOnError' => true, 'targetClass' => Debtor::className(), 'targetAttribute' => ['debtor_id' => 'id']],
         ];
     }
@@ -53,6 +54,7 @@ class Accrual extends \yii\db\ActiveRecord
             'single' => Yii::t('app', 'Разовые'),
             'additional_adjustment' => Yii::t('app', 'Доп. корректировка'),
             'subsidies' => Yii::t('app', 'Субсидии'),
+            'accrual_recount' => Yii::t('app', 'Конечная перерасчитанная задолженность (с учетом пени, корректировок и пр.)'),
         ];
     }
 
