@@ -3,7 +3,7 @@
  * @var yii\web\View $this
  * @var common\models\UploadForm $uploadModel
  * @var $searchModel common\models\DebtorSearch
- * filterModel
+ * @var $showSearchPane bool
  */
 
 use yii\helpers\Html;
@@ -90,7 +90,7 @@ use kartik\file\FileInput;
     </div>
     <br>
 
-    <div class="collapse" id="search-debtors">
+    <div class="collapse<?= $showSearchPane ? ' in' : '' ?>" id="search-debtors">
         <?php $form = ActiveForm::begin([
             'action' => ['index'],
             'fieldConfig' => [
@@ -99,7 +99,6 @@ use kartik\file\FileInput;
         ]); ?>
 
         <div class="row">
-
             <div class="col-md-4">
                 <?= $form->field($searchModel, 'location_street')->textInput(['placeholder' => Yii::t('app', 'Адрес дома')]) ?>
             </div>
@@ -107,7 +106,7 @@ use kartik\file\FileInput;
                 <?= $form->field($searchModel, 'LS_IKU_provider')->textInput(['placeholder' => Yii::t('app', 'Номер лицевого счета')]) ?>
             </div>
             <div class="col-md-4">
-                <?= $form->field($searchModel, 'status_status')->dropDownList(\common\models\DebtorStatus::STATUSES, ['id' => 'debtorstatus-status-search']); ?>
+                <?= $form->field($searchModel, 'status_status')->dropDownList(['' => Yii::t('app', '- Любой статус -')] + \common\models\DebtorStatus::STATUSES, ['id' => 'debtorstatus-status-search']); ?>
             </div>
         </div>
 

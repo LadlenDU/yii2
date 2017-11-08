@@ -99,10 +99,10 @@ class DebtorSearch extends Debtor
             ->andFilterWhere(['like', 'single', $this->single])
             ->andFilterWhere(['like', 'additional_adjustment', $this->additional_adjustment])
             ->andFilterWhere(['like', 'subsidies', $this->subsidies])
-            ->andFilterWhere(['like', 'location_street.region', $this->location_street])
-            ->andFilterWhere(['like', 'location_street.district', $this->location_street])
-            ->andFilterWhere(['like', 'location_street.city', $this->location_street])
-            ->andFilterWhere(['like', 'location_street.street', $this->location_street]);
+            ->andFilterWhere(['like', 'location.region', $this->location_street])
+            ->andFilterWhere(['like', 'location.district', $this->location_street])
+            ->andFilterWhere(['like', 'location.city', $this->location_street])
+            ->andFilterWhere(['like', 'location.street', $this->location_street]);
 
         return $dataProvider;
     }
