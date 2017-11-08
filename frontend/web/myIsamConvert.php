@@ -1,5 +1,8 @@
 <?php
 
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 echo 'conversion_started<br>';
 
 mysql_connect('localhost', 'root', 'temp123');
