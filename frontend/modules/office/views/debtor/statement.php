@@ -30,8 +30,8 @@ $debtPeriodEnd = $debtor->getDebtPeriodEnd();
 
 $finePeriodStart = (new \common\models\Fine)->recalcLoanDate($debtPeriodStart);
 
-$debtTotal = $debtor->getDebtTotal();
-$fineTotal = $debtor->getFineTotal();
+$debtTotal = $debtor->getDebt();
+$fineTotal = $debtor->getFine();
 $stateFee2 = $debtor->calculateStateFee2();
 
 $startDebtYear = strftime('%Y', $debtPeriodStart);

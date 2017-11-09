@@ -89,4 +89,49 @@ class Accrual extends \yii\db\ActiveRecord
 
         parent::save($runValidation, $attributeNames);
     }
+
+    //TODO: $save = true - напрягает, но пока используем учитывая приоритет надежности
+    protected function recountAccrual($save = true)
+    {
+        $accrual = $this->accrual ?: 0;
+        $subsidies = $this->subsidies ?: 0;
+        $single = $this->single ?: 0;
+        $additional_adjustment = $this->additional_adjustment ?: 0;
+        $this->accrual_recount = (float)$accrual - (float)$subsidies + (float)$single + (float)$additional_adjustment;
+        if ($save) {
+            $this->save(false, ['accrual_recount']);
+        }
+    }
+
+    public function setAccrual($val)
+    {
+        $this->accrual = $val;
+        $this->recountAccrual();
+    }
+
+    public function setSubsidies($val)
+    {
+        $this->subsidies = $val;
+        $this->recountAccrual();
+    }
+
+    public function setSingle($val)
+    {
+        $this->single = $val;
+        $this->recountAccrual();
+    }
+
+    public function setAdditionalAdjustment($val)
+    {
+        $this->additional_adjustment = $val;
+        $this->recountAccrual();
+    }
+
+    public function getAccrualRecount()
+    {
+        if ($this->accrual_recount === null) {
+            $this->recountAccrual();
+        }
+        return $this->accrual_recount;
+    }
 }

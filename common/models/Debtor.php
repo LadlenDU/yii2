@@ -31,6 +31,10 @@ use common\models\debtor_parse\DebtorParse;
  * @property string $subsidies
  * @property integer $user_id
  * @property integer $status_id
+ * @property string $debt
+ * @property string $fine
+ * @property string $cost_of_claim
+ * @property string $state_fee
  *
  * @property Accrual[] $accruals
  * @property DebtDetails[] $debtDetails
@@ -66,11 +70,11 @@ class Debtor extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['space_common', 'space_living', 'debt_total'], 'number'],
+            [['LS_IKU_provider'], 'required'],
+            [['space_common', 'space_living', 'debt_total', 'debt', 'fine', 'cost_of_claim', 'state_fee'], 'number'],
             [['ownership_type_id', 'location_id', 'name_id', 'user_id', 'status_id'], 'integer'],
             [['expiration_start', 'location_street', 'location_building', 'clam_sum_from', 'clam_sum_to', 'status_status'], 'safe'],
             [['phone', 'LS_EIRC', 'LS_IKU_provider', 'IKU', 'single', 'additional_adjustment', 'subsidies'], 'string', 'max' => 255],
-            [['LS_IKU_provider'], 'unique'],
             [['name_id'], 'unique'],
             [['location_id'], 'exist', 'skipOnError' => true, 'targetClass' => Location::className(), 'targetAttribute' => ['location_id' => 'id']],
             [['name_id'], 'exist', 'skipOnError' => true, 'targetClass' => Name::className(), 'targetAttribute' => ['name_id' => 'id']],
@@ -99,8 +103,10 @@ class Debtor extends \yii\db\ActiveRecord
             'location_id' => Yii::t('app', 'Location ID'),
             'name_id' => Yii::t('app', 'Name ID'),
             'expiration_start' => Yii::t('app', 'Начало просрочки'),
+            //TODO: Как это соотносится с полем 'debt'? Похоже это лишнее поле теперь
             'debt_total' => Yii::t('app', 'Сумма долга'),
             'single' => Yii::t('app', 'Разовые'),
+            //TODO: похоже, это лишнее поле. Посмотреть другие лишние поля и удалить.
             'additional_adjustment' => Yii::t('app', 'Доп. корректировка'),
             'subsidies' => Yii::t('app', 'Субсидии'),
             'accrualSum' => Yii::t('app', 'Начислено'),
@@ -109,6 +115,10 @@ class Debtor extends \yii\db\ActiveRecord
             'fineTotal' => Yii::t('app', 'Пеня'),
             'user_id' => Yii::t('app', 'ID пользователя'),
             'status_id' => Yii::t('app', 'ID cтатуса'),
+            'debt' => Yii::t('app', 'Задолженность'),
+            'fine' => Yii::t('app', 'Пеня'),
+            'cost_of_claim' => Yii::t('app', 'Цена иска (задолженность + пеня)'),
+            'state_fee' => Yii::t('app', 'Пошлина'),
         ];
     }
 
@@ -234,7 +244,7 @@ class Debtor extends \yii\db\ActiveRecord
         foreach ($accruals as $acc) {
             $date = strtotime($acc->accrual_date);
             $loans[] = [
-                'sum' => $this->calcAccrualSum($acc),
+                'sum' => $acc->getAccrualRecount(), //$this->calcAccrualSum($acc),
                 'date' => $date,
             ];
         }
@@ -255,7 +265,7 @@ class Debtor extends \yii\db\ActiveRecord
             $fineRes = $fine->fineCalculator($dateFinish, $loans, $payments);
         } catch (\Exception $e) {
             //TODO: что-то с этим делать
-            $sd = 123;
+            $ex = 'here is exception';
         }
 
         return $fineRes;
@@ -322,7 +332,7 @@ class Debtor extends \yii\db\ActiveRecord
         return 0;*/
     }
 
-    public static function calcAccrualSum(Accrual $acc)
+    /*public static function calcAccrualSum(Accrual $acc)
     {
         $accrual = $acc->accrual ?: null;
         if (empty($_GET['dis_sub'])) {
@@ -333,7 +343,7 @@ class Debtor extends \yii\db\ActiveRecord
         } else {
             return (float)$accrual;
         }
-    }
+    }*/
 
     public function calcDebts($sortParams = false, &$endSum = null)
     {
@@ -414,13 +424,15 @@ class Debtor extends \yii\db\ActiveRecord
         //TODO: может, оптимизировать?
         //return $this->find()->from('accrual')->where(['debtor_id' => $this->id])->sum('accrual') ?: 0;
 
+        return $this->getAccruals()->sum('accrual_recount') ?: 0;
+
         //TODO: оптимизировать
-        $sum = 0;
+        /*$sum = 0;
         $accruals = Accrual::find()->where(['debtor_id' => $this->id])->all();
         foreach ($accruals as $acc) {
-            $sum += $this->calcAccrualSum($acc);
+            $sum += $acc->accrual_recount; //$this->calcAccrualSum($acc);
         }
-        return $sum;
+        return $sum;*/
     }
 
     public function getPaymentSum()
@@ -431,31 +443,67 @@ class Debtor extends \yii\db\ActiveRecord
 
     /**
      * Вернуть общую задолженность.
-     *
      */
-    public function getDebtTotal()
+    public function getDebt()
+    {
+        if ($this->debt === null) {
+            $this->calculateDebt();
+        }
+        return $this->debt;
+    }
+
+    public function calculateDebt($save = true)
     {
         $debt = 0;
         $this->calcDebts(false, $debt);
+        $this->debt = $debt;
+        if ($save) {
+            $this->save(false, ['debt']);
+        }
         return $debt;
     }
 
     /**
      * Вернуть общую пеню.
-     *
      */
-    public function getFineTotal()
+    public function getFine()
+    {
+        if ($this->fine === null) {
+            $this->calculateFine();
+        }
+        return $this->fine;
+    }
+
+    public function calculateFine($save = true)
     {
         $fine = 0;
-
         $calcFines = $this->calcFines();
         if ($calcFines) {
             foreach ($calcFines as $fineElem) {
                 $fine += (float)$fineElem['fine'];
             }
         }
+        $this->fine = $fine;
+        if ($save) {
+            $this->save(false, ['fine']);
+        }
+        return $this->fine;
+    }
 
-        return $fine;
+    public function getCostOfClaim()
+    {
+        if ($this->cost_of_claim === false) {
+            $this->calculateCostOfClaim();
+        }
+        return $this->cost_of_claim;
+    }
+
+    public function calculateCostOfClaim($save = true)
+    {
+        $this->cost_of_claim = (float)$this->debt + (float)$this->fine;
+        if ($save) {
+            $this->save(false, ['cost_of_claim']);
+        }
     }
 
     /**
@@ -527,8 +575,10 @@ class Debtor extends \yii\db\ActiveRecord
      */
     public function calculateStateFee2()
     {
-        $amount = $this->getDebtTotal();
-        $amount += $this->getFineTotal();
+        //$amount = $this->getDebtTotal();
+        $amount = $this->getDebt();
+        //$amount += $this->getFineTotal();
+        $amount += $this->getFine();
 
         if ($amount <= 10000) {
             // до 10 000 рублей - 2 процента цены иска, но не менее 200 рублей;

@@ -427,7 +427,7 @@ class Fine
 
         $resSum = null;
         if ($paySum['value']) {
-            $resSum = normalizeLoan($paySum['value']);
+            $resSum = $this->normalizeLoan($paySum['value']);
         }
 
         if (!$resSum) {

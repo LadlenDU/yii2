@@ -13,7 +13,7 @@ use kartik\dynagrid\DynaGrid;
 use yii\helpers\Url;
 use yii\bootstrap\Modal;
 use common\models\Debtor;
-use yii\widgets\ActiveForm;
+//use yii\widgets\ActiveForm;
 use common\models\DebtorStatus;
 
 $this->title = Yii::t('app', 'Работа с должниками');
@@ -58,7 +58,7 @@ $columns = [
         'order' => DynaGrid::ORDER_FIX_LEFT,
     ],
     [
-        'class' => 'yii\grid\ActionColumn',
+        'class' => 'kartik\grid\ActionColumn',
         'buttons' => [
             'view' => function ($url, $model) {
                 return Html::a('<span class="glyphicon glyphicon-list-alt"></span>', $url, ['class' => 'view', 'data-pjax' => '0']);
@@ -76,6 +76,8 @@ $columns = [
     //['attribute' => 'id'],
     [
         'attribute' => 'LS_IKU_provider',
+        'pageSummary' => Yii::t('app', 'Итого:'),
+        'order' => DynaGrid::ORDER_FIX_LEFT,
         'hAlign' => 'center',
     ],
     [
@@ -109,28 +111,42 @@ $columns = [
     [
         'attribute' => 'accrualSum',
         'hAlign' => 'right',
+        /*'pageSummary' => function () {
+            return Debtor::find()->sum('debt');
+        },*/
     ],
     [
         'attribute' => 'paymentSum',
         'hAlign' => 'right',
     ],
     [
-        'attribute' => 'debtTotal',
+        //'attribute' => 'debtTotal',
+        'attribute' => 'debt',
         'hAlign' => 'right',
-        //'format' => ['decimal', 2],
+        'format' => ['decimal', 2],
+        'pageSummary' => function () {
+            return Debtor::find()->sum('debt');
+        },
     ],
     [
-        'attribute' => 'fineTotal',
+        //'attribute' => 'fineTotal',
+        'attribute' => 'fine',
         'hAlign' => 'right',
+        'format' => ['decimal', 2],
+        'pageSummary' => function () {
+            return Debtor::find()->sum('fine');
+        },
     ],
     [
         'attribute' => Yii::t('app', 'Пошлина'),
-        //'value' => function (\common\models\DebtDetails $model, $key, $index) {
         'value' => function (Debtor $model, $key, $index) {
             return $model->calculateStateFee2();
         },
         'format' => ['decimal', 2],
         'hAlign' => 'right',
+        'pageSummary' => function () {
+            return Debtor::find()->sum('state_fee');
+        },
     ],
 
     //['attribute' => 'phone'],
@@ -314,6 +330,7 @@ echo $this->render('_extensions', compact('uploadModel', 'searchModel', 'showSea
         'gridOptions' => [
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
+            'showPageSummary' => true,
             'pjax' => true,
             'panel' => [
                 'heading' => '<h3 class="panel-title">' . Yii::t('app', 'Список должников') . '</h3>',
