@@ -45,7 +45,9 @@
         "wapmorgan/yii2-inflection": "^1.0",
         "gufy/pdftohtml-php": "~2",
         "spatie/pdf-to-image": "^1.5",
-        "kartik-v/yii2-widget-datetimepicker": "*"
+        "kartik-v/yii2-widget-datetimepicker": "*",
+        "kartik-v/yii2-money": "*",
+        "life2016/yii2-tagsinput": "^1.1"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

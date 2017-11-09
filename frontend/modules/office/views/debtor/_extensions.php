@@ -9,6 +9,7 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use kartik\file\FileInput;
+use wbraganca\tagsinput\TagsinputWidget;
 
 ?>
     <div class="arrow-steps clearfix">
@@ -92,7 +93,7 @@ use kartik\file\FileInput;
 
     <div class="collapse<?= $showSearchPane ? ' in' : '' ?>" id="search-debtors">
         <?php $form = ActiveForm::begin([
-            'action' => ['index'],
+            'action' => ['index', 'search_done' => '1'],
             'fieldConfig' => [
                 'enableLabel' => false,
             ],
@@ -103,7 +104,13 @@ use kartik\file\FileInput;
                 <?= $form->field($searchModel, 'location_street')->textInput(['placeholder' => Yii::t('app', 'Адрес дома')]) ?>
             </div>
             <div class="col-md-4">
-                <?= $form->field($searchModel, 'LS_IKU_provider')->textInput(['placeholder' => Yii::t('app', 'Номер лицевого счета')]) ?>
+                <?/*= $form->field($searchModel, 'LS_IKU_provider')->textInput(['placeholder' => Yii::t('app', 'Номер лицевого счета')]) */?>
+                <?= $form->field($searchModel, 'LS_IKU_provider')->widget(TagsinputWidget::classname(), [
+                    'clientOptions' => [
+                        'trimValue' => true,
+                        'allowDuplicates' => false
+                    ]
+                ]) ?>
             </div>
             <div class="col-md-4">
                 <?= $form->field($searchModel, 'status_status')->dropDownList(['' => Yii::t('app', '- Любой статус -')] + \common\models\DebtorStatus::STATUSES, ['id' => 'debtorstatus-status-search']); ?>

@@ -60,6 +60,9 @@ class DebtorSearch extends Debtor
             return $dataProvider;
         }
 
+        //$LS_providers = implode(',', $this->LS_IKU_provider);
+        $LS_providers = str_replace(',', '|', $this->LS_IKU_provider);
+
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
@@ -96,7 +99,8 @@ class DebtorSearch extends Debtor
 
         $query->andFilterWhere(['like', 'phone', $this->phone])
             ->andFilterWhere(['like', 'LS_EIRC', $this->LS_EIRC])
-            ->andFilterWhere(['like', 'LS_IKU_provider', $this->LS_IKU_provider])
+            //->andFilterWhere(['like', 'LS_IKU_provider', $this->LS_IKU_provider])
+            ->andFilterWhere(['REGEXP', 'LS_IKU_provider', $LS_providers])
             ->andFilterWhere(['like', 'IKU', $this->IKU])
             ->andFilterWhere(['like', 'single', $this->single])
             ->andFilterWhere(['like', 'additional_adjustment', $this->additional_adjustment])
