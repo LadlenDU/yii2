@@ -501,13 +501,13 @@ class Debtor extends \yii\db\ActiveRecord
         return $this->cost_of_claim;
     }
 
-    /*public function getStateFee()
+    public function getStateFee()
     {
         if ($this->state_fee === false) {
-            $this->calculateCostOfClaim();
+            $this->calculateStateFee2();
         }
-        return $this->cost_of_claim;
-    }*/
+        return $this->state_fee;
+    }
 
     public function calculateCostOfClaim($save = true)
     {
@@ -549,7 +549,8 @@ class Debtor extends \yii\db\ActiveRecord
         }
         $this->calculateDebt(false);
         $this->calculateFine(false);
-        $this->save(false, ['debt', 'fine', 'cost_of_claim']);
+        $this->calculateStateFee2(false);
+        $this->save(false, ['debt', 'fine', 'cost_of_claim', 'state_fee']);
     }
 
     /**
@@ -599,12 +600,13 @@ class Debtor extends \yii\db\ActiveRecord
      *
      * @return float|int
      */
-    public function calculateStateFee2()
+    public function calculateStateFee2($save = true)
     {
         //$amount = $this->getDebtTotal();
-        $amount = $this->getDebt();
+        //amount = $this->getDebt();
         //$amount += $this->getFineTotal();
-        $amount += $this->getFine();
+        //$amount += $this->getFine();
+        $amount = $this->cost_of_claim ?: 0;
 
         if ($amount <= 10000) {
             // до 10 000 рублей - 2 процента цены иска, но не менее 200 рублей;
@@ -629,7 +631,10 @@ class Debtor extends \yii\db\ActiveRecord
             $fee = ($fee > 30000) ? 30000 : $fee;
         }
 
-        return $fee;
+        $this->state_fee = $fee;
+        if ($save) {
+            $this->save(false, ['state_fee']);
+        }
     }
 
     public static function handleDebtorsExcelFileAUser(UploadForm $uploadModel)
@@ -659,6 +664,7 @@ class Debtor extends \yii\db\ActiveRecord
         //TODO: костыль - исправить
         ini_set('memory_limit', '-1');
         ini_set('max_execution_time', 100000);
+        ignore_user_abort(true);
 
         $uploadModel->csvFile = UploadedFile::getInstance($uploadModel, 'csvFile');
 

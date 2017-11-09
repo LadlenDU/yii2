@@ -139,10 +139,11 @@ $columns = [
         },
     ],
     [
-        'attribute' => Yii::t('app', 'Пошлина'),
-        'value' => function (Debtor $model, $key, $index) {
+        //'attribute' => Yii::t('app', 'Пошлина'),
+        'attribute' => 'state_fee',
+        /*'value' => function (Debtor $model, $key, $index) {
             return $model->calculateStateFee2();
-        },
+        },*/
         'format' => ['decimal', 2],
         'hAlign' => 'right',
         'pageSummary' => function () {

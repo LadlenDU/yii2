@@ -630,6 +630,7 @@ class DebtorParse extends Model
         //TODO: ужасный костыль - исправить
         ini_set('memory_limit', '-1');
         ini_set('max_execution_time', 100000);
+        ignore_user_abort(true);
 
         $sheetData = [];
 
