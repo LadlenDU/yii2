@@ -10,4 +10,12 @@ class FormatHelper
         list($rouble, $kopek) = explode('.', $amountFormatted);
         return "$rouble руб. $kopek коп.";
     }
+
+    public static function convertDatetimeToTimezone(string $dateTime, string $toTimeZone = 'Europe/Moscow')
+    {
+        $datetime = new \DateTime($dateTime);
+        $tm = new \DateTimeZone($toTimeZone);
+        $datetime->setTimezone($tm);
+        return $datetime->format('Y-m-d H:i:s');
+    }
 }

@@ -707,7 +707,10 @@ class Debtor extends \yii\db\ActiveRecord
             unset($sheetData);
             $saveResult = DebtorParse::saveDebtors($info, $fileMonitor);
 
-            $msg = Yii::t('app', 'Успешно прошла операция добавления в БД.') . '<br><br>';
+            $msg = Yii::t('app', 'Успешно прошла операция добавления в БД.') . '<br>';
+            $finishedAtTz = \common\helpers\FormatHelper::convertDatetimeToTimezone($fileMonitor->finished_at);
+            $msg .= Yii::t('app', 'Файл: {fName}. Время завершения: {fDateTime}',
+                    ['fName' => $fileMonitor->file_name, 'fDateTime' => $finishedAtTz]) . '<br><br>';
 
             $addedNumber = empty($saveResult['debtors']['added']) ? 0 : $saveResult['debtors']['added'];
             $updatedNumber = empty($saveResult['debtors']['updated']) ? 0 : $saveResult['debtors']['updated'];
@@ -724,6 +727,8 @@ class Debtor extends \yii\db\ActiveRecord
             $updatedNumber = empty($saveResult['payments']['updated']) ? 0 : $saveResult['payments']['updated'];
             $msg .= "Оплат добавлено: $addedNumber<br>"
                 . "Оплат обновлено: $updatedNumber";
+
+            //TODO: yii логирование
 
             Yii::$app->getSession()->setFlash('success', $msg);
         } catch (\Exception $e) {

@@ -376,7 +376,7 @@ class DebtorParse extends Model
         }
     }
 
-    public static function saveDebtors(array $info, DebtorLoadMonitorFormat1 $fileMonitor)
+    public static function saveDebtors(array $info, DebtorLoadMonitorFormat1 &$fileMonitor)
     {
         $saveResult = self::$resultInfo;
 
