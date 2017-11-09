@@ -35,10 +35,10 @@ use yii\bootstrap\ActiveForm;
             <?= $form->field($model, 'location_building')->textInput(['placeholder' => Yii::t('app', '№ помещения')]) ?>
         </div>
         <div class="col-md-4">
-            <?= $form->field($model, 'clam_sum_from')->textInput(['placeholder' => Yii::t('app', 'Цена иска от')]) ?>
+            <?= $form->field($model, 'claim_sum_from')->textInput(['placeholder' => Yii::t('app', 'Цена иска от')]) ?>
         </div>
         <div class="col-md-4">
-            <?= $form->field($model, 'clam_sum_to')->textInput(['placeholder' => Yii::t('app', 'Цена иска до')]) ?>
+            <?= $form->field($model, 'claim_sum_to')->textInput(['placeholder' => Yii::t('app', 'Цена иска до')]) ?>
         </div>
     </div>
 

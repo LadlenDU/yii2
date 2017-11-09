@@ -72,6 +72,7 @@ $columns = [
                 //return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, ['class' => 'view', 'data-pjax' => '0']);
             },
         ],
+        'order' => DynaGrid::ORDER_FIX_LEFT,
     ],
     //['attribute' => 'id'],
     [

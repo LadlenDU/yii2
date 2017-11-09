@@ -115,10 +115,10 @@ use kartik\file\FileInput;
                 <?= $form->field($searchModel, 'location_building')->textInput(['placeholder' => Yii::t('app', '№ помещения')]) ?>
             </div>
             <div class="col-md-4">
-                <?= $form->field($searchModel, 'clam_sum_from')->textInput(['placeholder' => Yii::t('app', 'Цена иска от')]) ?>
+                <?= $form->field($searchModel, 'claim_sum_from')->textInput(['placeholder' => Yii::t('app', 'Цена иска от')]) ?>
             </div>
             <div class="col-md-4">
-                <?= $form->field($searchModel, 'clam_sum_to')->textInput(['placeholder' => Yii::t('app', 'Цена иска до')]) ?>
+                <?= $form->field($searchModel, 'claim_sum_to')->textInput(['placeholder' => Yii::t('app', 'Цена иска до')]) ?>
             </div>
         </div>
 

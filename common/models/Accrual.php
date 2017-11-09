@@ -91,7 +91,7 @@ class Accrual extends \yii\db\ActiveRecord
     }
 
     //TODO: $save = true - напрягает, но пока используем учитывая приоритет надежности
-    protected function recountAccrual($save = true)
+    public function recountAccrual($save = true)
     {
         $accrual = $this->accrual ?: 0;
         $subsidies = $this->subsidies ?: 0;

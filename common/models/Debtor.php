@@ -52,8 +52,8 @@ class Debtor extends \yii\db\ActiveRecord
 {
     public $location_street;
     public $location_building;
-    public $clam_sum_from;
-    public $clam_sum_to;
+    public $claim_sum_from;
+    public $claim_sum_to;
     public $status_status;
 
     /**
@@ -73,7 +73,7 @@ class Debtor extends \yii\db\ActiveRecord
             [['LS_IKU_provider'], 'required'],
             [['space_common', 'space_living', 'debt_total', 'debt', 'fine', 'cost_of_claim', 'state_fee'], 'number'],
             [['ownership_type_id', 'location_id', 'name_id', 'user_id', 'status_id'], 'integer'],
-            [['expiration_start', 'location_street', 'location_building', 'clam_sum_from', 'clam_sum_to', 'status_status'], 'safe'],
+            [['expiration_start', 'location_street', 'location_building', 'claim_sum_from', 'claim_sum_to', 'status_status'], 'safe'],
             [['phone', 'LS_EIRC', 'LS_IKU_provider', 'IKU', 'single', 'additional_adjustment', 'subsidies'], 'string', 'max' => 255],
             [['name_id'], 'unique'],
             [['location_id'], 'exist', 'skipOnError' => true, 'targetClass' => Location::className(), 'targetAttribute' => ['location_id' => 'id']],
@@ -457,8 +457,9 @@ class Debtor extends \yii\db\ActiveRecord
         $debt = 0;
         $this->calcDebts(false, $debt);
         $this->debt = $debt;
+        $this->calculateCostOfClaim(false);
         if ($save) {
-            $this->save(false, ['debt']);
+            $this->save(false, ['debt', 'cost_of_claim']);
         }
         return $debt;
     }
@@ -484,8 +485,9 @@ class Debtor extends \yii\db\ActiveRecord
             }
         }
         $this->fine = $fine;
+        $this->calculateCostOfClaim(false);
         if ($save) {
-            $this->save(false, ['fine']);
+            $this->save(false, ['fine', 'cost_of_claim']);
         }
         return $this->fine;
     }
@@ -524,6 +526,21 @@ class Debtor extends \yii\db\ActiveRecord
     public function getDebtPeriodEnd()
     {
         return $this->getDebtDateEnd();
+    }
+
+    /**
+     * Перерасчет всех технических значений (суммы данных)
+     */
+    public function recalculateAllTotalValues()
+    {
+        if ($this->accruals) {
+            foreach ($this->accruals as $acc) {
+                $acc->recountAccrual();
+            }
+        }
+        $this->calculateDebt(false);
+        $this->calculateFine(false);
+        $this->save(false, ['debt', 'fine', 'cost_of_claim']);
     }
 
     /**

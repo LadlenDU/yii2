@@ -19,7 +19,7 @@ class DebtorSearch extends Debtor
     {
         return [
             [['id', 'ownership_type_id', 'location_id', 'name_id', 'user_id', 'status_id'], 'integer'],
-            [['phone', 'LS_EIRC', 'LS_IKU_provider', 'IKU', 'expiration_start', 'single', 'additional_adjustment', 'subsidies', 'location_street', 'location_building', 'clam_sum_from', 'clam_sum_to', 'status_status'], 'safe'],
+            [['phone', 'LS_EIRC', 'LS_IKU_provider', 'IKU', 'expiration_start', 'single', 'additional_adjustment', 'subsidies', 'location_street', 'location_building', 'claim_sum_from', 'claim_sum_to', 'status_status'], 'safe'],
             [['space_common', 'space_living', 'debt_total'], 'number'],
         ];
     }
@@ -89,7 +89,10 @@ class DebtorSearch extends Debtor
             }
         }
 
-        //$query->andFilterWhere(['like', 'tbl_country.name', $this->country]);
+        //clam_sum_from
+        //cost_of_claim
+        $query->andFilterWhere(['>=', 'cost_of_claim', $this->claim_sum_from])
+            ->andFilterWhere(['<=', 'cost_of_claim', $this->claim_sum_to]);
 
         $query->andFilterWhere(['like', 'phone', $this->phone])
             ->andFilterWhere(['like', 'LS_EIRC', $this->LS_EIRC])

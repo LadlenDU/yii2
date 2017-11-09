@@ -713,6 +713,18 @@ class DebtorController extends Controller
         }
     }
 
+    /**
+     * TODO: костыльная функция, надо перенести в админку
+     */
+    public function actionRecalculateAllTotalValues()
+    {
+        foreach (Yii::$app->user->identity->debtors as $debtor) {
+            $debtor->recalculateAllTotalValues();
+        }
+
+        die('Values recalculated');
+    }
+
     /*public function actionDebtVerification()
     {
         $uploadModel = new UploadForm();
