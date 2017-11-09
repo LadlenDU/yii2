@@ -501,6 +501,14 @@ class Debtor extends \yii\db\ActiveRecord
         return $this->cost_of_claim;
     }
 
+    /*public function getStateFee()
+    {
+        if ($this->state_fee === false) {
+            $this->calculateCostOfClaim();
+        }
+        return $this->cost_of_claim;
+    }*/
+
     public function calculateCostOfClaim($save = true)
     {
         $this->cost_of_claim = (float)$this->debt + (float)$this->fine;
@@ -663,7 +671,7 @@ class Debtor extends \yii\db\ActiveRecord
             }
         } else {
             $fileMonitor = new DebtorLoadMonitorFormat1();
-            $fileMonitor->$uploadModel->csvFile->name;
+            $fileMonitor->file_name = $uploadModel->csvFile->name;
         }
 
         if ($fileName = $uploadModel->uploadCsv()) {
@@ -686,12 +694,12 @@ class Debtor extends \yii\db\ActiveRecord
         }
     }
 
-    public static function addDebtors(array $sheetData, DebtorLoadMonitorFormat1 $fileName)
+    public static function addDebtors(array $sheetData, DebtorLoadMonitorFormat1 $fileMonitor)
     {
         try {
             $info = DebtorParse::scrapeDebtorsFromArray($sheetData);
             unset($sheetData);
-            $saveResult = DebtorParse::saveDebtors($info, $fileName);
+            $saveResult = DebtorParse::saveDebtors($info, $fileMonitor);
 
             $msg = Yii::t('app', 'Успешно прошла операция добавления в БД.') . '<br><br>';
 
