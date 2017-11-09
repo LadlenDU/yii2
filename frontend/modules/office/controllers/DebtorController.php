@@ -718,6 +718,10 @@ class DebtorController extends Controller
      */
     public function actionRecalculateAllTotalValues()
     {
+        //TODO: костыль
+        ini_set('memory_limit', '-1');
+        ini_set('max_execution_time', 1000);
+
         foreach (Yii::$app->user->identity->debtors as $debtor) {
             $debtor->recalculateAllTotalValues();
         }
