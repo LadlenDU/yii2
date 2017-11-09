@@ -351,7 +351,7 @@ class DebtorParse extends Model
     {
         if ($fileMonitor->finished_at) {
             throw new \Exception(Yii::t('app', 'Файл {fName} уже был распарсен на {parseFinisDateTime}.',
-                ['fName' => $fileMonitor->name, 'parseFinisDateTime' => $fileMonitor->finished_at]
+                ['fName' => $fileMonitor->file_name, 'parseFinisDateTime' => $fileMonitor->finished_at]
             ));
         }
     }
@@ -372,7 +372,7 @@ class DebtorParse extends Model
         } else {
             $fileMonitor->started_at = date('Y-m-d H:i:s');
             $fileMonitor->total_rows = $totalRows;
-            $fileMonitor->save(false, ['started_at', 'total_rows']);
+            $fileMonitor->save(false);
         }
     }
 
