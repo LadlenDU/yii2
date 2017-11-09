@@ -7,6 +7,7 @@ use Yii;
 //use common\models\Fine;
 use yii\web\UploadedFile;
 use common\models\debtor_parse\DebtorParse;
+use common\models\helpers\DebtorLoadMonitorFormat1;
 
 //use common\models\debtor_parse\DebtorParse;
 //use morphos\Russian\inflectName;
@@ -652,6 +653,19 @@ class Debtor extends \yii\db\ActiveRecord
         ini_set('max_execution_time', 100000);
 
         $uploadModel->csvFile = UploadedFile::getInstance($uploadModel, 'csvFile');
+
+        if ($fileMonitor = DebtorLoadMonitorFormat1::find()->where(['file_name' => $uploadModel->csvFile->name])->one()) {
+            try {
+                DebtorParse::verifyFileMonitorFinish($fileMonitor);
+            } catch (\Exception $e) {
+                Yii::$app->getSession()->setFlash('error', $e->getMessage());
+                return;
+            }
+        } else {
+            $fileMonitor = new DebtorLoadMonitorFormat1();
+            $fileMonitor->$uploadModel->csvFile->name;
+        }
+
         if ($fileName = $uploadModel->uploadCsv()) {
             if ($handle = fopen($fileName, 'r')) {
                 $sheetDataRaw = [];
@@ -662,7 +676,8 @@ class Debtor extends \yii\db\ActiveRecord
                 fclose($handle);
 
                 $sheetData = Format_csv_1::format($sheetDataRaw);
-                self::addDebtors($sheetData);
+                unset($sheetDataRaw);
+                self::addDebtors($sheetData, $fileMonitor);
 
             } else {
                 //TODO: логирование
@@ -671,11 +686,12 @@ class Debtor extends \yii\db\ActiveRecord
         }
     }
 
-    public static function addDebtors(array $sheetData)
+    public static function addDebtors(array $sheetData, DebtorLoadMonitorFormat1 $fileName)
     {
         try {
             $info = DebtorParse::scrapeDebtorsFromArray($sheetData);
-            $saveResult = DebtorParse::saveDebtors($info);
+            unset($sheetData);
+            $saveResult = DebtorParse::saveDebtors($info, $fileName);
 
             $msg = Yii::t('app', 'Успешно прошла операция добавления в БД.') . '<br><br>';
 

@@ -14,6 +14,7 @@ use common\models\Name;
 use common\models\Location;
 use common\models\Accrual;
 use common\models\Payment;
+use common\models\helpers\DebtorLoadMonitorFormat1;
 
 class DebtorParse extends Model
 {
@@ -346,11 +347,42 @@ class DebtorParse extends Model
         return $info1;
     }
 
-    public static function saveDebtors(array $info)
+    public static function verifyFileMonitorFinish($fileMonitor)
+    {
+        if ($fileMonitor->finished_at) {
+            throw new \Exception(Yii::t('app', 'Файл {fName} уже был распарсен на {parseFinisDateTime}.',
+                ['fName' => $fileMonitor->name, 'parseFinisDateTime' => $fileMonitor->finished_at]
+            ));
+        }
+    }
+
+    public static function prepareFileMonitor(DebtorLoadMonitorFormat1 &$fileMonitor, array &$info)
+    {
+        self::verifyFileMonitorFinish($fileMonitor);
+
+        $totalRows = count($info['colInfo']);
+
+        if ($fileMonitor->started_at) {
+            if ($totalRows != $fileMonitor->total_rows) {
+                throw new \Exception(Yii::t('app',
+                    'Не совпадает количество строк в предыдущем файле ({prev}) и в текущем ({current}). Проверьте пожалуйста.',
+                    ['prev' => $fileMonitor->total_rows, 'current' => $totalRows])
+                );
+            }
+        } else {
+            $fileMonitor->started_at = date('Y-m-d H:i:s');
+            $fileMonitor->total_rows = $totalRows;
+            $fileMonitor->save(false, ['started_at', 'total_rows']);
+        }
+    }
+
+    public static function saveDebtors(array $info, DebtorLoadMonitorFormat1 $fileMonitor)
     {
         $saveResult = self::$resultInfo;
 
         if ($info['headers']) {
+            self::prepareFileMonitor($fileMonitor, $info);
+
             // Найдем индекс, по которому искать уникальность пользователя
             $uniqueIndex = false;
             $accrualDateIndex = false;
@@ -388,9 +420,13 @@ class DebtorParse extends Model
 
             $userId = Yii::$app->user->getId();
 
-            foreach ($info['colInfo'] as $rowInfo) {
-                #$accuralDateTimestamp = strtotime($rowInfo[$accrualDateIndex]);
-                #$rowInfo[$accrualDateIndex] = date('Y-m-d H:i:s', $fine->checkVacationInput(false, $accuralDateTimestamp, true));
+            $colInfoCount = count($info['colInfo']);
+
+            $lastAddedString = ($fileMonitor->last_added_string === null) ? 0 : $fileMonitor->last_added_string + 1;
+
+            //foreach ($info['colInfo'] as $rowInfo) {
+            for ($i = $lastAddedString; $i < $colInfoCount; ++$i) {
+                $rowInfo = $info['colInfo'][$i];
 
                 $tmpResultInfo = self::$resultInfo;
 
@@ -438,30 +474,9 @@ class DebtorParse extends Model
                         if ($accrual = $debtor->getAccruals()->where(['accrual.accrual_date' => $rowInfo[$accrualDateIndex]])->one()) {
                             ++$tmpResultInfo['accruals']['updated'];
                         }
-                        /*if (isset($debtor->accruals)) {
-                            // Найдем на ту же дату
-                            foreach ($debtor->accruals as $key => $acc) {
-                                if ($acc['accrual_date'] == $rowInfo[$accrualDateIndex]) {
-                                    $accrual = $acc;
-                                    ++$tmpResultInfo['accruals']['updated'];
-                                    break;
-                                }
-                            }
-                        }*/
-                        //$accrual = '' . $debtor['accrual.id'];
-
                         if ($payment = $debtor->getPayments()->where(['payment.payment_date' => $rowInfo[$paymentDateIndex]])->one()) {
                             ++$tmpResultInfo['payments']['updated'];
                         }
-                        /*if (isset($debtor->payments)) {
-                            foreach ($debtor->payments as $key => $pm) {
-                                if ($pm['payment_date'] == $rowInfo[$paymentDateIndex]) {
-                                    $payment = $pm;
-                                    ++$tmpResultInfo['payments']['updated'];
-                                    break;
-                                }
-                            }
-                        }*/
                     }
 
                     if (empty($debtor)) {
@@ -515,17 +530,6 @@ class DebtorParse extends Model
                                     $saveAccrual = false;
                                     --$tmpResultInfo['accruals']['added'];
                                 } else {
-                                    /*if (is_string($accrual)) {
-                                        // Здесь потребуется обновление
-                                        if (in_array($info['headers'][$key][1], ['accrual', 'additional_adjustment', 'subsidies', 'single'])) {
-                                            $accrualModel = new Accrual;
-                                            //TODO: возможно, костыль
-                                            $accrualModel->isNewRecord = false;
-                                            $accrualModel->id = $accrual;
-                                            $accrualModel->{$info['headers'][$key][1]} = self::convertNumberForSql($colInfo);
-                                            $accrualModel->save();
-                                        }
-                                    } else {*/
                                     // Запись в новый объект
                                     if (in_array($info['headers'][$key][1], ['accrual', 'additional_adjustment', 'subsidies', 'single'])) {
                                         $accrual->{$info['headers'][$key][1]} = self::convertNumberForSql($colInfo);
@@ -534,7 +538,6 @@ class DebtorParse extends Model
                                             $accrual->{$info['headers'][$key][1]} = $colInfo;
                                         }
                                     }
-                                    //}
                                 }
                             } elseif ($info['headers'][$key][0] == 'payment') {
                                 // Оплата не велась - не сохраняем
@@ -551,32 +554,35 @@ class DebtorParse extends Model
                     //TODO: подумать нужна ли валидация (пока отключим, по-моему нет)
                     //if ($debtor->validate()) {
 
-                        $debtor->save();
+                    $debtor->save();
 
-                        //TODO: можно оптимизировать? (двойные запросы при перезаписи не будут??)
-                        //TODO: debtDetails пока закомментируем
-                        /*$debtDetails->save();
-                        $debtDetails->link('debtor', $debtor);*/
+                    //TODO: можно оптимизировать? (двойные запросы при перезаписи не будут??)
+                    //TODO: debtDetails пока закомментируем
+                    /*$debtDetails->save();
+                    $debtDetails->link('debtor', $debtor);*/
 
-                        $name->save();
-                        $name->link('debtor', $debtor);
+                    $name->save();
+                    $name->link('debtor', $debtor);
 
-                        $location->save();
-                        $location->link('debtors', $debtor);
+                    $location->save();
+                    $location->link('debtors', $debtor);
 
-                        if ($saveAccrual) {
-                            $accrual->save();
-                            $accrual->link('debtor', $debtor);
-                        }
+                    if ($saveAccrual) {
+                        $accrual->save();
+                        $accrual->link('debtor', $debtor);
+                    }
 
-                        if ($savePayment) {
-                            $payment->save();
-                            $payment->link('debtor', $debtor);
-                        }
+                    if ($savePayment) {
+                        $payment->save();
+                        $payment->link('debtor', $debtor);
+                    }
 
-                        $transaction->commit();
+                    $fileMonitor->last_added_string = $i;
+                    $fileMonitor->save(false);
 
-                        $saveResult = self::mergeResultInfo($saveResult, $tmpResultInfo);
+                    $transaction->commit();
+
+                    $saveResult = self::mergeResultInfo($saveResult, $tmpResultInfo);
 
                     /*} else {
                         $err = print_r($debtor->getErrors(), true);
@@ -588,6 +594,9 @@ class DebtorParse extends Model
                     throw $e;
                 }
             }
+
+            $fileMonitor->finished_at = date('Y-m-d H:i:s');
+            $fileMonitor->save(false);
         } else {
             throw new UserException(Yii::t('app', 'Не обнаружены заголовки.'));
         }
