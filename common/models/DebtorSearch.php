@@ -72,7 +72,6 @@ class DebtorSearch extends Debtor
             'debt_total' => $this->debt_total,
             'user_id' => $this->user_id,
             'status_id' => $this->status_id,
-            'location_building.building' => $this->location_building,
         ]);
 
         if ($this->status_status) {
@@ -99,10 +98,17 @@ class DebtorSearch extends Debtor
             ->andFilterWhere(['like', 'single', $this->single])
             ->andFilterWhere(['like', 'additional_adjustment', $this->additional_adjustment])
             ->andFilterWhere(['like', 'subsidies', $this->subsidies])
-            ->andFilterWhere(['like', 'location.region', $this->location_street])
+            /*->andFilterWhere(['like', 'location.region', $this->location_street])
             ->andFilterWhere(['like', 'location.district', $this->location_street])
             ->andFilterWhere(['like', 'location.city', $this->location_street])
-            ->andFilterWhere(['like', 'location.street', $this->location_street]);
+            ->andFilterWhere(['like', 'location.street', $this->location_street])*/
+            ->andFilterWhere(['or',
+                ['like', 'location.region', $this->location_street],
+                ['like', 'location.district', $this->location_street],
+                ['like', 'location.city', $this->location_street],
+                ['like', 'location.street', $this->location_street],
+            ])
+            ->andFilterWhere(['like', 'location.building', $this->location_building]);
 
         return $dataProvider;
     }
