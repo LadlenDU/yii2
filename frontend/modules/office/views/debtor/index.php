@@ -372,7 +372,7 @@ echo $this->render('_extensions', compact('uploadModel', 'searchModel', 'showSea
                 /*[
                     'content' => '{dynagridFilter}{dynagridSort}{dynagrid}'
                 ],*/
-                '{export}',
+                //'{export}',
             ],
         ],
         'options' => ['id' => 'dynagrid-debtors'] // a unique identifier is important
