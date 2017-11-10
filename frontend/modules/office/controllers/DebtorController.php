@@ -749,19 +749,27 @@ class DebtorController extends Controller
         #$objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
         $sheet = $objPHPExcel->setActiveSheetIndex(0);
 
+        $startRow = 11;
+
         $dCount = count($debtorIds);
-        for ($i = 0; $i < $dCount; ++$i) {
+        for ($i = $dCount - 1; $i >= 0; --$i) {
             //TODO: запрос с ['id' => $dId] не выглядит достаточно корректным
             $debtor = Yii::$app->user->identity->getDebtors()->where(['id' => $debtorIds[$i]])->one();
             if ($debtor) {
-                $sheet->insertNewRowBefore(10);
+                // Get default font
+                #$defaultFont = $objPHPExcel->getDefaultStyle()->getFont();
+                #$rowHeight = \PHPExcel_Shared_Drawing::pixelsToCellDimension(460, $defaultFont);
+
+                $sheet->insertNewRowBefore($startRow, 1);
+                $sheet->getRowDimension($startRow)->setRowHeight(-1);
+
+                $sheet->setCellValueByColumnAndRow(0, $startRow, $i + 1);
 
                 $info = $debtor->getReportInfo();
-                $sheet->setCellValueByColumnAndRow(0, 10, $i + 1);
 
                 $iCount = count($info);
                 for ($j = 0; $j < $iCount; ++$j) {
-                    $sheet->setCellValueByColumnAndRow($j + 1, 10, $info[$j]);
+                    $sheet->setCellValueByColumnAndRow($j + 1, $startRow, $info[$j]);
                 }
             }
         }
