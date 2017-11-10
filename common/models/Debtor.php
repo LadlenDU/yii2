@@ -792,13 +792,17 @@ class Debtor extends \yii\db\ActiveRecord
 
     public function getReportInfo(): array
     {
+        //TODO: перенести в таблицу или как-то ещё иначе сделать
+        $timeNow = new \DateTime('now');
+        $timeStart = (new \DateTime('now'))->modify('-3 years -1 month');
+
         $arr['name'] = $this->name->createFullName();
         $arr['LS'] = $this->LS_IKU_provider;
         $arr['address'] = $this->location->createFullAddress(['zip_code', 'region', 'district', 'city', 'street']);
         $arr['building'] = $this->location->building;
         $arr['housing'] = '';
         $arr['appartment'] = $this->location->appartment;
-        $arr['debt_period'] = null;
+        $arr['debt_period'] = $timeStart->format('m.Y') . ' - ' . $timeNow->format('m.Y');
         $arr['debt_total_months'] = 36;
         $arr['total_debt_regarding_UK'] = $this->debt;
         $arr['total_debt_primary'] = $this->debt;
