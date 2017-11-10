@@ -111,18 +111,15 @@ CSS
                 <?= $form->field($searchModel, 'location_street')->textInput(['placeholder' => Yii::t('app', 'Адрес дома')]) ?>
             </div>
             <div class="col-md-4">
-                <?/*= $form->field($searchModel, 'LS_IKU_provider')->textInput(['placeholder' => Yii::t('app', 'Номер лицевого счета')]) */?>
+                <?/*= $form->field($searchModel, 'LS_IKU_provider')->textInput(['placeholder' => Yii::t('app', 'Номер лицевого счета')]) */ ?>
                 <?= $form->field($searchModel, 'LS_IKU_provider')->widget(TagsinputWidget::classname(), [
-                    //'placeholder' => Yii::t('app', '№ помещения'),
                     'clientOptions' => [
                         'trimValue' => true,
                         'allowDuplicates' => false,
                         'delimiter' => ' ',
-                        'placeholderText' => 'DDDDooooooooooo_ioioioioio',
                     ],
                     'options' => [
-                        'style' => 'some_styoe',
-                        'placeholderText' => 'ttt',
+                        'placeholder' => Yii::t('app', '№ ЛС'),
                     ],
                 ]) ?>
             </div>
