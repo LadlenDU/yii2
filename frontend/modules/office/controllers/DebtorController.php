@@ -748,6 +748,14 @@ class DebtorController extends Controller
 
         $startRow = 11;
 
+        $totals = [
+            'total_debt_regarding_UK' => 0,
+            'total_debt_primary' => 0,
+            'total_fine' => 0,
+            'cost_of_claim' => 0,
+            'state_fee' => 0,
+        ];
+
         $dCount = count($debtorIds);
         for ($i = $dCount - 1; $i >= 0; --$i) {
             //TODO: запрос с ['id' => $dId] не выглядит достаточно корректным
@@ -761,10 +769,24 @@ class DebtorController extends Controller
                 $info = $debtor->getReportInfo();
 
                 $j = 1;
-                foreach($info as $row) {
+                foreach($info as $key => $row) {
                     $sheet->setCellValueByColumnAndRow($j++, $startRow, $row);
+                    if (isset($totals[$key])) {
+                        $totals[$key] += $row;
+                    }
                 }
             }
+        }
+
+        if ($dCount) {
+            //TODO: бардак какой-то с формулой
+            //$sumFormula = '=SUM(INDIRECT(ADDRESS(11;COLUMN())&":"&ADDRESS(ROW()-1;COLUMN())))';
+            //$sheet->setCellValueByColumnAndRow(9, $startRow + $dCount, $sumFormula);
+            $sheet->setCellValueByColumnAndRow(9, $startRow + $dCount, $totals['total_debt_regarding_UK']);
+            $sheet->setCellValueByColumnAndRow(10, $startRow + $dCount, $totals['total_debt_primary']);
+            $sheet->setCellValueByColumnAndRow(11, $startRow + $dCount, $totals['total_fine']);
+            $sheet->setCellValueByColumnAndRow(12, $startRow + $dCount, $totals['cost_of_claim']);
+            $sheet->setCellValueByColumnAndRow(13, $startRow + $dCount, $totals['state_fee']);
         }
 
         //$objPHPExcel = $debtor->getReportExcel();
