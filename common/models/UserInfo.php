@@ -259,7 +259,7 @@ class UserInfo extends \yii\db\ActiveRecord
                 $viewName = 'legal_entity';
                 break;
             }
-            case 2: {
+            /*case 2: {
                 // индивидуальный предприниматель
                 if (!$model = IndividualEntrepreneur::find()->where(['user_info_id' => $this->id])->one()) {
                     $model = new IndividualEntrepreneur();
@@ -274,7 +274,7 @@ class UserInfo extends \yii\db\ActiveRecord
                 }
                 $viewName = 'individual';
                 break;
-            }
+            }*/
             default: {
                 break;
             }

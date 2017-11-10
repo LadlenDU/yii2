@@ -105,6 +105,16 @@ class Court extends \yii\db\ActiveRecord
         return $this->hasOne(User::className(), ['id' => 'user_id'])->inverseOf('courts');
     }
 
+    public function beforeSave($insert)
+    {
+        if ($insert) {
+            $user = Yii::$app->user->identity;
+            //$this->link('user', $user);
+            $user->link('courts', $this);
+        }
+        parent::beforeSave($insert);
+    }
+
     /**
      * @inheritdoc
      * @return CourtQuery the active query used by this AR class.
