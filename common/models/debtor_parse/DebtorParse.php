@@ -438,6 +438,8 @@ class DebtorParse extends Model
 
             if ($fileMonitor) {
                 $lastAddedString = ($fileMonitor->last_added_string === null) ? 0 : $fileMonitor->last_added_string + 1;
+            } else {
+                $lastAddedString = 0;
             }
 
             //foreach ($info['colInfo'] as $rowInfo) {
