@@ -32,12 +32,12 @@
                 'items' => [
                     //['label' => 'Меню Yii2', 'options' => ['class' => 'header']],
                     ['label' => 'Рабочий стол', 'icon' => 'share-alt', 'options' => ['class' => 'header']/*, 'url' => ['/office/desctop']*/],
-                    ['label' => 'Моя организация', 'icon' => 'id-card', 'url' => ['/office/my-organization']],
-                    ['label' => 'Организации', 'icon' => 'handshake-o', 'url' => ['/office/company']],
-                    ['label' => 'Дома', 'icon' => 'file-code-o', 'options' => ['class' => 'header']/*, 'url' => ['/office/buildings']*/],
+                    ['label' => 'Моя организация', 'icon' => 'fa fa-id-card', 'url' => ['/office/my-organization']],
+                    ['label' => 'Организации', 'icon' => 'fa fa-handshake-o', 'url' => ['/office/company']],
+                    ['label' => 'Дома', 'icon' => 'fa fa-file-code-o', 'options' => ['class' => 'header']/*, 'url' => ['/office/buildings']*/],
                     [
                         'label' => 'Работа с должниками',
-                        'icon' => 'users',
+                        'icon' => 'fa fa-users',
                         'url' => ['/office/debtor'],
                     ],
                     /*[
@@ -55,7 +55,7 @@
 //                            ['label' => 'Работа с приставами', 'icon' => 'dashboard', 'url' => ['/office/debtors/calculation-of-duty'],],
 //                        ],
                     ],*/
-                    ['label' => 'Справочник судов', 'icon' => 'bank', 'url' => ['/court']],
+                    ['label' => 'Справочник судов', 'icon' => 'fa fa-bank', 'url' => ['/court']],
                     /*[
                         //'label' => 'Заявление в суд',
                         'label' => 'Квартплата',
