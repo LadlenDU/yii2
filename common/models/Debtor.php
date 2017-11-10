@@ -790,15 +790,9 @@ class Debtor extends \yii\db\ActiveRecord
         return $city;
     }
 
-    public function getReportExcel()
+    public function getReportInfo() : array
     {
-        $fName = Yii::getAlias('@common/data/DebtorsReportTemplate.xlsx');
-        $objPHPExcel = \PHPExcel_IOFactory::load($fName);
-        #$sheetData = $objPHPExcel->getActiveSheet();
-        #$objPHPExcel = new \PHPExcel();
-        #$objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-        $sheet = $objPHPExcel->setActiveSheetIndex(0);
-        $sheet->setCellValue('A1', 'Firstname');
-        return $objPHPExcel;
+        $arr = [];
+        return $arr;
     }
 }

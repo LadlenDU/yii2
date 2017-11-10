@@ -742,23 +742,63 @@ class DebtorController extends Controller
 
     public function actionGetReportFile(array $debtorIds)
     {
-        foreach ($debtorIds as $dId) {
-            //TODO: запрос с ['id' => $dId] не выглядит достаточно корректным
-            $debtor = Yii::$app->user->identity->getDebtors()->where(['id' => $dId])->one();
-            $objPHPExcel = $debtor->getReportExcel();
-            //another MIME type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
-            //return Yii::$app->response->sendContentAsFile($content, 'DebtorsReport.xlsx', ['mimeType' => 'application/vnd.ms-excel']);
+        $fName = Yii::getAlias('@common/data/DebtorsReportTemplate.xlsx');
+        $objPHPExcel = \PHPExcel_IOFactory::load($fName);
+        #$sheetData = $objPHPExcel->getActiveSheet();
+        #$objPHPExcel = new \PHPExcel();
+        #$objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $sheet = $objPHPExcel->setActiveSheetIndex(0);
 
-            //TODO: выдавать нормально
-            header('Content-Type: application/vnd.ms-excel');
-            $filename = "DebtorsReport_" . date("d-m-Y-His") . ".xls";
-            header('Content-Disposition: attachment;filename=' . $filename . ' ');
-            header('Cache-Control: max-age=0');
-            $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-            $objWriter->save('php://output');
-            exit;
+        $dCount = count($debtorIds);
+        for ($i = 0; $i < $dCount; ++$i) {
+            //TODO: запрос с ['id' => $dId] не выглядит достаточно корректным
+            $debtor = Yii::$app->user->identity->getDebtors()->where(['id' => $debtorIds[$i]])->one();
+            if ($debtor) {
+                $sheet->insertNewRowBefore(10);
+
+                $info = $debtor->getReportInfo();
+                $sheet->setCellValueByColumnAndRow(0, 10, $i + 1);
+
+                $iCount = count($info);
+                for ($j = 0; $j < $iCount; ++$j) {
+                    $sheet->setCellValueByColumnAndRow($j + 1, 10, $info[$j]);
+                }
+            }
         }
+
+        //$objPHPExcel = $debtor->getReportExcel();
+        //another MIME type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+        //return Yii::$app->response->sendContentAsFile($content, 'DebtorsReport.xlsx', ['mimeType' => 'application/vnd.ms-excel']);
+
+        //TODO: выдавать нормально
+        header('Content-Type: application/vnd.ms-excel');
+        $filename = "DebtorsReport_" . date("d-m-Y-His") . ".xls";
+        header('Content-Disposition: attachment;filename=' . $filename . ' ');
+        header('Cache-Control: max-age=0');
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        $objWriter->save('php://output');
+        exit;
     }
+
+   /* protected function function getReportExcel()
+    {
+        $fName = Yii::getAlias('@common/data/DebtorsReportTemplate.xlsx');
+        $objPHPExcel = \PHPExcel_IOFactory::load($fName);
+        #$sheetData = $objPHPExcel->getActiveSheet();
+        #$objPHPExcel = new \PHPExcel();
+        #$objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $sheet = $objPHPExcel->setActiveSheetIndex(0);
+        //$sheet->setCellValue('A1', 'Firstname');
+        $sheet->insertNewRowBefore(10);
+
+        $info = $this->getReportInfo();
+        $iCount = count($info);
+        for ($i = 0; $i < $iCount; ++$i) {
+            $sheet->setCellValueByColumnAndRow($i, 10, $info[$i]);
+        }
+
+        return $objPHPExcel;
+    }*/
 
     /*public function actionDebtVerification()
     {
