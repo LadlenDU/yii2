@@ -11,6 +11,13 @@ use yii\bootstrap\ActiveForm;
 use kartik\file\FileInput;
 use wbraganca\tagsinput\TagsinputWidget;
 
+$this->registerCss(<<<CSS
+.bootstrap-tagsinput {
+  width: 100% !important;
+}
+CSS
+);
+
 ?>
     <div class="arrow-steps clearfix">
         <div class="step"><span><?= Yii::t('app', 'Досудебная практика') ?></span></div>
@@ -93,7 +100,7 @@ use wbraganca\tagsinput\TagsinputWidget;
 
     <div class="collapse<?= $showSearchPane ? ' in' : '' ?>" id="search-debtors">
         <?php $form = ActiveForm::begin([
-            'action' => ['index', 'search_done' => '1'],
+            'action' => ['index', 'search' => '1'],
             'fieldConfig' => [
                 'enableLabel' => false,
             ],
@@ -106,10 +113,17 @@ use wbraganca\tagsinput\TagsinputWidget;
             <div class="col-md-4">
                 <?/*= $form->field($searchModel, 'LS_IKU_provider')->textInput(['placeholder' => Yii::t('app', 'Номер лицевого счета')]) */?>
                 <?= $form->field($searchModel, 'LS_IKU_provider')->widget(TagsinputWidget::classname(), [
+                    //'placeholder' => Yii::t('app', '№ помещения'),
                     'clientOptions' => [
                         'trimValue' => true,
-                        'allowDuplicates' => false
-                    ]
+                        'allowDuplicates' => false,
+                        'delimiter' => ' ',
+                        'placeholderText' => 'DDDDooooooooooo_ioioioioio',
+                    ],
+                    'options' => [
+                        'style' => 'some_styoe',
+                        'placeholderText' => 'ttt',
+                    ],
                 ]) ?>
             </div>
             <div class="col-md-4">

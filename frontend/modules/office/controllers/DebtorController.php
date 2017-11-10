@@ -88,7 +88,7 @@ class DebtorController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'uploadModel' => $uploadModel,
-            'showSearchPane' => Yii::$app->request->queryParams['search_done'] ?? false,
+            'showSearchPane' => Yii::$app->request->queryParams['search'] ?? false,
         ]);
     }
 

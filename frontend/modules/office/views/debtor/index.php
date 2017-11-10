@@ -331,7 +331,7 @@ echo $this->render('_extensions', compact('uploadModel', 'searchModel', 'showSea
         'theme' => 'simple-striped',
         'gridOptions' => [
             'dataProvider' => $dataProvider,
-            'filterModel' => $searchModel,
+            //'filterModel' => $searchModel,
             'showPageSummary' => true,
             'pjax' => true,
             'panel' => [
