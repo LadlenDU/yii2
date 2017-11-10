@@ -83,8 +83,8 @@ class Accrual extends \yii\db\ActiveRecord
             if (!empty($parts[0]) && !empty($parts[1])) {
                 $this->accrual_date = $this->accrual_date;
             }*/
-            $this->accrual_date = strtotime($this->accrual_date);
-            $this->accrual_date = date('Y-m-d G:i:s', $this->accrual_date);
+            $accrual_date = strtotime($this->accrual_date);
+            $this->accrual_date = date('Y-m-d G:i:s', $accrual_date);
         }
 
         parent::save($runValidation, $attributeNames);
