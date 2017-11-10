@@ -692,8 +692,8 @@ class Debtor extends \yii\db\ActiveRecord
         $uploadModel->csvFile = UploadedFile::getInstance($uploadModel, 'csvFile');
 
         //TODO: пока сделаем так, пока не пойдет другая загрузка
-        if ($fileMonitor = DebtorLoadMonitorFormat1::find()->where(['file_name' => $uploadModel->csvFile->name])->one()) {
-            //if ($fileMonitor = Yii::$app->user->identity->getDebtorLoadMonitorFormat1s()->where(['file_name' => $uploadModel->csvFile->name])->one()) {
+        //if ($fileMonitor = DebtorLoadMonitorFormat1::find()->where(['file_name' => $uploadModel->csvFile->name])->one()) {
+        if ($fileMonitor = Yii::$app->user->identity->getDebtorLoadMonitorFormat1s()->where(['file_name' => $uploadModel->csvFile->name])->one()) {
             try {
                 DebtorParse::verifyFileMonitorFinish($fileMonitor);
             } catch (\Exception $e) {
@@ -790,7 +790,7 @@ class Debtor extends \yii\db\ActiveRecord
         return $city;
     }
 
-    public function getReportInfo() : array
+    public function getReportInfo(): array
     {
         $arr['name'] = $this->name->createFullName();
         $arr['LS'] = $this->LS_IKU_provider;
@@ -800,7 +800,7 @@ class Debtor extends \yii\db\ActiveRecord
         $arr['appartment'] = $this->location->appartment;
         $arr['debt_period'] = null;
         $arr['debt_total_months'] = 36;
-        $arr['total_debt_regarding_UK'] = '?';
+        $arr['total_debt_regarding_UK'] = $this->debt;
         $arr['total_debt_primary'] = $this->debt;
         $arr['total_fine'] = $this->fine;
         $arr['cost_of_claim'] = $this->cost_of_claim;
