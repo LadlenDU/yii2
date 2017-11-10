@@ -338,6 +338,10 @@ echo $this->render('_extensions', compact('uploadModel', 'searchModel', 'showSea
                 'heading' => '<h3 class="panel-title">' . Yii::t('app', 'Список должников') . '</h3>',
                 'before' => '{dynagrid}',
             ],
+            'pager' => [
+                'firstPageLabel' => Yii::t('app', 'Первая'),
+                'lastPageLabel' => Yii::t('app', 'Последняя'),
+            ],
             'options' => ['id' => 'dynagrid-debtors-options'],
             'toolbar' => [
                 [

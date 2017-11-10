@@ -47,9 +47,11 @@ class DebtorSearch extends Debtor
         $query->joinWith(['status', 'location']);
 
         // add conditions that should always apply here
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => [
+                'pageSize' => 25,
+            ],
         ]);
 
         $this->load($params);
