@@ -792,7 +792,20 @@ class Debtor extends \yii\db\ActiveRecord
 
     public function getReportInfo() : array
     {
-        $arr = [];
+        $arr['name'] = $this->name->createFullName();
+        $arr['LS'] = $this->LS_IKU_provider;
+        $arr['address'] = $this->location->createFullAddress(['zip_code', 'region', 'district', 'city', 'street']);
+        $arr['building'] = $this->location->building;
+        $arr['housing'] = '';
+        $arr['appartment'] = $this->location->appartment;
+        $arr['debt_period'] = null;
+        $arr['debt_total_months'] = 36;
+        $arr['total_debt_regarding_UK'] = '?';
+        $arr['total_debt_primary'] = $this->debt;
+        $arr['total_fine'] = $this->fine;
+        $arr['cost_of_claim'] = $this->cost_of_claim;
+        $arr['state_fee'] = $this->state_fee;
+
         return $arr;
     }
 }

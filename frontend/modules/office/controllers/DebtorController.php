@@ -744,9 +744,6 @@ class DebtorController extends Controller
     {
         $fName = Yii::getAlias('@common/data/DebtorsReportTemplate.xlsx');
         $objPHPExcel = \PHPExcel_IOFactory::load($fName);
-        #$sheetData = $objPHPExcel->getActiveSheet();
-        #$objPHPExcel = new \PHPExcel();
-        #$objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
         $sheet = $objPHPExcel->setActiveSheetIndex(0);
 
         $startRow = 11;
@@ -756,10 +753,6 @@ class DebtorController extends Controller
             //TODO: запрос с ['id' => $dId] не выглядит достаточно корректным
             $debtor = Yii::$app->user->identity->getDebtors()->where(['id' => $debtorIds[$i]])->one();
             if ($debtor) {
-                // Get default font
-                #$defaultFont = $objPHPExcel->getDefaultStyle()->getFont();
-                #$rowHeight = \PHPExcel_Shared_Drawing::pixelsToCellDimension(460, $defaultFont);
-
                 $sheet->insertNewRowBefore($startRow, 1);
                 $sheet->getRowDimension($startRow)->setRowHeight(-1);
 
@@ -767,9 +760,9 @@ class DebtorController extends Controller
 
                 $info = $debtor->getReportInfo();
 
-                $iCount = count($info);
-                for ($j = 0; $j < $iCount; ++$j) {
-                    $sheet->setCellValueByColumnAndRow($j + 1, $startRow, $info[$j]);
+                $j = 1;
+                foreach($info as $row) {
+                    $sheet->setCellValueByColumnAndRow($j++, $startRow, $row);
                 }
             }
         }
@@ -787,26 +780,6 @@ class DebtorController extends Controller
         $objWriter->save('php://output');
         exit;
     }
-
-   /* protected function function getReportExcel()
-    {
-        $fName = Yii::getAlias('@common/data/DebtorsReportTemplate.xlsx');
-        $objPHPExcel = \PHPExcel_IOFactory::load($fName);
-        #$sheetData = $objPHPExcel->getActiveSheet();
-        #$objPHPExcel = new \PHPExcel();
-        #$objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-        $sheet = $objPHPExcel->setActiveSheetIndex(0);
-        //$sheet->setCellValue('A1', 'Firstname');
-        $sheet->insertNewRowBefore(10);
-
-        $info = $this->getReportInfo();
-        $iCount = count($info);
-        for ($i = 0; $i < $iCount; ++$i) {
-            $sheet->setCellValueByColumnAndRow($i, 10, $info[$i]);
-        }
-
-        return $objPHPExcel;
-    }*/
 
     /*public function actionDebtVerification()
     {
