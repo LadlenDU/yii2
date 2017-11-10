@@ -47,6 +47,7 @@ use common\models\helpers\DebtorLoadMonitorFormat1;
  * @property DebtorCohabitant[] $debtorCohabitants
  * @property DebtorPublicService[] $debtorPublicServices
  * @property PublicService[] $publicServices
+ * @property Indebtedness[] $indebtednesses
  * @property Payment[] $payments
  */
 class Debtor extends \yii\db\ActiveRecord
@@ -201,6 +202,14 @@ class Debtor extends \yii\db\ActiveRecord
     public function getPublicServices()
     {
         return $this->hasMany(PublicService::className(), ['id' => 'public_service_id'])->viaTable('debtor_public_service', ['debtor_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getIndebtednesses()
+    {
+        return $this->hasMany(Indebtedness::className(), ['debtor_id' => 'id'])->inverseOf('debtor');
     }
 
     /**
@@ -659,10 +668,19 @@ class Debtor extends \yii\db\ActiveRecord
         }
     }
 
-    public static function handleDebtorsExcelType1(UploadForm $uploadModel)
+    /*public static function handleDebtorsExcelType1(UploadForm $uploadModel)
     {
-
-    }
+        $uploadModel->excelFileType1 = UploadedFile::getInstance($uploadModel, 'debtorsExcelType1');
+        if ($fileName = $uploadModel->uploadExcel()) {
+            // file is uploaded successfully
+            $objPHPExcel = \PHPExcel_IOFactory::load($fileName);
+            $sheetDataRaw = $objPHPExcel->getActiveSheet()->toArray(null, false, false, false);
+            //self::addDebtors($sheetData);
+            $sheetData = Format_DebtorsExcelType1::format($sheetDataRaw);
+            unset($sheetDataRaw);
+            self::addDebtors($sheetData);
+        }
+    }*/
 
     public static function handleDebtorsCsvFile(UploadForm $uploadModel)
     {
@@ -675,7 +693,7 @@ class Debtor extends \yii\db\ActiveRecord
 
         //TODO: пока сделаем так, пока не пойдет другая загрузка
         if ($fileMonitor = DebtorLoadMonitorFormat1::find()->where(['file_name' => $uploadModel->csvFile->name])->one()) {
-        //if ($fileMonitor = Yii::$app->user->identity->getDebtorLoadMonitorFormat1s()->where(['file_name' => $uploadModel->csvFile->name])->one()) {
+            //if ($fileMonitor = Yii::$app->user->identity->getDebtorLoadMonitorFormat1s()->where(['file_name' => $uploadModel->csvFile->name])->one()) {
             try {
                 DebtorParse::verifyFileMonitorFinish($fileMonitor);
             } catch (\Exception $e) {
@@ -710,7 +728,7 @@ class Debtor extends \yii\db\ActiveRecord
         }
     }
 
-    public static function addDebtors(array $sheetData, DebtorLoadMonitorFormat1 $fileMonitor)
+    public static function addDebtors(array $sheetData, DebtorLoadMonitorFormat1 $fileMonitor = null)
     {
         try {
             $info = DebtorParse::scrapeDebtorsFromArray($sheetData);
@@ -770,5 +788,17 @@ class Debtor extends \yii\db\ActiveRecord
             }
         }
         return $city;
+    }
+
+    public function getReportExcel()
+    {
+        $fName = Yii::getAlias('@common/data/DebtorsReportTemplate.xlsx');
+        $objPHPExcel = \PHPExcel_IOFactory::load($fName);
+        #$sheetData = $objPHPExcel->getActiveSheet();
+        #$objPHPExcel = new \PHPExcel();
+        #$objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $sheet = $objPHPExcel->setActiveSheetIndex(0);
+        $sheet->setCellValue('A1', 'Firstname');
+        return $objPHPExcel;
     }
 }

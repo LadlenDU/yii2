@@ -78,6 +78,7 @@ class DebtorParse extends Model
             'ЛС ИКУ/ поставщика',
             '№ ЛС',
             '№ лицевого счета',
+            'Номер лицевого счета',
         ],
         'IKU' => [
             'ИКУ',
@@ -118,6 +119,7 @@ class DebtorParse extends Model
             'фамилия,имя,отчество',
             'фамилия, имя, отчество',
             'ФИО квартиросъемщика',
+            'Наименование ответчика',
         ],
     ];
 
@@ -133,6 +135,7 @@ class DebtorParse extends Model
         ],
         'appartment' => [
             '№ кв.',
+            'квартира',
         ],
     ];
 
@@ -146,6 +149,15 @@ class DebtorParse extends Model
             'Оплаты',
         ],
     ];
+
+    /*protected static $FIELDS_INDEBTEDNESS = [
+        'date' => [
+            '',
+        ],
+        'amount' => [
+            'Сумма основного долга',
+        ],
+    ];*/
 
     protected static $FIELDS_ACCRUAL = [
         'accrual_date' => [
@@ -381,7 +393,9 @@ class DebtorParse extends Model
         $saveResult = self::$resultInfo;
 
         if ($info['headers']) {
-            self::prepareFileMonitor($fileMonitor, $info);
+            if ($fileMonitor) {
+                self::prepareFileMonitor($fileMonitor, $info);
+            }
 
             // Найдем индекс, по которому искать уникальность пользователя
             $uniqueIndex = false;
@@ -422,7 +436,9 @@ class DebtorParse extends Model
 
             $colInfoCount = count($info['colInfo']);
 
-            $lastAddedString = ($fileMonitor->last_added_string === null) ? 0 : $fileMonitor->last_added_string + 1;
+            if ($fileMonitor) {
+                $lastAddedString = ($fileMonitor->last_added_string === null) ? 0 : $fileMonitor->last_added_string + 1;
+            }
 
             //foreach ($info['colInfo'] as $rowInfo) {
             for ($i = $lastAddedString; $i < $colInfoCount; ++$i) {
@@ -577,8 +593,10 @@ class DebtorParse extends Model
                         $payment->link('debtor', $debtor);
                     }
 
-                    $fileMonitor->last_added_string = $i;
-                    $fileMonitor->save(false);
+                    if ($fileMonitor) {
+                        $fileMonitor->last_added_string = $i;
+                        $fileMonitor->save(false);
+                    }
 
                     $transaction->commit();
 
@@ -595,8 +613,10 @@ class DebtorParse extends Model
                 }
             }
 
-            $fileMonitor->finished_at = date('Y-m-d H:i:s');
-            $fileMonitor->save(false);
+            if ($fileMonitor) {
+                $fileMonitor->finished_at = date('Y-m-d H:i:s');
+                $fileMonitor->save(false);
+            }
         } else {
             throw new UserException(Yii::t('app', 'Не обнаружены заголовки.'));
         }

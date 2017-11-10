@@ -16,13 +16,13 @@ class UploadForm extends Model
     public $excelFile;
     public $excelFileForAUser;
     public $csvFile;
+    public $excelFileType1;
 
     public function rules()
     {
         return [
             //[['imageFile'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg'],
-            [['excelFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'xls, xlsx'],
-            [['excelFileForAUser'], 'file', 'skipOnEmpty' => true, 'extensions' => 'xls, xlsx'],
+            [['excelFileForAUser', 'excelFile', 'excelFileType1'], 'file', 'skipOnEmpty' => true, 'extensions' => 'xls, xlsx'],
             [['csvFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'csv'],
         ];
     }
@@ -63,6 +63,7 @@ class UploadForm extends Model
     {
         $labels = parent::attributeLabels();
         $labels['excelFile'] = Yii::t('app', 'Файл Excel (много пользователей)');
+        $labels['excelFileType1'] = Yii::t('app', 'Файл Excel (много пользователей, тип 1)');
         $labels['excelFileForAUser'] = Yii::t('app', 'Файл Excel (один пользователь)');
         $labels['csvFile'] = Yii::t('app', 'Файл СSV (много пользователей)');
 

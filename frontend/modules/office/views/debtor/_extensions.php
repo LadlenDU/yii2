@@ -10,6 +10,7 @@ use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use kartik\file\FileInput;
 use wbraganca\tagsinput\TagsinputWidget;
+use yii\helpers\Url;
 
 $this->registerCss(<<<CSS
 .bootstrap-tagsinput {
@@ -149,6 +150,18 @@ CSS
     </div>
 
     <div class="row collapse" id="load-debtors">
+        <!--<div class="col-xs-12">
+            <?php
+        /*            $form = ActiveForm::begin([
+                        'options' => [
+                            'enctype' => 'multipart/form-data',
+                        ],
+                    ]);
+                    echo Html::hiddenInput('action', 'upload_debtors_excel_type_1');
+                    echo $form->field($uploadModel, 'debtorsExcelType1')->widget(FileInput::classname(), $uploadModel->fileUploadConfig('excel'));
+                    ActiveForm::end();
+                    */ ?>
+        </div>-->
         <div class="col-xs-12">
             <?php
             $form = ActiveForm::begin([
@@ -185,23 +198,41 @@ CSS
 $printErrorTxt = json_encode(Yii::t('app', 'Ошибка печати!'));
 $noDebtorsSelectedTxt = json_encode(Yii::t('app', 'Выберите пожалуйста должников.'));
 $lowBalance = json_encode(Yii::t('app', 'Недостаточно средств.'));
-$pdfUrl = json_encode(\yii\helpers\Url::to('/office/debtor/print-documents/?', true));
+$pdfUrl = json_encode(Url::to('/office/debtor/print-documents/?', true));
+$downloadReportUrl = json_encode(Url::to('/office/debtor/get-report-file/?'));
 $script = <<<JS
-    $("#print_invoices").click(function () {
+    function getDebtorsSelected()
+    {
         var keys = $('#dynagrid-debtors-options').yiiGridView('getSelectedRows');
         if (!keys.length) {
             alert($noDebtorsSelectedTxt);
-            return;
+            return false;
         }
-        var url = '/office/debtors/invoice-prev/?' + $.param({debtorIds:keys});
-        window.open(url, '_blank');
+        return keys;
+    }
+
+    $("#get_debtor_report").click(function(e) {
+        e.preventDefault();
+        var keys = getDebtorsSelected();
+        if (keys) {
+            var url = $downloadReportUrl + $.param({debtorIds:keys});
+            window.location.href = url;
+        }
+        return false;
+    });
+
+    $("#print_invoices").click(function () {
+        var keys = getDebtorsSelected();
+        if (keys) {
+            var url = '/office/debtors/invoice-prev/?' + $.param({debtorIds:keys});
+            window.open(url, '_blank');
+        }
     });
 
     $("#print_statements").click(function (e) {
         e.preventDefault();
-        var keys = $('#dynagrid-debtors-options').yiiGridView('getSelectedRows');
-        if (!keys.length) {
-            alert($noDebtorsSelectedTxt);
+        var keys = getDebtorsSelected();
+        if (!keys) {
             return false;
         }
                 
@@ -259,13 +290,11 @@ $script = <<<JS
         });
     });
     $("#print_documents").click(function () {
-        var keys = $('#dynagrid-debts-options').yiiGridView('getSelectedRows');
-        if (!keys.length) {
-            alert($noDebtorsSelectedTxt);
-            return;
+        var keys = getDebtorsSelected();
+        if (keys) {
+            var url = '/office/debtors/documents/?' + $.param({debtorIds:keys});
+            window.open(url, '_blank');
         }
-        var url = '/office/debtors/documents/?' + $.param({debtorIds:keys});
-        window.open(url, '_blank');
     });
 
 JS;

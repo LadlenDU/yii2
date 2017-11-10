@@ -61,6 +61,12 @@ class DebtorController extends Controller
         $uploadModel = new UploadForm();
 
         if (Yii::$app->request->isPost) {
+
+            //TODO: костыль - исправить
+            ini_set('memory_limit', '-1');
+            ini_set('max_execution_time', 100000);
+            ignore_user_abort(true);
+
             switch (Yii::$app->request->post('action')) {
                 case 'upload_debtors_excel': {
                     Debtor::handleDebtorsExcelFile($uploadModel);
@@ -70,6 +76,10 @@ class DebtorController extends Controller
                     Debtor::handleDebtorsExcelFileAUser($uploadModel);
                     break;
                 }
+                /*case 'upload_debtors_excel_type_1': {
+                    Debtor::handleDebtorsExcelType1($uploadModel);
+                    break;
+                }*/
                 case 'upload_debtors_csv': {
                     Debtor::handleDebtorsCsvFile($uploadModel);
                     break;
@@ -728,6 +738,26 @@ class DebtorController extends Controller
         }
 
         die('Values recalculated');
+    }
+
+    public function actionGetReportFile(array $debtorIds)
+    {
+        foreach ($debtorIds as $dId) {
+            //TODO: запрос с ['id' => $dId] не выглядит достаточно корректным
+            $debtor = Yii::$app->user->identity->getDebtors()->where(['id' => $dId])->one();
+            $objPHPExcel = $debtor->getReportExcel();
+            //another MIME type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+            //return Yii::$app->response->sendContentAsFile($content, 'DebtorsReport.xlsx', ['mimeType' => 'application/vnd.ms-excel']);
+
+            //TODO: выдавать нормально
+            header('Content-Type: application/vnd.ms-excel');
+            $filename = "DebtorsReport_" . date("d-m-Y-His") . ".xls";
+            header('Content-Disposition: attachment;filename=' . $filename . ' ');
+            header('Cache-Control: max-age=0');
+            $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+            $objWriter->save('php://output');
+            exit;
+        }
     }
 
     /*public function actionDebtVerification()
