@@ -659,16 +659,23 @@ class Debtor extends \yii\db\ActiveRecord
         }
     }
 
+    public static function handleDebtorsExcelType1(UploadForm $uploadModel)
+    {
+
+    }
+
     public static function handleDebtorsCsvFile(UploadForm $uploadModel)
     {
-        //TODO: костыль - исправить
+        /*//TODO: костыль - исправить
         ini_set('memory_limit', '-1');
         ini_set('max_execution_time', 100000);
-        ignore_user_abort(true);
+        ignore_user_abort(true);*/
 
         $uploadModel->csvFile = UploadedFile::getInstance($uploadModel, 'csvFile');
 
+        //TODO: пока сделаем так, пока не пойдет другая загрузка
         if ($fileMonitor = DebtorLoadMonitorFormat1::find()->where(['file_name' => $uploadModel->csvFile->name])->one()) {
+        //if ($fileMonitor = Yii::$app->user->identity->getDebtorLoadMonitorFormat1s()->where(['file_name' => $uploadModel->csvFile->name])->one()) {
             try {
                 DebtorParse::verifyFileMonitorFinish($fileMonitor);
             } catch (\Exception $e) {
@@ -677,7 +684,10 @@ class Debtor extends \yii\db\ActiveRecord
             }
         } else {
             $fileMonitor = new DebtorLoadMonitorFormat1();
+            //$fileMonitor->user_id = Yii::$app->user->identity->getId();
+            //TODO: может не самый лучший способ: сохраняет здесь? Здесь не лучшее место если парсинг не начнется
             $fileMonitor->file_name = $uploadModel->csvFile->name;
+            $fileMonitor->link('user', Yii::$app->user->identity);
         }
 
         if ($fileName = $uploadModel->uploadCsv()) {

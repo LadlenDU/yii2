@@ -7,12 +7,14 @@ use dektrium\user\models\User as BaseUser;
 use dektrium\user\models\Token;
 use common\models\UserInfo;
 use common\events\UserBalanceEvent;
+use common\models\helpers\DebtorLoadMonitorFormat1;
 
 /**
  * @property Court[] $courts
  * @property Debtor[] $debtors
+ * @property DebtorLoadMonitorFormat1[] $debtorLoadMonitorFormat1s
  * @property UserInfo $userInfo
- */
+  */
 class User extends BaseUser
 {
     //const DECREASE_BALANCE = 'decreaseBalance';
@@ -40,6 +42,14 @@ class User extends BaseUser
     public function getDebtors()
     {
         return $this->hasMany(Debtor::className(), ['user_id' => 'id'])->inverseOf('user');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDebtorLoadMonitorFormat1s()
+    {
+        return $this->hasMany(DebtorLoadMonitorFormat1::className(), ['user_id' => 'id'])->inverseOf('user');
     }
 
     /**
