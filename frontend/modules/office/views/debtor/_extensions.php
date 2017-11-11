@@ -241,6 +241,8 @@ $script = <<<JS
             + '</body></html>';
         
         //window.location.href = $pdfUrl + $.param({debtorIds:keys});
+        var statementWnd = window.open($pdfUrl + $.param({debtorIds:keys}), '_blank');
+        return false;
         //TODO: false вместо '' ??
         var statementWnd = window.open('', '_blank');
         statementWnd.addEventListener('load', function() {
