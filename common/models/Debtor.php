@@ -439,6 +439,9 @@ class Debtor extends \yii\db\ActiveRecord
         if (!$accrualSum) {
             foreach ($this->accruals as $acc) {
                 $acc->recountAccrual();
+                foreach ($this->accruals->debtor as $debtor) {
+                    $debtor->recalculateAllTotalValues();
+                }
             }
         }
 
