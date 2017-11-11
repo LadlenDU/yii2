@@ -434,7 +434,17 @@ class Debtor extends \yii\db\ActiveRecord
         //TODO: может, оптимизировать?
         //return $this->find()->from('accrual')->where(['debtor_id' => $this->id])->sum('accrual') ?: 0;
 
-        return $this->getAccruals()->sum('accrual_recount') ?: 0;
+        $accrualSum = $this->getAccruals()->sum('accrual_recount') ?: 0;
+
+        if (!$accrualSum) {
+            foreach ($this->accruals as $acc) {
+                $acc->recountAccrual();
+            }
+        }
+
+        $accrualSum = $this->getAccruals()->sum('accrual_recount') ?: 0;
+
+        return $accrualSum;
 
         //TODO: оптимизировать
         /*$sum = 0;
