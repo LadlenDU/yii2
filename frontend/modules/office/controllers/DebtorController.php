@@ -733,11 +733,18 @@ class DebtorController extends Controller
         ini_set('max_execution_time', 10000);
         ignore_user_abort(true);
 
-        $debtorCount = count(Yii::$app->user->identity->debtors);
-        //foreach (Yii::$app->user->identity->debtors as $debtor) {
-        for ($i = $debtorCount - 1; $i >= 0; --$i) {
-            $debtor = Yii::$app->user->identity->debtors[$i];
-            $debtor->recalculateAllTotalValues();
+        if (empty($_GET['backwards'])) {
+            foreach (Yii::$app->user->identity->debtors as $debtor) {
+                $debtor = Yii::$app->user->identity->debtors[$i];
+                $debtor->recalculateAllTotalValues();
+            }
+
+        } else {
+            $debtorCount = count(Yii::$app->user->identity->debtors);
+            for ($i = $debtorCount - 1; $i >= 0; --$i) {
+                $debtor = Yii::$app->user->identity->debtors[$i];
+                $debtor->recalculateAllTotalValues();
+            }
         }
 
         die('Values recalculated');
@@ -772,7 +779,7 @@ class DebtorController extends Controller
                 $info = $debtor->getReportInfo();
 
                 $j = 1;
-                foreach($info as $key => $row) {
+                foreach ($info as $key => $row) {
                     $sheet->setCellValueByColumnAndRow($j++, $startRow, $row);
                     if (isset($totals[$key])) {
                         $totals[$key] += $row;
