@@ -241,6 +241,15 @@ class Debtor extends \yii\db\ActiveRecord
          }
      }*/
 
+    public function init()
+    {
+        parent::init();
+
+        /*if ($this->debt === null || $this->fine === null || $this->cost_of_claim === null || $this->state_fee === null) {
+            $this->recalculateAllTotalValues();
+        }*/
+    }
+
     public function getFineCalculatorResult()
     {
         $fineRes = false;
@@ -437,11 +446,13 @@ class Debtor extends \yii\db\ActiveRecord
         $accrualSum = $this->getAccruals()->sum('accrual_recount') ?: 0;
 
         if (!$accrualSum) {
+            #$debtor->recalculateAllTotalValues();
             foreach ($this->accruals as $acc) {
                 $acc->recountAccrual();
-                foreach ($this->accruals->debtor as $debtor) {
+                $this->recalculateAllTotalValues();
+                /*foreach ($this->accruals->debtor as $debtor) {
                     $debtor->recalculateAllTotalValues();
-                }
+                }*/
             }
         }
 
@@ -625,7 +636,7 @@ class Debtor extends \yii\db\ActiveRecord
     public function calculateStateFee2($save = true)
     {
         //$amount = $this->getDebtTotal();
-        //amount = $this->getDebt();
+        //$amount = $this->getDebt();
         //$amount += $this->getFineTotal();
         //$amount += $this->getFine();
         $amount = $this->cost_of_claim ?: 0;
