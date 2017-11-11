@@ -733,20 +733,27 @@ class DebtorController extends Controller
         ini_set('max_execution_time', 10000);
         ignore_user_abort(true);
 
-        if (empty($_GET['backwards'])) {
-            foreach (Yii::$app->user->identity->debtors as $debtor) {
+        if (!empty($_GET['all_empty'])) {
+            $debtors = Yii::$app->user->identity->getDebtors()->where(['state_fee' => null])->all();
+            foreach ($debtors as $debtor) {
                 $debtor->recalculateAllTotalValues();
             }
-            /*if ($debtors = Yii::$app->user->identity->getDebtors()->select(['id'])->all()) {
-                foreach ($debtors as $debt) {
-                    $rr = 90;
-                }
-            }*/
         } else {
-            $debtorCount = count(Yii::$app->user->identity->debtors);
-            for ($i = $debtorCount - 1; $i >= 0; --$i) {
-                $debtor = Yii::$app->user->identity->debtors[$i];
-                $debtor->recalculateAllTotalValues();
+            if (empty($_GET['backwards'])) {
+                foreach (Yii::$app->user->identity->debtors as $debtor) {
+                    $debtor->recalculateAllTotalValues();
+                }
+                /*if ($debtors = Yii::$app->user->identity->getDebtors()->select(['id'])->all()) {
+                    foreach ($debtors as $debt) {
+                        $rr = 90;
+                    }
+                }*/
+            } else {
+                $debtorCount = count(Yii::$app->user->identity->debtors);
+                for ($i = $debtorCount - 1; $i >= 0; --$i) {
+                    $debtor = Yii::$app->user->identity->debtors[$i];
+                    $debtor->recalculateAllTotalValues();
+                }
             }
         }
 
