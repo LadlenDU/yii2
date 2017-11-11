@@ -733,7 +733,10 @@ class DebtorController extends Controller
         ini_set('max_execution_time', 10000);
         ignore_user_abort(true);
 
-        foreach (Yii::$app->user->identity->debtors as $debtor) {
+        $debtorCount = count(Yii::$app->user->identity->debtors);
+        //foreach (Yii::$app->user->identity->debtors as $debtor) {
+        for ($i = $debtorCount - 1; $i >= 0; --$i) {
+            $debtor = Yii::$app->user->identity->debtors[$i];
             $debtor->recalculateAllTotalValues();
         }
 
