@@ -64,6 +64,8 @@ class DebtorSearch extends Debtor
 
         //$LS_providers = preg_replace('/\s+/', '|', $this->LS_IKU_provider);
         $LS_providers = str_replace(',', '|', $this->LS_IKU_provider);
+        //TODO: какой-то костыль
+        $this->LS_IKU_provider = str_replace(',', ' ', $this->LS_IKU_provider);
 
         // grid filtering conditions
         $query->andFilterWhere([
