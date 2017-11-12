@@ -8,10 +8,12 @@ use dektrium\user\models\Token;
 use common\models\UserInfo;
 use common\events\UserBalanceEvent;
 use common\models\helpers\DebtorLoadMonitorFormat1;
+use common\models\helpers\DebtorCommonRecalculateMonitor;
 
 /**
  * @property Court[] $courts
  * @property Debtor[] $debtors
+ * @property DebtorCommonRecalculateMonitor[] $debtorCommonRecalculateMonitors
  * @property DebtorLoadMonitorFormat1[] $debtorLoadMonitorFormat1s
  * @property UserInfo $userInfo
   */
@@ -42,6 +44,14 @@ class User extends BaseUser
     public function getDebtors()
     {
         return $this->hasMany(Debtor::className(), ['user_id' => 'id'])->inverseOf('user');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDebtorCommonRecalculateMonitors()
+    {
+        return $this->hasMany(DebtorCommonRecalculateMonitor::className(), ['user_id' => 'id'])->inverseOf('user');
     }
 
     /**
