@@ -509,6 +509,8 @@ JS
     cursor: pointer;
     border-bottom: 1px dashed;
     margin-right: 2em;
+    float: left;
+    margin-top: 0.7em;
 }
 CSS
     );
