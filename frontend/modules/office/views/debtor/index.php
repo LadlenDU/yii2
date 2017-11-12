@@ -489,6 +489,12 @@ echo $this->render('_extensions', compact('uploadModel', 'searchModel', 'showSea
             txtElem2.text(txt2);
             hiddenSelectedAll.val(+!selected);
         });
+        
+        $("#dynagrid-debtors-select-all-status").click(function(){
+            //var tempHtml = $("#debtor-status-temp").html();
+            //$("#statusesModal").find('.modal-body').html(tempHtml).modal('show');
+            $("#statusesModal-temp").modal('show');
+        });
 JS
     );
 
@@ -545,3 +551,332 @@ CSS
             </div>
         </div>
     </div>
+
+    <div id="statusesModal-temp" class="modal fade" role="dialog">
+        <div class="vertical-alignment-helper">
+            <div class="modal-dialog vertical-align-center">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title"><?= Yii::t('app', 'Смена статуса заявления') ?></h4>
+                    </div>
+                    <div class="modal-body">
+
+                        <form id="debtor-status-form" class="form-horizontal"
+                              action="/office/debtor-status?debtorId=25937" method="post" enctype="multipart/form-data">
+                            <input name="_csrf-frontend"
+                                   value="5p6d1il4NUktzj0bKseKTmKRujLh7n8wQFxPVCOX3ob7yAkD3J7UsX_kB6_V72nxlzsJD2dbXuIifBLTCN3rMQ=="
+                                   type="hidden">
+                            <div class="form-group field-debtorstatus-status">
+                                <label class="control-label col-sm-3" for="debtorstatus-status">Тип статуса</label>
+                                <div class="col-sm-9">
+                                    <select id="debtorstatus-status" class="form-control" name="DebtorStatus[status]"
+                                            maxlength="">
+                                        <option value="new" selected="">Новое</option>
+                                        <option value="to_work">В работу</option>
+                                        <option value="submitted_to_court">Подано в суд</option>
+                                        <option value="adjudicated">Вынесено решение</option>
+                                        <option value="application_withdrawn">Заявление отозвано</option>
+                                    </select>
+
+                                    <div class="help-block help-block-error "></div>
+                                </div>
+                            </div>
+                            <div class="d_status_new show-hide" style="display: block;"></div>
+                            <div class="d_status_to_work show-hide" style="display: none;"></div>
+
+                            <div class="d_status_submitted_to_court show-hide" style="display: none;">
+                                <div class="form-group field-debtorstatus-submitted_to_court_start">
+                                    <label class="control-label col-sm-3" for="debtorstatus-submitted_to_court_start">Начало
+                                        суда</label>
+                                    <div class="col-sm-9">
+                                        <div id="debtorstatus-submitted_to_court_start-datetime"
+                                             class="input-group date"><span class="input-group-addon"
+                                                                            title="Выбрать дату &amp; время"><span
+                                                        class="glyphicon glyphicon-calendar"></span></span><span
+                                                    class="input-group-addon" title="Очистить поле"><span
+                                                        class="glyphicon glyphicon-remove"></span></span><input
+                                                    id="debtorstatus-submitted_to_court_start" class="form-control"
+                                                    name="DebtorStatus[submitted_to_court_start]"
+                                                    placeholder="Введите дату ..."
+                                                    data-krajee-datetimepicker="datetimepicker_48b7abfd" type="text">
+                                        </div>
+
+                                        <div class="help-block help-block-error "></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="d_status_adjudicated show-hide" style="display: none;">
+                                <div class="form-group field-debtorstatus-adjudicated_result">
+                                    <label class="control-label col-sm-3" for="debtorstatus-adjudicated_result">Результат
+                                        суда</label>
+                                    <div class="col-sm-9">
+                                        <select id="debtorstatus-adjudicated_result" class="form-control"
+                                                name="DebtorStatus[adjudicated_result]">
+                                            <option value="positive">Положительный результат</option>
+                                            <option value="negative">Отрицательный результат</option>
+                                            <option value="settlement_agreement">Мировое соглашение</option>
+                                        </select>
+
+                                        <div class="help-block help-block-error "></div>
+                                    </div>
+                                </div>
+                                <div class="form-group field-debtorstatus-adjudicated_decision">
+                                    <label class="control-label col-sm-3" for="debtorstatus-adjudicated_decision">Решение
+                                        суда</label>
+                                    <div class="col-sm-9">
+                                        <textarea id="debtorstatus-adjudicated_decision" class="form-control"
+                                                  name="DebtorStatus[adjudicated_decision]" rows="4"></textarea>
+
+                                        <div class="help-block help-block-error "></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="d_status_application_withdrawn show-hide" style="display: none;">
+                                <div class="form-group field-debtorstatus-application_withdrawn_reason">
+                                    <label class="control-label col-sm-3"
+                                           for="debtorstatus-application_withdrawn_reason">Причина отзыва
+                                        заявления</label>
+                                    <div class="col-sm-9">
+                                        <textarea id="debtorstatus-application_withdrawn_reason" class="form-control"
+                                                  name="DebtorStatus[application_withdrawn_reason]" rows="4"></textarea>
+
+                                        <div class="help-block help-block-error "></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group field-debtorstatus-debtorstatusfiles">
+                                <label class="control-label col-sm-3" for="debtorstatus-debtorstatusfiles">Debtor Status
+                                    Files</label>
+                                <div class="col-sm-9">
+                                    <input name="DebtorStatus[debtorStatusFiles][]" value="" type="hidden">
+                                    <div class="file-input file-input-new">
+                                        <div class="file-preview ">
+                                            <button type="button" class="close fileinput-remove">×</button>
+                                            <div class="file-drop-disabled">
+                                                <div class="file-preview-thumbnails">
+                                                </div>
+                                                <div class="clearfix"></div>
+                                                <div class="file-preview-status text-center text-success"></div>
+                                                <div class="kv-fileinput-error file-error-message"
+                                                     style="display: none;"></div>
+                                            </div>
+                                        </div>
+                                        <div class="kv-upload-progress kv-hidden" style="display: none;">
+                                            <div class="progress">
+                                                <div class="progress-bar bg-success progress-bar-success progress-bar-striped active"
+                                                     role="progressbar" aria-valuenow="0" aria-valuemin="0"
+                                                     aria-valuemax="100" style="width:0%;">
+                                                    0%
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                        <div class="input-group file-caption-main">
+                                            <div class="file-caption form-control kv-fileinput-caption icon-visible"
+                                                 tabindex="500">
+                                                <span class="file-caption-icon"><i class="glyphicon glyphicon-file"></i></span>
+                                                <input class="file-caption-name" onkeydown="return false;"
+                                                       onpaste="return false;" placeholder="Select файлы..."
+                                                       title="Дополнительные файлы">
+                                            </div>
+                                            <div class="input-group-btn">
+
+                                                <button type="button" tabindex="500" title="Отменить текущую загрузку"
+                                                        class="btn btn-default btn-secondary kv-hidden fileinput-cancel fileinput-cancel-button">
+                                                    <i class="glyphicon glyphicon-ban-circle"></i> <span
+                                                            class="hidden-xs">Отмена</span></button>
+                                                <button type="submit" tabindex="500" title="Загрузить выбранные файлы"
+                                                        class="btn btn-default btn-secondary fileinput-upload fileinput-upload-button">
+                                                    <i class="glyphicon glyphicon-upload"></i> <span class="hidden-xs">Загрузить</span>
+                                                </button>
+                                                <div tabindex="500" class="btn btn-primary btn-file"><i
+                                                            class="glyphicon glyphicon-folder-open"></i>&nbsp; <span
+                                                            class="hidden-xs">Выбрать …</span><input
+                                                            id="debtorstatus-debtorstatusfiles" class=""
+                                                            name="DebtorStatus[debtorStatusFiles][]" multiple=""
+                                                            accept="application/pdf"
+                                                            allowedfileextensions="[&quot;jpeg&quot;,&quot;png&quot;,&quot;pdf&quot;,&quot;doc&quot;,&quot;docx&quot;,&quot;xls&quot;,&quot;xlsx&quot;]"
+                                                            initialpreview="{&quot;other&quot;:&quot;width:50px;height:50px;&quot;}"
+                                                            data-krajee-fileinput="fileinput_9cb72f2a" type="file">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--[if lt IE 10]><br>
+                                    <div class="alert alert-warning"><strong>Примечание:</strong> Ваш браузер не
+                                        поддерживает предварительный просмотр и множественную загрузку файлов.
+                                        Попробуйте более новую версию или другой браузер, чтобы получить доступ к этим
+                                        функциям.
+                                    </div>
+                                    <script>document.getElementById("debtorstatus-debtorstatusfiles").className.replace(/\bfile-loading\b/, "");
+                                    ;</script><![endif]-->
+
+                                    <div class="help-block help-block-error "></div>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="submit btn btn-success btn-small btn-sm"
+                                data-dismiss="modal"><?= Yii::t('app', 'Сохранить') ?></button>
+                        <button type="button" class="btn btn-danger btn-small btn-sm"
+                                data-dismiss="modal"><?= Yii::t('app', 'Отменить') ?></button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!--<div id="debtor-status-temp" style="display: none">
+        <form id="debtor-status-form" class="form-horizontal" action="/office/debtor-status?debtorId=25937"
+              method="post" enctype="multipart/form-data">
+            <input name="_csrf-frontend"
+                   value="5p6d1il4NUktzj0bKseKTmKRujLh7n8wQFxPVCOX3ob7yAkD3J7UsX_kB6_V72nxlzsJD2dbXuIifBLTCN3rMQ=="
+                   type="hidden">
+            <div class="form-group field-debtorstatus-status">
+                <label class="control-label col-sm-3" for="debtorstatus-status">Тип статуса</label>
+                <div class="col-sm-9">
+                    <select id="debtorstatus-status" class="form-control" name="DebtorStatus[status]" maxlength="">
+                        <option value="new" selected="">Новое</option>
+                        <option value="to_work">В работу</option>
+                        <option value="submitted_to_court">Подано в суд</option>
+                        <option value="adjudicated">Вынесено решение</option>
+                        <option value="application_withdrawn">Заявление отозвано</option>
+                    </select>
+
+                    <div class="help-block help-block-error "></div>
+                </div>
+            </div>
+            <div class="d_status_new show-hide" style="display: block;"></div>
+            <div class="d_status_to_work show-hide" style="display: none;"></div>
+
+            <div class="d_status_submitted_to_court show-hide" style="display: none;">
+                <div class="form-group field-debtorstatus-submitted_to_court_start">
+                    <label class="control-label col-sm-3" for="debtorstatus-submitted_to_court_start">Начало
+                        суда</label>
+                    <div class="col-sm-9">
+                        <div id="debtorstatus-submitted_to_court_start-datetime" class="input-group date"><span
+                                    class="input-group-addon" title="Выбрать дату &amp; время"><span
+                                        class="glyphicon glyphicon-calendar"></span></span><span
+                                    class="input-group-addon" title="Очистить поле"><span
+                                        class="glyphicon glyphicon-remove"></span></span><input
+                                    id="debtorstatus-submitted_to_court_start" class="form-control"
+                                    name="DebtorStatus[submitted_to_court_start]" placeholder="Введите дату ..."
+                                    data-krajee-datetimepicker="datetimepicker_48b7abfd" type="text"></div>
+
+                        <div class="help-block help-block-error "></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d_status_adjudicated show-hide" style="display: none;">
+                <div class="form-group field-debtorstatus-adjudicated_result">
+                    <label class="control-label col-sm-3" for="debtorstatus-adjudicated_result">Результат суда</label>
+                    <div class="col-sm-9">
+                        <select id="debtorstatus-adjudicated_result" class="form-control"
+                                name="DebtorStatus[adjudicated_result]">
+                            <option value="positive">Положительный результат</option>
+                            <option value="negative">Отрицательный результат</option>
+                            <option value="settlement_agreement">Мировое соглашение</option>
+                        </select>
+
+                        <div class="help-block help-block-error "></div>
+                    </div>
+                </div>
+                <div class="form-group field-debtorstatus-adjudicated_decision">
+                    <label class="control-label col-sm-3" for="debtorstatus-adjudicated_decision">Решение суда</label>
+                    <div class="col-sm-9">
+                        <textarea id="debtorstatus-adjudicated_decision" class="form-control"
+                                  name="DebtorStatus[adjudicated_decision]" rows="4"></textarea>
+
+                        <div class="help-block help-block-error "></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d_status_application_withdrawn show-hide" style="display: none;">
+                <div class="form-group field-debtorstatus-application_withdrawn_reason">
+                    <label class="control-label col-sm-3" for="debtorstatus-application_withdrawn_reason">Причина отзыва
+                        заявления</label>
+                    <div class="col-sm-9">
+                        <textarea id="debtorstatus-application_withdrawn_reason" class="form-control"
+                                  name="DebtorStatus[application_withdrawn_reason]" rows="4"></textarea>
+
+                        <div class="help-block help-block-error "></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group field-debtorstatus-debtorstatusfiles">
+                <label class="control-label col-sm-3" for="debtorstatus-debtorstatusfiles">Debtor Status Files</label>
+                <div class="col-sm-9">
+                    <input name="DebtorStatus[debtorStatusFiles][]" value="" type="hidden">
+                    <div class="file-input file-input-new">
+                        <div class="file-preview ">
+                            <button type="button" class="close fileinput-remove">×</button>
+                            <div class="file-drop-disabled">
+                                <div class="file-preview-thumbnails">
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="file-preview-status text-center text-success"></div>
+                                <div class="kv-fileinput-error file-error-message" style="display: none;"></div>
+                            </div>
+                        </div>
+                        <div class="kv-upload-progress kv-hidden" style="display: none;">
+                            <div class="progress">
+                                <div class="progress-bar bg-success progress-bar-success progress-bar-striped active"
+                                     role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"
+                                     style="width:0%;">
+                                    0%
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="input-group file-caption-main">
+                            <div class="file-caption form-control kv-fileinput-caption icon-visible" tabindex="500">
+                                <span class="file-caption-icon"><i class="glyphicon glyphicon-file"></i></span>
+                                <input class="file-caption-name" onkeydown="return false;" onpaste="return false;"
+                                       placeholder="Select файлы..." title="Дополнительные файлы">
+                            </div>
+                            <div class="input-group-btn">
+
+                                <button type="button" tabindex="500" title="Отменить текущую загрузку"
+                                        class="btn btn-default btn-secondary kv-hidden fileinput-cancel fileinput-cancel-button">
+                                    <i class="glyphicon glyphicon-ban-circle"></i> <span class="hidden-xs">Отмена</span>
+                                </button>
+                                <button type="submit" tabindex="500" title="Загрузить выбранные файлы"
+                                        class="btn btn-default btn-secondary fileinput-upload fileinput-upload-button">
+                                    <i class="glyphicon glyphicon-upload"></i> <span class="hidden-xs">Загрузить</span>
+                                </button>
+                                <div tabindex="500" class="btn btn-primary btn-file"><i
+                                            class="glyphicon glyphicon-folder-open"></i>&nbsp; <span class="hidden-xs">Выбрать …</span><input
+                                            id="debtorstatus-debtorstatusfiles" class=""
+                                            name="DebtorStatus[debtorStatusFiles][]" multiple=""
+                                            accept="application/pdf"
+                                            allowedfileextensions="[&quot;jpeg&quot;,&quot;png&quot;,&quot;pdf&quot;,&quot;doc&quot;,&quot;docx&quot;,&quot;xls&quot;,&quot;xlsx&quot;]"
+                                            initialpreview="{&quot;other&quot;:&quot;width:50px;height:50px;&quot;}"
+                                            data-krajee-fileinput="fileinput_9cb72f2a" type="file"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--[if lt IE 10]><br>
+                    <div class="alert alert-warning"><strong>Примечание:</strong> Ваш браузер не поддерживает
+                        предварительный просмотр и множественную загрузку файлов. Попробуйте более новую версию или
+                        другой браузер, чтобы получить доступ к этим функциям.
+                    </div>
+                    <script>document.getElementById("debtorstatus-debtorstatusfiles").className.replace(/\bfile-loading\b/, "");
+                    ;</script><![endif]-->
+
+                    <div class="help-block help-block-error "></div>
+                </div>
+            </div>
+        </form>
+    </div>-->
