@@ -56,9 +56,9 @@ $columns = [
     [
         'class' => 'kartik\grid\CheckboxColumn',
         'order' => DynaGrid::ORDER_FIX_LEFT,
-        /*'checkboxOptions' => [
-            'class' => 'select-all-debtors',
-        ],*/
+        'checkboxOptions' => [
+            'class' => 'sgkh-debtor-check',
+        ],
     ],
     [
         'class' => 'kartik\grid\ActionColumn',
@@ -353,7 +353,7 @@ echo $this->render('_extensions', compact('uploadModel', 'searchModel', 'showSea
             'options' => ['id' => 'dynagrid-debtors-options'],
             'toolbar' => [
                 [
-                    'content' =>
+                    'content' => '<span id="dynagrid-debtors-select-all-status">Изменить статус выбранных должников</span>' .
                         Html::button('<i class="glyphicon glyphicon-list-alt"></i>',
                             [
                                 'type' => 'button',
@@ -406,7 +406,7 @@ echo $this->render('_extensions', compact('uploadModel', 'searchModel', 'showSea
             'style' => 'margin:1em',
         ]) . '</div>';
 
-    $totalDebtors = $dataProvider->getTotalCount();
+    $totalDebtors = (int)$dataProvider->getTotalCount();
 
     $this->registerJs(<<<JS
         $(document).on('ready pjax:success', function() {  // 'pjax:success' use if you have used pjax
@@ -422,6 +422,7 @@ echo $this->render('_extensions', compact('uploadModel', 'searchModel', 'showSea
 
         var txtElem1 = $("#dynagrid-debtors-selected-debtors-msg-1");
         var txtElem2 = $("#dynagrid-debtors-selected-debtors-msg-2");
+        var dynagridDebtors = $("#dynagrid-debtors");
         
         var debtorsSelectedText = function(num) {
             return 'Выбрано должников: %s.'.replace('%s', num);
@@ -436,7 +437,27 @@ echo $this->render('_extensions', compact('uploadModel', 'searchModel', 'showSea
             txtElem1.text(debtorsSelectedText(keys.length));
         }
         
-        $("#dynagrid-debtors .select-on-check-all").change(function() {
+        var uncheckAllDebtors = function() {
+            dynagridDebtors.find(".select-on-check-all").prop('checked', false);
+            dynagridDebtors.find(".sgkh-debtor-check").prop('checked', false);
+        }
+        
+        var debtorSeletionChanged = function() {
+            var totalSelected;
+            if (+$("#debtors-selected-all-total").val()) {
+                totalSelected = $totalDebtors;
+            } else {
+                var keys = $('#dynagrid-debtors-options').yiiGridView('getSelectedRows');
+                totalSelected = keys.length;
+            }
+            if (totalSelected >= 10 && totalSelected <= 50) {
+                $("#dynagrid-debtors-select-all-status").show();
+            } else {
+                $("#dynagrid-debtors-select-all-status").hide();
+            }
+        }
+        
+        dynagridDebtors.find(".select-on-check-all").change(function(){
             var checked = $(this).is(':checked');
             var msgElem = $("#dynagrid-debtors-selected-debtors");
             if (checked) {
@@ -446,6 +467,11 @@ echo $this->render('_extensions', compact('uploadModel', 'searchModel', 'showSea
             } else {
                 msgElem.fadeOut();
             }
+            debtorSeletionChanged();
+        });
+        
+        dynagridDebtors.find(".sgkh-debtor-check").change(function(){
+            debtorSeletionChanged();
         });
         
         $("#dynagrid-debtors-selected-debtors-msg-2").click(function(){
@@ -455,6 +481,7 @@ echo $this->render('_extensions', compact('uploadModel', 'searchModel', 'showSea
             if (selected) {
                 txt2 = debtorsSelectedTextSelectAll($totalDebtors);
                 setSelectedOnCurrentPageOnly();
+                uncheckAllDebtors();
             } else {
                 txtElem1.text(debtorsSelectedText($totalDebtors));
                 txt2 = 'Снять выделение со всех должников.';
@@ -476,6 +503,12 @@ JS
 #dynagrid-debtors-selected-debtors-msg-2 {
     cursor: pointer;
     border-bottom: 1px dashed;
+}
+#dynagrid-debtors-select-all-status {
+    display: none;
+    cursor: pointer;
+    border-bottom: 1px dashed;
+    margin-right: 2em;
 }
 CSS
     );
