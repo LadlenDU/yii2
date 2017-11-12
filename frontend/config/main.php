@@ -46,8 +46,9 @@ return [
                 '/office/my-organization/<action:[\w-]+>' => 'office/company/<action>',
                 '/office/my-organization' => 'office/default/my-organization',
 
-                '<module:\w+>/<controller:\w+>/<action:[\w-]+>/<id:(.*?)>' => '<module>/<controller>/<action>/<id>',
-                '<module:\w+>/<controller:\w+>/<action:[\w-]+>' => '<module>/<controller>/<action>',
+                //'<module:\w+>/<controller:\w+>/<action:[\w-]+>/<id:(.*?)>' => '<module>/<controller>/<action>/<id>',
+                //'<module:\w+>/<controller:\w+>/<action:[\w-]+>' => '<module>/<controller>/<action>',
+
                 //'<module:\w+>/<action:[\w-]+>/<id:(.*?)>' => '<module>/default/<action>/<id>',
                 //'<module:\w+>/<action:[\w-]+>' => '<module>/default/<action>',
 

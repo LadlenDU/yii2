@@ -58,7 +58,7 @@ JS
             ],
         ],
         'id' => 'debtor-status-form',
-        'action' => yii\helpers\Url::to(['/office/debtor-status', 'debtorId' => $debtorId]),
+        'action' => yii\helpers\Url::to(['/office/debtor-status', 'debtorIds' => $debtorId]),
     ]
 ); ?>
 

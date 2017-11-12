@@ -26,8 +26,12 @@ class DebtorStatusController extends \yii\web\Controller
         throw new NotFoundHttpException();
     }
 
-    public function actionIndex($debtorId)
+    public function actionIndex($debtorIds = [])
+    //public function actionIndex($debtorId)
     {
+        $debtorIds = (array)$debtorIds;
+        $debtorId = $debtorIds[0];
+
         $debtorStatus = $this->findModel($debtorId);
 
         if ($debtorStatus->load(Yii::$app->request->post()) && $debtorStatus->save()) {
