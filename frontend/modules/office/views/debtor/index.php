@@ -420,28 +420,28 @@ echo $this->render('_extensions', compact('uploadModel', 'searchModel', 'showSea
 
         $("#dynagrid-debtors-options-container").prepend('<input type="hidden" name="selected_all_total" id="debtors-selected-all-total" value="0">');
 
+        var txtElem1 = $("#dynagrid-debtors-selected-debtors-msg-1");
+        var txtElem2 = $("#dynagrid-debtors-selected-debtors-msg-2");
+        
         var debtorsSelectedText = function(num) {
-            return 'Выбрано %s должников.'.replace('%s', num);
+            return 'Выбрано должников: %s.'.replace('%s', num);
         }
         
         var debtorsSelectedTextSelectAll = function(num) {
             return 'Выбрать всех должников (%s).'.replace('%s', num);
         }
         
-        var txtElem1 = $("#dynagrid-debtors-selected-debtors-msg-1");
-        var txtElem2 = $("#dynagrid-debtors-selected-debtors-msg-2");
-
+        var setSelectedOnCurrentPageOnly = function() {
+            var keys = $('#dynagrid-debtors-options').yiiGridView('getSelectedRows');
+            txtElem1.text(debtorsSelectedText(keys.length));
+        }
+        
         $("#dynagrid-debtors .select-on-check-all").change(function() {
             var checked = $(this).is(':checked');
             var msgElem = $("#dynagrid-debtors-selected-debtors");
             if (checked) {
-                var keys = $('#dynagrid-debtors-options').yiiGridView('getSelectedRows');
-                var txt1 = debtorsSelectedText(keys.length);
-                var txt2 = debtorsSelectedTextSelectAll($totalDebtors);
-                
-                txtElem1.text(txt1);
-                txtElem2.text(txt2);
-                
+                setSelectedOnCurrentPageOnly();
+                txtElem2.text(debtorsSelectedTextSelectAll($totalDebtors));
                 msgElem.fadeIn();
             } else {
                 msgElem.fadeOut();
@@ -454,7 +454,9 @@ echo $this->render('_extensions', compact('uploadModel', 'searchModel', 'showSea
             var txt2;
             if (selected) {
                 txt2 = debtorsSelectedTextSelectAll($totalDebtors);
+                setSelectedOnCurrentPageOnly();
             } else {
+                txtElem1.text(debtorsSelectedText($totalDebtors));
                 txt2 = 'Снять выделение со всех должников.';
             }
             txtElem2.text(txt2);
