@@ -56,6 +56,9 @@ $columns = [
     [
         'class' => 'kartik\grid\CheckboxColumn',
         'order' => DynaGrid::ORDER_FIX_LEFT,
+        /*'checkboxOptions' => [
+            'class' => 'select-all-debtors',
+        ],*/
     ],
     [
         'class' => 'kartik\grid\ActionColumn',
@@ -330,7 +333,7 @@ echo $this->render('_extensions', compact('uploadModel', 'searchModel', 'showSea
         'storage' => DynaGrid::TYPE_COOKIE,
         'theme' => 'simple-striped',
         'toggleButtonGrid' => [
-                'label' => '<span class="glyphicon glyphicon-cog"></span>',
+            'label' => '<span class="glyphicon glyphicon-cog"></span>',
         ],
         'gridOptions' => [
             'dataProvider' => $dataProvider,
@@ -339,7 +342,9 @@ echo $this->render('_extensions', compact('uploadModel', 'searchModel', 'showSea
             'pjax' => true,
             'panel' => [
                 'heading' => '<h3 class="panel-title">' . Yii::t('app', 'Список должников') . '</h3>',
-                'before' => '{dynagrid}',
+                'before' => '{dynagrid}<span id="dynagrid-debtors-selected-debtors"><span id="dynagrid-debtors-selected-debtors-msg-1">'
+                    . Yii::t('app', 'Выбрано %s должников.') . '</span>&nbsp;&nbsp;<span id="dynagrid-debtors-selected-debtors-msg-2"></span>'
+                    . '</span>',
             ],
             'pager' => [
                 'firstPageLabel' => Yii::t('app', 'Первая'),
@@ -358,14 +363,14 @@ echo $this->render('_extensions', compact('uploadModel', 'searchModel', 'showSea
                                 //'href' => Url::to('/office/debtor/create'),
                             ]
                         )
-                        /*Html::button('<i class="glyphicon glyphicon-plus"></i>',
-                            [
-                                'type' => 'button',
-                                'title' => Yii::t('app', 'Добавить должника'),
-                                'class' => 'btn btn-success',
-                                'href' => Url::to('/office/debtor/create'),
-                            ]
-                        )*/
+                    /*Html::button('<i class="glyphicon glyphicon-plus"></i>',
+                        [
+                            'type' => 'button',
+                            'title' => Yii::t('app', 'Добавить должника'),
+                            'class' => 'btn btn-success',
+                            'href' => Url::to('/office/debtor/create'),
+                        ]
+                    )*/
                     /* . ' ' .
                         Html::a('<i class="glyphicon glyphicon-repeat"></i>',
                             ['dynagrid-demo'],
@@ -401,6 +406,8 @@ echo $this->render('_extensions', compact('uploadModel', 'searchModel', 'showSea
             'style' => 'margin:1em',
         ]) . '</div>';
 
+    $totalDebtors = $dataProvider->getTotalCount();
+
     $this->registerJs(<<<JS
         $(document).on('ready pjax:success', function() {  // 'pjax:success' use if you have used pjax
             $('.view').click(function(e){
@@ -410,10 +417,66 @@ echo $this->render('_extensions', compact('uploadModel', 'searchModel', 'showSea
                pModal.modal('show').find('.modal-content').load($(this).attr('href'));
            });
         });
+
+        $("#dynagrid-debtors-options-container").prepend('<input type="hidden" name="selected_all_total" id="debtors-selected-all-total" value="0">');
+
+        var debtorsSelectedText = function(num) {
+            return 'Выбрано %s должников.'.replace('%s', num);
+        }
+        
+        var debtorsSelectedTextSelectAll = function(num) {
+            return 'Выбрать всех должников (%s).'.replace('%s', num);
+        }
+        
+        var txtElem1 = $("#dynagrid-debtors-selected-debtors-msg-1");
+        var txtElem2 = $("#dynagrid-debtors-selected-debtors-msg-2");
+
+        $("#dynagrid-debtors .select-on-check-all").change(function() {
+            var checked = $(this).is(':checked');
+            var msgElem = $("#dynagrid-debtors-selected-debtors");
+            if (checked) {
+                var keys = $('#dynagrid-debtors-options').yiiGridView('getSelectedRows');
+                var txt1 = debtorsSelectedText(keys.length);
+                var txt2 = debtorsSelectedTextSelectAll($totalDebtors);
+                
+                txtElem1.text(txt1);
+                txtElem2.text(txt2);
+                
+                msgElem.fadeIn();
+            } else {
+                msgElem.fadeOut();
+            }
+        });
+        
+        $("#dynagrid-debtors-selected-debtors-msg-2").click(function(){
+            var hiddenSelectedAll = $("#debtors-selected-all-total");
+            var selected = +hiddenSelectedAll.val();
+            var txt2;
+            if (selected) {
+                txt2 = debtorsSelectedTextSelectAll($totalDebtors);
+            } else {
+                txt2 = 'Снять выделение со всех должников.';
+            }
+            txtElem2.text(txt2);
+            hiddenSelectedAll.val(+!selected);
+        });
 JS
     );
 
-    $this->registerCss('.modal-content {padding: 1em;}');
+    $this->registerCss(<<<CSS
+.modal-content {
+    padding: 1em;
+}
+#dynagrid-debtors-selected-debtors {
+    display: none;
+    margin-left: 2em;
+}
+#dynagrid-debtors-selected-debtors-msg-2 {
+    cursor: pointer;
+    border-bottom: 1px dashed;
+}
+CSS
+    );
 
     Modal::begin([
         'id' => 'pModal',
