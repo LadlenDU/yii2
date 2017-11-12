@@ -26,34 +26,44 @@ class DebtorStatusController extends \yii\web\Controller
         throw new NotFoundHttpException();
     }
 
-    public function actionIndex($debtorIds = [])
-    //public function actionIndex($debtorId)
+    public function actionIndex(array $debtorIds)
+        //public function actionIndex($debtorId)
     {
+        $needRedirect = false;
+
         $debtorIds = (array)$debtorIds;
-        $debtorId = $debtorIds[0];
-
-        $debtorStatus = $this->findModel($debtorId);
-
-        if ($debtorStatus->load(Yii::$app->request->post()) && $debtorStatus->save()) {
-
-            if ($debtorStatus->validate()) {
-                if ($uploadedFiles = UploadedFile::getInstances($debtorStatus, 'debtorStatusFiles')) {
-                    foreach ($uploadedFiles as $upFile) {
-                        $dsFiles = new DebtorStatusFiles();
-                        $dsFiles->content = file_get_contents($upFile->tempName);
-                        $dsFiles->name = $upFile->name;
-                        $dsFiles->mime_type = $upFile->type;
-                        $dsFiles->save();
-                        $debtorStatus->link('debtorStatusFiles', $dsFiles);
+        foreach ($debtorIds as $debtorId) {
+            $debtorStatus = $this->findModel($debtorId);
+            if ($debtorStatus->load(Yii::$app->request->post()) && $debtorStatus->save()) {
+                if ($debtorStatus->validate()) {
+                    if ($uploadedFiles = UploadedFile::getInstances($debtorStatus, 'debtorStatusFiles')) {
+                        foreach ($uploadedFiles as $upFile) {
+                            $dsFiles = new DebtorStatusFiles();
+                            $dsFiles->content = file_get_contents($upFile->tempName);
+                            $dsFiles->name = $upFile->name;
+                            $dsFiles->mime_type = $upFile->type;
+                            $dsFiles->save();
+                            $debtorStatus->link('debtorStatusFiles', $dsFiles);
+                        }
                     }
-                }
 
-                if ($debtorStatus->save()) {
-                    return $this->redirect(['/office/debtor']);
+                    if (!$debtorStatus->save()) {
+                        //TODO: обработка ошибок (какой-нибудь попап)
+                    }
+                    $needRedirect = true;
+                } else {
+                    //TODO: обработка ошибок
                 }
-            } else {
-                //TODO: обработка ошибок
             }
+        }
+
+        if ($needRedirect) {
+            return $this->redirect(['/office/debtor']);
+        }
+
+        if (count($debtorIds) > 1) {
+            // меняем для нескольких должников - выдаем пустую форму
+            $debtorStatus = new DebtorStatus();
         }
 
         $fileUpload = new FileUploadHelper('/office/debtor-status/status-files');
@@ -66,14 +76,10 @@ class DebtorStatusController extends \yii\web\Controller
         $fileUploadConfig['options']['allowedFileExtensions'] = ['jpeg', 'png', 'pdf', 'doc', 'docx', 'xls', 'xlsx'];
         $fileUploadConfig['options']['initialPreview'] = [
             'other' => 'width:50px;height:50px;'
-               /* [
-                    'width' => '50px',
-                    'height' => '50px',
-                ],*/
         ];
 
         $config = [
-            'debtorId' => $debtorId,
+            'debtorIds' => $debtorIds,
             'debtorStatus' => $debtorStatus,
             'fileUploadConfig' => $fileUploadConfig,
         ];

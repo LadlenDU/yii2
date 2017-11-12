@@ -7,7 +7,7 @@ use kartik\file\FileInput;
 use kartik\datetime\DateTimePicker;
 
 /* @var $this yii\web\View */
-/* @var $debtorId integer */
+/* @var $debtorIds array */
 /* @var $debtorStatus common\models\DebtorStatus */
 /* @var $fileUploadConfig array */
 
@@ -58,7 +58,7 @@ JS
             ],
         ],
         'id' => 'debtor-status-form',
-        'action' => yii\helpers\Url::to(['/office/debtor-status', 'debtorIds' => $debtorId]),
+        'action' => yii\helpers\Url::to(['/office/debtor-status', 'debtorIds' => $debtorIds]),
     ]
 ); ?>
 
