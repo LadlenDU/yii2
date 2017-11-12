@@ -493,7 +493,7 @@ class Debtor extends \yii\db\ActiveRecord
         $this->debt = $debt;
         $this->calculateCostOfClaim(false);
         if ($save) {
-            $this->save(false, ['debt', 'cost_of_claim']);
+            $this->save(true, ['debt', 'cost_of_claim']);
         }
         return $debt;
     }
@@ -580,10 +580,10 @@ class Debtor extends \yii\db\ActiveRecord
                 $acc->recountAccrual();
             }
         }
-        $this->calculateDebt(false);
-        $this->calculateFine(false);
-        $this->calculateStateFee2(false);
-        $this->save(false, ['debt', 'fine', 'cost_of_claim', 'state_fee']);
+        $this->calculateDebt(true);
+        $this->calculateFine(true);
+        $this->calculateStateFee2(true);
+        $this->save(true, ['debt', 'fine', 'cost_of_claim', 'state_fee']);
     }
 
     /**
@@ -648,7 +648,7 @@ class Debtor extends \yii\db\ActiveRecord
         } elseif ($amount <= 20000) {
             // до 20 000 рублей - 2 процента цены иска, но не менее 400 рублей;
             $fee = $amount / 100 * 2;
-            $fee = ($fee < 400) ? 400 : $fee;
+            //$fee = ($fee < 400) ? 400 : $fee;
         } elseif ($amount <= 100000) {
             // от 20 001 рубля до 100 000 рублей - 400 рублей плюс 1,5 процента суммы, превышающей 20 000 рублей;
             $fee = 400 + ($amount - 20000) / 100 * 1.5;
