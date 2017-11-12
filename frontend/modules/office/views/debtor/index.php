@@ -329,6 +329,9 @@ echo $this->render('_extensions', compact('uploadModel', 'searchModel', 'showSea
         'columns' => $columns,
         'storage' => DynaGrid::TYPE_COOKIE,
         'theme' => 'simple-striped',
+        'toggleButtonGrid' => [
+                'label' => '<span class="glyphicon glyphicon-cog"></span>',
+        ],
         'gridOptions' => [
             'dataProvider' => $dataProvider,
             //'filterModel' => $searchModel,
