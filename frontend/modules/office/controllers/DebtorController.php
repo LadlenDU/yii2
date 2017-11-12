@@ -724,6 +724,13 @@ class DebtorController extends Controller
         }
     }
 
+    public function actionRecalculateTotalValueForADebtor($debtorId)
+    {
+        $debtor = Debtor::findOne($debtorId);
+        $debtor->recalculateAllTotalValues();
+        echo 'DONE';
+    }
+
     /**
      * TODO: костыльная функция, надо перенести в админку
      */
@@ -765,6 +772,8 @@ class DebtorController extends Controller
 
         $rMonitor->finished_at = date('Y-m-d H:i:s');
         $rMonitor->save();
+
+        //3130139485
 
         /*if (!empty($_GET['all_empty'])) {
             $debtors = Yii::$app->user->identity->getDebtors()->where(['state_fee' => null])->all();
