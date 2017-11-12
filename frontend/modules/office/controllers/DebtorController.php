@@ -20,6 +20,7 @@ use common\helpers\DebtHelper;
 use yii\filters\AccessControl;
 use yii\helpers\Url;
 use common\models\DebtorStatus;
+use common\models\helpers\DebtorCommonRecalculateMonitor;
 
 //use kartik\mpdf\Pdf;
 
@@ -733,7 +734,39 @@ class DebtorController extends Controller
         ini_set('max_execution_time', 10000);
         ignore_user_abort(true);
 
-        if (!empty($_GET['all_empty'])) {
+        if ($rMonitor = Yii::$app->user->identity->debtorCommonRecalculateMonitors) {
+            $rMonitor = $rMonitor[count($rMonitor) - 1];
+            //TODO: временный косытль чтобы перерасчитать на скорую руку. Надо смотреть не перерасчитан ли следующий месяц.
+            if ($rMonitor->finished_at) {
+                return 'Должник перерасчитан';
+            }
+            $rMonitor->continued_at = date('Y-m-d H:i:s');
+        } else {
+            $rMonitor = new DebtorCommonRecalculateMonitor();
+            $rMonitor->total_debtors = count(Yii::$app->user->identity->debtors);
+            $rMonitor->started_at = date('Y-m-d H:i:s');
+            $rMonitor->link('user', Yii::$app->user->identity);
+        }
+
+        $rMonitor->save(false);
+
+        if ($rMonitor->last_recounted_debtor_id) {
+            $debtors = Yii::$app->user->identity->getDebtors()
+                ->andWhere(['>', 'id', $rMonitor->last_recounted_debtor_id])->orderBy(['id' => SORT_ASC])->all();
+        } else {
+            $debtors = Yii::$app->user->identity->getDebtors()->orderBy(['id' => SORT_ASC])->all();
+        }
+
+        foreach ($debtors as $debtor) {
+            $debtor->recalculateAllTotalValues();
+            $rMonitor->last_recounted_debtor_id = $debtor->id;
+            $rMonitor->save();
+        }
+
+        $rMonitor->finished_at = date('Y-m-d H:i:s');
+        $rMonitor->save();
+
+        /*if (!empty($_GET['all_empty'])) {
             $debtors = Yii::$app->user->identity->getDebtors()->where(['state_fee' => null])->all();
             foreach ($debtors as $debtor) {
                 $debtor->recalculateAllTotalValues();
@@ -743,11 +776,6 @@ class DebtorController extends Controller
                 foreach (Yii::$app->user->identity->debtors as $debtor) {
                     $debtor->recalculateAllTotalValues();
                 }
-                /*if ($debtors = Yii::$app->user->identity->getDebtors()->select(['id'])->all()) {
-                    foreach ($debtors as $debt) {
-                        $rr = 90;
-                    }
-                }*/
             } else {
                 $debtorCount = count(Yii::$app->user->identity->debtors);
                 for ($i = $debtorCount - 1; $i >= 0; --$i) {
@@ -755,9 +783,9 @@ class DebtorController extends Controller
                     $debtor->recalculateAllTotalValues();
                 }
             }
-        }
+        }*/
 
-        die('Values recalculated');
+        return 'Должники перерасчитаны';
     }
 
     public function actionGetReportFile(array $debtorIds)
