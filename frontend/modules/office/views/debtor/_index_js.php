@@ -139,7 +139,7 @@ $this->registerJs(<<<JS
         } else {
             totalSelected = $('#dynagrid-debtors-options').yiiGridView('getSelectedRows').length;
         }
-        if (totalSelected >= 10 && totalSelected <= 50) {
+        if (totalSelected >= 10 && totalSelected <= 200) {
             debtorsChangeStatusLink.fadeIn();
         } else {
             debtorsChangeStatusLink.fadeOut();

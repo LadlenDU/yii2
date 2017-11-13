@@ -82,6 +82,8 @@ return [
         ],
         'dynagrid' => [
             'class' => '\kartik\dynagrid\Module',
+            'defaultPageSize' => 25,
+            'maxPageSize' => 200,
             // other settings (refer documentation)
         ],
         'gridview' => [
