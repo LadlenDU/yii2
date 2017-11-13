@@ -489,6 +489,7 @@ echo $this->render('_extensions', compact('uploadModel', 'searchModel', 'showSea
                 txt2 = debtorsSelectedTextSelectAll($totalDebtors);
                 setSelectedOnCurrentPageOnly();
                 uncheckAllDebtors();
+                $("#dynagrid-debtors-selected-debtors").fadeOut();
             } else {
                 txtElem1.text(debtorsSelectedText($totalDebtors));
                 txt2 = 'Снять выделение со всех должников.';
