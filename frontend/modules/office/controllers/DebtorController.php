@@ -801,7 +801,7 @@ class DebtorController extends Controller
     {
         //TODO: костыль - исправить
         ini_set('memory_limit', '-1');
-        ini_set('max_execution_time', 3000);
+        ini_set('max_execution_time', 20000);
         ignore_user_abort(true);
 
         $fName = Yii::getAlias('@common/data/DebtorsReportTemplate.xlsx');
