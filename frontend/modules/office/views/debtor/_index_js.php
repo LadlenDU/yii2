@@ -153,27 +153,29 @@ $this->registerJs(<<<JS
         debtorsChangeStatusLink = $("#dynagrid-debtors-change-status");
         msgElem = $("#dynagrid-debtors-selected-debtors");
     
-        $('.view').click(function(e){
+        dynagridDebtors.find('.view').unbind('click').click(function(e){
            e.preventDefault();
            var pModal = $('#pModal');
            pModal.find('.modal-content').html('$loading');
            pModal.modal('show').find('.modal-content').load($(this).attr('href'));
         });
         
-        dynagridDebtors.find(".select-on-check-all").change(function(){
+        dynagridDebtors.find(".select-on-check-all").unbind('change').change(function(){
             eventAllDebtorsSelected();
         });
-        dynagridDebtors.find(".sgkh-debtor-check").change(function(){
+        
+        dynagridDebtors.find(".sgkh-debtor-check").unbind('change').change(function(){
             debtorSeletionChanged();
             // При любом изменении обычного чекбокса - сбрасываем глобальное выделение
             msgElem.fadeOut();
             hiddenSelectedAll.val(0);
         });
-        txtElem2.click(function(){
+        
+        txtElem2.unbind('click').click(function(){
             eventAllDebtorsSelectedTotal();
         });
         
-        $("#get_debtor_report").click(function(e) {
+        $("#get_debtor_report").unbind('click').click(function(e) {
             e.preventDefault();
             var all = +hiddenSelectedAll.val();
             if (all) {
