@@ -213,10 +213,16 @@ $script = <<<JS
 
     $("#get_debtor_report").click(function(e) {
         e.preventDefault();
-        var keys = getDebtorsSelected();
-        if (keys) {
-            var url = $downloadReportUrl + $.param({debtorIds:keys});
+        var all = +$("#debtors-selected-all-total").val();
+        if (all) {
+            var url = $downloadReportUrl + $.param({debtorIds:['all']});
             window.location.href = url;
+        } else {
+            var keys = getDebtorsSelected();
+            if (keys) {
+                var url = $downloadReportUrl + $.param({debtorIds:keys});
+                window.location.href = url;
+            }
         }
         return false;
     });

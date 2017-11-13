@@ -27,7 +27,6 @@ class DebtorStatusController extends \yii\web\Controller
     }
 
     public function actionIndex(array $debtorIds)
-        //public function actionIndex($debtorId)
     {
         $needRedirect = false;
 

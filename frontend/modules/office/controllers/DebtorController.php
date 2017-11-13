@@ -799,6 +799,11 @@ class DebtorController extends Controller
 
     public function actionGetReportFile(array $debtorIds)
     {
+        //TODO: костыль - исправить
+        ini_set('memory_limit', '-1');
+        ini_set('max_execution_time', 3000);
+        ignore_user_abort(true);
+
         $fName = Yii::getAlias('@common/data/DebtorsReportTemplate.xlsx');
         $objPHPExcel = \PHPExcel_IOFactory::load($fName);
         $sheet = $objPHPExcel->setActiveSheetIndex(0);
@@ -813,6 +818,14 @@ class DebtorController extends Controller
             'state_fee' => 0,
         ];
 
+        if ($debtorIds[0] == 'all') {
+            $debtorIds = [];
+            $dCount = Yii::$app->user->identity->getDebtors()->select('id')->all();
+            //TODO: использовать ArrayMap, вроде того
+            foreach ($dCount as $el) {
+                $debtorIds[] = $el['id'];
+            }
+        }
         $dCount = count($debtorIds);
         for ($i = $dCount - 1; $i >= 0; --$i) {
             //TODO: запрос с ['id' => $dId] не выглядит достаточно корректным
