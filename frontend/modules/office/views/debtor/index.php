@@ -10,7 +10,6 @@ use yii\helpers\Html;
 //use yii\grid\GridView;
 //use yii\widgets\Pjax;
 use kartik\dynagrid\DynaGrid;
-use yii\helpers\Url;
 use yii\bootstrap\Modal;
 use common\models\Debtor;
 //use yii\widgets\ActiveForm;
@@ -19,50 +18,29 @@ use common\models\DebtorStatus;
 $this->title = Yii::t('app', 'Работа с должниками');
 $this->params['breadcrumbs'][] = $this->title;
 
-$getStatusInfoUrl = json_encode(Url::to('/office/debtor-status/?', true));
+$this->render('_index_js', ['dataProvider' => $dataProvider]);
 
-$ajaxLoader = json_encode(\common\helpers\HtmlHelper::getCenteredAjaxLoadImg());
-
-$this->registerJs(<<<JS
-    $('#statusesModal').on('show.bs.modal', function(e) {
-        
-        //TODO: не очень уверен в правильности решения
-        if (e.namespace != 'bs.modal') {
-            return;
-        }
-        
-        $(e.currentTarget).find('.modal-body').html($ajaxLoader);
-        
-        //TODO: почему-то происходит редирект при 404
-        var debtorIds = [];
-        if ($(e.relatedTarget).data('type') == 'change_selected') {
-            debtorIds = $('#dynagrid-debtors-options').yiiGridView('getSelectedRows');
-        } else {
-            debtorIds = $(e.relatedTarget).data('debtor-id');
-        }
-        //debtorIds = $(e.relatedTarget).data('debtor-id');
-        var url;
-        //if (+$("#debtors-selected-all-total").val()) {
-        if (0) {
-            url = $getStatusInfoUrl + $.param({debtorIds:['all'],redirect:window.location.href});
-        } else {
-            url = $getStatusInfoUrl + $.param({debtorIds:debtorIds,redirect:window.location.href});
-        }
-        $(e.currentTarget).find('.modal-body').load(url,
-            function(response, status, xhr) {
-                if (status == "error") {
-                    var msg = "Произошла ошибка: ";
-                    $(this).html(msg + xhr.status + " " + xhr.statusText);
-                }
-                return true;
-            }
-        );
-    });
-
-    $("#statusesModal .submit").click(function() {
-        $("#debtor-status-form").submit();
-    });
-JS
+$this->registerCss(<<<CSS
+.modal-content {
+    padding: 1em;
+}
+#dynagrid-debtors-selected-debtors {
+    display: none;
+    margin-left: 2em;
+}
+#dynagrid-debtors-selected-debtors-msg-2 {
+    cursor: pointer;
+    border-bottom: 1px dashed;
+}
+#dynagrid-debtors-change-status {
+    display: none;
+    cursor: pointer;
+    border-bottom: 1px dashed;
+    margin-right: 2em;
+    float: left;
+    margin-top: 0.7em;
+}
+CSS
 );
 
 $columns = [
@@ -90,7 +68,6 @@ $columns = [
         ],
         'order' => DynaGrid::ORDER_FIX_LEFT,
     ],
-    //['attribute' => 'id'],
     [
         'attribute' => 'LS_IKU_provider',
         'pageSummary' => Yii::t('app', 'Итого:'),
@@ -166,137 +143,6 @@ $columns = [
             return Debtor::find()->sum('state_fee');
         },
     ],
-
-    //['attribute' => 'phone'],
-//    ['attribute' => 'LS_EIRC'],
-//    ['attribute' => 'IKU'],
-    /*['attribute' => 'space_common'],
-    ['attribute' => 'space_living'],
-    ['attribute' => 'privatized'],*/
-//    ['attribute' => 'location.region'],
-//    ['attribute' => 'name.first_name'],
-//    ['attribute' => 'expiration_start'],
-//    [
-//        'attribute' => 'debt_total',
-//        'format' => ['decimal', 2],
-//        'hAlign' => 'right',
-//    ],
-    /*[
-        'attribute' => Yii::t('app', 'Пошлина'),
-        'value' => function (\common\models\DebtDetails $model, $key, $index) {
-            return $model->calculateStateFee2();
-        },
-        'format' => ['decimal', 2],
-        'hAlign' => 'right',
-    ],*/
-    /*[
-        'attribute' => Yii::t('app', 'Пеня'),
-        'value' => function (Debtor $model, $key, $index) {
-            return $model->calcFine();
-        },
-        'format' => ['decimal', 2],
-        'hAlign' => 'right',
-    ],*/
-    /*[
-        //TODO: разобраться с label
-        'attribute' => 'LS_IKU_provider',
-        'label' => Yii::t('app', '№ ЛС'),
-        'value' => 'debtor.LS_IKU_provider',
-    ],
-    [
-        'attribute' => 'IKU',
-        'label' => Yii::t('app', 'ИКУ'),
-        'value' => 'debtor.IKU',
-    ],
-    [
-        'attribute' => 'name_mixed',
-        'label' => Yii::t('app', 'ФИО'),
-        'value' => 'debtor.name.full_name',
-    ],
-    [
-        'attribute' => 'city',
-        'label' => Yii::t('app', 'Населённый пункт'),
-        'value' => 'debtor.location.city',
-    ],
-    [
-        'attribute' => 'street',
-        'label' => Yii::t('app', 'Улица'),
-        'value' => 'debtor.location.street',
-    ],
-    [
-        'attribute' => 'building',
-        'label' => Yii::t('app', 'Дом'),
-        'value' => 'debtor.location.building',
-    ],
-    [
-        'attribute' => 'appartment',
-        'label' => Yii::t('app', 'Квартира'),
-        'value' => 'debtor.location.appartment',
-    ],
-    [
-        'attribute' => 'privatized',
-        'label' => Yii::t('app', 'Тип'),
-        'value' => function ($model, $key, $index) {
-            //TODO: исправить костыль
-            return $model->debtor->privatized ? 'Приватизированное' : 'Муниципальное';
-        },
-        'format' => 'raw',
-    ],
-    [
-        'attribute' => 'phone',
-        'label' => Yii::t('app', 'Телефон'),
-        'value' => 'debtor.phone',
-    ],
-    [
-        'attribute' => 'amount',
-        'label' => Yii::t('app', 'Сумма долга'),
-        'format' => ['decimal', 2],
-        'hAlign' => 'right',
-        //'pageSummary' => true,
-        'pageSummary' => function () {
-            return DebtDetailsExt::getTotalOfColumn('amount');
-        },
-    ],
-    [
-        'attribute' => 'amount_additional_services',
-        'label' => Yii::t('app', 'Сумма долга с допуслугами'),
-        'format' => ['decimal', 2],
-        'hAlign' => 'right',
-    ],
-
-    [
-        'attribute' => 'outgoing_balance_debit',
-        'format' => ['decimal', 2],
-        'hAlign' => 'right',
-        'pageSummary' => function () {
-            return DebtDetailsExt::getTotalOfColumn('outgoing_balance_debit');
-        },
-    ],
-    [
-        'attribute' => 'outgoing_balance_credit',
-        'format' => ['decimal', 2],
-        'hAlign' => 'right',
-        'pageSummary' => function () {
-            return DebtDetailsExt::getTotalOfColumn('outgoing_balance_credit');
-        },
-    ],
-    [
-        'attribute' => 'overdue_debts',
-        'format' => ['decimal', 2],
-        'hAlign' => 'right',
-        'pageSummary' => function () {
-            return DebtDetailsExt::getTotalOfColumn('overdue_debts');
-        },
-    ],
-
-    [
-        'attribute' => Yii::t('app', 'Пошлина'),
-        'value' => function (\common\models\DebtDetails $model, $key, $index) {
-            return $model->calculateStateFee2();
-        },
-        'format' => ['decimal', 2],
-        'hAlign' => 'right',
-    ],*/
 ];
 
 ?>
@@ -312,35 +158,6 @@ echo $this->render('_extensions', compact('uploadModel', 'searchModel', 'showSea
 ?>
 
 <div class="debtor-index">
-
-    <!--    <h1><? /*= Html::encode($this->title) */ ?></h1>
-    <?php /*// echo $this->render('_search', ['model' => $searchModel]); */ ?>
-
-    <p>
-        <? /*= Html::a(Yii::t('app', 'Создать должника'), ['create'], ['class' => 'btn btn-success']) */ ?>
-    </p>-->
-    <?php /*Pjax::begin(); */ ?><!--    <? /*= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'phone',
-            'LS_EIRC',
-            'LS_IKU_provider',
-            'IKU',
-            // 'space_common',
-            // 'space_living',
-            // 'privatized',
-            // 'location_id',
-            // 'name_id',
-
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); */ ?>
-<?php /*Pjax::end(); */ ?></div>-->
-
     <?= DynaGrid::widget([
         'columns' => $columns,
         'storage' => DynaGrid::TYPE_COOKIE,
@@ -401,186 +218,14 @@ echo $this->render('_extensions', compact('uploadModel', 'searchModel', 'showSea
             ],
         ],
         'options' => ['id' => 'dynagrid-debtors'] // a unique identifier is important
-    ]);
+    ]); ?>
 
-    /*yii\bootstrap\Modal::begin([
-        'headerOptions' => ['id' => 'modalHeader'],
-        'id' => 'modal',
-        'size' => 'modal-lg',
-        //keeps from closing modal with esc key or by clicking out of the modal.
-        // user must click cancel or X to close
-        'clientOptions' => ['backdrop' => 'static', 'keyboard' => FALSE]
-    ]);
-    echo "<div id='modalContent'>SOME MODAL CONTENT</div>";
-    yii\bootstrap\Modal::end();*/
-
-    $loading = '<div style="text-align: center">' . Html::img('/img/loading.gif', [
-            'alt' => Yii::t('app', 'Загрузка...'),
-            'style' => 'margin:1em',
-        ]) . '</div>';
-
-    $totalDebtors = (int)$dataProvider->getTotalCount();
-
-    $this->registerJs(<<<JS
-        $(document).on('ready pjax:success', function() {  // 'pjax:success' use if you have used pjax
-        
-            prepareEvents();
-        
-            if (+$("#debtors-selected-all-total").val()) {
-               $("#debtors-selected-all-total").val(0);
-               checkAllDebtors();
-               //debtorSeletionChanged();
-               eventAllDebtorsSelected();
-               eventAllDebtorsSelectedTotal();
-            }
-          
-        });
-
-        var txtElem1;
-        var txtElem2;
-        var dynagridDebtors;
-        
-        var debtorsSelectedText = function(num) {
-            return 'Выбрано должников: %s.'.replace('%s', num);
-        };
-        
-        var debtorsSelectedTextSelectAll = function(num) {
-            return 'Выбрать всех должников (%s).'.replace('%s', num);
-        };
-        
-        var setSelectedOnCurrentPageOnly = function() {
-            var keys = $('#dynagrid-debtors-options').yiiGridView('getSelectedRows');
-            txtElem1.text(debtorsSelectedText(keys.length));
-        };
-        
-        var uncheckAllDebtors = function() {
-            dynagridDebtors.find(".select-on-check-all").prop('checked', false);
-            dynagridDebtors.find(".sgkh-debtor-check").prop('checked', false);
-        };
-        
-        var checkAllDebtors = function() {
-            dynagridDebtors.find(".select-on-check-all").prop('checked', true);
-            dynagridDebtors.find(".sgkh-debtor-check").prop('checked', true);
-        };
-        
-        var eventAllDebtorsSelected = function() {
-            var checked = dynagridDebtors.find(".select-on-check-all").is(':checked');
-            var msgElem = $("#dynagrid-debtors-selected-debtors");
-            if (checked) {
-                setSelectedOnCurrentPageOnly();
-                txtElem2.text(debtorsSelectedTextSelectAll($totalDebtors));
-                msgElem.fadeIn();
-            } else {
-                msgElem.fadeOut();
-            }
-            debtorSeletionChanged();
-        };
-        
-        var eventAllDebtorsSelectedTotal = function() {
-            var hiddenSelectedAll = $("#debtors-selected-all-total");
-            var selected = +hiddenSelectedAll.val();
-            var txt2;
-            if (selected) {
-                txt2 = debtorsSelectedTextSelectAll($totalDebtors);
-                setSelectedOnCurrentPageOnly();
-                uncheckAllDebtors();
-                $("#dynagrid-debtors-selected-debtors").fadeOut();
-            } else {
-                txtElem1.text(debtorsSelectedText($totalDebtors));
-                txt2 = 'Снять выделение со всех должников.';
-            }
-            txtElem2.text(txt2);
-            hiddenSelectedAll.val(+!selected);
-        };
-        
-        var debtorSeletionChanged = function() {
-            var totalSelected;
-            if (+$("#debtors-selected-all-total").val()) {
-                totalSelected = $totalDebtors;
-            } else {
-                var keys = $('#dynagrid-debtors-options').yiiGridView('getSelectedRows');
-                totalSelected = keys.length;
-            }
-            if (totalSelected >= 10 && totalSelected <= 50) {
-                $("#dynagrid-debtors-change-status").show();
-            } else {
-                $("#dynagrid-debtors-change-status").hide();
-            }
-        };
-        
-        function prepareEvents() {
-            txtElem1 = $("#dynagrid-debtors-selected-debtors-msg-1");
-            txtElem2 = $("#dynagrid-debtors-selected-debtors-msg-2");
-            dynagridDebtors = $("#dynagrid-debtors");
-        
-            $('.view').click(function(e){
-               e.preventDefault();
-               var pModal = $('#pModal');
-               pModal.find('.modal-content').html('$loading');
-               pModal.modal('show').find('.modal-content').load($(this).attr('href'));
-            });
-            dynagridDebtors.find(".select-on-check-all").change(function(){
-                eventAllDebtorsSelected();
-            });
-            dynagridDebtors.find(".sgkh-debtor-check").change(function(){
-                debtorSeletionChanged();
-            });
-            $("#dynagrid-debtors-selected-debtors-msg-2").click(function(){
-                eventAllDebtorsSelectedTotal();
-            });
-        }
-        
-        prepareEvents();
-        
-        /*dynagridDebtors.find(".select-on-check-all").change(function(){
-            eventAllDebtorsSelected();
-        });
-        
-        dynagridDebtors.find(".sgkh-debtor-check").change(function(){
-            debtorSeletionChanged();
-        });
-        
-        $("#dynagrid-debtors-selected-debtors-msg-2").click(function(){
-            eventAllDebtorsSelectedTotal();
-        });*/
-        
-        /*$("#dynagrid-debtors-change-status").click(function(){
-            //var tempHtml = $("#debtor-status-temp").html();
-            //$("#statusesModal").find('.modal-body').html(tempHtml).modal('show');
-            $("#statusesModal-temp").modal('show');
-        });*/
-JS
-    );
-
-    $this->registerCss(<<<CSS
-.modal-content {
-    padding: 1em;
-}
-#dynagrid-debtors-selected-debtors {
-    display: none;
-    margin-left: 2em;
-}
-#dynagrid-debtors-selected-debtors-msg-2 {
-    cursor: pointer;
-    border-bottom: 1px dashed;
-}
-#dynagrid-debtors-change-status {
-    display: none;
-    cursor: pointer;
-    border-bottom: 1px dashed;
-    margin-right: 2em;
-    float: left;
-    margin-top: 0.7em;
-}
-CSS
-    );
-
+    <?php
     Modal::begin([
         'id' => 'pModal',
         'size' => 'modal-lg',
     ]);
     Modal::end();
-
     ?>
 
     <div id="statusesModal" class="modal fade" role="dialog">

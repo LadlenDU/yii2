@@ -199,7 +199,6 @@ $printErrorTxt = json_encode(Yii::t('app', 'Ошибка печати!'));
 $noDebtorsSelectedTxt = json_encode(Yii::t('app', 'Выберите пожалуйста должников.'));
 $lowBalance = json_encode(Yii::t('app', 'Недостаточно средств.'));
 $pdfUrl = json_encode(Url::to('/office/debtor/print-documents/?', true));
-$downloadReportUrl = json_encode(Url::to('/office/debtor/get-report-file/?'));
 $script = <<<JS
     function getDebtorsSelected()
     {
@@ -210,22 +209,6 @@ $script = <<<JS
         }
         return keys;
     }
-
-    $("#get_debtor_report").click(function(e) {
-        e.preventDefault();
-        var all = +$("#debtors-selected-all-total").val();
-        if (all) {
-            var url = $downloadReportUrl + $.param({debtorIds:['all']});
-            window.location.href = url;
-        } else {
-            var keys = getDebtorsSelected();
-            if (keys) {
-                var url = $downloadReportUrl + $.param({debtorIds:keys});
-                window.location.href = url;
-            }
-        }
-        return false;
-    });
 
     $("#print_invoices").click(function () {
         var keys = getDebtorsSelected();
