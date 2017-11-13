@@ -232,8 +232,9 @@ $script = <<<JS
         //window.location.href = $pdfUrl + $.param({debtorIds:keys});
         var statementWnd = window.open($pdfUrl + $.param({debtorIds:keys}), '_blank');
         return false;
+        
         //TODO: false вместо '' ??
-        var statementWnd = window.open('', '_blank');
+        /*var statementWnd = window.open('', '_blank');
         statementWnd.addEventListener('load', function() {
                 //TODO: костыль - подумать что с ним делать
                 setTimeout(function() {
@@ -245,7 +246,7 @@ $script = <<<JS
             }, false);
         statementWnd.document.open();
         statementWnd.document.write(embedHtml);
-        statementWnd.document.close();
+        statementWnd.document.close();*/
         /*statementWnd[statementWnd.addEventListener ? 'addEventListener' : 'attachEvent'](
             (statementWnd.attachEvent ? 'on' : '') + 'load', function() {
                 alert(1);

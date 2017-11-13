@@ -57,9 +57,11 @@ $this->registerJs(<<<JS
     
     //------------------------------------------
     
+    var msgElem;
     var txtElem1;
     var txtElem2;
     var dynagridDebtors;
+    var debtorsChangeStatusLink;
     var hiddenSelectedAll = $("#debtors-selected-all-total");
     
     $(document).on('ready pjax:success', function() {  // 'pjax:success' use if you have used pjax
@@ -92,6 +94,7 @@ $this->registerJs(<<<JS
     var uncheckAllDebtors = function() {
         dynagridDebtors.find(".select-on-check-all").prop('checked', false);
         dynagridDebtors.find(".sgkh-debtor-check").prop('checked', false);
+        $("#dynagrid-debtors-options-container > table tr").removeClass('danger');
     };
     
     var checkAllDebtors = function() {
@@ -101,7 +104,6 @@ $this->registerJs(<<<JS
     
     var eventAllDebtorsSelected = function() {
         var checked = dynagridDebtors.find(".select-on-check-all").is(':checked');
-        var msgElem = $("#dynagrid-debtors-selected-debtors");
         if (checked) {
             setSelectedOnCurrentPageOnly();
             txtElem2.text(debtorsSelectedTextSelectAll($totalDebtors));
@@ -114,18 +116,20 @@ $this->registerJs(<<<JS
     
     var eventAllDebtorsSelectedTotal = function() {
         var selected = +hiddenSelectedAll.val();
+        hiddenSelectedAll.val(+!selected);
         var txt2;
         if (selected) {
             txt2 = debtorsSelectedTextSelectAll($totalDebtors);
-            setSelectedOnCurrentPageOnly();
+            //setSelectedOnCurrentPageOnly();
             uncheckAllDebtors();
             $("#dynagrid-debtors-selected-debtors").fadeOut();
         } else {
             txtElem1.text(debtorsSelectedText($totalDebtors));
             txt2 = 'Снять выделение со всех должников.';
         }
+        debtorSeletionChanged();
         txtElem2.text(txt2);
-        hiddenSelectedAll.val(+!selected);
+        
     };
     
     var debtorSeletionChanged = function() {
@@ -133,13 +137,12 @@ $this->registerJs(<<<JS
         if (+hiddenSelectedAll.val()) {
             totalSelected = $totalDebtors;
         } else {
-            var keys = $('#dynagrid-debtors-options').yiiGridView('getSelectedRows');
-            totalSelected = keys.length;
+            totalSelected = $('#dynagrid-debtors-options').yiiGridView('getSelectedRows').length;
         }
         if (totalSelected >= 10 && totalSelected <= 50) {
-            $("#dynagrid-debtors-change-status").show();
+            debtorsChangeStatusLink.show();
         } else {
-            $("#dynagrid-debtors-change-status").hide();
+            debtorsChangeStatusLink.hide();
         }
     };
     
@@ -147,6 +150,8 @@ $this->registerJs(<<<JS
         txtElem1 = $("#dynagrid-debtors-selected-debtors-msg-1");
         txtElem2 = $("#dynagrid-debtors-selected-debtors-msg-2");
         dynagridDebtors = $("#dynagrid-debtors");
+        debtorsChangeStatusLink = $("#dynagrid-debtors-change-status");
+        msgElem = $("#dynagrid-debtors-selected-debtors");
     
         $('.view').click(function(e){
            e.preventDefault();
@@ -160,6 +165,9 @@ $this->registerJs(<<<JS
         });
         dynagridDebtors.find(".sgkh-debtor-check").change(function(){
             debtorSeletionChanged();
+            // При любом изменении обычного чекбокса - сбрасываем глобальное выделение
+            msgElem.fadeOut();
+            hiddenSelectedAll.val(0);
         });
         txtElem2.click(function(){
             eventAllDebtorsSelectedTotal();
@@ -194,7 +202,7 @@ $this->registerJs(<<<JS
         eventAllDebtorsSelectedTotal();
     });*/
     
-    /*$("#dynagrid-debtors-change-status").click(function(){
+    /*debtorsChangeStatusLink.click(function(){
         //var tempHtml = $("#debtor-status-temp").html();
         //$("#statusesModal").find('.modal-body').html(tempHtml).modal('show');
         $("#statusesModal-temp").modal('show');
