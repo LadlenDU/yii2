@@ -26,7 +26,7 @@ class DebtorStatusController extends \yii\web\Controller
         throw new NotFoundHttpException();
     }
 
-    public function actionIndex(array $debtorIds)
+    public function actionIndex(array $debtorIds, $redirect)
     {
         $needRedirect = false;
 
@@ -68,7 +68,7 @@ class DebtorStatusController extends \yii\web\Controller
         }
 
         if ($needRedirect) {
-            return $this->redirect(['/office/debtor']);
+            return $this->redirect($redirect ?: ['/office/debtor']);
         }
 
         if (count($debtorIds) > 1) {
@@ -90,6 +90,7 @@ class DebtorStatusController extends \yii\web\Controller
 
         $config = [
             'debtorIds' => $debtorIds,
+            'redirect' => $redirect,
             'debtorStatus' => $debtorStatus,
             'fileUploadConfig' => $fileUploadConfig,
         ];

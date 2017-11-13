@@ -42,13 +42,11 @@ $this->registerJs(<<<JS
         }
         //debtorIds = $(e.relatedTarget).data('debtor-id');
         var url;
-        var all = +$("#debtors-selected-all-total").val();
-        //if (all) {
+        //if (+$("#debtors-selected-all-total").val()) {
         if (0) {
-            url = $getStatusInfoUrl + $.param({debtorIds:['all']});
-            window.location.href = url;
+            url = $getStatusInfoUrl + $.param({debtorIds:['all'],redirect:window.location.href});
         } else {
-            url = $getStatusInfoUrl + $.param({debtorIds:debtorIds});
+            url = $getStatusInfoUrl + $.param({debtorIds:debtorIds,redirect:window.location.href});
         }
         $(e.currentTarget).find('.modal-body').load(url,
             function(response, status, xhr) {
