@@ -140,9 +140,9 @@ $this->registerJs(<<<JS
             totalSelected = $('#dynagrid-debtors-options').yiiGridView('getSelectedRows').length;
         }
         if (totalSelected >= 10 && totalSelected <= 50) {
-            debtorsChangeStatusLink.show();
+            debtorsChangeStatusLink.fadeIn();
         } else {
-            debtorsChangeStatusLink.hide();
+            debtorsChangeStatusLink.fadeOut();
         }
     };
     
@@ -189,24 +189,6 @@ $this->registerJs(<<<JS
     }
     
     prepareEvents();
-    
-    /*dynagridDebtors.find(".select-on-check-all").change(function(){
-        eventAllDebtorsSelected();
-    });
-    
-    dynagridDebtors.find(".sgkh-debtor-check").change(function(){
-        debtorSeletionChanged();
-    });
-    
-    $("#dynagrid-debtors-selected-debtors-msg-2").click(function(){
-        eventAllDebtorsSelectedTotal();
-    });*/
-    
-    /*debtorsChangeStatusLink.click(function(){
-        //var tempHtml = $("#debtor-status-temp").html();
-        //$("#statusesModal").find('.modal-body').html(tempHtml).modal('show');
-        $("#statusesModal-temp").modal('show');
-    });*/
-        
+       
 JS
 );
