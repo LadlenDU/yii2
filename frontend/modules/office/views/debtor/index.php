@@ -417,37 +417,85 @@ echo $this->render('_extensions', compact('uploadModel', 'searchModel', 'showSea
 
     $this->registerJs(<<<JS
         $(document).on('ready pjax:success', function() {  // 'pjax:success' use if you have used pjax
-            $('.view').click(function(e){
+            if (+$("#debtors-selected-all-total").val()) {
+               checkAllDebtors();
+               debtorSeletionChanged();
+               eventAllDebtorsSelectedTotal();
+            }
+            /*$('.view').click(function(e){
                e.preventDefault();
                var pModal = $('#pModal');
                pModal.find('.modal-content').html('$loading');
                pModal.modal('show').find('.modal-content').load($(this).attr('href'));
-           });
+            });
+            dynagridDebtors.find(".select-on-check-all").change(function(){
+                eventAllDebtorsSelected();
+            });
+            dynagridDebtors.find(".sgkh-debtor-check").change(function(){
+                debtorSeletionChanged();
+            });
+            $("#dynagrid-debtors-selected-debtors-msg-2").click(function(){
+                eventAllDebtorsSelectedTotal();
+            });*/
+            
+            prepareEvents();
         });
 
-        $("#dynagrid-debtors-options-container").prepend('<input type="hidden" name="selected_all_total" id="debtors-selected-all-total" value="0">');
-
-        var txtElem1 = $("#dynagrid-debtors-selected-debtors-msg-1");
-        var txtElem2 = $("#dynagrid-debtors-selected-debtors-msg-2");
-        var dynagridDebtors = $("#dynagrid-debtors");
+        var txtElem1;
+        var txtElem2;
+        var dynagridDebtors;
         
         var debtorsSelectedText = function(num) {
             return 'Выбрано должников: %s.'.replace('%s', num);
-        }
+        };
         
         var debtorsSelectedTextSelectAll = function(num) {
             return 'Выбрать всех должников (%s).'.replace('%s', num);
-        }
+        };
         
         var setSelectedOnCurrentPageOnly = function() {
             var keys = $('#dynagrid-debtors-options').yiiGridView('getSelectedRows');
             txtElem1.text(debtorsSelectedText(keys.length));
-        }
+        };
         
         var uncheckAllDebtors = function() {
             dynagridDebtors.find(".select-on-check-all").prop('checked', false);
             dynagridDebtors.find(".sgkh-debtor-check").prop('checked', false);
-        }
+        };
+        
+        var checkAllDebtors = function() {
+            dynagridDebtors.find(".select-on-check-all").prop('checked', true);
+            dynagridDebtors.find(".sgkh-debtor-check").prop('checked', true);
+        };
+        
+        var eventAllDebtorsSelected = function() {
+            var checked = dynagridDebtors.find(".select-on-check-all").is(':checked');
+            var msgElem = $("#dynagrid-debtors-selected-debtors");
+            if (checked) {
+                setSelectedOnCurrentPageOnly();
+                txtElem2.text(debtorsSelectedTextSelectAll($totalDebtors));
+                msgElem.fadeIn();
+            } else {
+                msgElem.fadeOut();
+            }
+            debtorSeletionChanged();
+        };
+        
+        var eventAllDebtorsSelectedTotal = function() {
+            var hiddenSelectedAll = $("#debtors-selected-all-total");
+            var selected = +hiddenSelectedAll.val();
+            var txt2;
+            if (selected) {
+                txt2 = debtorsSelectedTextSelectAll($totalDebtors);
+                setSelectedOnCurrentPageOnly();
+                uncheckAllDebtors();
+            } else {
+                txtElem1.text(debtorsSelectedText($totalDebtors));
+                txt2 = 'Снять выделение со всех должников.';
+            }
+            txtElem2.text(txt2);
+            hiddenSelectedAll.val(+!selected);
+        };
         
         var debtorSeletionChanged = function() {
             var totalSelected;
@@ -462,19 +510,34 @@ echo $this->render('_extensions', compact('uploadModel', 'searchModel', 'showSea
             } else {
                 $("#dynagrid-debtors-select-all-status").hide();
             }
+        };
+        
+        function prepareEvents() {
+            txtElem1 = $("#dynagrid-debtors-selected-debtors-msg-1");
+            txtElem2 = $("#dynagrid-debtors-selected-debtors-msg-2");
+            dynagridDebtors = $("#dynagrid-debtors");
+        
+            $('.view').click(function(e){
+               e.preventDefault();
+               var pModal = $('#pModal');
+               pModal.find('.modal-content').html('$loading');
+               pModal.modal('show').find('.modal-content').load($(this).attr('href'));
+            });
+            dynagridDebtors.find(".select-on-check-all").change(function(){
+                eventAllDebtorsSelected();
+            });
+            dynagridDebtors.find(".sgkh-debtor-check").change(function(){
+                debtorSeletionChanged();
+            });
+            $("#dynagrid-debtors-selected-debtors-msg-2").click(function(){
+                eventAllDebtorsSelectedTotal();
+            });
         }
         
-        dynagridDebtors.find(".select-on-check-all").change(function(){
-            var checked = $(this).is(':checked');
-            var msgElem = $("#dynagrid-debtors-selected-debtors");
-            if (checked) {
-                setSelectedOnCurrentPageOnly();
-                txtElem2.text(debtorsSelectedTextSelectAll($totalDebtors));
-                msgElem.fadeIn();
-            } else {
-                msgElem.fadeOut();
-            }
-            debtorSeletionChanged();
+        prepareEvents();
+        
+        /*dynagridDebtors.find(".select-on-check-all").change(function(){
+            eventAllDebtorsSelected();
         });
         
         dynagridDebtors.find(".sgkh-debtor-check").change(function(){
@@ -482,20 +545,8 @@ echo $this->render('_extensions', compact('uploadModel', 'searchModel', 'showSea
         });
         
         $("#dynagrid-debtors-selected-debtors-msg-2").click(function(){
-            var hiddenSelectedAll = $("#debtors-selected-all-total");
-            var selected = +hiddenSelectedAll.val();
-            var txt2;
-            if (selected) {
-                txt2 = debtorsSelectedTextSelectAll($totalDebtors);
-                setSelectedOnCurrentPageOnly();
-                uncheckAllDebtors();
-            } else {
-                txtElem1.text(debtorsSelectedText($totalDebtors));
-                txt2 = 'Снять выделение со всех должников.';
-            }
-            txtElem2.text(txt2);
-            hiddenSelectedAll.val(+!selected);
-        });
+            eventAllDebtorsSelectedTotal();
+        });*/
         
         /*$("#dynagrid-debtors-select-all-status").click(function(){
             //var tempHtml = $("#debtor-status-temp").html();
@@ -558,3 +609,5 @@ CSS
             </div>
         </div>
     </div>
+
+    <input type="hidden" name="selected_all_total" id="debtors-selected-all-total" value="0">
