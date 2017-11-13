@@ -360,7 +360,7 @@ echo $this->render('_extensions', compact('uploadModel', 'searchModel', 'showSea
             'options' => ['id' => 'dynagrid-debtors-options'],
             'toolbar' => [
                 [
-                    'content' => '<span id="dynagrid-debtors-select-all-status" data-toggle="modal" data-target="#statusesModal" data-type="change_selected">Изменить статус выбранных должников</span>' .
+                    'content' => '<span id="dynagrid-debtors-change-status" data-toggle="modal" data-target="#statusesModal" data-type="change_selected">Изменить статус выбранных должников</span>' .
                         Html::button('<i class="glyphicon glyphicon-list-alt"></i>',
                             [
                                 'type' => 'button',
@@ -417,28 +417,17 @@ echo $this->render('_extensions', compact('uploadModel', 'searchModel', 'showSea
 
     $this->registerJs(<<<JS
         $(document).on('ready pjax:success', function() {  // 'pjax:success' use if you have used pjax
+        
+            prepareEvents();
+        
             if (+$("#debtors-selected-all-total").val()) {
+               $("#debtors-selected-all-total").val(0);
                checkAllDebtors();
-               debtorSeletionChanged();
+               //debtorSeletionChanged();
+               eventAllDebtorsSelected();
                eventAllDebtorsSelectedTotal();
             }
-            /*$('.view').click(function(e){
-               e.preventDefault();
-               var pModal = $('#pModal');
-               pModal.find('.modal-content').html('$loading');
-               pModal.modal('show').find('.modal-content').load($(this).attr('href'));
-            });
-            dynagridDebtors.find(".select-on-check-all").change(function(){
-                eventAllDebtorsSelected();
-            });
-            dynagridDebtors.find(".sgkh-debtor-check").change(function(){
-                debtorSeletionChanged();
-            });
-            $("#dynagrid-debtors-selected-debtors-msg-2").click(function(){
-                eventAllDebtorsSelectedTotal();
-            });*/
-            
-            prepareEvents();
+          
         });
 
         var txtElem1;
@@ -507,9 +496,9 @@ echo $this->render('_extensions', compact('uploadModel', 'searchModel', 'showSea
                 totalSelected = keys.length;
             }
             if (totalSelected >= 10 && totalSelected <= 50) {
-                $("#dynagrid-debtors-select-all-status").show();
+                $("#dynagrid-debtors-change-status").show();
             } else {
-                $("#dynagrid-debtors-select-all-status").hide();
+                $("#dynagrid-debtors-change-status").hide();
             }
         };
         
@@ -549,7 +538,7 @@ echo $this->render('_extensions', compact('uploadModel', 'searchModel', 'showSea
             eventAllDebtorsSelectedTotal();
         });*/
         
-        /*$("#dynagrid-debtors-select-all-status").click(function(){
+        /*$("#dynagrid-debtors-change-status").click(function(){
             //var tempHtml = $("#debtor-status-temp").html();
             //$("#statusesModal").find('.modal-body').html(tempHtml).modal('show');
             $("#statusesModal-temp").modal('show');
@@ -569,7 +558,7 @@ JS
     cursor: pointer;
     border-bottom: 1px dashed;
 }
-#dynagrid-debtors-select-all-status {
+#dynagrid-debtors-change-status {
     display: none;
     cursor: pointer;
     border-bottom: 1px dashed;
