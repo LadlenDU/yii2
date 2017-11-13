@@ -31,6 +31,17 @@ class DebtorStatusController extends \yii\web\Controller
         $needRedirect = false;
 
         $debtorIds = (array)$debtorIds;
+
+        //TODO: !!! вынести $debtorIds в actionUpdate, вроде того
+        if ($debtorIds[0] == 'all') {
+            $debtorIds = [];
+            $dCount = Yii::$app->user->identity->getDebtors()->select('id')->all();
+            //TODO: использовать ArrayMap, вроде того
+            foreach ($dCount as $el) {
+                $debtorIds[] = $el['id'];
+            }
+        }
+
         foreach ($debtorIds as $debtorId) {
             $debtorStatus = $this->findModel($debtorId);
             if ($debtorStatus->load(Yii::$app->request->post()) && $debtorStatus->save()) {

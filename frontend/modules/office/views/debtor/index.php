@@ -41,8 +41,16 @@ $this->registerJs(<<<JS
             debtorIds = $(e.relatedTarget).data('debtor-id');
         }
         //debtorIds = $(e.relatedTarget).data('debtor-id');
-        $(e.currentTarget).find('.modal-body').load($getStatusInfoUrl + $.param({debtorIds:debtorIds}),
-        //$(e.currentTarget).find('.modal-body').load($getStatusInfoUrl + $.param({debtorIds:debtorIds}),
+        var url;
+        var all = +$("#debtors-selected-all-total").val();
+        //if (all) {
+        if (0) {
+            url = $getStatusInfoUrl + $.param({debtorIds:['all']});
+            window.location.href = url;
+        } else {
+            url = $getStatusInfoUrl + $.param({debtorIds:debtorIds});
+        }
+        $(e.currentTarget).find('.modal-body').load(url,
             function(response, status, xhr) {
                 if (status == "error") {
                     var msg = "Произошла ошибка: ";
