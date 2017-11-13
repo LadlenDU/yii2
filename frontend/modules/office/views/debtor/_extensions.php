@@ -59,7 +59,7 @@ CSS
 
                 <button class="btn-sm toggle-filter btn btn-primary" id="search_debtors" data-toggle="collapse"
                         data-target="#search-debtors">
-                    <i class="icon-search icon-white"></i><?= Yii::t('app', 'Поиск должников') ?>
+                    <i class="icon-search icon-white"></i><?= Yii::t('app', 'Поиск') ?>
                 </button>
 
                 <button class="btn-sm toggle-filter btn btn-primary" id="load_debtors" data-toggle="collapse"

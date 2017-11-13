@@ -187,7 +187,7 @@ echo $this->render('_extensions', compact('uploadModel', 'searchModel', 'showSea
                         Html::button('<i class="glyphicon glyphicon-list-alt"></i>',
                             [
                                 'type' => 'button',
-                                'title' => Yii::t('app', 'Получить отчет о выбранных должниках'),
+                                'title' => Yii::t('app', 'Приложение к договору оказания юридических услуг'),
                                 'class' => 'btn btn-success',
                                 'id' => 'get_debtor_report',
                                 //'href' => Url::to('/office/debtor/create'),
