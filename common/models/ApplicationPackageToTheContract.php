@@ -8,11 +8,13 @@ use Yii;
  * This is the model class for table "application_package_to_the_contract".
  *
  * @property integer $id
+ * @property integer $user_id
  * @property string $number
  * @property string $name
  *
- * @property ApplicationPackageToTheContractUser[] $applicationPackageToTheContractUsers
- * @property User[] $users
+ * @property User $user
+ * @property ApplicationPackageToTheContractDebtor[] $applicationPackageToTheContractDebtors
+ * @property Debtor[] $debtors
  */
 class ApplicationPackageToTheContract extends \yii\db\ActiveRecord
 {
@@ -30,9 +32,10 @@ class ApplicationPackageToTheContract extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['user_id', 'number'], 'integer'],
             [['number', 'name'], 'required'],
-            [['number'], 'integer'],
             [['name'], 'string', 'max' => 255],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
 
@@ -43,6 +46,7 @@ class ApplicationPackageToTheContract extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
+            'user_id' => Yii::t('app', 'User ID'),
             'number' => Yii::t('app', 'Номер по порядку'),
             'name' => Yii::t('app', 'Название пакета приложений'),
         ];
@@ -51,16 +55,24 @@ class ApplicationPackageToTheContract extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getApplicationPackageToTheContractUsers()
+    public function getUser()
     {
-        return $this->hasMany(ApplicationPackageToTheContractUser::className(), ['application_package_to_the_contract_id' => 'id'])->inverseOf('applicationPackageToTheContract');
+        return $this->hasOne(User::className(), ['id' => 'user_id'])->inverseOf('applicationPackageToTheContracts');
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUsers()
+    public function getApplicationPackageToTheContractDebtors()
     {
-        return $this->hasMany(User::className(), ['id' => 'user_id'])->viaTable('application_package_to_the_contract_user', ['application_package_to_the_contract_id' => 'id']);
+        return $this->hasMany(ApplicationPackageToTheContractDebtor::className(), ['application_package_to_the_contract_id' => 'id'])->inverseOf('applicationPackageToTheContract');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDebtors()
+    {
+        return $this->hasMany(Debtor::className(), ['id' => 'debtor_id'])->viaTable('application_package_to_the_contract_debtor', ['application_package_to_the_contract_id' => 'id']);
     }
 }

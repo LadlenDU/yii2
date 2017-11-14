@@ -38,6 +38,8 @@ use common\models\helpers\DebtorLoadMonitorFormat1;
  * @property string $state_fee
  *
  * @property Accrual[] $accruals
+ * @property ApplicationPackageToTheContractDebtor[] $applicationPackageToTheContractDebtors
+ * @property ApplicationPackageToTheContract[] $applicationPackageToTheContracts
  * @property DebtDetails[] $debtDetails
  * @property Location $location
  * @property Name $name
@@ -130,6 +132,22 @@ class Debtor extends \yii\db\ActiveRecord
     public function getAccruals()
     {
         return $this->hasMany(Accrual::className(), ['debtor_id' => 'id'])->inverseOf('debtor');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getApplicationPackageToTheContractDebtors()
+    {
+        return $this->hasMany(ApplicationPackageToTheContractDebtor::className(), ['debtor_id' => 'id'])->inverseOf('debtor');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getApplicationPackageToTheContracts()
+    {
+        return $this->hasMany(ApplicationPackageToTheContract::className(), ['id' => 'application_package_to_the_contract_id'])->viaTable('application_package_to_the_contract_debtor', ['debtor_id' => 'id']);
     }
 
     /**

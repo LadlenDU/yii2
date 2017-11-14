@@ -804,6 +804,7 @@ class DebtorController extends Controller
         ini_set('max_execution_time', 20000);
         ignore_user_abort(true);
 
+        //TODO: вынести в модель
         $fName = Yii::getAlias('@common/data/DebtorsReportTemplate.xlsx');
         $objPHPExcel = \PHPExcel_IOFactory::load($fName);
         $sheet = $objPHPExcel->setActiveSheetIndex(0);
@@ -826,7 +827,21 @@ class DebtorController extends Controller
                 $debtorIds[] = $el['id'];
             }
         }
+
+        // Вносим поля отчета о должниках
         $dCount = count($debtorIds);
+
+        if (!$dCount) {
+            //TODO: как-то это улучшить
+            throw new \Exception('Нет должников');
+        }
+
+        $appPackagesCount = \Yii::$app->user->identity->getApplicationPackageToTheContracts()->count();
+        $appPackageNumber = $appPackagesCount + 1;
+        $appPackage = new \common\models\ApplicationPackageToTheContract();
+        $appPackage->number = $appPackageNumber;
+        $appPackage->link('user', \Yii::$app->user->identity);
+
         for ($i = $dCount - 1; $i >= 0; --$i) {
             //TODO: запрос с ['id' => $dId] не выглядит достаточно корректным
             $debtor = Yii::$app->user->identity->getDebtors()->where(['id' => $debtorIds[$i]])->one();
@@ -845,8 +860,16 @@ class DebtorController extends Controller
                         $totals[$key] += $row;
                     }
                 }
+
+                $debtor->link('ApplicationPackageToTheContracts', $appPackage);
             }
         }
+
+        // Заносим текстовую информацию
+        //$sheet->setCellValueByColumnAndRow(, 1, $row);
+        $sheet->setCellValue('N2', Yii::t('app', "Приложение № $appPackageNumber"));
+        //TODO: проверить на timezone
+        $sheet->setCellValue('N3', Yii::t('app', 'от ' . date('')));
 
         if ($dCount) {
             //TODO: бардак какой-то с формулой

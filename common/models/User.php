@@ -11,7 +11,6 @@ use common\models\helpers\DebtorLoadMonitorFormat1;
 use common\models\helpers\DebtorCommonRecalculateMonitor;
 
 /**
- * @property ApplicationPackageToTheContractUser[] $applicationPackageToTheContractUsers
  * @property ApplicationPackageToTheContract[] $applicationPackageToTheContracts
  * @property Court[] $courts
  * @property Debtor[] $debtors
@@ -35,17 +34,9 @@ class User extends BaseUser
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getApplicationPackageToTheContractUsers()
-    {
-        return $this->hasMany(ApplicationPackageToTheContractUser::className(), ['user_id' => 'id'])->inverseOf('user');
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
     public function getApplicationPackageToTheContracts()
     {
-        return $this->hasMany(ApplicationPackageToTheContract::className(), ['id' => 'application_package_to_the_contract_id'])->viaTable('application_package_to_the_contract_user', ['user_id' => 'id']);
+        return $this->hasMany(ApplicationPackageToTheContract::className(), ['user_id' => 'id'])->inverseOf('user');
     }
 
     /**
