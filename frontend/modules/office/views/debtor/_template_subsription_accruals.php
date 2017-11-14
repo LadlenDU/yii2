@@ -98,10 +98,10 @@ CSS
     </tr>
     <tr>
         <td colspan="3" class="sgkh-no-tbl-border" style="font-size: 10px;text-align: right;padding-right: 1em">
-            <?= Yii::t('app', 'Должность') ?>
+            <?= Yii::t('app', 'Генеральный директор') ?>
         </td>
         <td colspan="2" class="sgkh-no-tbl-border">&nbsp;</td>
-        <td colspan="4" class="sgkh-no-tbl-border" style="font-size: 10px;text-align: left"><?= Yii::t('app', 'ФИО') ?></td>
+        <td colspan="4" class="sgkh-no-tbl-border" style="font-size: 10px;text-align: left"><?= Yii::t('app', Yii::$app->user->identity->userInfo->primaryCompany->cEO->createShortName()) ?></td>
     </tr>
     <tr>
         <td colspan="3" class="sgkh-no-tbl-border">&nbsp</td>
