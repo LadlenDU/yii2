@@ -11,6 +11,7 @@ use yii\bootstrap\ActiveForm;
 use kartik\file\FileInput;
 use wbraganca\tagsinput\TagsinputWidget;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 
 $this->registerCss(<<<CSS
 .bootstrap-tagsinput {
@@ -18,6 +19,8 @@ $this->registerCss(<<<CSS
 }
 CSS
 );
+
+$applicationPackageToTheContracts = ArrayHelper::map(\Yii::$app->user->identity->applicationPackageToTheContracts, 'id', 'number');
 
 ?>
     <div class="arrow-steps clearfix">
@@ -133,11 +136,14 @@ CSS
             <div class="col-md-4">
                 <?= $form->field($searchModel, 'location_building')->textInput(['placeholder' => Yii::t('app', '№ помещения')]) ?>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-2">
                 <?= $form->field($searchModel, 'claim_sum_from')->textInput(['placeholder' => Yii::t('app', 'Цена иска от')]) ?>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-2">
                 <?= $form->field($searchModel, 'claim_sum_to')->textInput(['placeholder' => Yii::t('app', 'Цена иска до')]) ?>
+            </div>
+            <div class="col-md-4">
+                <?= $form->field($searchModel, 'application_package')->dropDownList(['' => Yii::t('app', '- Любой номер приложения -')] + $applicationPackageToTheContracts) ?>
             </div>
         </div>
 
