@@ -836,10 +836,11 @@ class DebtorController extends Controller
             throw new \Exception('Нет должников');
         }
 
-        $appPackagesCount = \Yii::$app->user->identity->getApplicationPackageToTheContracts()->count();
+        $appPackagesCount = (int)\Yii::$app->user->identity->getApplicationPackageToTheContracts()->count();
         $appPackageNumber = $appPackagesCount + 1;
         $appPackage = new \common\models\ApplicationPackageToTheContract();
         $appPackage->number = $appPackageNumber;
+        $appPackage->name = '';
         $appPackage->link('user', \Yii::$app->user->identity);
 
         for ($i = $dCount - 1; $i >= 0; --$i) {
@@ -861,18 +862,20 @@ class DebtorController extends Controller
                     }
                 }
 
-                $debtor->link('ApplicationPackageToTheContracts', $appPackage);
+                $debtor->link('applicationPackageToTheContracts', $appPackage);
             }
         }
+
+        $appPackage->save();
 
         // Заносим текстовую информацию
         //$sheet->setCellValueByColumnAndRow(, 1, $row);
         $sheet->setCellValue('N2', Yii::t('app', "Приложение № $appPackageNumber"));
         //TODO: проверить date на timezone
         $sheet->setCellValue('N3', Yii::t('app', 'от {date}', ['date' => date('d.m.Y')]));
-        $company = \Yii::$app->user->identity->userInfo->primary_company;
+        $company = \Yii::$app->user->identity->userInfo->primaryCompany;
         $sheet->setCellValue('B' . ($dCount + 17), $company->short_name);
-        $sheet->setCellValue('B' . ($dCount + 19), '______________________________ ' . $company->CEO->createShortName());
+        $sheet->setCellValue('B' . ($dCount + 19), '______________________________ ' . $company->cEO->createShortName());
 
         //TODO: бардак какой-то с формулой
         //$sumFormula = '=SUM(INDIRECT(ADDRESS(11;COLUMN())&":"&ADDRESS(ROW()-1;COLUMN())))';
