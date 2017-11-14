@@ -210,7 +210,7 @@ $this->registerJs(<<<JS
             var debtorIds = getDebtorsSelected();
             if (debtorIds) {
                 // Удаление из бд TODO: обработка ошибок
-                //$.post('/office/debtor/remove-debtors-from-report/?' + $.params({debtorIds:debtorIds}));
+                $.post('/office/debtor/remove-debtors-from-report/?' + $.params({debtorIds:debtorIds}));
                 // Удаление из таблицы
                 for (var id in debtorIds) {
                     $("#dynagrid-debtors-options-container").find("input[value=" + debtorIds[id] + "]").parent().parent().fadeOut();

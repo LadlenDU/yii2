@@ -104,6 +104,14 @@ class DebtorController extends Controller
         ]);
     }
 
+    public function actionRemoveDebtorsFromReport($debtorIds)
+    {
+        foreach ($debtorIds as $dId) {
+
+        }
+        return '';
+    }
+
     /**
      * Displays a single Debtor model.
      * @param integer $id
@@ -862,6 +870,9 @@ class DebtorController extends Controller
                         $totals[$key] += $row;
                     }
                 }
+
+                $debtor->status->status = 'to_work';
+                $debtor->status->save();
 
                 $debtor->link('applicationPackageToTheContracts', $appPackage);
             }
