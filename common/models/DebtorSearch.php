@@ -12,6 +12,8 @@ use common\models\Debtor;
  */
 class DebtorSearch extends Debtor
 {
+    public $application_package;
+
     /**
      * @inheritdoc
      */
@@ -19,7 +21,7 @@ class DebtorSearch extends Debtor
     {
         return [
             [['id', 'ownership_type_id', 'location_id', 'name_id', 'user_id', 'status_id'], 'integer'],
-            [['phone', 'LS_EIRC', 'LS_IKU_provider', 'IKU', 'expiration_start', 'single', 'additional_adjustment', 'subsidies', 'location_street', 'location_building', 'claim_sum_from', 'claim_sum_to', 'status_status'], 'safe'],
+            [['phone', 'LS_EIRC', 'LS_IKU_provider', 'IKU', 'expiration_start', 'single', 'additional_adjustment', 'subsidies', 'location_street', 'location_building', 'claim_sum_from', 'claim_sum_to', 'status_status', 'application_package'], 'safe'],
             [['space_common', 'space_living', 'debt_total'], 'number'],
         ];
     }
@@ -69,17 +71,24 @@ class DebtorSearch extends Debtor
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
-            'space_common' => $this->space_common,
-            'space_living' => $this->space_living,
-            'ownership_type_id' => $this->ownership_type_id,
-            'location_id' => $this->location_id,
-            'name_id' => $this->name_id,
-            'expiration_start' => $this->expiration_start,
-            'debt_total' => $this->debt_total,
-            'user_id' => $this->user_id,
-            'status_id' => $this->status_id,
+            'debtor.id' => $this->id,
+            'debtor.space_common' => $this->space_common,
+            'debtor.space_living' => $this->space_living,
+            'debtor.ownership_type_id' => $this->ownership_type_id,
+            'debtor.location_id' => $this->location_id,
+            'debtor.name_id' => $this->name_id,
+            'debtor.expiration_start' => $this->expiration_start,
+            'debtor.debt_total' => $this->debt_total,
+            'debtor.user_id' => $this->user_id,
+            'debtor.status_id' => $this->status_id,
         ]);
+
+        if ($this->application_package) {
+            $query->innerJoinWith('applicationPackageToTheContracts', true);
+            $query->andFilterWhere([
+                'application_package_to_the_contract.number' => $this->application_package,
+            ]);
+        }
 
         if ($this->status_status) {
             if ($this->status_status == 'new') {
@@ -120,6 +129,8 @@ class DebtorSearch extends Debtor
                 ['like', 'location.street', $this->location_street],
             ])
             ->andFilterWhere(['like', 'location.building', $this->location_building]);
+
+        //$this->application_package
 
         return $dataProvider;
     }
