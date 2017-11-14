@@ -177,15 +177,32 @@ $this->registerJs(<<<JS
         
         $("#get_debtor_report").unbind('click').click(function(e) {
             e.preventDefault();
+            
+            var url;
+            
             var all = +hiddenSelectedAll.val();
             if (all) {
-                window.location.href = $downloadReportUrl + $.param({debtorIds:['all']});
+                url = $downloadReportUrl + $.param({debtorIds:['all']});
             } else {
                 var keys = getDebtorsSelected();
                 if (keys) {
-                    window.location.href = $downloadReportUrl + $.param({debtorIds:keys});
+                    url = $downloadReportUrl + $.param({debtorIds:keys});
                 }
             }
+            
+            if (url) {
+                $("#debtor-report-download-frame").attr('src', url);
+                //TODO: временный костыль, костыльный костыль, ОБЯЗАТЕЛЬНО ИСПРАВИТЬ!!!
+                var maxVal = 1;
+                $.map($("#debtorsearch-application_package option"), function(option) {
+                    if (maxVal < parseInt(option.value)) {
+                        maxVal = parseInt(option.value);
+                    }
+                });
+                maxVal++;
+                $("#debtorsearch-application_package").append('<option value="' + maxVal + '">' + maxVal + '</option>');
+            }
+            
             return false;
         });
     }
