@@ -20,6 +20,9 @@ $this->registerCss(<<<CSS
     text-align: center;
     vertical-align: top;
 }
+.subs_accruals_main_tbl .sgkh-no-tbl-border {
+    border: none;
+}
 CSS
 );
 
@@ -86,22 +89,23 @@ CSS
     }
     ?>
     <tr>
-        <td colspan="9" style="font-weight:bold;padding: 5em 5em 0 0">
+        <td colspan="7" style="font-weight:bold;padding: 5em 3em 2em 0;border-left:none;border-right:none;border-bottom:none;text-align: right">
             <?= Yii::t('app', 'Итого общая сумма задолженности <span style="font-size: 10px">{amount}</span> <span style="font-weight: normal">рублей</span>',
                 //['amount' => $debtor->debt . " ($totalDebt)"])
                 ['amount' => $debtor->debt]) ?>
         </td>
+        <td colspan="2" style="border-left:none;border-right:none;border-bottom:none">&nbsp;</td>
     </tr>
     <tr>
-        <td colspan="3" style="font-size: 10px;text-align: right;padding-right: 1em">
+        <td colspan="3" class="sgkh-no-tbl-border" style="font-size: 10px;text-align: right;padding-right: 1em">
             <?= Yii::t('app', 'Должность') ?>
         </td>
-        <td colspan="2">&nbsp;</td>
-        <td colspan="4" style="font-size: 10px;text-align: left"><?= Yii::t('app', 'ФИО') ?></td>
+        <td colspan="2" class="sgkh-no-tbl-border">&nbsp;</td>
+        <td colspan="4" class="sgkh-no-tbl-border" style="font-size: 10px;text-align: left"><?= Yii::t('app', 'ФИО') ?></td>
     </tr>
     <tr>
-        <td colspan="3">&nbsp</td>
-        <td colspan="6" style="font-size: 10px;text-align: left"><?= Yii::t('app', 'М.П.') ?></td>
+        <td colspan="3" class="sgkh-no-tbl-border">&nbsp</td>
+        <td colspan="6" class="sgkh-no-tbl-border" style="font-size: 10px;text-align: left"><?= Yii::t('app', 'М.П.') ?></td>
     </tr>
 </table>
 <br>
