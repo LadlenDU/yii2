@@ -100,6 +100,7 @@ class DebtorController extends Controller
             'dataProvider' => $dataProvider,
             'uploadModel' => $uploadModel,
             'showSearchPane' => Yii::$app->request->queryParams['search'] ?? false,
+            'showReportHandleButtons' => $searchModel->application_package,
         ]);
     }
 

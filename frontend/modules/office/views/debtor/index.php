@@ -4,6 +4,7 @@
 /* @var $searchModel common\models\DebtorSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 /* @var $uploadModel common\models\UploadForm */
+/* @var $showReportHandleButtons int */
 
 use yii\helpers\Html;
 
@@ -155,6 +156,21 @@ $columns = [
 
 <?php
 echo $this->render('_extensions', compact('uploadModel', 'searchModel', 'showSearchPane'));//['uploadModel' => $uploadModel, 'searchModel' => $searchModel, '$showSearchPane']);
+
+$reportHandleButtons = '';
+if ($showReportHandleButtons) {
+    $reportHandleButtons = '<span style="margin-left:1em">'
+        . Html::button('<i class="glyphicon glyphicon-minus"></i>',
+            [
+                'type' => 'button',
+                'title' => Yii::t('app', 'Удалить должника из приложения'),
+                'class' => 'btn btn-danger',
+                'id' => 'remove_debtors_from_report',
+            ]
+
+        )
+        . '</span>';
+}
 ?>
 
 <div class="debtor-index">
@@ -172,7 +188,7 @@ echo $this->render('_extensions', compact('uploadModel', 'searchModel', 'showSea
             'pjax' => true,
             'panel' => [
                 'heading' => '<h3 class="panel-title">' . Yii::t('app', 'Список должников') . '</h3>',
-                'before' => '{dynagrid}<span id="dynagrid-debtors-selected-debtors"><span id="dynagrid-debtors-selected-debtors-msg-1">'
+                'before' => '{dynagrid}' . $reportHandleButtons . '<span id="dynagrid-debtors-selected-debtors"><span id="dynagrid-debtors-selected-debtors-msg-1">'
                     . Yii::t('app', 'Выбрано %s должников.') . '</span>&nbsp;&nbsp;<span id="dynagrid-debtors-selected-debtors-msg-2"></span>'
                     . '</span>',
             ],

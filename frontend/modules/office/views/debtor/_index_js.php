@@ -205,6 +205,19 @@ $this->registerJs(<<<JS
             
             return false;
         });
+        
+        $("#remove_debtors_from_report").unbind('click').click(function(e) {
+            var debtorIds = getDebtorsSelected();
+            if (debtorIds) {
+                // Удаление из бд TODO: обработка ошибок
+                //$.post('/office/debtor/remove-debtors-from-report/?' + $.params({debtorIds:debtorIds}));
+                // Удаление из таблицы
+                for (var id in debtorIds) {
+                    $("#dynagrid-debtors-options-container").find("input[value=" + debtorIds[id] + "]").parent().parent().fadeOut();
+                }
+            }
+        });
+        
     }
     
     prepareEvents();
