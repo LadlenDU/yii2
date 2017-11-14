@@ -61,34 +61,35 @@ CSS
         <th colspan="3"><?= Yii::t('app', 'Период взаиморасчетов') ?></th>
     </tr>
     <?php
-        $totalDebt = 0;
+    $totalDebt = 0;
 
-        foreach ($debtor->accruals as $accrual) {
-            echo '<tr>';
-            $accrualDate = date('m.Y', strtotime($accrual->accrual_date));
-            //$accrualDateMonthOnly = substr($accrual->accrual_date, 0, 7);
-            //TODO: может быть в теории несколько оплат - заменить one() на all()
-            //$payment = \common\models\Payment::find()->where('payment_date' => $accrualDateMonthOnly)->one();
-            //$payment = \common\models\Payment::find()->where(['payment_date' => $accrual->accrual_date])->one();
-            $payment = $debtor->getPayments()->where(['payment_date' => $accrual->accrual_date])->one();
-            $paymentAmount = $payment ? $payment->amount : '0.00';
-            //TODO: проверить правильность
-            $debt = (float)$accrual->accrual_recount - (float)$paymentAmount;
-            echo "<td colspan='3' style='text-align:center'>$accrualDate</td>";
-            echo '<td>&nbsp;</td>';
-            echo "<td style='text-align:right'>$accrual->accrual_recount</td>";
-            echo "<td style='text-align:right'>$paymentAmount</td>";
-            echo "<td style='text-align:right'>$debt</td>";
-            echo "<td style='text-align:right'>$debt</td>";
-            echo "<td style='text-align:right'>$debt</td>";
-            echo '</tr>';
-            $totalDebt += $debt;
-        }
+    foreach ($debtor->accruals as $accrual) {
+        echo '<tr>';
+        $accrualDate = date('m.Y', strtotime($accrual->accrual_date));
+        //$accrualDateMonthOnly = substr($accrual->accrual_date, 0, 7);
+        //TODO: может быть в теории несколько оплат - заменить one() на all()
+        //$payment = \common\models\Payment::find()->where('payment_date' => $accrualDateMonthOnly)->one();
+        //$payment = \common\models\Payment::find()->where(['payment_date' => $accrual->accrual_date])->one();
+        $payment = $debtor->getPayments()->where(['payment_date' => $accrual->accrual_date])->one();
+        $paymentAmount = $payment ? $payment->amount : '0.00';
+        //TODO: проверить правильность
+        $debt = (float)$accrual->accrual_recount - (float)$paymentAmount;
+        echo "<td colspan='3' style='text-align:center'>$accrualDate</td>";
+        echo '<td>&nbsp;</td>';
+        echo "<td style='text-align:right'>$accrual->accrual_recount</td>";
+        echo "<td style='text-align:right'>$paymentAmount</td>";
+        echo "<td style='text-align:right'>$debt</td>";
+        echo "<td style='text-align:right'>$debt</td>";
+        echo "<td style='text-align:right'>$debt</td>";
+        echo '</tr>';
+        $totalDebt += $debt;
+    }
     ?>
     <tr>
         <td colspan="9" style="font-weight:bold;padding: 5em 5em 0 0">
             <?= Yii::t('app', 'Итого общая сумма задолженности <span style="font-size: 10px">{amount}</span> <span style="font-weight: normal">рублей</span>',
-                ['amount' => $debtor->debt . " ($totalDebt)"]) ?>
+                //['amount' => $debtor->debt . " ($totalDebt)"]) ?>
+            ['amount' => $debtor->debt]) ?>
         </td>
     </tr>
     <tr>
