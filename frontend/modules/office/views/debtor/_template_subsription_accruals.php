@@ -7,37 +7,53 @@
 
 use yii\helpers\Html;
 
+$this->registerCss(<<<CSS
+.subs_accruals_main_tbl {
+    width: 100%;
+    font-size: 8px;
+}
+.subs_accruals_main_tbl td,
+.subs_accruals_main_tbl th {
+    border: 1px solid black;
+}
+.subs_accruals_main_tbl th{
+    text-align: center;
+    vertical-align: top;
+}
+CSS
+);
+
 ?>
 <span style="font-size: 12px;font-weight:bold"><?= Yii::t('app', 'Свод начислений по лицевому счету') ?></span>
 <br>
 <br>
 <table style="font-size: 10px">
     <tr>
-        <td style="font-weight:bold;text-align:right">Номер лицевого счета</td>
+        <td style="font-weight:bold;text-align:right;padding-right:2em">Номер лицевого счета</td>
         <td style="text-align:left"><?= Html::encode($debtor->LS_IKU_provider) ?></td>
     </tr>
     <tr>
-        <td style="font-weight:bold;text-align:right">Адрес</td>
+        <td style="font-weight:bold;text-align:right;padding-right:2em">Адрес</td>
         <td style="text-align:left"><?= Html::encode($debtor->location->createFullAddress()) ?></td>
     </tr>
     <tr>
-        <td style="font-weight:bold;text-align:right">ФИО</td>
+        <td style="font-weight:bold;text-align:right;padding-right:1em">ФИО</td>
         <td style="text-align:left"><?= Html::encode($debtor->name->createFullName()) ?></td>
     </tr>
 </table>
-<table style="width: 100%;font-size: 8px">
+<table class="subs_accruals_main_tbl">
     <tr>
-        <td colspan="3"><?= Yii::t('app', 'Организация')?></td>
-        <td rowspan="3"><?= Yii::t('app', 'Начальный остаток')?></td>
-        <td rowspan="3"><?= Yii::t('app', 'Начислено')?></td>
-        <td rowspan="3"><?= Yii::t('app', 'Оплачено')?></td>
-        <td colspan="2"><?= Yii::t('app', 'Конечный остаток')?></td>
-        <td rowspan="3"><?= Yii::t('app', 'Сумма просроченной задолженности')?></td>
+        <th colspan="3"><?= Yii::t('app', 'Организация') ?></th>
+        <th rowspan="3"><?= Yii::t('app', 'Начальный остаток') ?></th>
+        <th rowspan="3"><?= Yii::t('app', 'Начислено') ?></th>
+        <th rowspan="3"><?= Yii::t('app', 'Оплачено') ?></th>
+        <th colspan="2"><?= Yii::t('app', 'Конечный остаток') ?></th>
+        <th rowspan="3"><?= Yii::t('app', 'Сумма просроченной задолженности') ?></th>
     </tr>
     <tr>
-        <td><?= Yii::t('app', '№ кв.')?></td>
-        <td><?= Yii::t('app', 'Лицевой счет')?></td>
-        <td><?= Yii::t('app', 'Месяцев задолженности')?></td>
+        <td style="vertical-align: middle"><?= Yii::t('app', '№ кв.') ?></td>
+        <td style="vertical-align: middle"><?= Yii::t('app', 'Лицевой счет') ?></td>
+        <td style="vertical-align: middle"><?= Yii::t('app', 'Месяцев задолженности') ?></td>
     </tr>
     <tr>
         <td colspan="3"><?= Yii::t('app', 'Период взаиморасчетов') ?></td>
@@ -61,7 +77,7 @@ use yii\helpers\Html;
     <tr>
         <td colspan="3">&nbsp</td>
         <td colspan="6" style="font-size: 10px;text-align: left"><?= Yii::t('app', 'М.П.') ?></td>
-    </tr>€
+    </tr>
 </table>
 <br>
 <br>

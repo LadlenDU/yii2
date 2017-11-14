@@ -13,7 +13,9 @@ $loading = '<div style="text-align: center">' . Html::img('/img/loading.gif', [
         'style' => 'margin:1em',
     ]) . '</div>';
 $totalDebtors = (int)$dataProvider->getTotalCount();
-$downloadReportUrl = json_encode(Url::to('/office/debtor/get-report-file/?'));
+$downloadReportUrl = json_encode(Url::to('/office/debtor/get-report-file/?', true));
+$removeDebtorsFromReport = json_encode(Url::to('/office/debtor/remove-debtors-from-report/?', true));
+$showSubscriptionForAccruals = json_encode(Url::to('/office/debtor/show-subscription-for-accruals/?', true));
 
 $this->registerJs(<<<JS
     $('#statusesModal').on('show.bs.modal', function(e) {
@@ -207,14 +209,22 @@ $this->registerJs(<<<JS
         });
         
         $("#remove_debtors_from_report").unbind('click').click(function(e) {
+            e.preventDefault();
             var debtorIds = getDebtorsSelected();
             if (debtorIds) {
                 // Удаление из бд TODO: обработка ошибок
-                $.post('/office/debtor/remove-debtors-from-report/?' + $.params({debtorIds:debtorIds}));
+                $.post($removeDebtorsFromReport + $.param({debtorIds:debtorIds}));
                 // Удаление из таблицы
                 for (var id in debtorIds) {
                     $("#dynagrid-debtors-options-container").find("input[value=" + debtorIds[id] + "]").parent().parent().fadeOut();
                 }
+            }
+        });
+        
+        $("#show_subscription_for_accruals").click(function() {
+            var debtorIds = getDebtorsSelected();
+            if (debtorIds) {
+                window.open($showSubscriptionForAccruals + $.param({debtorId:debtorIds[0]}), "_blank");
             }
         });
         

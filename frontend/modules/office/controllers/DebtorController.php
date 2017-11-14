@@ -107,7 +107,12 @@ class DebtorController extends Controller
     public function actionRemoveDebtorsFromReport($debtorIds)
     {
         foreach ($debtorIds as $dId) {
-
+            if ($debtor = $this->findModel($dId)) {
+                $debtor->status->status = 'new';
+                $debtor->status->save();
+                //TODO: рассмотреть удаление (unlink($name, $model, true))
+                \Yii::$app->user->identity->applicationPackageToTheContract->unlink('debtors', $debtor);
+            }
         }
         return '';
     }
@@ -468,6 +473,13 @@ class DebtorController extends Controller
         $tempFNamePdfHouses && unlink($tempFNamePdfHouses);
 
         return $tempFNameResult;
+    }
+
+    public function actionShowSubscriptionForAccruals($debtorId)
+    {
+        $this->layout = 'print_fine';
+        $debtor = $this->findModel($debtorId);
+        return $this->render('_template_subsription_accruals', ['debtor' => $debtor]);
     }
 
     public function actionPrintDocuments()

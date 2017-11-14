@@ -208,6 +208,13 @@ if ($showReportHandleButtons) {
                                 'id' => 'get_debtor_report',
                                 //'href' => Url::to('/office/debtor/create'),
                             ]
+                        ) . '&nbsp;&nbsp;' . Html::button('<i class="glyphicon glyphicon-list-alt"></i>',
+                            [
+                                'type' => 'button',
+                                'title' => Yii::t('app', 'Свод начислений по лицевому счету'),
+                                'class' => 'btn btn-warning',
+                                'id' => 'show_subscription_for_accruals',
+                            ]
                         )
                     /*Html::button('<i class="glyphicon glyphicon-plus"></i>',
                         [
