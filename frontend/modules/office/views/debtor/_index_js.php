@@ -221,7 +221,7 @@ $this->registerJs(<<<JS
             }
         });
         
-        $("#show_subscription_for_accruals").click(function() {
+        $("#show_subscription_for_accruals").unbind('click').click(function() {
             var debtorIds = getDebtorsSelected();
             if (debtorIds) {
                 window.open($showSubscriptionForAccruals + $.param({debtorId:debtorIds[0]}), "_blank");
