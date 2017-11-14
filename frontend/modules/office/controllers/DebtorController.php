@@ -868,19 +868,20 @@ class DebtorController extends Controller
         // Заносим текстовую информацию
         //$sheet->setCellValueByColumnAndRow(, 1, $row);
         $sheet->setCellValue('N2', Yii::t('app', "Приложение № $appPackageNumber"));
-        //TODO: проверить на timezone
-        $sheet->setCellValue('N3', Yii::t('app', 'от ' . date('')));
+        //TODO: проверить date на timezone
+        $sheet->setCellValue('N3', Yii::t('app', 'от {date}', ['date' => date('d.m.Y')]));
+        $company = \Yii::$app->user->identity->userInfo->primary_company;
+        $sheet->setCellValue('B' . ($dCount + 17), $company->short_name);
+        $sheet->setCellValue('B' . ($dCount + 19), '______________________________ ' . $company->CEO->createShortName());
 
-        if ($dCount) {
-            //TODO: бардак какой-то с формулой
-            //$sumFormula = '=SUM(INDIRECT(ADDRESS(11;COLUMN())&":"&ADDRESS(ROW()-1;COLUMN())))';
-            //$sheet->setCellValueByColumnAndRow(9, $startRow + $dCount, $sumFormula);
-            $sheet->setCellValueByColumnAndRow(9, $startRow + $dCount, $totals['total_debt_regarding_UK']);
-            $sheet->setCellValueByColumnAndRow(10, $startRow + $dCount, $totals['total_debt_primary']);
-            $sheet->setCellValueByColumnAndRow(11, $startRow + $dCount, $totals['total_fine']);
-            $sheet->setCellValueByColumnAndRow(12, $startRow + $dCount, $totals['cost_of_claim']);
-            $sheet->setCellValueByColumnAndRow(13, $startRow + $dCount, $totals['state_fee']);
-        }
+        //TODO: бардак какой-то с формулой
+        //$sumFormula = '=SUM(INDIRECT(ADDRESS(11;COLUMN())&":"&ADDRESS(ROW()-1;COLUMN())))';
+        //$sheet->setCellValueByColumnAndRow(9, $startRow + $dCount, $sumFormula);
+        $sheet->setCellValueByColumnAndRow(9, $startRow + $dCount, $totals['total_debt_regarding_UK']);
+        $sheet->setCellValueByColumnAndRow(10, $startRow + $dCount, $totals['total_debt_primary']);
+        $sheet->setCellValueByColumnAndRow(11, $startRow + $dCount, $totals['total_fine']);
+        $sheet->setCellValueByColumnAndRow(12, $startRow + $dCount, $totals['cost_of_claim']);
+        $sheet->setCellValueByColumnAndRow(13, $startRow + $dCount, $totals['state_fee']);
 
         //$objPHPExcel = $debtor->getReportExcel();
         //another MIME type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
