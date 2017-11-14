@@ -88,8 +88,8 @@ CSS
     <tr>
         <td colspan="9" style="font-weight:bold;padding: 5em 5em 0 0">
             <?= Yii::t('app', 'Итого общая сумма задолженности <span style="font-size: 10px">{amount}</span> <span style="font-weight: normal">рублей</span>',
-                //['amount' => $debtor->debt . " ($totalDebt)"]) ?>
-            ['amount' => $debtor->debt]) ?>
+                //['amount' => $debtor->debt . " ($totalDebt)"])
+                ['amount' => $debtor->debt]) ?>
         </td>
     </tr>
     <tr>
