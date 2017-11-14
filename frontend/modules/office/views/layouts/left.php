@@ -35,6 +35,8 @@
                     ['label' => 'Моя организация', 'icon' => 'fa fa-id-card', 'url' => ['/office/my-organization']],
                     ['label' => 'Организации', 'icon' => 'fa fa-handshake-o', 'url' => ['/office/company']],
                     ['label' => 'Дома', 'icon' => 'fa fa-file-code-o', 'options' => ['class' => 'header']/*, 'url' => ['/office/buildings']*/],
+                    ['label' => 'Квартплата', 'icon' => 'fa fa-file-code-o', 'options' => ['class' => 'header']],
+                    ['label' => 'Диспетчерская', 'icon' => 'fa fa-tty', 'url' => ['/office/dispatching']],
                     [
                         'label' => 'Работа с должниками',
                         'icon' => 'fa fa-users',
@@ -66,7 +68,6 @@
                         ],
                     ],*/
                     //['label' => 'Заявление приставам', 'icon' => 'file-code-o', 'url' => ['/office/statement-to-bailiffs']],
-                    ['label' => 'Диспетчерская', 'icon' => 'file-code-o', 'options' => ['class' => 'header']/*, 'url' => ['/office/statement-to-bailiffs']*/],
                     ['label' => 'Рассылки', 'icon' => 'file-code-o', 'options' => ['class' => 'header']/*, 'url' => ['/office/newsletters']*/],
                     ['label' => 'Отчеты', 'icon' => 'file-code-o', 'options' => ['class' => 'header']/*, 'url' => ['/office/reports']*/],
                     ['label' => 'Аналитика', 'icon' => 'file-code-o', 'options' => ['class' => 'header']/*, 'url' => ['/office/analytics']*/],
