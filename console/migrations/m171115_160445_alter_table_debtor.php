@@ -6,9 +6,6 @@ class m171115_160445_alter_table_debtor extends Migration
 {
     public function safeUp()
     {
-        $this->alterColumn('debtor', 'user_id', $this->integer()->notNull());
-        $this->renameColumn('debtor', 'user_id', 'company_id');
-
         // drops foreign key for table `user`
         $this->dropForeignKey(
             'fk-debtor-user_id',
@@ -19,6 +16,9 @@ class m171115_160445_alter_table_debtor extends Migration
             'idx-debtor-user_id',
             'debtor'
         );
+
+        $this->alterColumn('debtor', 'user_id', $this->integer()->notNull());
+        $this->renameColumn('debtor', 'user_id', 'company_id');
 
         // creates index for column `user_id`
         $this->createIndex(
