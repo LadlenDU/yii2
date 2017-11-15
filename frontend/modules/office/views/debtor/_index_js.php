@@ -222,13 +222,25 @@ $this->registerJs(<<<JS
                 var data = {debtorIds: debtorIds, appId: appId};
                 data[csrfParam] = csrfToken;
                 $.post($removeDebtorsFromReport, data, function(data){
-                    if (data && data.result == 'success') {
-                        // Удаление из таблицы
-                        for (var id in debtorIds) {
-                            $("#dynagrid-debtors-options-container").find("input[value=" + debtorIds[id] + "]").parent().parent().fadeOut();
+                    if (data){
+                        switch (data.result)
+                        {
+                            case 'success':
+                                // Удаление из таблицы
+                                for (var id in debtorIds) {
+                                    $("#dynagrid-debtors-options-container").find("input[value=" + debtorIds[id] + "]").parent().parent().fadeOut();
+                                }
+                                break;
+                            case 'page_reload':
+                                location.href = location.href; 
+                                break;
+                            default:
+                                alert($removeDebtorsFromReportError);
+                                break;
                         }
                     }
                 }, 'json').fail(function() {
+                    //TODO: уточнять причину
                     alert($removeDebtorsFromReportError);
                 });
             }
