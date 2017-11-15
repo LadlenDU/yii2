@@ -27,9 +27,8 @@ CSS
 }*/
 $applicationPackageToTheContracts = [];
 foreach (\Yii::$app->user->identity->applicationPackageToTheContracts as $apc) {
-    #$item['id'] = $apc->id;
-    #$item['number'] = $apc->id;
-    $str = Yii::t('app', 'Приложение № {number} от {created_at}', ['number' => $apc->number, 'created_at' => $apc->created_at]);
+    $createdAt = date('d.m.Y - H:i', strtotime($apc->created_at));
+    $str = Yii::t('app', 'Приложение № {number} от {created_at}', ['number' => $apc->number, 'created_at' => $createdAt]);
     $applicationPackageToTheContracts[$apc['id']] = $str;
 }
 
