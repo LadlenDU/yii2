@@ -66,30 +66,24 @@ CSS
     <?php
     $totalDebt = 0;
 
-    foreach ($debtor->accruals as $accrual) {
-        echo '<tr>';
-        $accrualDate = date('m.Y', strtotime($accrual->accrual_date));
-        //$accrualDateMonthOnly = substr($accrual->accrual_date, 0, 7);
-        //TODO: может быть в теории несколько оплат - заменить one() на all()
-        //$payment = \common\models\Payment::find()->where('payment_date' => $accrualDateMonthOnly)->one();
-        //$payment = \common\models\Payment::find()->where(['payment_date' => $accrual->accrual_date])->one();
-        $payment = $debtor->getPayments()->where(['payment_date' => $accrual->accrual_date])->one();
-        $paymentAmount = $payment ? $payment->amount : '0.00';
-        //TODO: проверить правильность
-        $debt = (float)$accrual->accrual_recount - (float)$paymentAmount;
-        echo "<td colspan='3' style='text-align:center'>$accrualDate</td>";
-        echo '<td>&nbsp;</td>';
-        echo "<td style='text-align:right'>$accrual->accrual_recount</td>";
-        echo "<td style='text-align:right'>$paymentAmount</td>";
-        echo "<td style='text-align:right'>$debt</td>";
-        echo "<td style='text-align:right'>$debt</td>";
-        echo "<td style='text-align:right'>$debt</td>";
-        echo '</tr>';
-        $totalDebt += $debt;
+    $saiItems = $debtor->getSubscriptionAccrualsInfo();
+
+    foreach ($saiItems as $item) {
+        //TODO: '0.00' - сделать как-то глобальный денежный формат для нуля денег
+        echo '<tr>'
+            . '<td colspan="3" style="text-align:center">' . date('m.Y', $item['accrual_date']) . '</td>'
+            . '<td>' . ($item['initial_balance'] ?: '&nbsp;') . '</td>'
+            . '<td style="text-align:right">' . ($item['accrual'] ?: '0.00') . '</td>'
+            . '<td style="text-align:right">' . ($item['payment'] ?: '0.00') . '</td>'
+            . '<td style="text-align:right">' . ($item['debt'] ?: '0.00') . '</td>'
+            . '<td style="text-align:right">' . ($item['final_balance'] ?: '0.00') . '</td>'
+            . '<td style="text-align:right">' . ($item['overdue_debt'] ?: '0.00') . '</td>'
+            . '</tr>';
     }
     ?>
     <tr>
-        <td colspan="7" style="font-weight:bold;padding: 5em 3em 2em 0;border-left:none;border-right:none;border-bottom:none;text-align: right">
+        <td colspan="7"
+            style="font-weight:bold;padding: 5em 3em 2em 0;border-left:none;border-right:none;border-bottom:none;text-align: right">
             <?= Yii::t('app', 'Итого общая сумма задолженности <span style="font-size: 10px">{amount}</span> <span style="font-weight: normal">рублей</span>',
                 //['amount' => $debtor->debt . " ($totalDebt)"])
                 ['amount' => $debtor->debt]) ?>
@@ -101,11 +95,13 @@ CSS
             <?= Yii::t('app', 'Генеральный директор') ?>
         </td>
         <td colspan="2" class="sgkh-no-tbl-border">&nbsp;</td>
-        <td colspan="4" class="sgkh-no-tbl-border" style="font-size: 10px;text-align: left"><?= Yii::t('app', Yii::$app->user->identity->userInfo->primaryCompany->cEO->createShortName()) ?></td>
+        <td colspan="4" class="sgkh-no-tbl-border"
+            style="font-size: 10px;text-align: left"><?= Yii::t('app', Yii::$app->user->identity->userInfo->primaryCompany->cEO->createShortName()) ?></td>
     </tr>
     <tr>
         <td colspan="3" class="sgkh-no-tbl-border">&nbsp</td>
-        <td colspan="6" class="sgkh-no-tbl-border" style="font-size: 10px;text-align: left"><?= Yii::t('app', 'М.П.') ?></td>
+        <td colspan="6" class="sgkh-no-tbl-border"
+            style="font-size: 10px;text-align: left"><?= Yii::t('app', 'М.П.') ?></td>
     </tr>
 </table>
 <br>

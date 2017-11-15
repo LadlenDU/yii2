@@ -8,6 +8,7 @@ use Yii;
 use yii\web\UploadedFile;
 use common\models\debtor_parse\DebtorParse;
 use common\models\helpers\DebtorLoadMonitorFormat1;
+use common\helpers\FormatHelper;
 
 //use common\models\debtor_parse\DebtorParse;
 //use morphos\Russian\inflectName;
@@ -778,7 +779,7 @@ class Debtor extends \yii\db\ActiveRecord
             $saveResult = DebtorParse::saveDebtors($info, $fileMonitor);
 
             $msg = Yii::t('app', 'Успешно прошла операция добавления в БД.') . '<br>';
-            $finishedAtTz = \common\helpers\FormatHelper::convertDatetimeToTimezone($fileMonitor->finished_at);
+            $finishedAtTz = FormatHelper::convertDatetimeToTimezone($fileMonitor->finished_at);
             $msg .= Yii::t('app', 'Файл: {fName}. Время завершения: {fDateTime}',
                     ['fName' => $fileMonitor->file_name, 'fDateTime' => $finishedAtTz]) . '<br><br>';
 
@@ -853,5 +854,76 @@ class Debtor extends \yii\db\ActiveRecord
         $arr['state_fee'] = $this->state_fee;
 
         return $arr;
+    }
+
+    /**
+     * Возвращает информацию для "Свод начислений по лицевому счету"
+     */
+    public function getSubscriptionAccrualsInfo()
+    {
+        $info = [];
+
+        $allDebtorAccruals = $this->getAccruals()->orderBy(['accrual_date' => SORT_ASC])->all();
+
+        if ($allDebtorAccruals) {
+            $realAccrualsCounter = 0;
+            for (; ;) {
+                $lastAccrual = $allDebtorAccruals[$realAccrualsCounter];
+                $info[] = $this->getSubscriptionAccrualsInfoElement($lastAccrual);
+
+                $currMonthDateStr = FormatHelper::setDateToMonthStart($lastAccrual->accrual_date);
+                $nextMonthDateStr = FormatHelper::addIntervalToDateTimeString($currMonthDateStr, '1 month');
+
+                ++$realAccrualsCounter;
+
+                if (isset($allDebtorAccruals[$realAccrualsCounter])) {
+                    $nextAccrual = $allDebtorAccruals[$realAccrualsCounter];
+                    $nextAvailableMonthDate = FormatHelper::setDateToMonthStart($nextAccrual->accrual_date);
+                    while ($nextAvailableMonthDate != $nextMonthDateStr) {
+                        $info[] = $this->getSubscriptionAccrualsInfoElement(null, $nextMonthDateStr);
+                        $nextMonthDateStr = FormatHelper::addIntervalToDateTimeString($nextMonthDateStr, '1 month');
+                    }
+                } else {
+                    break;
+                }
+            }
+        }
+
+        return $info;
+    }
+
+    protected function getSubscriptionAccrualsInfoElement($accrual = false, string $accrualDateOnEmptyAccrual = null): array
+    {
+        $info = [];
+
+        if ($accrual) {
+            //TODO: косяк с поиском, надо искать по месяцу
+            $payment = $this->getPayments()
+                ->where(['payment_date' => FormatHelper::setDateToMonthStart($accrual->accrual_date)])->one();
+            $paymentAmount = $payment ? $payment->amount : '0.00';
+            //TODO: проверить правильность
+            $debt = (float)$accrual->accrual_recount - (float)$paymentAmount;
+            $info = [
+                'accrual_date' => strtotime($accrual->accrual_date),
+                'initial_balance' => null,
+                'accrual' => $accrual->accrual_recount,
+                'payment' => $paymentAmount,
+                'debt' => $debt,
+                'final_balance' => $debt,
+                'overdue_debt' => $debt,
+            ];
+        } else {
+            $info = [
+                'accrual_date' => strtotime($accrualDateOnEmptyAccrual),
+                'initial_balance' => null,
+                'accrual' => '0.00',
+                'payment' => '0.00',
+                'debt' => '0.00',
+                'final_balance' => '0.00',
+                'overdue_debt' => '0.00',
+            ];
+        }
+
+        return $info;
     }
 }
