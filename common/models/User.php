@@ -13,11 +13,10 @@ use common\models\helpers\DebtorCommonRecalculateMonitor;
 /**
  * @property ApplicationPackageToTheContract[] $applicationPackageToTheContracts
  * @property Court[] $courts
- * @property Debtor[] $debtors
  * @property DebtorCommonRecalculateMonitor[] $debtorCommonRecalculateMonitors
  * @property DebtorLoadMonitorFormat1[] $debtorLoadMonitorFormat1s
  * @property UserInfo $userInfo
-  */
+ */
 class User extends BaseUser
 {
     //const DECREASE_BALANCE = 'decreaseBalance';
@@ -45,14 +44,6 @@ class User extends BaseUser
     public function getCourts()
     {
         return $this->hasMany(Court::className(), ['user_id' => 'id'])->inverseOf('user');
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getDebtors()
-    {
-        return $this->hasMany(Debtor::className(), ['user_id' => 'id'])->inverseOf('user');
     }
 
     /**

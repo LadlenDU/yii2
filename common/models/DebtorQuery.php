@@ -16,7 +16,9 @@ class DebtorQuery extends \yii\db\ActiveQuery
 
     public function prepare($builder)
     {
-        $this->andWhere(['debtor.user_id' => \Yii::$app->user->identity->getId()]);
+        //TODO: как-то лучше это сделать
+        //$this->andWhere(['debtor.user_id' => \Yii::$app->user->identity->getId()]);
+        $this->andWhere(['debtor.company_id' => \Yii::$app->user->identity->userInfo->primary_company]);
         return parent::prepare($builder);
     }
 

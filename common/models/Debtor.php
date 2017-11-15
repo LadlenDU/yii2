@@ -9,6 +9,7 @@ use yii\web\UploadedFile;
 use common\models\debtor_parse\DebtorParse;
 use common\models\helpers\DebtorLoadMonitorFormat1;
 use common\helpers\FormatHelper;
+use common\models\info\Company;
 
 //use common\models\debtor_parse\DebtorParse;
 //use morphos\Russian\inflectName;
@@ -31,7 +32,7 @@ use common\helpers\FormatHelper;
  * @property string $single
  * @property string $additional_adjustment
  * @property string $subsidies
- * @property integer $user_id
+ * @property integer $company_id
  * @property integer $status_id
  * @property string $debt
  * @property string $fine
@@ -42,11 +43,11 @@ use common\helpers\FormatHelper;
  * @property ApplicationPackageToTheContractDebtor[] $applicationPackageToTheContractDebtors
  * @property ApplicationPackageToTheContract[] $applicationPackageToTheContracts
  * @property DebtDetails[] $debtDetails
+ * @property Company $company
  * @property Location $location
  * @property Name $name
  * @property OwnershipType $ownershipType
  * @property DebtorStatus $status
- * @property User $user
  * @property DebtorCohabitant[] $debtorCohabitants
  * @property DebtorPublicService[] $debtorPublicServices
  * @property PublicService[] $publicServices
@@ -75,17 +76,17 @@ class Debtor extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['LS_IKU_provider'], 'required'],
+            [['LS_IKU_provider', 'company_id'], 'required'],
             [['space_common', 'space_living', 'debt_total', 'debt', 'fine', 'cost_of_claim', 'state_fee'], 'number'],
-            [['ownership_type_id', 'location_id', 'name_id', 'user_id', 'status_id'], 'integer'],
+            [['ownership_type_id', 'location_id', 'name_id', 'company_id', 'status_id'], 'integer'],
             [['expiration_start', 'location_street', 'location_building', 'claim_sum_from', 'claim_sum_to', 'status_status'], 'safe'],
             [['phone', 'LS_EIRC', 'LS_IKU_provider', 'IKU', 'single', 'additional_adjustment', 'subsidies'], 'string', 'max' => 255],
             [['name_id'], 'unique'],
+            [['company_id'], 'exist', 'skipOnError' => true, 'targetClass' => Company::className(), 'targetAttribute' => ['company_id' => 'id']],
             [['location_id'], 'exist', 'skipOnError' => true, 'targetClass' => Location::className(), 'targetAttribute' => ['location_id' => 'id']],
             [['name_id'], 'exist', 'skipOnError' => true, 'targetClass' => Name::className(), 'targetAttribute' => ['name_id' => 'id']],
             [['ownership_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => OwnershipType::className(), 'targetAttribute' => ['ownership_type_id' => 'id']],
             [['status_id'], 'exist', 'skipOnError' => true, 'targetClass' => DebtorStatus::className(), 'targetAttribute' => ['status_id' => 'id']],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
 
@@ -118,7 +119,7 @@ class Debtor extends \yii\db\ActiveRecord
             'paymentSum' => Yii::t('app', 'Оплачено'),
             'debtTotal' => Yii::t('app', 'Задолженность'),
             'fineTotal' => Yii::t('app', 'Пеня'),
-            'user_id' => Yii::t('app', 'ID пользователя'),
+            'company_id' => Yii::t('app', 'ID компании'),
             'status_id' => Yii::t('app', 'ID cтатуса'),
             'debt' => Yii::t('app', 'Задолженность'),
             'fine' => Yii::t('app', 'Пеня'),
@@ -162,6 +163,14 @@ class Debtor extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getCompany()
+    {
+        return $this->hasOne(Company::className(), ['id' => 'company_id'])->inverseOf('debtors');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getLocation()
     {
         return $this->hasOne(Location::className(), ['id' => 'location_id'])->inverseOf('debtors');
@@ -189,14 +198,6 @@ class Debtor extends \yii\db\ActiveRecord
     public function getStatus()
     {
         return $this->hasOne(DebtorStatus::className(), ['id' => 'status_id'])->inverseOf('debtors');
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getUser()
-    {
-        return $this->hasOne(User::className(), ['id' => 'user_id'])->inverseOf('debtors');
     }
 
     /**

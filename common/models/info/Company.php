@@ -4,6 +4,7 @@ namespace common\models\info;
 
 use Yii;
 use common\models\Name;
+use common\models\Debtor;
 use common\models\Location;
 use common\models\UserInfo;
 use common\models\UserInfoCompany;
@@ -53,6 +54,7 @@ use common\models\stat\StatisticPrint;
  * @property CompanyHouse[] $companyHouses
  * @property House[] $houses
  * @property CompanyPhone[] $companyPhones
+ * @property Debtor[] $debtors
  * @property StatisticPrint[] $statisticPrints
  * @property UserInfo[] $userInfos
  * @property UserInfoCompany[] $userInfoCompanies
@@ -305,6 +307,14 @@ class Company extends \yii\db\ActiveRecord
     public function getCompanyPhones()
     {
         return $this->hasMany(CompanyPhone::className(), ['company_id' => 'id'])->inverseOf('company');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDebtors()
+    {
+        return $this->hasMany(Debtor::className(), ['company_id' => 'id'])->inverseOf('company');
     }
 
     /**
