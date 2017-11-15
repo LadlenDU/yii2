@@ -11,6 +11,7 @@ use Yii;
  * @property integer $user_id
  * @property string $number
  * @property string $name
+ * @property string $created_at
  *
  * @property User $user
  * @property ApplicationPackageToTheContractDebtor[] $applicationPackageToTheContractDebtors
@@ -34,6 +35,7 @@ class ApplicationPackageToTheContract extends \yii\db\ActiveRecord
         return [
             [['user_id', 'number'], 'integer'],
             [['number', 'name'], 'required'],
+            [['created_at'], 'safe'],
             [['name'], 'string', 'max' => 255],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
@@ -49,6 +51,7 @@ class ApplicationPackageToTheContract extends \yii\db\ActiveRecord
             'user_id' => Yii::t('app', 'User ID'),
             'number' => Yii::t('app', 'Номер по порядку'),
             'name' => Yii::t('app', 'Название пакета приложений'),
+            'created_at' => Yii::t('app', 'Время создания'),
         ];
     }
 

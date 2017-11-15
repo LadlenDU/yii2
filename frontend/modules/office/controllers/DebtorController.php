@@ -824,10 +824,10 @@ class DebtorController extends Controller
         $rMonitor->save(false);
 
         if ($rMonitor->last_recounted_debtor_id) {
-            $debtors = Yii::$app->user->identity->getDebtors()
+            $debtors = Yii::$app->user->identity->userInfo->primaryCompany->getDebtors()
                 ->andWhere(['>', 'id', $rMonitor->last_recounted_debtor_id])->orderBy(['id' => SORT_ASC])->all();
         } else {
-            $debtors = Yii::$app->user->identity->getDebtors()->orderBy(['id' => SORT_ASC])->all();
+            $debtors = Yii::$app->user->identity->userInfo->primaryCompany->getDebtors()->orderBy(['id' => SORT_ASC])->all();
         }
 
         foreach ($debtors as $debtor) {
@@ -842,7 +842,7 @@ class DebtorController extends Controller
         //3130139485
 
         /*if (!empty($_GET['all_empty'])) {
-            $debtors = Yii::$app->user->identity->getDebtors()->where(['state_fee' => null])->all();
+            $debtors = Yii::$app->user->identity->userInfo->primaryCompany->getDebtors()->where(['state_fee' => null])->all();
             foreach ($debtors as $debtor) {
                 $debtor->recalculateAllTotalValues();
             }
@@ -887,7 +887,7 @@ class DebtorController extends Controller
 
         if ($debtorIds[0] == 'all') {
             $debtorIds = [];
-            $dCount = Yii::$app->user->identity->getDebtors()->select('id')->all();
+            $dCount = Yii::$app->user->identity->userInfo->primaryCompany->getDebtors()->select('id')->all();
             //TODO: использовать ArrayMap, вроде того
             foreach ($dCount as $el) {
                 $debtorIds[] = $el['id'];
@@ -907,11 +907,13 @@ class DebtorController extends Controller
         $appPackage = new \common\models\ApplicationPackageToTheContract();
         $appPackage->number = $appPackageNumber;
         $appPackage->name = '';
+        $appPackage->created_at = date('Y-m-d H:i:s');
         $appPackage->link('user', \Yii::$app->user->identity);
 
         for ($i = $dCount - 1; $i >= 0; --$i) {
             //TODO: запрос с ['id' => $dId] не выглядит достаточно корректным
-            $debtor = Yii::$app->user->identity->getDebtors()->where(['id' => $debtorIds[$i]])->one();
+            //$debtor = Yii::$app->user->identity->getDebtors()->where(['id' => $debtorIds[$i]])->one();
+            $debtor = Yii::$app->user->identity->userInfo->primaryCompany->getDebtors()->where(['id' => $debtorIds[$i]])->one();
             if ($debtor) {
                 $sheet->insertNewRowBefore($startRow, 1);
                 $sheet->getRowDimension($startRow)->setRowHeight(-1);

@@ -35,7 +35,7 @@ class DebtorStatusController extends \yii\web\Controller
         //TODO: !!! вынести $debtorIds в actionUpdate, вроде того
         if ($debtorIds[0] == 'all') {
             $debtorIds = [];
-            $dCount = Yii::$app->user->identity->getDebtors()->select('id')->all();
+            $dCount = Yii::$app->user->identity->userInfo->primaryCompany->getDebtors()->select('id')->all();
             //TODO: использовать ArrayMap, вроде того
             foreach ($dCount as $el) {
                 $debtorIds[] = $el['id'];

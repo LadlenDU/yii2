@@ -20,7 +20,18 @@ $this->registerCss(<<<CSS
 CSS
 );
 
-$applicationPackageToTheContracts = ArrayHelper::map(\Yii::$app->user->identity->applicationPackageToTheContracts, 'id', 'number');
+/*if ($applicationPackageToTheContracts = ArrayHelper::map(\Yii::$app->user->identity->applicationPackageToTheContracts, 'id', 'number')) {
+    foreach ($applicationPackageToTheContracts as &$apc) {
+        $apc = Yii::t('app', 'Приложение № {number} от {datetime}', ['number' => $apc, 'datetime' => ]);
+    }
+}*/
+$applicationPackageToTheContracts = [];
+foreach (\Yii::$app->user->identity->applicationPackageToTheContracts as $apc) {
+    #$item['id'] = $apc->id;
+    #$item['number'] = $apc->id;
+    $str = Yii::t('app', 'Приложение № {number} от {created_at}', ['number' => $apc->number, 'created_at' => $apc->created_at]);
+    $applicationPackageToTheContracts[$apc['id']] = $str;
+}
 
 ?>
     <div class="arrow-steps clearfix">
@@ -215,6 +226,11 @@ $script = <<<JS
         }
         return keys;
     }
+    
+    $("#debtorsearch-application_package").change(function(){
+        /*if ($(this).find('option:selected').val()) {
+        }*/
+    });
 
     $("#print_invoices").click(function () {
         var keys = getDebtorsSelected();
