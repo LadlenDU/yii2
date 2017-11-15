@@ -108,17 +108,48 @@ class DebtorController extends Controller
         ]);
     }
 
-    public function actionRemoveDebtorsFromReport(array $debtorIds, int $appId)
+    public function actionRemoveDebtorsFromReport()
     {
-        foreach ($debtorIds as $dId) {
-            if ($debtor = $this->findModel($dId)) {
-                $debtor->status->status = 'new';
-                $debtor->status->save();
-                //TODO: рассмотреть удаление (unlink($name, $model, true))
-                \Yii::$app->user->identity->getApplicationPackageToTheContracts()->unlink('debtors', $debtor);
-            }
+        $result = ['result' => 'unknown'];
+
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        //TODO: проверить почему не работает
+        if (!Yii::$app->request->validateCsrfToken()) {
+            $result = [
+                'result' => 'error',
+                'msg' => 'Error CSFR',
+            ];
+
+            return $result;
         }
-        return '';
+
+        $post = Yii::$app->request->post();
+        $debtorIds = $post['debtorIds'];
+        $appId = $post['appId'];
+
+        $success = true;
+        if ($appContract = ApplicationPackageToTheContract::findOne($appId)) {
+            foreach ($debtorIds as $dId) {
+                if ($debtor = $this->findModel($dId)) {
+                    $debtor->status->status = 'new';
+                    $debtor->status->save();
+                    //TODO: рассмотреть удаление (unlink($name, $model, true))
+                    //\Yii::$app->user->identity->getApplicationPackageToTheContracts()->unlink('debtors', $debtor);
+                    $appContract->unlink('debtors', $debtor, true);
+                } else {
+                    $success = false;
+                }
+            }
+        } else {
+            $success = false;
+        }
+
+        if ($success) {
+            $result['result'] = 'success';
+        }
+
+        return $result;
     }
 
     /**

@@ -215,10 +215,14 @@ $this->registerJs(<<<JS
             var debtorIds = getDebtorsSelected();
             if (debtorIds) {
                 // Удаление из бд TODO: обработка ошибок
-                //TODO: рассмотреть CSRF
+                var csrfParam = $('meta[name="csrf-param"]').attr("content");
+                var csrfToken = $('meta[name="csrf-token"]').attr("content");
                 var appId = $("#sgkh-number-of-selected-app").val();
-                $.post($removeDebtorsFromReport, {debtorIds:debtorIds,appId:appId}, function(data){
-                    if (data && data.success) {
+                
+                var data = {debtorIds: debtorIds, appId: appId};
+                data[csrfParam] = csrfToken;
+                $.post($removeDebtorsFromReport, data, function(data){
+                    if (data && data.result == 'success') {
                         // Удаление из таблицы
                         for (var id in debtorIds) {
                             $("#dynagrid-debtors-options-container").find("input[value=" + debtorIds[id] + "]").parent().parent().fadeOut();
