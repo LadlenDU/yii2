@@ -17,6 +17,8 @@ $downloadReportUrl = json_encode(Url::to('/office/debtor/get-report-file/?', tru
 $removeDebtorsFromReport = json_encode(Url::to('/office/debtor/remove-debtors-from-report/?', true));
 $showSubscriptionForAccruals = json_encode(Url::to('/office/debtor/show-subscription-for-accruals/?', true));
 
+$removeDebtorsFromReportError = json_encode(Yii::t('app', 'Произошла ошибка, повторите пожалуйста попытку позже.'));
+
 $this->registerJs(<<<JS
     $('#statusesModal').on('show.bs.modal', function(e) {
         
@@ -213,11 +215,18 @@ $this->registerJs(<<<JS
             var debtorIds = getDebtorsSelected();
             if (debtorIds) {
                 // Удаление из бд TODO: обработка ошибок
-                $.post($removeDebtorsFromReport + $.param({debtorIds:debtorIds}));
-                // Удаление из таблицы
-                for (var id in debtorIds) {
-                    $("#dynagrid-debtors-options-container").find("input[value=" + debtorIds[id] + "]").parent().parent().fadeOut();
-                }
+                //TODO: рассмотреть CSRF
+                var appId = $("#sgkh-number-of-selected-app").val();
+                $.post($removeDebtorsFromReport, {debtorIds:debtorIds,appId:appId}, function(data){
+                    if (data && data.success) {
+                        // Удаление из таблицы
+                        for (var id in debtorIds) {
+                            $("#dynagrid-debtors-options-container").find("input[value=" + debtorIds[id] + "]").parent().parent().fadeOut();
+                        }
+                    }
+                }, 'json').fail(function() {
+                    alert($removeDebtorsFromReportError);
+                });
             }
         });
         

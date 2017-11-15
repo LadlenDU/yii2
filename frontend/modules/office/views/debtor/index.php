@@ -4,7 +4,7 @@
 /* @var $searchModel common\models\DebtorSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 /* @var $uploadModel common\models\UploadForm */
-/* @var $showReportHandleButtons int */
+/* @var $applicationPackage array */
 
 use yii\helpers\Html;
 
@@ -158,7 +158,7 @@ $columns = [
 echo $this->render('_extensions', compact('uploadModel', 'searchModel', 'showSearchPane'));//['uploadModel' => $uploadModel, 'searchModel' => $searchModel, '$showSearchPane']);
 
 $reportHandleButtons = '';
-if ($showReportHandleButtons) {
+if ($applicationPackage['id']) {
     $reportHandleButtons = '<span style="margin-left:1em">'
         . Html::button('<i class="glyphicon glyphicon-minus"></i>',
             [
@@ -169,7 +169,9 @@ if ($showReportHandleButtons) {
             ]
 
         )
-        . '</span>';
+        . '<span style="margin-left:1em;font-weight:bold">'
+        . Yii::t('app', 'Приложение № ' . $applicationPackage['number'])
+        . '</span><input type="hidden" id="sgkh-number-of-selected-app" value="' . $applicationPackage['number'] . '"></span>';
 }
 ?>
 

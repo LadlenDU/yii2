@@ -84,10 +84,11 @@ class DebtorSearch extends Debtor
         ]);
 
         if ($this->application_package) {
-            $query->innerJoinWith('applicationPackageToTheContracts', true);
+            $query->joinWith('applicationPackageToTheContracts', true);
             $query->andFilterWhere([
                 'application_package_to_the_contract.number' => $this->application_package,
             ]);
+            //$query->select(['debtor.*', 'application_package_to_the_contract.number AS apNumber']);
         }
 
         if ($this->status_status) {
@@ -105,8 +106,6 @@ class DebtorSearch extends Debtor
             }
         }
 
-        //clam_sum_from
-        //cost_of_claim
         $query->andFilterWhere(['>=', 'cost_of_claim', $this->claim_sum_from])
             ->andFilterWhere(['<=', 'cost_of_claim', $this->claim_sum_to]);
 
@@ -118,10 +117,6 @@ class DebtorSearch extends Debtor
             ->andFilterWhere(['like', 'single', $this->single])
             ->andFilterWhere(['like', 'additional_adjustment', $this->additional_adjustment])
             ->andFilterWhere(['like', 'subsidies', $this->subsidies])
-            /*->andFilterWhere(['like', 'location.region', $this->location_street])
-            ->andFilterWhere(['like', 'location.district', $this->location_street])
-            ->andFilterWhere(['like', 'location.city', $this->location_street])
-            ->andFilterWhere(['like', 'location.street', $this->location_street])*/
             ->andFilterWhere(['or',
                 ['like', 'location.region', $this->location_street],
                 ['like', 'location.district', $this->location_street],
@@ -129,8 +124,6 @@ class DebtorSearch extends Debtor
                 ['like', 'location.street', $this->location_street],
             ])
             ->andFilterWhere(['like', 'location.building', $this->location_building]);
-
-        //$this->application_package
 
         return $dataProvider;
     }

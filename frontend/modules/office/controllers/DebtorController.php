@@ -3,6 +3,7 @@
 namespace frontend\modules\office\controllers;
 
 use common\models\AccrualSearch;
+use common\models\ApplicationPackageToTheContract;
 use Yii;
 use common\models\Debtor;
 use common\models\DebtorSearch;
@@ -100,11 +101,14 @@ class DebtorController extends Controller
             'dataProvider' => $dataProvider,
             'uploadModel' => $uploadModel,
             'showSearchPane' => Yii::$app->request->queryParams['search'] ?? false,
-            'showReportHandleButtons' => $searchModel->application_package,
+            'applicationPackage' => [
+                'id' => $searchModel->application_package ?? null,
+                'number' => $searchModel->application_package ? ApplicationPackageToTheContract::findOne($searchModel->application_package)->number : null,
+            ],
         ]);
     }
 
-    public function actionRemoveDebtorsFromReport(array $debtorIds)
+    public function actionRemoveDebtorsFromReport(array $debtorIds, int $appId)
     {
         foreach ($debtorIds as $dId) {
             if ($debtor = $this->findModel($dId)) {
