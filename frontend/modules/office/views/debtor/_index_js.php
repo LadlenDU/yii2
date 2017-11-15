@@ -249,7 +249,7 @@ $this->registerJs(<<<JS
         $("#show_subscription_for_accruals").unbind('click').click(function() {
             var debtorIds = getDebtorsSelected();
             if (debtorIds) {
-                window.open($showSubscriptionForAccruals + $.param({debtorId:debtorIds[0]}), "_blank");
+                window.open($showSubscriptionForAccruals + $.param({debtorIds:debtorIds}), "_blank");
             }
         });
         

@@ -513,11 +513,18 @@ class DebtorController extends Controller
         return $tempFNameResult;
     }
 
-    public function actionShowSubscriptionForAccruals($debtorId)
+    public function actionShowSubscriptionForAccruals(array $debtorIds)
     {
         $this->layout = 'print_fine';
-        $debtor = $this->findModel($debtorId);
-        return $this->render('_template_subsription_accruals', ['debtor' => $debtor]);
+
+        $debtors = [];
+        foreach ($debtorIds as $dId) {
+            if ($debtor = $this->findModel($dId)) {
+                $debtors[] = $debtor;
+            }
+        }
+        //return $this->render('_template_subsription_accruals', ['debtor' => $debtor]);
+        return $this->render('_template_subsription_accruals_bulk', ['debtors' => $debtors]);
     }
 
     public function actionPrintDocuments()
