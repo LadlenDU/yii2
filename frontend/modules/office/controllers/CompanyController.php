@@ -238,7 +238,15 @@ class CompanyController extends Controller
      */
     public function actionCreate()
     {
-        return $this->showForm();
+        $newCompany = new Company();
+        $newCompany->full_name = Yii::t('app', '< полное наименование отстутствует >');
+        $newCompany->short_name = Yii::t('app', '< сокращенное наименование отстутствует >');
+        $newCompany->save(false);
+        $newCompany->link('userInfos0', Yii::$app->user->identity->userInfo);
+
+        //return $this->redirect(['/office/my-organization/update', 'id' => $newCompany->getPrimaryKey()]);
+
+        return $this->showForm($newCompany->getPrimaryKey());
 
         /*$model = new Company();
 
@@ -316,7 +324,8 @@ class CompanyController extends Controller
      */
     protected function findModel($id)
     {
-        $userInfoId = UserInfo::find()->where(['user_id' => Yii::$app->user->identity->getId()])->one()->primaryKey;
+        //$userInfoId = UserInfo::find()->where(['user_id' => Yii::$app->user->identity->getId()])->one()->primaryKey;
+        $userInfoId = Yii::$app->user->identity->userInfo->primaryKey;
         $model = Company::find()
             ->joinWith(['userInfoCompanies', 'legalAddressLocation', 'cEO'])
             ->andFilterWhere(['user_info_company.user_info_id' => $userInfoId, 'company.id' => $id])
