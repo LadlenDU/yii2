@@ -286,6 +286,10 @@ class CompanyController extends Controller
      * @param integer $id
      * @return mixed
      */
+    public function actionUpdate($id)
+    {
+        return $this->showForm($id, true);
+    }
     /*public function actionUpdate($id)
     {
         $model = $this->findModel($id);
@@ -310,7 +314,7 @@ class CompanyController extends Controller
     {
         $this->findModel($id)->delete();
 
-        return $this->redirect('/office/my-organization');
+        return $this->redirect('/office/company');
         //return $this->redirect(Yii::$app->request->referrer ?: ['index']);
         //return $this->redirect(['index']);
     }
