@@ -104,14 +104,14 @@ class DebtorController extends Controller
         ]);
     }
 
-    public function actionRemoveDebtorsFromReport($debtorIds)
+    public function actionRemoveDebtorsFromReport(array $debtorIds)
     {
         foreach ($debtorIds as $dId) {
             if ($debtor = $this->findModel($dId)) {
                 $debtor->status->status = 'new';
                 $debtor->status->save();
                 //TODO: рассмотреть удаление (unlink($name, $model, true))
-                \Yii::$app->user->identity->applicationPackageToTheContract->unlink('debtors', $debtor);
+                \Yii::$app->user->identity->getApplicationPackageToTheContracts()->unlink('debtors', $debtor);
             }
         }
         return '';
