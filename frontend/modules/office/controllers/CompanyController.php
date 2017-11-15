@@ -87,7 +87,7 @@ class CompanyController extends Controller
         return 'Не AJAX запрос';
     }
 
-    protected function showForm($id = null)
+    protected function showForm($id = null, $editMode = false)
     {
         /*return $this->render('view', [
             'model' => $this->findModel($id),
@@ -169,7 +169,7 @@ class CompanyController extends Controller
                     'fileUploadHousesConfig' => $fileUploadHousesConfig,
                     //'companyFilesNames' => $companyFilesNames,
                 ],
-                'edit' => $id,
+                'edit' => $editMode,
             ]);
         }
     }
@@ -246,7 +246,7 @@ class CompanyController extends Controller
 
         //return $this->redirect(['/office/my-organization/update', 'id' => $newCompany->getPrimaryKey()]);
 
-        return $this->showForm($newCompany->getPrimaryKey());
+        return $this->showForm($newCompany->getPrimaryKey(), true);
 
         /*$model = new Company();
 

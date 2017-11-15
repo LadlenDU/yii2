@@ -202,7 +202,7 @@ $attributes = [
 echo DetailView::widget([
     'model' => $model,
     'attributes' => $attributes,
-    'mode' => !$edit ? DetailView::MODE_EDIT : DetailView::MODE_VIEW,
+    'mode' => $edit ? DetailView::MODE_EDIT : DetailView::MODE_VIEW,
     'bordered' => true,
     'striped' => false,
     'condensed' => false,
