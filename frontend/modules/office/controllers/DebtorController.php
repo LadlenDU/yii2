@@ -871,7 +871,7 @@ class DebtorController extends Controller
             ->orderBy(['created_at' => SORT_DESC])->one()
         ) {
             if ($caption = $this->renderPartial('_application_package_to_the_contracts_option_capt', ['apc' => $apc])) {
-                $html = "<option val='" . $apc->getPrimaryKey() . "'>$caption</option>";
+                $html = "<option value='" . $apc->getPrimaryKey() . "'>$caption</option>";
             }
         }
 
