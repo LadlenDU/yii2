@@ -27,19 +27,21 @@ CSS
 }*/
 $applicationPackageToTheContracts = [];
 foreach (\Yii::$app->user->identity->applicationPackageToTheContracts as $apc) {
-    //$createdAt = date('d.m.Y - H:i', strtotime($apc->created_at));
 
-    #$dt = new DateTime($apc->created_at); //first argument "must" be a string
-    //$dt->setTimestamp($timestamp); //adjust the object to correct timestamp
-    #$createdAt = $dt->format('d.m.Y, H:i');
+    $apcStr = '';
 
-    //date_default_timezone_set('Europe/Moscow');
-    date_default_timezone_set('Europe/Moscow');
-    //$createdAt = strftime('%d.%m.%Y - %H:%M', strtotime($apc->created_at));
-    $createdAt = date('d.m.Y - H:i', strtotime($apc->created_at));
+    if ($apc->created_at) {
+        date_default_timezone_set('GMT');
+        $createdAtTs = strtotime($apc->created_at);
+        //TODO: убрать хардкод 'Europe/Moscow'
+        date_default_timezone_set('Europe/Moscow');
+        $createdAt = date('d.m.Y - H:i', $createdAtTs);
+        $apcStr = Yii::t('app', 'Приложение № {number} от {created_at}', ['number' => $apc->number, 'created_at' => $createdAt]);
+    } else {
+        $apcStr = Yii::t('app', 'Приложение № {number}', ['number' => $apc->number]);
+    }
 
-    $str = Yii::t('app', 'Приложение № {number} от {created_at}', ['number' => $apc->number, 'created_at' => $createdAt]);
-    $applicationPackageToTheContracts[$apc['id']] = $str;
+    $applicationPackageToTheContracts[$apc['id']] = $apcStr;
 }
 
 ?>
