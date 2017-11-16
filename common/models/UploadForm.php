@@ -41,19 +41,29 @@ class UploadForm extends Model
         return false;
     }
 
+    protected function handleUplodedCsvFile($csvFile)
+    {
+        $fileName = @tempnam(Yii::getAlias('@common') . '/uploads/debtors', 'csv_');
+        //$fileName .= '.' . $this->csvFile->extension;
+        $csvFile->saveAs($fileName);
+        //TODO: жесткий косяк - ПЕРЕДЕЛАТЬ!!!
+        $fContent = file_get_contents($fileName);
+        $fContent = mb_convert_encoding($fContent, 'UTF-8', 'CP1251');
+        file_put_contents($fileName, $fContent);
+
+        return $fileName;
+    }
+
     public function uploadCsv()
     {
         //TODO: косяк, костыль - исправить
         //if ($this->validate()) {
         if (1) {
-            $fileName = @tempnam(Yii::getAlias('@common') . '/uploads/debtors', 'csv_');
-            //$fileName .= '.' . $this->csvFile->extension;
-            $this->csvFile->saveAs($fileName);
-            //TODO: жесткий косяк - ПЕРЕДЕЛАТЬ!!!
-            $fContent = file_get_contents($fileName);
-            $fContent = mb_convert_encoding($fContent, 'UTF-8', 'CP1251');
-            file_put_contents($fileName, $fContent);
-            return $fileName;
+            $fileNames = [];
+            foreach ($this->csvFiles as $file) {
+                $fileNames[] = $this->handleUplodedCsvFile($file);
+            }
+            return $fileNames;
         }
 
         return false;

@@ -728,15 +728,9 @@ class Debtor extends \yii\db\ActiveRecord
 
     public static function handleDebtorsCsvFile(UploadForm $uploadModel)
     {
-        /*//TODO: костыль - исправить
-        ini_set('memory_limit', '-1');
-        ini_set('max_execution_time', 100000);
-        ignore_user_abort(true);*/
-
-        $uploadModel->csvFile = UploadedFile::getInstance($uploadModel, 'csvFile');
+        $uploadModel->csvFiles = UploadedFile::getInstances($uploadModel, 'csvFile');
 
         //TODO: пока сделаем так, пока не пойдет другая загрузка
-        //if ($fileMonitor = DebtorLoadMonitorFormat1::find()->where(['file_name' => $uploadModel->csvFile->name])->one()) {
         if ($fileMonitor = Yii::$app->user->identity->getDebtorLoadMonitorFormat1s()->where(['file_name' => $uploadModel->csvFile->name])->one()) {
             try {
                 DebtorParse::verifyFileMonitorFinish($fileMonitor);
@@ -752,22 +746,24 @@ class Debtor extends \yii\db\ActiveRecord
             $fileMonitor->link('user', Yii::$app->user->identity);
         }
 
-        if ($fileName = $uploadModel->uploadCsv()) {
-            if ($handle = fopen($fileName, 'r')) {
-                $sheetDataRaw = [];
-                $count = 0;
-                while (($data = fgetcsv($handle, 0, ';')) !== false) {
-                    $sheetDataRaw[] = $data;
+        if ($allFileNames = $uploadModel->uploadCsv()) {
+            foreach ($allFileNames as $fileName) {
+                if ($handle = fopen($fileName, 'r')) {
+                    $sheetDataRaw = [];
+                    $count = 0;
+                    while (($data = fgetcsv($handle, 0, ';')) !== false) {
+                        $sheetDataRaw[] = $data;
+                    }
+                    fclose($handle);
+
+                    $sheetData = Format_csv_1::format($sheetDataRaw);
+                    unset($sheetDataRaw);
+                    self::addDebtors($sheetData, $fileMonitor);
+
+                } else {
+                    //TODO: логирование
+                    Yii::$app->getSession()->setFlash('error', Yii::t('app', 'Не удался импорт из-за внутренней ошибки.'));
                 }
-                fclose($handle);
-
-                $sheetData = Format_csv_1::format($sheetDataRaw);
-                unset($sheetDataRaw);
-                self::addDebtors($sheetData, $fileMonitor);
-
-            } else {
-                //TODO: логирование
-                Yii::$app->getSession()->setFlash('error', Yii::t('app', 'Не удался импорт из-за внутренней ошибки.'));
             }
         }
     }
