@@ -64,10 +64,10 @@ foreach (\Yii::$app->user->identity->applicationPackageToTheContracts as $apc) {
                 <i class="fa fa-filter"></i><? /*= Yii::t('app', 'Сбросить фильтр') */ ?>
             </button>-->
 
-                <button class="btn-sm toggle-filter btn btn-primary" id="search_debtors" data-toggle="collapse"
+                <!--<button class="btn-sm toggle-filter btn btn-primary" id="search_debtors" data-toggle="collapse"
                         data-target="#search-debtors">
-                    <i class="glyphicon glyphicon-search"></i>&nbsp;&nbsp;<?= Yii::t('app', 'Поиск') ?>
-                </button>
+                    <i class="glyphicon glyphicon-search"></i>&nbsp;&nbsp;<?/*= Yii::t('app', 'Поиск') */ ?>
+                </button>-->
 
                 <button class="btn-sm toggle-filter btn btn-primary" id="load_debtors" data-toggle="collapse"
                         data-target="#load-debtors"
@@ -106,6 +106,64 @@ foreach (\Yii::$app->user->identity->applicationPackageToTheContracts as $apc) {
     </div>
     <br>
 
+    <div class="row collapse" id="load-debtors">
+        <!--<div class="col-xs-12">
+            <?php
+        /*            $form = ActiveForm::begin([
+                        'options' => [
+                            'enctype' => 'multipart/form-data',
+                        ],
+                    ]);
+                    echo Html::hiddenInput('action', 'upload_debtors_excel_type_1');
+                    echo $form->field($uploadModel, 'debtorsExcelType1')->widget(FileInput::classname(), $uploadModel->fileUploadConfig('excel'));
+                    ActiveForm::end();
+                    */ ?>
+        </div>-->
+        <div class="col-xs-12">
+            <?php
+            $form = ActiveForm::begin([
+                'options' => [
+                    'enctype' => 'multipart/form-data',
+                ],
+            ]);
+            //echo $form->field($uploadModel, 'action')->hiddenInput(['value' => 'upload_debtors_excel']);
+            echo Html::hiddenInput('action', 'upload_debtors_excel_a_user');
+            echo $form->field($uploadModel, 'excelFileForAUser')->widget(FileInput::classname(), $uploadModel->fileUploadConfig('excel'));
+            ActiveForm::end();
+            ?>
+        </div>
+        <div class="col-xs-12">
+            <?php
+            $form = ActiveForm::begin([
+                /*'action' => [
+                    '/office/debtors/debt-verification',
+                    'action' => 'upload_debtors_csv',
+                ],*/
+                'options' => [
+                    'enctype' => 'multipart/form-data',
+                ],
+            ]);
+            //echo $form->field($uploadModel, 'action')->hiddenInput(['value' => 'upload_debtors_csv']);
+            $fuConfCsv = $uploadModel->fileUploadConfig('csv');
+            $fuConfCsv['options']['multiple'] = true;
+            $fuConfCsv['pluginOptions']['maxFileCount'] = 100;
+            $fuConfCsv['pluginOptions']['showRemove'] = true;
+            echo Html::hiddenInput('action', 'upload_debtors_csv');
+            echo $form->field($uploadModel, 'csvFile[]')->widget(FileInput::classname(), $fuConfCsv);
+            ActiveForm::end();
+            ?>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 controls-buttons">
+            <button class="btn-sm toggle-filter btn btn-primary" id="search_debtors" data-toggle="collapse"
+                    data-target="#search-debtors">
+                <i class="glyphicon glyphicon-search"></i>&nbsp;&nbsp;<?= Yii::t('app', 'Поиск') ?>
+            </button>
+        </div>
+    </div>
+    <br>
     <div class="collapse<?= $showSearchPane ? ' in' : '' ?>" id="search-debtors">
         <?php $form = ActiveForm::begin([
             'action' => ['index', 'search' => '1'],
@@ -157,55 +215,6 @@ foreach (\Yii::$app->user->identity->applicationPackageToTheContracts as $apc) {
         </div>
 
         <?php ActiveForm::end(); ?>
-    </div>
-
-    <div class="row collapse" id="load-debtors">
-        <!--<div class="col-xs-12">
-            <?php
-        /*            $form = ActiveForm::begin([
-                        'options' => [
-                            'enctype' => 'multipart/form-data',
-                        ],
-                    ]);
-                    echo Html::hiddenInput('action', 'upload_debtors_excel_type_1');
-                    echo $form->field($uploadModel, 'debtorsExcelType1')->widget(FileInput::classname(), $uploadModel->fileUploadConfig('excel'));
-                    ActiveForm::end();
-                    */ ?>
-        </div>-->
-        <div class="col-xs-12">
-            <?php
-            $form = ActiveForm::begin([
-                'options' => [
-                    'enctype' => 'multipart/form-data',
-                ],
-            ]);
-            //echo $form->field($uploadModel, 'action')->hiddenInput(['value' => 'upload_debtors_excel']);
-            echo Html::hiddenInput('action', 'upload_debtors_excel_a_user');
-            echo $form->field($uploadModel, 'excelFileForAUser')->widget(FileInput::classname(), $uploadModel->fileUploadConfig('excel'));
-            ActiveForm::end();
-            ?>
-        </div>
-        <div class="col-xs-12">
-            <?php
-            $form = ActiveForm::begin([
-                /*'action' => [
-                    '/office/debtors/debt-verification',
-                    'action' => 'upload_debtors_csv',
-                ],*/
-                'options' => [
-                    'enctype' => 'multipart/form-data',
-                ],
-            ]);
-            //echo $form->field($uploadModel, 'action')->hiddenInput(['value' => 'upload_debtors_csv']);
-            $fuConfCsv = $uploadModel->fileUploadConfig('csv');
-            $fuConfCsv['options']['multiple'] = true;
-            $fuConfCsv['pluginOptions']['maxFileCount'] = 100;
-            $fuConfCsv['pluginOptions']['showRemove'] = true;
-            echo Html::hiddenInput('action', 'upload_debtors_csv');
-            echo $form->field($uploadModel, 'csvFile[]')->widget(FileInput::classname(), $fuConfCsv);
-            ActiveForm::end();
-            ?>
-        </div>
     </div>
 
 <?php

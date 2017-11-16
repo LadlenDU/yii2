@@ -163,9 +163,19 @@ if ($applicationPackage['id']) {
         . Html::button('<i class="glyphicon glyphicon-minus"></i>',
             [
                 'type' => 'button',
-                'title' => Yii::t('app', 'Удалить должника из приложения'),
+                'title' => Yii::t('app', 'Удалить выбранных должников из приложения'),
                 'class' => 'btn btn-danger',
                 'id' => 'remove_debtors_from_report',
+            ]
+
+        )
+        . Html::button('<i class="glyphicon glyphicon-plus"></i>',
+            [
+                'type' => 'button',
+                'title' => Yii::t('app', 'Добавить должников в приложение'),
+                'class' => 'btn btn-primary',
+                'id' => 'add_debtors_to_report',
+                'style' => 'margin-left:.4em',
             ]
 
         )

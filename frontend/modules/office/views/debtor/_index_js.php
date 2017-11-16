@@ -268,6 +268,10 @@ $this->registerJs(<<<JS
             }
         });
         
+        $("#add_debtors_to_report").unbind('click').click(function(e) {
+            
+        });
+        
         $("#show_subscription_for_accruals").unbind('click').click(function() {
             var debtorIds = getDebtorsSelected();
             if (debtorIds) {
