@@ -44,7 +44,7 @@ $this->registerCss(<<<CSS
 CSS
 );
 
-echo $this->render('_extensions', compact('uploadModel', 'searchModel', 'showSearchPane'));//['uploadModel' => $uploadModel, 'searchModel' => $searchModel, '$showSearchPane']);
+echo $this->render('_extensions', compact('uploadModel', 'searchModel'));//['uploadModel' => $uploadModel, 'searchModel' => $searchModel, '$showSearchPane']);
 
 Modal::begin([
     'id' => 'pModal',
@@ -52,7 +52,7 @@ Modal::begin([
 ]);
 Modal::end();
 
-echo $this->render('_debtors_and_search', compact('searchModel', 'dataProvider', 'uploadModel', 'applicationPackage'));
+echo $this->render('_debtors_and_search', compact('searchModel', 'dataProvider', 'uploadModel', 'applicationPackage', 'showSearchPane'));
 
 ?>
 
