@@ -375,12 +375,14 @@ class DebtorParse extends Model
         $totalRows = count($info['colInfo']);
 
         if ($fileMonitor->started_at) {
-            if ($totalRows != $fileMonitor->total_rows) {
+            //TODO: может пригодиться но пришлось отказаться т. к. файл форматнулся. Возможно надо смотреть не кол-во строк в файле
+            //TODO: а кол-во пользователей в файле
+            /*if ($totalRows != $fileMonitor->total_rows) {
                 throw new \Exception(Yii::t('app',
                     'Не совпадает количество строк в предыдущем файле ({prev}) и в текущем ({current}). Проверьте пожалуйста.',
                     ['prev' => $fileMonitor->total_rows, 'current' => $totalRows])
                 );
-            }
+            }*/
         } else {
             $fileMonitor->started_at = date('Y-m-d H:i:s');
             $fileMonitor->total_rows = $totalRows;
@@ -432,7 +434,8 @@ class DebtorParse extends Model
 
             #$fine = new Fine;
 
-            $userId = Yii::$app->user->getId();
+            //$userId = Yii::$app->user->getId();
+            $companyId = Yii::$app->user->identity->userInfo->primary_company;
 
             $colInfoCount = count($info['colInfo']);
 
@@ -498,9 +501,11 @@ class DebtorParse extends Model
                     }
 
                     if (empty($debtor)) {
+                        //TODO: избавиться от DebtorExt в пользу Debtor
                         $debtor = new DebtorExt;
                         ++$tmpResultInfo['debtors']['added'];
-                        $debtor->user_id = $userId;
+                        //$debtor->user_id = $userId;
+                        $debtor->company_id = $companyId;
                     }
                     //TODO: debtDetails пока закомментируем
                     /*if (empty($debtDetails)) {
