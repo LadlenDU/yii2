@@ -20,27 +20,9 @@ $this->registerCss(<<<CSS
 CSS
 );
 
-/*if ($applicationPackageToTheContracts = ArrayHelper::map(\Yii::$app->user->identity->applicationPackageToTheContracts, 'id', 'number')) {
-    foreach ($applicationPackageToTheContracts as &$apc) {
-        $apc = Yii::t('app', 'Приложение № {number} от {datetime}', ['number' => $apc, 'datetime' => ]);
-    }
-}*/
 $applicationPackageToTheContracts = [];
 foreach (\Yii::$app->user->identity->applicationPackageToTheContracts as $apc) {
-
-    $apcStr = '';
-
-    if ($apc->created_at) {
-        date_default_timezone_set('GMT');
-        $createdAtTs = strtotime($apc->created_at);
-        //TODO: убрать хардкод 'Europe/Moscow'
-        date_default_timezone_set('Europe/Moscow');
-        $createdAt = date('d.m.Y - H:i', $createdAtTs);
-        $apcStr = Yii::t('app', 'Приложение № {number} от {created_at}', ['number' => $apc->number, 'created_at' => $createdAt]);
-    } else {
-        $apcStr = Yii::t('app', 'Приложение № {number}', ['number' => $apc->number]);
-    }
-
+    $apcStr = $this->render('_application_package_to_the_contracts_option_capt', ['apc' => $apc]);
     $applicationPackageToTheContracts[$apc['id']] = $apcStr;
 }
 
@@ -220,7 +202,7 @@ foreach (\Yii::$app->user->identity->applicationPackageToTheContracts as $apc) {
             $fuConfCsv['pluginOptions']['maxFileCount'] = 100;
             $fuConfCsv['pluginOptions']['showRemove'] = true;
             echo Html::hiddenInput('action', 'upload_debtors_csv');
-            echo $form->field($uploadModel, 'csvFile')->widget(FileInput::classname(), $fuConfCsv);
+            echo $form->field($uploadModel, 'csvFile[]')->widget(FileInput::classname(), $fuConfCsv);
             ActiveForm::end();
             ?>
         </div>

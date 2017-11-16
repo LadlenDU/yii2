@@ -278,4 +278,4 @@ if ($applicationPackage['id']) {
 
     <input type="hidden" name="selected_all_total" id="debtors-selected-all-total" value="0">
 
-    <iframe id="debtor-report-download-frame" style="display:none;"></iframe>
+    <!--<iframe id="debtor-report-download-frame" style="display:none;"></iframe>-->

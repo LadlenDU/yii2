@@ -6,6 +6,8 @@
 use yii\helpers\Url;
 use yii\helpers\Html;
 
+\frontend\assets\JohnculvinerFileDownload::register($this);
+
 $getStatusInfoUrl = json_encode(Url::to('/office/debtor-status/?', true));
 $ajaxLoader = json_encode(\common\helpers\HtmlHelper::getCenteredAjaxLoadImg());
 $loading = '<div style="text-align: center">' . Html::img('/img/loading.gif', [
@@ -16,8 +18,10 @@ $totalDebtors = (int)$dataProvider->getTotalCount();
 $downloadReportUrl = json_encode(Url::to('/office/debtor/get-report-file/?', true));
 $removeDebtorsFromReport = json_encode(Url::to('/office/debtor/remove-debtors-from-report/?', true));
 $showSubscriptionForAccruals = json_encode(Url::to('/office/debtor/show-subscription-for-accruals/?', true));
+$getLastApplicationOptionString = json_encode(Url::to('/office/debtor/get-last-application-option-string', true));
 
 $removeDebtorsFromReportError = json_encode(Yii::t('app', 'Произошла ошибка, повторите пожалуйста попытку позже.'));
+$getReportError = $removeDebtorsFromReportError;
 
 $this->registerJs(<<<JS
     $('#statusesModal').on('show.bs.modal', function(e) {
@@ -180,7 +184,7 @@ $this->registerJs(<<<JS
         });
         
         $("#get_debtor_report").unbind('click').click(function(e) {
-            e.preventDefault();
+            //e.preventDefault();
             
             var url;
             
@@ -195,8 +199,26 @@ $this->registerJs(<<<JS
             }
             
             if (url) {
-                $("#debtor-report-download-frame").attr('src', url);
-                //TODO: временный костыль, костыльный костыль, ОБЯЗАТЕЛЬНО ИСПРАВИТЬ!!!
+                sgkh.ajaxWait();
+                $.fileDownload(url, {
+                    //preparingMessageHtml: "We are preparing your report, please wait...",
+                    successCallback: function (url) {
+                        sgkh.ajaxWait('end');
+                        //var dsapObj = $("#debtorsearch-application_package");
+                        //dsapObj.find.("option:selected").val();
+                        //TODO: сделать чтобы возвращало полный список приложений, пока будем брать последнее
+                        $.get($getLastApplicationOptionString, function(htmlOptionString){
+                            $("#debtorsearch-application_package").append(htmlOptionString);
+                        });
+                    },
+                    failCallback: function (html, url) {
+                        sgkh.ajaxWait('end');
+                        alert($getReportError);
+                    }
+                });
+                return false;
+                
+                /*$("#debtor-report-download-frame").attr('src', url);
                 var maxVal = 1;
                 $.map($("#debtorsearch-application_package option"), function(option) {
                     if (maxVal < parseInt(option.value)) {
@@ -204,7 +226,7 @@ $this->registerJs(<<<JS
                     }
                 });
                 maxVal++;
-                $("#debtorsearch-application_package").append('<option value="' + maxVal + '">' + maxVal + '</option>');
+                $("#debtorsearch-application_package").append('<option value="' + maxVal + '">' + maxVal + '</option>');*/
             }
             
             return false;

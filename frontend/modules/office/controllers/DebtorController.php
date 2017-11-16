@@ -863,11 +863,28 @@ class DebtorController extends Controller
         return 'Должники перерасчитаны';
     }
 
+    public function actionGetLastApplicationOptionString()
+    {
+        $html = '';
+
+        if ($apc = \Yii::$app->user->identity->getApplicationPackageToTheContracts()
+            ->orderBy(['created_at' => SORT_DESC])->one()
+        ) {
+            if ($caption = $this->renderPartial('_application_package_to_the_contracts_option_capt', ['apc' => $apc])) {
+                $html = "<option val='" . $apc->getPrimaryKey() . "'>$caption</option>";
+            }
+        }
+
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_HTML;
+
+        return $html;
+    }
+
     public function actionGetReportFile(array $debtorIds)
     {
         //TODO: костыль - исправить
         ini_set('memory_limit', '-1');
-        ini_set('max_execution_time', 20000);
+        ini_set('max_execution_time', 2000);
         ignore_user_abort(true);
 
         //TODO: вынести в модель
@@ -902,8 +919,9 @@ class DebtorController extends Controller
             throw new \Exception('Нет должников');
         }
 
-        $appPackagesCount = (int)\Yii::$app->user->identity->getApplicationPackageToTheContracts()->count();
-        $appPackageNumber = $appPackagesCount + 1;
+        //$appPackagesCount = (int)\Yii::$app->user->identity->getApplicationPackageToTheContracts()->count();
+        $appPackagesLastNumber = (int)\Yii::$app->user->identity->getApplicationPackageToTheContracts()->max('number');
+        $appPackageNumber = $appPackagesLastNumber + 1;
         $appPackage = new \common\models\ApplicationPackageToTheContract();
         $appPackage->number = $appPackageNumber;
         $appPackage->name = '';
@@ -962,10 +980,16 @@ class DebtorController extends Controller
         //return Yii::$app->response->sendContentAsFile($content, 'DebtorsReport.xlsx', ['mimeType' => 'application/vnd.ms-excel']);
 
         //TODO: выдавать нормально
-        header('Content-Type: application/vnd.ms-excel');
+        #header('Content-Type: application/vnd.ms-excel');
         $filename = "DebtorsReport_" . date("d-m-Y-His") . ".xls";
-        header('Content-Disposition: attachment;filename=' . $filename . ' ');
-        header('Cache-Control: max-age=0');
+        #header('Content-Disposition: attachment;filename=' . $filename . ' ');
+        #header('Cache-Control: max-age=0');
+
+        header('Set-Cookie: fileDownload=true; path=/');
+        header('Cache-Control: max-age=0, must-revalidate');
+        header("Content-Type: application/vnd.ms-excel");
+        header('Content-Disposition: attachment; filename="' . $filename . '"');
+
         $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
         $objWriter->save('php://output');
         exit;
