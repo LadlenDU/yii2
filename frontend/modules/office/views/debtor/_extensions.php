@@ -143,7 +143,7 @@ CSS
             $fuConfCsv['pluginOptions']['maxFileCount'] = 100;
             $fuConfCsv['pluginOptions']['showRemove'] = true;
             echo Html::hiddenInput('action', 'upload_debtors_csv');
-            echo $form->field($uploadModel, 'csvFile[]')->widget(FileInput::classname(), $fuConfCsv);
+            echo $form->field($uploadModel, 'csvFiles[]')->widget(FileInput::classname(), $fuConfCsv);
             ActiveForm::end();
             ?>
         </div>

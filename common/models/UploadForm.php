@@ -16,6 +16,7 @@ class UploadForm extends Model
     public $excelFile;
     public $excelFileForAUser;
     public $csvFile;
+    public $csvFiles;
     public $excelFileType1;
 
     public function rules()
@@ -23,7 +24,8 @@ class UploadForm extends Model
         return [
             //[['imageFile'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg'],
             [['excelFileForAUser', 'excelFile', 'excelFileType1'], 'file', 'skipOnEmpty' => true, 'extensions' => 'xls, xlsx'],
-            [['csvFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'csv', 'maxFiles' => 100],
+            [['csvFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'csv'],
+            [['csvFiles'], 'file', 'skipOnEmpty' => true, 'extensions' => 'csv', 'maxFiles' => 100],
         ];
     }
 
@@ -61,7 +63,9 @@ class UploadForm extends Model
         if (1) {
             $fileNames = [];
             foreach ($this->csvFiles as $file) {
-                $fileNames[] = $this->handleUplodedCsvFile($file);
+                $fInfo['real_name'] = $file->name;
+                $fInfo['name_on_disk'] = $this->handleUplodedCsvFile($file);
+                $fileNames[] = $fInfo;
             }
             return $fileNames;
         }

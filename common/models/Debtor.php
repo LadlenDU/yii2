@@ -728,26 +728,30 @@ class Debtor extends \yii\db\ActiveRecord
 
     public static function handleDebtorsCsvFile(UploadForm $uploadModel)
     {
-        $uploadModel->csvFiles = UploadedFile::getInstances($uploadModel, 'csvFile');
-
-        //TODO: пока сделаем так, пока не пойдет другая загрузка
-        if ($fileMonitor = Yii::$app->user->identity->getDebtorLoadMonitorFormat1s()->where(['file_name' => $uploadModel->csvFile->name])->one()) {
-            try {
-                DebtorParse::verifyFileMonitorFinish($fileMonitor);
-            } catch (\Exception $e) {
-                Yii::$app->getSession()->setFlash('error', $e->getMessage());
-                return;
-            }
-        } else {
-            $fileMonitor = new DebtorLoadMonitorFormat1();
-            //$fileMonitor->user_id = Yii::$app->user->identity->getId();
-            //TODO: может не самый лучший способ: сохраняет здесь? Здесь не лучшее место если парсинг не начнется
-            $fileMonitor->file_name = $uploadModel->csvFile->name;
-            $fileMonitor->link('user', Yii::$app->user->identity);
-        }
+        $uploadModel->csvFiles = UploadedFile::getInstances($uploadModel, 'csvFiles');
 
         if ($allFileNames = $uploadModel->uploadCsv()) {
-            foreach ($allFileNames as $fileName) {
+            foreach ($allFileNames as $fileNameInfo) {
+
+                $fileName = $fileNameInfo['name_on_disk'];
+                $realFileName = $fileNameInfo['real_name'];
+
+                //TODO: пока сделаем так, пока не пойдет другая загрузка
+                if ($fileMonitor = Yii::$app->user->identity->getDebtorLoadMonitorFormat1s()->where(['file_name' => $realFileName])->one()) {
+                    try {
+                        DebtorParse::verifyFileMonitorFinish($fileMonitor);
+                    } catch (\Exception $e) {
+                        Yii::$app->getSession()->setFlash('error', $e->getMessage());
+                        return;
+                    }
+                } else {
+                    $fileMonitor = new DebtorLoadMonitorFormat1();
+                    //$fileMonitor->user_id = Yii::$app->user->identity->getId();
+                    //TODO: может не самый лучший способ: сохраняет здесь? Здесь не лучшее место если парсинг не начнется
+                    $fileMonitor->file_name = $realFileName;
+                    $fileMonitor->link('user', Yii::$app->user->identity);
+                }
+
                 if ($handle = fopen($fileName, 'r')) {
                     $sheetDataRaw = [];
                     $count = 0;
