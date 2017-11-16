@@ -215,8 +215,12 @@ foreach (\Yii::$app->user->identity->applicationPackageToTheContracts as $apc) {
                 ],
             ]);
             //echo $form->field($uploadModel, 'action')->hiddenInput(['value' => 'upload_debtors_csv']);
+            $fuConfCsv = $uploadModel->fileUploadConfig('csv');
+            $fuConfCsv['options']['multiple'] = true;
+            $fuConfCsv['pluginOptions']['maxFileCount'] = 100;
+            $fuConfCsv['pluginOptions']['showRemove'] = true;
             echo Html::hiddenInput('action', 'upload_debtors_csv');
-            echo $form->field($uploadModel, 'csvFile')->widget(FileInput::classname(), $uploadModel->fileUploadConfig('csv'));
+            echo $form->field($uploadModel, 'csvFile')->widget(FileInput::classname(), $fuConfCsv);
             ActiveForm::end();
             ?>
         </div>

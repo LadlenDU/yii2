@@ -23,7 +23,7 @@ class UploadForm extends Model
         return [
             //[['imageFile'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg'],
             [['excelFileForAUser', 'excelFile', 'excelFileType1'], 'file', 'skipOnEmpty' => true, 'extensions' => 'xls, xlsx'],
-            [['csvFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'csv'],
+            [['csvFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'csv', 'maxFiles' => 100],
         ];
     }
 
